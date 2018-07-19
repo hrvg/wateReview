@@ -9,7 +9,7 @@
 import::here(.from = "./R/utils/envpath.R", 
 	get_rootdir)
 
-import::here(.from = "./R/utils/lib_querry.R",
+import::here(.from = "./R/utils/lib_query.R",
 	get_csv_files,
 	get_citation_dataframe)
 
@@ -17,7 +17,7 @@ import::here(.from = "./R/utils/lib_querry.R",
 ####### HELPERS #######
 #######################
 
-import::here(.from = "./R/querrying/helpers.R",
+import::here(.from = "./R/querying/helpers.R",
 	check_duplicate,
 	write_citation_dataframe)
 
