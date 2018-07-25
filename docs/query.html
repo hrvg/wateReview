@@ -1087,19 +1087,29 @@ body .markdown-body
 <div class="toc">
 <ul>
 <li><a href="#making-the-query">making the query</a><ul>
+<li><a href="#method-for-selecting-a-database">method for selecting a database</a></li>
+<li><a href="#web-of-science">Web of Science</a></li>
 <li><a href="#scopus">Scopus</a><ul>
 <li><a href="#work-flow">work-flow</a></li>
 <li><a href="#query-with-english-terms">query with English terms</a></li>
 </ul>
 </li>
+<li><a href="#webscrapping-with-endnote">webscrapping with EndNote</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <hr />
+<h2 id="method-for-selecting-a-database">method for selecting a database</h2>
+<p>Choice should be based on the following criteria : 
+- inclusion of latin america paper databases (e.g. SciELO)
+- number of results in English but also in Spanish and Portuguese
+- alleged noise level from expert assessment of the relevancy of the results</p>
+<h2 id="web-of-science">Web of Science</h2>
 <h2 id="scopus">Scopus</h2>
 <ul>
 <li>allow for exporting 20k citation at once in <code>.csv</code></li>
+<li>Scopus includes part of SciELO journals and has more journal in languages that are not English</li>
 </ul>
 <h3 id="work-flow">work-flow</h3>
 <ol>
@@ -1116,8 +1126,31 @@ body .markdown-body
 <li>import the <code>.ris</code> into <code>EndNote</code></li>
 </ol>
 <h3 id="query-with-english-terms">query with English terms</h3>
-<pre><code>TITLE-ABS-KEY ( ( ( access ) OR ( agricultural ) OR ( aquifer* ) OR ( bay* ) OR ( catchment* ) OR ( change* AND of AND storage ) OR ( climate AND change ) OR ( contamination* ) OR ( cost-benefit* AND analysis ) OR ( crop* AND coefficient* ) OR ( dam* ) OR ( decision-maker* ) OR ( delta* ) OR ( demand* ) OR ( desalination* ) OR ( drought* ) OR ( ecosystem* AND service* ) OR ( environment* ) OR ( environmental AND degradation* ) OR ( environmental AND issue* ) OR ( environmental AND justice ) OR ( estuar* ) OR ( evapotranspiration* ) OR ( flood* ) OR ( focus AND group* ) OR ( fog* ) OR ( gis ) OR ( groundwater ) OR ( hydroeconomic* ) OR ( hydrologic ) OR ( hydrologic AND region* ) OR ( in-situ AND monitoring ) OR ( interview* ) OR ( irrigation ) OR ( irrigation AND district* ) OR ( lake* ) OR ( modeling ) OR ( municipal ) OR ( non-point AND source* AND pollution* ) OR ( ocean* ) OR ( optimization ) OR ( over-draft* ) OR ( point AND source* AND pollution* ) OR ( pollution* ) OR ( precipitation* ) OR ( protected ) OR ( rain-fed ) OR ( recharge* ) OR ( recreation* ) OR ( reliability ) OR ( remote AND sensing ) OR ( reservoir* ) OR ( resilience ) OR ( river* ) OR ( river* ) OR ( rural ) OR ( scenari* ) OR ( sea* ) OR ( sea AND water AND intrusion* ) OR ( sewage* ) OR ( shortage* ) OR ( simulation* ) OR ( snowmelt ) OR ( social AND justice ) OR ( ( social OR political ) AND issue* ) OR ( stakeholder* ) OR ( stream* ) OR ( sub-basin* ) OR ( subsidence ) OR ( supply ) OR ( surface AND water ) OR ( surveying ) OR ( sustainability AND index ) OR ( transboundary ) OR ( unprotected ) OR ( urban ) OR ( vulnerability ) OR ( wastewater ) OR ( water ) OR ( water AND footprint ) OR ( water AND governance* ) OR ( water AND market* ) OR ( water AND over-allocation* ) OR ( water AND price* ) OR ( water AND treatment* ) OR ( watershed* ) OR ( well* ) OR ( wetland* ) ) AND ( ( puerto AND rico ) OR ( belize ) OR ( turks AND caicos AND islands ) OR ( aruba ) OR ( argentina ) OR ( jamaica ) OR ( virgin AND islands ) OR ( dominican AND republic ) OR ( haiti ) OR ( colombia ) OR ( grenada ) OR ( antigua AND barbuda ) OR ( saint AND vincent AND grenadines ) OR ( chile ) OR ( saint AND lucia ) OR ( bahamas ) OR ( saint AND kiss AND nevis ) OR ( guadeloupe ) OR ( french AND guyana ) OR ( peru ) OR ( mexico ) OR ( suriname ) OR ( honduras ) OR ( panama ) OR ( brazil ) OR ( martinique ) OR ( cuba ) OR ( costa AND rica ) OR ( ecuador ) OR ( nicaragua ) OR ( saint AND barthelemy ) OR ( guatemala ) OR ( uruguay ) OR ( trinidad AND tobago ) OR ( venezuela ) OR ( bolivia ) OR ( cayman AND islands ) OR ( paraguay ) OR ( barbados ) OR ( el AND salvador ) ) ) AND DOCTYPE ( ar ) AND ( EXCLUDE ( PREFNAMEAUID,&quot;Anon#1 &quot; ) OR EXCLUDE ( PREFNAMEAUID,&quot; Undefined#Undefined &quot; ) ) AND ( EXCLUDE ( SUBJAREA,&quot;MEDI&quot; ) OR EXCLUDE ( SUBJAREA,&quot;BIOC&quot; ) OR EXCLUDE ( SUBJAREA,&quot;IMMU&quot; ) OR EXCLUDE ( SUBJAREA,&quot;ARTS&quot; ) OR EXCLUDE ( SUBJAREA,&quot;VETE&quot; ) OR EXCLUDE ( SUBJAREA,&quot;PHAR&quot; ) OR EXCLUDE ( SUBJAREA,&quot;NURS&quot; ) OR EXCLUDE ( SUBJAREA,&quot;PSYC&quot; ) OR EXCLUDE ( SUBJAREA,&quot;PHYS&quot; ) OR EXCLUDE ( SUBJAREA,&quot;NEUR&quot; ) OR EXCLUDE ( SUBJAREA,&quot;HEAL&quot; ) OR EXCLUDE ( SUBJAREA,&quot;DENT&quot; ) OR EXCLUDE ( SUBJAREA,&quot;MATH&quot; ) OR EXCLUDE ( SUBJAREA,&quot;Undefined&quot; ) ) 
+<pre><code>KEY(
+(Water) 
+)
+AND 
+KEY
+(
+(Access) OR (Agricultural) OR (Aquifer*) OR (bay*) OR (catchment*) OR (&quot;Change of storage&quot;) OR (&quot;Climate change&quot;) OR (Contamination*) OR (&quot;Cost-benefit analysis&quot;) OR (&quot;Crop Coefficient?&quot;) OR (Dam*) OR (&quot;Decision?maker?&quot;) OR (delta*) OR (Demand*) OR (Desalination*) OR (Drought*) OR (&quot;Ecosystem service?&quot;) OR (Environment*) OR (&quot;Environmental degradation?&quot;) OR (Environmental AND issue*) OR (Environmental AND justice) OR (estuar*) OR (Evapotranspiration*) OR (Flood*) OR (&quot;Focus group?&quot;) OR (Fog*) OR (GIS) OR (Groundwater) OR (Hydroeconomic*) OR (Hydrologic) OR (&quot;hydrologic region?&quot;) OR (&quot;In-situ monitoring&quot;) OR (Interview*) OR (Irrigation) OR (&quot;irrigation district?&quot;) OR (lake*) OR (Modeling) OR (Municipal) OR (&quot;Non-point source?&quot;) OR (Optimization) OR (Over-draft*) OR (&quot;Point source?&quot;) OR (Pollution*) OR (Precipitation*) OR (Protected) OR (Rain-fed) OR (Recharge*) OR (Recreation*) OR (Reliability) OR (&quot;Remote sensing&quot;) OR (Reservoir*) OR (Resilience) OR (river*) OR (River*) OR (Rural) OR (Scenari*) OR (&quot;Sea water intrusion?&quot;) OR (&quot;Seawater intrusion?&quot;) OR (Sewage*) OR (Shortage*) OR (Simulation*) OR (Snowmelt) OR (Social AND justice) OR (&quot;Social issue?&quot;) OR (&quot;Political issue?&quot;) OR (Stakeholder*) OR (stream*) OR (Sub-basin*) OR (Subsidence) OR (Supply) OR (Surface AND water) OR (Surveying) OR (&quot;Sustainability ind?&quot;) OR (Transboundar*) OR (Unprotected) OR (Urban) OR (Vulnerabilit*) OR (Wastewater) OR (Water) OR (footprint) OR (governance*) OR (market*) OR (over-allocation*) OR (price*) OR (treatment*) OR (watershed*) OR (Well*) OR (Wetland*) AND NOT (Marine)
+)
+AND KEY
+(
+(&quot;puerto rico&quot;) OR (belize) OR (turks AND caicos AND islands) OR (aruba) OR (argentina) OR (jamaica) OR (&quot;virgin islands&quot;) OR (dominican AND republic) OR (haiti) OR (colombia) OR (grenada) OR (antigua AND barbuda) OR (&quot;saint vincent&quot; AND grenadines) OR (chile) OR (&quot;saint lucia&quot;) OR (bahamas) OR (&quot;saint kiss&quot; AND nevis) OR (guadeloupe) OR (french AND guyana) OR (peru) OR (mexico AND NOT (&quot;New Mexico&quot;)) OR (suriname) OR (honduras) OR (panama) OR (brazil) OR (martinique) OR (cuba) OR (&quot;costa rica&quot;) OR (ecuador) OR (nicaragua) OR (&quot;saint barthelemy&quot;) OR (guatemala) OR (uruguay) OR (trinidad AND tobago) OR (venezuela) OR (bolivia) OR (&quot;cayman islands&quot;) OR (paraguay) OR (barbados) OR (&quot;latin america?&quot;) OR (&quot;south america?&quot;) OR (caribbean) OR (&quot;central america?&quot;) OR (el AND salvador)
+) 
+AND  DOCTYPE ( ar )  AND  ( EXCLUDE ( PREFNAMEAUID ,  &quot;Anon#1&quot; )  OR  EXCLUDE ( PREFNAMEAUID ,  &quot;Undefined#Undefined&quot; ) )  AND  ( EXCLUDE ( SUBJAREA ,  &quot;MEDI&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;BIOC&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;IMMU&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;ARTS&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;VETE&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;PHAR&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;NURS&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;PSYC&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;PHYS&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;NEUR&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;HEAL&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;DENT&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;MATH&quot; )  OR  EXCLUDE ( SUBJAREA ,  &quot;Undefined&quot; ) )  AND  ( LIMIT-TO ( LANGUAGE ,  &quot;English&quot; ) )
 </code></pre>
 
+<h2 id="webscrapping-with-endnote">webscrapping with EndNote</h2>
+<p>EndNote is unable to search for more than 1000 <code>.pdf</code> at once.</p>
+<ol>
+<li>Create a Smart Group with the files without <code>.pdf</code></li>
+<li>Select all the bibliography with <code>ctrl + A</code></li>
+<li>Right click <span class="arithmatex">\(\to\)</span> <code>Find Full Text</code> </li>
+<li><code>EndNote</code> starts searching for Full text</li>
+<li>After <span class="arithmatex">\(\sim 6\)</span> hours, the process should terminate</li>
+<li>Click on the Smart Groups <code>Found URL</code> and <code>Not Found</code> and move the references that <code>EndNote</code> was unable to find a <code>.pdf</code>for to the trash</li>
+<li>Go back to step 2.</li>
+</ol>
 <hr />
 <p><em>Hervé Guillon, July 18th 2018</em></p></article></body></html>
