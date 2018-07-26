@@ -18,7 +18,7 @@ Choice should be based on the following criteria :
 ### query with Spanish terms
 
 ```
-SU = Water Resources AND (TS =((Agua) AND ((Acceso) OR (Agrícola) OR (Acuífero?) OR (bahía?) OR (captación*) OR ("cambio de almacenamiento") OR ("Cambio climático") OR (Contaminación*) OR ("análisis de costo-beneficio") OR ("Coeficiente? de cultivo") OR (Presa?) OR ("tomadores de decisiones") OR (delta?) OR (Demanda) OR (Desalinización) OR (Sequía?) OR ("Servicio? del ecosistema") OR (Medioambiental) OR ("Degradación ambiental") OR (Problema? AND ambientale?) OR (Justicia AND ambiental) OR (estuario?) OR (Evapotranspiración) OR (Inundación?) OR ("Grupo? de enfoque") OR (Niebla?) OR (SIG) OR ("Agua subterránea") OR (Economía del agua) OR (Hidrológico) OR ("región* hidrológica?") OR ("Monitoreo in-situ") OR (Entrevista?) OR (Irrigación) OR ("distrito? de riego") OR (lago?) OR (Modelación) OR (Municipal) OR ("Contaminación de fuentes no puntuales") OR (Optimización) OR (Sobreexplotación) OR ("Contaminación de fuente puntual") OR (Polución) OR (Precipitación*) OR (protegid*) OR ("agricultura de tempral") OR (Recharge*) OR (Recreación) OR (confiabilidad) OR (Teledetección) OR (Embalse?) OR (resilencia) OR (río?) OR (Rural) OR (Escenario?) OR ("Intrusión salina") OR ("Agua? Residuale?") OR (Escasez) OR (Simulación*) OR (deshielo) OR (Justicia AND social) OR (Problema? sociale?) OR (Problema? político?) OR ("Partes interesadas") OR (corriente?) OR (Subcuenca?) OR (Hundimiento) OR (Abastecimiento) OR ("Agua superficial") OR ("Levantamiento de terreno") OR ("índice? de sustentabilidad") OR (Transfronteriz*) OR (Desprotegid*) OR (Urbano) OR (vulnerabilidad) OR ("derretimiento de nieve") OR (Agua) OR (huella) OR (Gobernanza) OR (mercado?) OR (Sobre-asignación) OR (precio?) OR (Tratamiento) OR (cuenca?) OR (pozo?) OR (Humedal) NOT (Marine) ) AND (("puerto rico") OR (belice) OR ("Islas Turcas Caicos") OR (aruba) OR (argentina) OR (jamaica) OR ("Islas Virgenes") OR ("República Dominicana") OR (Haití) OR (colombia) OR (Granada) OR (antigua AND barbuda) OR ("San Vicente y las Granadinas") OR (chile) OR ("Santa Lucía") OR (bahamas) OR ("saint kitts" AND nevis) OR (guadalupe) OR ("Guayana Francesa") OR (Perú) OR (méxico NOT ("nuevo Mexico")) OR (suriname) OR (honduras) OR (Panamá) OR (brasil) OR (Martinica) OR (cuba) OR ("costa rica") OR (ecuador) OR (nicaragua) OR ("santo Barthelemy") OR (guatemala) OR (uruguay) OR (trinidad AND tobago) OR (venezuela) OR (bolivia) OR ("Islas Caimán") OR (paraguay) OR (barbados) OR ("America latina") OR (Sudamerica) OR (caribe) OR (Centroamérica) OR (el AND salvador) ) ) )
+SU = Water Resources AND (TS =((Agua) AND ((Acceso) OR (Agrícola) OR (Acuífero?) OR (bahía?) OR (captación*) OR ("cambio de almacenamiento") OR ("Cambio climático") OR (Contaminación*) OR ("análisis de costo-beneficio") OR ("Coeficiente? de cultivo") OR (Presa?) OR ("tomadores de decisiones") OR (delta?) OR (Demanda) OR (Desalinización) OR (Sequía?) OR ("Servicio? del ecosistema") OR (Medioambiental) OR ("Degradación ambiental") OR (Problema? AND ambientale?) OR (Justicia AND ambiental) OR (estuario?) OR (Evapotranspiración) OR (Inundación?) OR ("Grupo? de enfoque") OR (Niebla?) OR (SIG) OR ("Agua subterránea") OR (Economía del agua) OR (Hidrológico) OR ("región* hidrológica?") OR ("Monitoreo in-situ") OR (Entrevista?) OR (Irrigación) OR ("distrito? de riego") OR (lago?) OR (Modelación) OR (Municipal) OR ("Contaminación de fuentes no puntuales") OR (Optimización) OR (Sobreexplotación) OR ("Contaminación de fuente puntual") OR (Polución) OR (Precipitación*) OR (protegid*) OR ("agricultura de tempral") OR (Recarga*) OR (Recreación) OR (confiabilidad) OR (Teledetección) OR (Embalse?) OR (resilencia) OR (río?) OR (Rural) OR (Escenario?) OR ("Intrusión salina") OR ("Agua? Residuale?") OR (Escasez) OR (Simulación*) OR (deshielo) OR (Justicia AND social) OR (Problema? sociale?) OR (Problema? político?) OR ("Partes interesadas") OR (corriente?) OR (Subcuenca?) OR (Hundimiento) OR (Abastecimiento) OR ("Agua superficial") OR ("Levantamiento de terreno") OR ("índice? de sustentabilidad") OR (Transfronteriz*) OR (Desprotegid*) OR (Urbano) OR (vulnerabilidad) OR ("derretimiento de nieve") OR (Agua) OR (huella) OR (Gobernanza) OR (mercado?) OR (Sobre-asignación) OR (precio?) OR (Tratamiento) OR (cuenca?) OR (pozo?) OR (Humedal) NOT (Marine) ) AND (("puerto rico") OR (belice) OR ("Islas Turcas Caicos") OR (aruba) OR (argentina) OR (jamaica) OR ("Islas Virgenes") OR ("República Dominicana") OR (Haití) OR (colombia) OR (Granada) OR (antigua AND barbuda) OR ("San Vicente y las Granadinas") OR (chile) OR ("Santa Lucía") OR (bahamas) OR ("saint kitts" AND nevis) OR (guadalupe) OR ("Guayana Francesa") OR (Perú) OR (méxico NOT ("nuevo Mexico")) OR (suriname) OR (honduras) OR (Panamá) OR (brasil) OR (Martinica) OR (cuba) OR ("costa rica") OR (ecuador) OR (nicaragua) OR ("santo Barthelemy") OR (guatemala) OR (uruguay) OR (trinidad AND tobago) OR (venezuela) OR (bolivia) OR ("Islas Caimán") OR (paraguay) OR (barbados) OR ("America latina") OR (Sudamerica) OR (caribe) OR (Centroamérica) OR (el AND salvador) ) ) )
  ```
 
 ### query with English terms
@@ -49,99 +49,107 @@ SU = Water Resources AND (TS =((Water) AND ((Access) OR (Agricultural) OR (Aquif
 
 ```
 KEY(
-(Water) 
+(água) 
 )
 AND 
 KEY
 (
 (Access) OR 
-(Agricultural) OR 
-(Aquifer*) OR 
-(bay*) OR 
-(catchment*) OR 
-("Change of storage") OR 
+(agricultura) OR 
+(agropecuária) OR 
+(aquíferos) OR 
+(baia) OR 
+(microbacia) OR 
+("alteração da reserva") OR 
+("mudança da reserva") OR 
 ("Climate change") OR 
 (Contamination*) OR 
-("Cost-benefit analysis") OR 
-("Crop Coefficient?") OR 
-(Dam*) OR 
-("Decision?maker?") OR 
+("análise de custo-benefício") OR 
+("coeficiente da cultura") OR 
+(barragens) OR 
+("tomadores-de-decisão") OR 
+("tomadores de decisão") OR 
 (delta*) OR 
-(Demand*) OR 
-(Desalination*) OR 
+(demanda) OR 
+(dessalinização) OR 
 (Drought*) OR 
 ("Ecosystem service?") OR 
-(Environment*) OR 
+(ambiente) OR 
 ("Environmental degradation?") OR 
 (Environmental AND issue*) OR 
 (Environmental AND justice) OR 
-(estuar*) OR 
-(Evapotranspiration*) OR 
+(estuário) OR 
+(evapotranspiração) OR 
 (Flood*) OR 
-("Focus group?") OR 
-(Fog*) OR 
+("grupos focais") OR 
+(névoa) OR 
 (GIS) OR 
-(Groundwater) OR 
-(Hydroeconomic*) OR 
-(Hydrologic) OR 
-("hydrologic region?") OR 
-("In-situ monitoring") OR 
+(SIG) OR 
+("água subterrânea") OR 
+(hidro-econômico) OR 
+(hidrológico) OR 
+("região hidrográfica") OR 
+("monitoramento in-situ") OR 
 (Interview*) OR 
-(Irrigation) OR 
-("irrigation district?") OR 
-(lake*) OR 
-(Modeling) OR 
+(irrigação) OR 
+("distrito de irrigação") OR 
+(lago) OR 
+(modelagem) OR 
 (Municipal) OR 
 ("Non-point source?") OR 
-(Optimization) OR 
+(otimização) OR 
 (Over-draft*) OR 
 ("Point source?") OR 
 (Pollution*) OR 
-(Precipitation*) OR 
-(Protected) OR 
+(precipitação) OR 
+(protegido) OR 
 (Rain-fed) OR 
-(Recharge*) OR 
-(Recreation*) OR 
-(Reliability) OR 
-("Remote sensing") OR 
-(Reservoir*) OR 
-(Resilience) OR 
-(river*) OR 
+(recarga) OR 
+(recreação) OR 
+(segurança) OR 
+("sensoriamento remoto") OR 
+(reservatórios) OR 
+(resiliência) OR 
+(rio) OR 
 (River*) OR 
 (Rural) OR 
-(Scenari*) OR 
+(cenários) OR 
 ("Sea water intrusion?") OR 
 ("Seawater intrusion?") OR 
-(Sewage*) OR 
+(esgoto) OR 
 (Shortage*) OR 
-(Simulation*) OR 
-(Snowmelt) OR 
+(simulação) OR 
+(água AND degelo) OR 
 (Social AND justice) OR 
 ("Social issue?") OR 
 ("Political issue?") OR 
 (Stakeholder*) OR 
-(stream*) OR 
-(Sub-basin*) OR 
+(interessados) OR 
+(rio) OR 
+(riacho) OR 
+(corpo d'água) OR 
+(sub-bacia) OR 
 (Subsidence) OR 
-(Supply) OR 
-(Surface AND water) OR 
-(Surveying) OR 
-("Sustainability ind?") OR 
+(oferta) OR 
+(água AND superficial) OR 
+(pesquisa) OR 
+(levantamento de dados) OR 
+("índice de sustentabilidade") OR 
 (Transboundar*) OR 
-(Unprotected) OR 
-(Urban) OR 
-(Vulnerabilit*) OR 
-(Wastewater) OR 
+(não-protegido OR desprotegido) OR 
+(Urbano) OR 
+(vulnerabilidade) OR 
+(águas residuárias) OR 
 (Water) OR 
-(footprint) OR 
+(pegada hídrica) OR 
 (governance*) OR 
-(market*) OR 
+(mercado?) OR 
 (over-allocation*) OR 
-(price*) OR 
-(treatment*) OR 
-(watershed*) OR 
-(Well*) OR 
-(Wetland*) AND NOT (Marine)
+(preço?) OR 
+(tratamento) OR 
+(bacia hidrográfica) OR 
+("poço subterrâneo") OR 
+(Pântanos) AND NOT (Marine)
 )
 AND KEY
 (
@@ -203,7 +211,7 @@ KEY(
 AND 
 KEY
 (
-(Acceso) OR (Agrícola) OR (Acuífero?) OR (bahía?) OR (captación*) OR ("cambio de almacenamiento") OR ("Cambio climático") OR (Contaminación*) OR ("análisis de costo-beneficio") OR ("Coeficiente? de cultivo") OR (Presa?) OR ("tomadores de decisiones") OR (delta?) OR (Demanda) OR (Desalinización) OR (Sequía?) OR ("Servicio? del ecosistema") OR (Medioambiental) OR ("Degradación ambiental") OR (Problema? AND ambientale?) OR (Justicia AND ambiental) OR (estuario?) OR (Evapotranspiración) OR (Inundación?) OR ("Grupo? de enfoque") OR (Niebla?) OR (SIG) OR ("Agua subterránea") OR (Economía del agua) OR (Hidrológico) OR ("región* hidrológica?") OR ("Monitoreo in-situ") OR (Entrevista?) OR (Irrigación) OR ("distrito? de riego") OR (lago?) OR (Modelación) OR (Municipal) OR ("Contaminación de fuentes no puntuales") OR (Optimización) OR (Sobreexplotación) OR ("Contaminación de fuente puntual") OR (Polución) OR (Precipitación*) OR (protegid*) OR ("agricultura de tempral") OR (Recharge*) OR (Recreación) OR (confiabilidad) OR (Teledetección) OR (Embalse?) OR (resilencia) OR (río?) OR (Rural) OR (Escenario?) OR ("Intrusión salina") OR ("Agua? Residuale?") OR (Escasez) OR (Simulación*) OR (deshielo) OR (Justicia AND social) OR (Problema? sociale?) OR (Problema? político?) OR ("Partes interesadas") OR (corriente?) OR (Subcuenca?) OR (Hundimiento) OR (Abastecimiento) OR ("Agua superficial") OR ("Levantamiento de terreno") OR ("índice? de sustentabilidad") OR (Transfronteriz*) OR (Desprotegid*) OR (Urbano) OR (vulnerabilidad) OR ("derretimiento de nieve") OR (Agua) OR (huella) OR (Gobernanza) OR (mercado?) OR (Sobre-asignación) OR (precio?) OR (Tratamiento) OR (cuenca?) OR (pozo?) OR (Humedal) AND NOT (Marine)
+(Acceso) OR (Agrícola) OR (Acuífero?) OR (bahía?) OR (captación*) OR ("cambio de almacenamiento") OR ("Cambio climático") OR (Contaminación*) OR ("análisis de costo-beneficio") OR ("Coeficiente? de cultivo") OR (Presa?) OR ("tomadores de decisiones") OR (delta?) OR (Demanda) OR (Desalinización) OR (Sequía?) OR ("Servicio? del ecosistema") OR (Medioambiental) OR ("Degradación ambiental") OR (Problema? AND ambientale?) OR (Justicia AND ambiental) OR (estuario?) OR (Evapotranspiración) OR (Inundación?) OR ("Grupo? de enfoque") OR (Niebla?) OR (SIG) OR ("Agua subterránea") OR (Economía del agua) OR (Hidrológico) OR ("región* hidrológica?") OR ("Monitoreo in-situ") OR (Entrevista?) OR (Irrigación) OR ("distrito? de riego") OR (lago?) OR (Modelación) OR (Municipal) OR ("Contaminación de fuentes no puntuales") OR (Optimización) OR (Sobreexplotación) OR ("Contaminación de fuente puntual") OR (Polución) OR (Precipitación*) OR (protegid*) OR ("agricultura de tempral") OR (Recarga*) OR (Recreación) OR (confiabilidad) OR (Teledetección) OR (Embalse?) OR (resilencia) OR (río?) OR (Rural) OR (Escenario?) OR ("Intrusión salina") OR ("Agua? Residuale?") OR (Escasez) OR (Simulación*) OR (deshielo) OR (Justicia AND social) OR (Problema? sociale?) OR (Problema? político?) OR ("Partes interesadas") OR (corriente?) OR (Subcuenca?) OR (Hundimiento) OR (Abastecimiento) OR ("Agua superficial") OR ("Levantamiento de terreno") OR ("índice? de sustentabilidad") OR (Transfronteriz*) OR (Desprotegid*) OR (Urbano) OR (vulnerabilidad) OR ("derretimiento de nieve") OR (Agua) OR (huella) OR (Gobernanza) OR (mercado?) OR (Sobre-asignación) OR (precio?) OR (Tratamiento) OR (cuenca?) OR (pozo?) OR (Humedal) AND NOT (Marine)
 )
 AND KEY
 (
