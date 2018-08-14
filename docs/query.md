@@ -143,12 +143,12 @@ AND  DOCTYPE ( ar )  AND  ( EXCLUDE ( PREFNAMEAUID ,  "Anon#1" )  OR  EXCLUDE ( 
 
 | Target corpus | Database                 | Search terms | Language filter | Number of results |
 |:--------------|:-------------------------|:-------------|:----------------|:-----------------:|
-| English       | Scopus                   | English      | English         |       14486       |
-|               | Web of Science – Core    | English      | English         |       4214        |
+| English       | Scopus                   | English      | English         |      14 486       |
+|               | Web of Science – Core    | English      | English         |       4 214       |
 |               | Web of Science – Biosis  | English      | English         |        194        |
 |               | Web of Science – SciELO  | English      | English         |        25         |
-|               | Web of Science – alleged | English      | English         |       15524       |
-| Spanish       | Scopus                   | English      | Spanish         |       1017        |
+|               | Web of Science – alleged | English      | English         |      15 524       |
+| Spanish       | Scopus                   | English      | Spanish         |       1 017       |
 |               | Web of Science – Core    | English      | Spanish         |        335        |
 |               | Web of Science – Biosis  | English      | Spanish         |        10         |
 |               | Web of Science – SciELO  | English      | Spanish         |        136        |
@@ -165,9 +165,9 @@ AND  DOCTYPE ( ar )  AND  ( EXCLUDE ( PREFNAMEAUID ,  "Anon#1" )  OR  EXCLUDE ( 
 
 | Target corpus | Initial corpus size | Non-duplicate corpus size | pdfs retrieved | Non-duplicate pdfs |
 |:--------------|:-------------------:|:-------------------------:|:--------------:|:------------------:|
-| English       |        34443        |           29353           |                |                    |
-| Spanish       |        1619         |           1408            |                |                    |
-| Portuguese    |         835         |            777            |      300       |                    |
+| English       |       34 443        |          29 353           |     21 186     |       20 647       |
+| Spanish       |        1 619        |           1 408           |      122       |        122         |
+| Portuguese    |         835         |            777            |      300       |        299         |
 
 
 
