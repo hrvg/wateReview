@@ -29,22 +29,22 @@ root.dir <- get_rootdir()
 ##### MAIN #####
 ################
 
+pdf.dir <- "data/latin_america/corpus_pdf/spanish/spanish.Data/"
 pdf.dir <- "data/latin_america/corpus_pdf/portuguese/portuguese.Data/"
 pdf.dir <- "data/latin_america/corpus_pdf/english/english.Data/"
-pdf.dir <- "data/latin_america/corpus_pdf/spanish/spanish.Data/"
 
+out.dir <- "data/latin_america/corpus_pdf/spanish/"
 out.dir <- "data/latin_america/corpus_pdf/portuguese/"
 out.dir <- "data/latin_america/corpus_pdf/english/"
-out.dir <- "data/latin_america/corpus_pdf/spanish/"
 
 l <- get_pdf_files(root.dir, pdf.dir)
 names <- unname(l$names)
 full.names <- l$full.names
 
-duplicate_index <- get_duplicate_pdfs(names)
+non_duplicate_index <- get_duplicate_pdfs(names)
 
-select_ind <- article_selection(full.names, duplicate_index)
+select_ind <- article_selection(full.names, non_duplicate_index, ratio = 0.2) 
 
-number_of_readers <- 3
+number_of_readers <- 4
 
 assign_articles_to_readers(select_ind, number_of_readers, out.dir)
