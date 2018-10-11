@@ -7,7 +7,7 @@ def flatten(var,vartype='list'):
 		var=np.asarray([item for sublist in var for item in sublist])
 	return var
 
-lang = "spanish"
+lang = "english"
 file = "./data/mails_" + lang +".csv"
 f = open(file,'r') # open file
 data_raw = f.readlines() # read lines, return a list, each element is a str
