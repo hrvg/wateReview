@@ -41,7 +41,7 @@ get_mail <- function(pdf){
 	}
 }
 
-lang <- "portuguese"
+lang <- "english"
 pdf.dir <- paste0("data/latin_america/corpus_pdf/", lang, "/", lang, ".Data")
 
 lf <- list.files(file.path(root.dir, pdf.dir), recursive = TRUE, pattern = ".pdf", full.names = TRUE)
