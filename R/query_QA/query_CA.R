@@ -8,6 +8,7 @@ library(plyr)
 library(dplyr)
 library(cowplot)
 library(gridExtra)
+library(multcompView)
 
 #################
 ##### UTILS #####
