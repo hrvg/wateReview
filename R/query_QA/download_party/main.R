@@ -40,7 +40,9 @@ import::here(.from = "./R/query_QA/helpers.R",
 import::here(.from = "./R/query_QA/download_party/helpers.R", 
 	get_samples,
 	print_estimate,
-	plot_estimates
+	plot_estimates,
+	get_n_players,
+	assign_articles_to_players
 	)
 
 ##############
@@ -62,11 +64,21 @@ load(file = file.path(root.dir, out.dir, paste0("language_dfs", ".rda")))
 baseline_pct <- table(language_dfs$english$collected)[["in corpus"]] / nrow(language_dfs$english)
 n_spanish <- ceiling(baseline_pct * nrow(language_dfs$spanish)) - table(language_dfs$spanish$collected)[["in corpus"]]
 n_portuguese <- ceiling(baseline_pct * nrow(language_dfs$portuguese)) - table(language_dfs$portuguese$collected)[["in corpus"]]
+n <- list(spanish = n_spanish, portuguese = n_portuguese)
 N <- n_spanish + n_portuguese
 
 # 3. get estimates
 plot_estimates()
 
-# 4. get samples
+# 4. get samples 
 spanish_samples <- get_samples("spanish", n_spanish, pl = TRUE)
 portuguese_samples <- get_samples("portuguese", n_portuguese, pl = TRUE)
+samples <- list(spanish = spanish_samples, portuguese = portuguese_samples)
+ind_spanish <- which(spanish_samples == 1)
+ind_portuguese <- which(portuguese_samples == 1)
+ind <- list(spanish = ind_spanish, portuguese = ind_portuguese)
+
+# 5. assign urls to downloaders
+n_players <- get_n_players()
+assign_articles_to_players("spanish", number_of_players = n_players)
+assign_articles_to_players("portuguese", number_of_players = n_players)

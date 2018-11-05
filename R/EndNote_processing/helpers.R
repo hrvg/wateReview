@@ -1,14 +1,3 @@
-make_pretty_str <- function(string_list){
-	# This function takes care of some formatting issue that appeared in the process of aligning database coming from the query and from EndNote.
-	# The function removes alpha-numeric characters, some special characters, trim whitespaces and concatenate them.
-	# arg in: a list of string
-	# output: a cleaned list of string 
-	nl <- gsub("[^[:alnum:][:space:]]", "",  string_list)
-	nl <- gsub("ltigt", " ",  nl)
-	nl <- gsub("\\s+", " ", nl)
-	nl <- trimws(nl)
-	return(nl)
-}
 
 get_endnote_xml <- function(language){
 	pdf.dir <- paste0("data/latin_america/corpus_pdf/", language)	

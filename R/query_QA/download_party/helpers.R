@@ -78,3 +78,25 @@ get_samples <- function(language, n, pl = FALSE){
 
 	return(samples)
 }
+
+assign_articles_to_players <- function(language, number_of_players = 8){
+	selected <- language_dfs[[language]][ind[[language]], ]
+	selected <- selected[, colnames(selected) %in% c("Authors", "Title", "Year", "Source", "urls", "DOI")]
+	selected$ID <- ind[[language]]
+	selected <- selected[order(selected$Source), ]
+	selected <- selected[, c(7, 2, 1, 3, 4, 6, 5)]
+	chunk2 <- function(x,n) split(x, cut(seq_along(x), n, labels = FALSE))
+	chunked <- chunk2(seq(nrow(selected)), number_of_players)
+	dir.create(file.path(root.dir, out.dir, language))
+	for (i in 1:number_of_players){
+		dir.create(file.path(root.dir, out.dir, language, paste0("player_", i)))
+		ind <- chunked[[i]]
+		write.csv(selected[ind, ], file.path(root.dir, out.dir, language, paste0("player_", i), paste0("to_dl.csv")), row.names = FALSE)
+	}
+
+}
+
+get_n_players <- function(){
+	n_players <- readline(prompt="How many people are downloading?: ")
+	return( as.numeric(n_players) )
+}
