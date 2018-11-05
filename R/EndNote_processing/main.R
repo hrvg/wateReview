@@ -17,57 +17,63 @@ library(XML)
 import::here(.from = "./R/utils/envpath.R", 
 	get_rootdir)
 
+
+import::here(.from = "./R/utils/lib_query.R",
+	get_meta_df,
+	get_language_dfs,
+	make_pretty_str
+	)
+
 #######################
 ####### HELPERS #######
 #######################
+
+import::here(.from = "./R/EndNote_processing/helpers.R", 
+	get_endnote_titles,
+	get_endnote_xml)
+
+##############
+#### INIT ####
+##############
+
+root.dir <- get_rootdir()
+out.dir <- "exploitation/out/run79"
+languages <- c("english", "portuguese", "spanish")
 
 ##############
 #### MAIN ####
 ##############
 
-### INIT ###
-root.dir = get_rootdir()
-language <- "spanish"
-pdf.dir <- paste0("data/latin_america/corpus_pdf/", language)
+### FOREWORD ###
+# The time spent scripting blew up (10+ hours) because EndNote formats everything to its own liking, making comparison with the files coming from the query process more difficult.
+# Here, the EndNote database is useful because it holds the location of the .pdf files for each of the articles that have been retrieved.
+# It also holds the various urls of the article.
+# We need that information.
+# 
+# However, because of text formating issues, EndNote data has to be exported as .xml and as .txt. Both files have the same ordering, but the .xml is encoded as UTF-8 whereas the .txt is encoded as Windows 1252 to allow comparison with the .csv coming from the query process.
+# Basically, in the following, the .txt is used to align the .xml with .csv
 
-doc <- xmlParse(file.path(root.dir, pdf.dir, paste0(language, "_database.xml")))
-xmldf <- xmlToDataFrame(nodes = getNodeSet(doc, "//record"))
+# 1. read csv databases
+language_dfs <- get_language_dfs(languages)
+meta_df <- get_meta_df(language_dfs)
 
-urls <- sapply(xmldf$urls, function(url){
-	unlist(strsplit(url, "internal-pdf://"))[1]
-})
+# 2. align EndNote .xml database with query .csv database
+for (language in languages){
+	print(language)
+	# xmldf <- get_endnote_xml(language)
+	# endnote_titles <- get_endnote_titles(language)
 
-pdfs <- unname(sapply(xmldf$urls, function(url){
-	unlist(strsplit(url, "internal-pdf://"))[2]
-}))
+	# endnote_titles <- make_pretty_str(endnote_titles)
+	# query_titles <- make_pretty_str(language_dfs[[language]]$Title)
 
-xmldf$pdfs <- pdfs
-xmldf$dates <- as.numeric(sub("//", "", xmldf$dates))
+	# stopifnot(all(query_titles %in% endnote_titles) & all(endnote_titles %in% query_titles))
 
-which(xmldf$titles %in% dfs[[3]]$Title)
+	# language_dfs[[language]] <- cbind(language_dfs[[language]][match(endnote_titles, query_titles), ], xmldf)
 
-authors <- sapply(dfs[[3]]$Authors, function(authors){
-	str <- unlist(strsplit(as.character(authors), " "))
-	if (grepl(".", str[1])){
-		return(str[2])
-	} else {
-		return(str[1])
-	}
-})
+	# stopifnot(names(table(language_dfs[[language]]$`electronic-resource-num` == language_dfs[[language]]$DOI)) == "TRUE")
 
-short_titles <- unname(sapply(xmldf$pdfs, function(pdf){
-	tools::file_path_sans_ext(tail((unlist(strsplit(pdf, "-"))), 1))
-}))
+	collected <- ifelse(is.na(language_dfs[[language]]$pdfs), "absent from corpus", "in corpus")
+	language_dfs[[language]]$collected
+}
 
-short_titles <- unname(sapply(retrieved.df, function(pdf){
-	substring(pdf, 1, 30)
-}))
-
-ind <- lapply(short_titles, function(title){
-	if (grepl("\\(", title)) title <- unlist(strsplit(title, "\\("))[1]
-	if (grepl("\\[", title)) title <- unlist(strsplit(title, "\\["))[1]
-	if (grepl("\\{", title)) title <- unlist(strsplit(title, "\\{"))[1]
-	return(grep(title, dfs[[3]]$Title))
-})
-
-rr <- gsub("[^[:alnum:][:space:]]","",retrieved.df)
+save(language_dfs, file = file.path(root.dir, out.dir, paste0("language_dfs", ".rda")))
