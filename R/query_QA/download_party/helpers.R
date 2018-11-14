@@ -66,6 +66,8 @@ get_samples <- function(language, n, pl = FALSE){
 		points(pt_df_year$year, pt_df_year$corpus, col = "red")
 		points(pt_df_year$year, pt_df_year$resampling, col = "purple")
 		points(pt_df_year$year, pt_df_year$resampled, col = "black", pch = 3)
+		legend(x="topleft", legend = c("Query", "Corpus", "Resampling", "Corpus after resampling"), col = c("blue", "red", "purple", "black"), pch = c(1, 1, 1, 3), bty = "n")
+
 
 		pt_df_source <- get_pt_df("Source", resampled = TRUE)
 		par(mfrow = c(1,1))
@@ -73,6 +75,7 @@ get_samples <- function(language, n, pl = FALSE){
 		points(seq(nrow(pt_df_source)), pt_df_source$corpus, col = "red")
 		points(seq(nrow(pt_df_source)), pt_df_source$resampling, col = "purple")
 		points(seq(nrow(pt_df_source)), pt_df_source$resampled, col = "black", pch = 3)
+		legend(x="topright", legend = c("Query", "Corpus", "Resampling", "Corpus after resampling"), col = c("blue", "red", "purple", "black"), pch = c(1, 1, 1, 3), bty = "n")
 	}
 
 	return(samples)
@@ -102,7 +105,7 @@ get_n_players <- function(){
 
 update_database <- function(language, language_dfs){
 	language_ld <- list.dirs(file.path(root.dir, paste0("data/latin_america/corpus_pdf/", language, "/manual_download_", language)), recursive = TRUE, full.names = FALSE)[-1]
-	language_recovery_rate <- length(language_ld) / n$language # 77%
+	language_recovery_rate <- length(language_ld) / n$language
 	for (d in as.numeric(language_ld)){
 		if (is.na(language_dfs[[language]]$pdfs[d])){
 			f <- list.files(file.path(root.dir, paste0("data/latin_america/corpus_pdf/", language, "/manual_download_", language), d))

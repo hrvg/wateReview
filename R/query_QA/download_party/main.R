@@ -80,9 +80,10 @@ ind_portuguese <- which(portuguese_samples == 1)
 ind <- list(spanish = ind_spanish, portuguese = ind_portuguese)
 
 # 5. assign urls to downloaders
-n_players <- get_n_players()
-assign_articles_to_players("spanish", number_of_players = n_players)
-assign_articles_to_players("portuguese", number_of_players = n_players)
+# n_players <- get_n_players()
+# n_players <- 12
+# assign_articles_to_players("spanish", number_of_players = n_players)
+# assign_articles_to_players("portuguese", number_of_players = n_players)
 
 # 6. update the databases
 language_dfs <- update_database("portuguese", language_dfs)
