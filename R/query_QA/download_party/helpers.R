@@ -18,8 +18,6 @@ plot_estimates <- function(downloaders = seq(7, 7+5), times = seq(1, 5, 0.5)){
 		decimate = FALSE)
 }
 
-
-
 get_samples <- function(language, n, pl = FALSE){
 
 	get_pt_df <- function(var, resampled = FALSE){
