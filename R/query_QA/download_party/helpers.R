@@ -73,7 +73,6 @@ get_samples <- function(language, n, pl = FALSE){
 		points(seq(nrow(pt_df_source)), pt_df_source$corpus, col = "red")
 		points(seq(nrow(pt_df_source)), pt_df_source$resampling, col = "purple")
 		points(seq(nrow(pt_df_source)), pt_df_source$resampled, col = "black", pch = 3)
-		
 	}
 
 	return(samples)
@@ -99,4 +98,17 @@ assign_articles_to_players <- function(language, number_of_players = 8){
 get_n_players <- function(){
 	n_players <- readline(prompt="How many people are downloading?: ")
 	return( as.numeric(n_players) )
+}
+
+update_database <- function(language, language_dfs){
+	language_ld <- list.dirs(file.path(root.dir, paste0("data/latin_america/corpus_pdf/", language, "/manual_download_", language)), recursive = TRUE, full.names = FALSE)[-1]
+	language_recovery_rate <- length(language_ld) / n$language # 77%
+	for (d in as.numeric(language_ld)){
+		if (is.na(language_dfs[[language]]$pdfs[d])){
+			f <- list.files(file.path(root.dir, paste0("data/latin_america/corpus_pdf/", language, "/manual_download_", language), d))
+			language_dfs[[language]]$pdfs[d] <- paste0("manual_download_", language, "/", d, "/", f)
+			language_dfs[[language]]$collected[d] <- "in corpus"
+		}
+	}
+	return(language_dfs)
 }

@@ -42,7 +42,8 @@ import::here(.from = "./R/query_QA/download_party/helpers.R",
 	print_estimate,
 	plot_estimates,
 	get_n_players,
-	assign_articles_to_players
+	assign_articles_to_players,
+	update_database
 	)
 
 ##############
@@ -82,3 +83,8 @@ ind <- list(spanish = ind_spanish, portuguese = ind_portuguese)
 n_players <- get_n_players()
 assign_articles_to_players("spanish", number_of_players = n_players)
 assign_articles_to_players("portuguese", number_of_players = n_players)
+
+# 6. update the databases
+language_dfs <- update_database("portuguese", language_dfs)
+language_dfs <- update_database("spanish", language_dfs)
+save(language_dfs, file = file.path(root.dir, out.dir, paste0("language_dfs_updated", ".rda")))

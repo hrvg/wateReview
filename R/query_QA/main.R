@@ -49,6 +49,7 @@ out.dir <- "exploitation/out/run79"
 # 1. read csv databases
 # language_dfs <- get_language_dfs(languages)
 load(file = file.path(root.dir, out.dir, paste0("language_dfs", ".rda")))
+load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated", ".rda")))
 meta_df <- get_meta_df(language_dfs)
 
 # 2. graphs

@@ -60,17 +60,17 @@ meta_df <- get_meta_df(language_dfs)
 # 2. align EndNote .xml database with query .csv database
 for (language in languages){
 	print(language)
-	# xmldf <- get_endnote_xml(language)
-	# endnote_titles <- get_endnote_titles(language)
+	xmldf <- get_endnote_xml(language)
+	endnote_titles <- get_endnote_titles(language)
 
-	# endnote_titles <- make_pretty_str(endnote_titles)
-	# query_titles <- make_pretty_str(language_dfs[[language]]$Title)
+	endnote_titles <- make_pretty_str(endnote_titles)
+	query_titles <- make_pretty_str(language_dfs[[language]]$Title)
 
-	# stopifnot(all(query_titles %in% endnote_titles) & all(endnote_titles %in% query_titles))
+	stopifnot(all(query_titles %in% endnote_titles) & all(endnote_titles %in% query_titles))
 
-	# language_dfs[[language]] <- cbind(language_dfs[[language]][match(endnote_titles, query_titles), ], xmldf)
+	language_dfs[[language]] <- cbind(language_dfs[[language]][match(endnote_titles, query_titles), ], xmldf)
 
-	# stopifnot(names(table(language_dfs[[language]]$`electronic-resource-num` == language_dfs[[language]]$DOI)) == "TRUE")
+	stopifnot(names(table(language_dfs[[language]]$`electronic-resource-num` == language_dfs[[language]]$DOI)) == "TRUE")
 
 	collected <- ifelse(is.na(language_dfs[[language]]$pdfs), "absent from corpus", "in corpus")
 	language_dfs[[language]]$collected
