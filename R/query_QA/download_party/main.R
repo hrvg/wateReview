@@ -59,14 +59,15 @@ out.dir <- "exploitation/out/run79"
 ##############
 
 # 1. read csv databases
-load(file = file.path(root.dir, out.dir, paste0("language_dfs", ".rda")))
+load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated", ".rda")))
 
 # 2. get number of samples
 baseline_pct <- table(language_dfs$english$collected)[["in corpus"]] / nrow(language_dfs$english)
 n_spanish <- ceiling(baseline_pct * nrow(language_dfs$spanish)) - table(language_dfs$spanish$collected)[["in corpus"]]
 n_portuguese <- ceiling(baseline_pct * nrow(language_dfs$portuguese)) - table(language_dfs$portuguese$collected)[["in corpus"]]
-n <- list(spanish = n_spanish, portuguese = n_portuguese)
-N <- n_spanish + n_portuguese
+# n <- list(spanish = n_spanish, portuguese = n_portuguese)
+n <- list(spanish = 1.2 * n_spanish, portuguese = 1.2 * n_portuguese)
+N <- sum(unlist(n))
 
 # 3. get estimates
 plot_estimates()
@@ -80,12 +81,12 @@ ind_portuguese <- which(portuguese_samples == 1)
 ind <- list(spanish = ind_spanish, portuguese = ind_portuguese)
 
 # 5. assign urls to downloaders
-# n_players <- get_n_players()
+n_players <- get_n_players()
 # n_players <- 12
-# assign_articles_to_players("spanish", number_of_players = n_players)
-# assign_articles_to_players("portuguese", number_of_players = n_players)
+assign_articles_to_players("spanish", number_of_players = n_players)
+assign_articles_to_players("portuguese", number_of_players = n_players)
 
 # 6. update the databases
-language_dfs <- update_database("portuguese", language_dfs)
-language_dfs <- update_database("spanish", language_dfs)
-save(language_dfs, file = file.path(root.dir, out.dir, paste0("language_dfs_updated", ".rda")))
+# language_dfs <- update_database("portuguese", language_dfs)
+# language_dfs <- update_database("spanish", language_dfs)
+# save(language_dfs, file = file.path(root.dir, out.dir, paste0("language_dfs_updated_2", ".rda")))

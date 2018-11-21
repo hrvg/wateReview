@@ -53,7 +53,7 @@ get_samples <- function(language, n, pl = FALSE){
 	prob <- prob / sum(prob)
 
 	set.seed(1789)
-	pik <- inclusionprobabilities(prob, n)
+	pik <- sampling::inclusionprobabilities(prob, n)
 	samples <- sampling::UPsystematic(pik)
 
 	if (pl){
