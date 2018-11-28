@@ -48,8 +48,9 @@ out.dir <- "exploitation/out/run79"
 
 # 1. read csv databases
 # language_dfs <- get_language_dfs(languages)
-load(file = file.path(root.dir, out.dir, paste0("language_dfs", ".rda")))
-load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated", ".rda")))
+# load(file = file.path(root.dir, out.dir, paste0("language_dfs", ".rda")))
+# load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated", ".rda")))
+load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated_2", ".rda")))
 meta_df <- get_meta_df(language_dfs)
 
 # 2. graphs
@@ -81,6 +82,6 @@ p5 <- ggplot(meta_df[meta_df$Cites >= 1, ], aes(y = Cites, x = language)) +
 
 plot.list <- list(pp, pps, p2, p3, p5)
 
-pdf(file.path(root.dir, out.dir, "query_QA.pdf"), width = 17, height = 11, title = "query_QA")
+pdf(file.path(root.dir, out.dir, "query_QA_2.pdf"), width = 17, height = 11, title = "query_QA")
 print(plot.list)
 dev.off()
