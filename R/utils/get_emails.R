@@ -15,13 +15,31 @@ import::here(.from = "./R/utils/envpath.R",
 ##### INITIALIZING #####
 ########################
 
-root.dir <- get_rootdir()
+# root.dir <- get_rootdir()
+root.dir <- "/media/hguillon/Seagate Expansion Drive" # dirty fix, see disclaimer
+
 
 ################
 ##### MAIN #####
 ################
 
+
+#####################################
+########### DISCLAIMER ##############
+#####################################
+
+# 
+# You want to execute this code on a linux server to avoid the shitshow that is special character handling on Windows
+#
+
 get_mail <- function(pdf){
+	# print(pdf)
+	if (file.size(pdf) > 0){
+
+	# if (lang == "spanish"){
+	# 	pdf <- gsub("i´", "í", pdf)
+	# 	pdf <- gsub("e´", "é", pdf)
+	# }
 	text <- pdf_text(pdf)
 	text2 <- strsplit(text, "\n")
 	i1 <- grep("@", text2)
@@ -40,10 +58,30 @@ get_mail <- function(pdf){
 		return(length(i1))
 	}
 }
+}
 
-lang <- "english"
-pdf.dir <- paste0("data/latin_america/corpus_pdf/", lang, "/", lang, ".Data")
+lang <- "portuguese"
 
-lf <- list.files(file.path(root.dir, pdf.dir), recursive = TRUE, pattern = ".pdf", full.names = TRUE)
+# pdf.dirs <- c(
+# 	paste0("data/latin_america/corpus_pdf/", lang, "/", lang, ".Data"),
+# 	paste0("data/latin_america/corpus_pdf/", lang, "/manual_download_", lang)
+# 	)
+
+# more dirty fixes, see disclaimer
+pdf.dirs <- c(
+	paste0("latin_america/corpus_pdf/", lang, "/", lang, ".Data"),
+	paste0("latin_america/corpus_pdf/", lang, "/manual_download_", lang)
+	)
+
+lf <- lapply(pdf.dirs, function(pdf.dir){
+	list.files(file.path(root.dir, pdf.dir), recursive = TRUE, pattern = ".pdf", full.names = TRUE)
+})
+lf <- c(lf[[1]], lf[[2]])
+
+
+
+
 mails <- unlist(lapply(lf, get_mail))
-write.table(mails, file.path(root.dir, pdf.dir, paste0("mails_", lang, ".csv")), row.names = FALSE, col.names = FALSE)
+
+
+write.table(mails, file.path(root.dir, pdf.dirs[1], paste0("mails_", lang, ".csv")), row.names = FALSE, col.names = FALSE)

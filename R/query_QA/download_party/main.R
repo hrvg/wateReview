@@ -59,7 +59,7 @@ out.dir <- "exploitation/out/run79"
 ##############
 
 # 1. read csv databases
-load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated", ".rda")))
+load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated_2", ".rda")))
 
 # 2. get number of samples
 baseline_pct <- table(language_dfs$english$collected)[["in corpus"]] / nrow(language_dfs$english)
