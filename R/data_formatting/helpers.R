@@ -14,7 +14,7 @@ get_duplicate_pdfs <- function(names){
 
 article_selection <- function(full.names, non_duplicate_index, ratio = .2){
 	set.seed(89)
-	n <- floor(ratio * length(full.names))
+	n <- floor(ratio * length(non_duplicate_index))
 	select_ind <- sample(non_duplicate_index, n)
 	return(select_ind)
 }
@@ -29,7 +29,7 @@ assign_articles_to_readers <- function(select_ind, number_of_readers, out.dir){
 		dir.create(file.path(root.dir, out.dir, paste0("reader_", i)))
 		id <- sample(seq(chunked.full.names[[i]]))
 		lapply(seq_along(chunked.full.names[[i]]), function(j){
-			file.copy(from = chunked.full.names[[i]][j], to = file.path(root.dir, out.dir, paste0("reader_", i), paste0(id[j], "_", chunked.names[[i]][j])))
+			file.copy(from = file.path(root.dir, out.dir, chunked.full.names[[i]][j]), to = file.path(root.dir, out.dir, paste0("reader_", i), paste0(id[j], "_", chunked.names[[i]][j])))
 		})
 	}
 }
