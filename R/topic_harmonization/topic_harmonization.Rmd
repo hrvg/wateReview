@@ -1,0 +1,48 @@
+---
+title: "Topic Harmonization"
+resource_files:
+- topic_harmonization.csv
+runtime: shiny
+output: flexdashboard::flex_dashboard
+---
+
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+
+library(shinydashboard)
+library(wordcloud)
+library(tm)
+library(ggplot2)
+
+df <- read.csv("topic_harmonization.csv")
+df_useful <- df[, grep("useful", colnames(df))]
+df_name <- df[, grep("name", colnames(df))]
+
+
+```
+
+Topic Name and Usefulness
+=====================================
+
+```{r}
+numericInput('topic', 'Topic', 1, min = 1, max = 105, step = 1)
+```
+
+Column
+------------------------------------------------------------------------
+```{r}
+renderTable({
+  data.frame(name = unname(na.omit((t(df_name[input$topic, ])))))
+})
+```
+
+
+Column
+------------------------------------------------------------------------
+```{r}
+renderPlot({
+    df <- data.frame(useful = unname(t(df_useful[input$topic, ])))
+    df$useful <- factor(df$useful, levels = c(0, 1), labels = c("No", "Yes"))
+    ggplot(df, aes(x = useful)) + geom_bar() + coord_flip() + ylim(0, 8) + theme_minimal() +  theme(text = element_text(size=16))
+})    
+```

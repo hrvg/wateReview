@@ -1,0 +1,12 @@
+name: topic_harmonization
+title: topic_harmonization
+username:
+account: herveguillon
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 890779
+bundleId: 2039144
+url: https://guillon.shinyapps.io/topic_harmonization/
+when: 1556215893.48508
+asMultiple: FALSE
+asStatic: FALSE

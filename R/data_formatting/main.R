@@ -35,9 +35,9 @@ pdf.dir <- "data/latin_america/corpus_pdf/spanish/spanish.Data/"
 pdf.dir <- "data/latin_america/corpus_pdf/portuguese/portuguese.Data/"
 pdf.dir <- "data/latin_america/corpus_pdf/english/english.Data/"
 
-out.dir <- "data/latin_america/corpus_pdf/spanish/"
-out.dir <- "data/latin_america/corpus_pdf/portuguese/"
-out.dir <- "data/latin_america/corpus_pdf"
+# out.dir <- "data/latin_america/corpus_pdf/spanish/"
+# out.dir <- "data/latin_america/corpus_pdf/portuguese/"
+# out.dir <- "data/latin_america/corpus_pdf"
 
 l <- get_pdf_files(root.dir, pdf.dir)
 full.names <- unname(l$full.names)

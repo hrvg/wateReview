@@ -1,0 +1,106 @@
+topic,useful.HG,useful.AJD,useful.LEG,useful.NP,name.HG,name.AJD,name.LEG,name.NP,useful.FvB,name.FvB,useful.EG,name.EG,useful.PO,name.PO,useful.RDG,name.RDG
+1,1,1,0,1,air quality,air pollution,athmospheric emissions,atmosphere and pollution,0,Air pollution,1,Air quality,1,Air quality,1,pollution
+2,1,1,1,1,seasons,seasonality,seasonality ,seasonal climate,1,Seasonal weather variation,1,Water year type,1,Precipitation patterns,1,climate variability
+3,1,1,1,1,botany,seeds,seed development ,plant biology,0,Germination,1,Agriculture,1,Agroecology/Plants early stages,0, Plant ecology
+4,1,1,1,1,food production systems,agricultural production,aquaculture,aquaculture,1,Aquaculture,1,Aquaculture,1,Animal agriculture,1,production system
+5,1,0,1,1,organic matter,,organic compounds ,organics,0,Organic matter,0,,1,Soils organic carbon/ soils quaity,1,soil quality
+6,1,1,1,1,fish,fish,fish ecology,fish,1,Fisheries ecology,1,Aquatic ecosystem,1,Fish ecology,1,fish ecology
+7,1,1,1,1,population dynamics,animal biology,fish poplation ecology ,life history and reproduction,0,Larval development,1,Biology,1,Species life cycle,0,ecology
+8,1,1,1,1,epidemiology,disease,water pathogens,water quality: pathogens ,1,Contaminants,1,Health?!,1,Water patogens,1,Contamination
+9,1,0,0,1,mineralogy,,,minerology,0,Geology,1,Soil,0,Soils minerals,0,Mineral composition
+10,1,0,0,0,quantitative methods,,,,0,Measurement,1,Field survey,0,Methods,0,analysis methods
+11,1,0,1,1,statistical methods and probabilities,,optimization,predictive modeling,0,Model,1,Statistical modeling,1,Modeling,1,modelization
+12,1,1,1,1,linear regression and statistics,variable relationships,statistics,methodology: statistics and modeling,0,Correlation,1,Statistical modeling,1,Sensitivity analysis,0,analysis methods
+13,0,0,1,0,,,watershed hydrology ,,1,Watershed,1,Watershed,0,Watershed sciences,1,Watershead
+14,1,1,1,1,urban,urban,urban water,urban,1,Urban water,1,Urban,1,Urban water management,1,urban hydrology
+15,1,1,0,1,pacific ocean,currents,,global climate,1,Oceans,1,Location,0,Regional studies,1,regions
+16,0,0,0,0,,,,,0,Miscellaneous,0,,0,,0,
+17,1,1,1,1,amendments,,agriculture practices,agriculture,1,Agriculture,1,Agriculture,1,Fertilizers,0,agricultural 
+18,1,1,1,1,flow in porous media,fluid mechanics,groundwater transport / flow,groundwater flow,1,Water flows,1,Hydraulic,1,Hydraulics,1,Hydraulic
+19,1,1,1,1,arsenic contamination,water quality,water quality - toxicity ,human health,1,Drinking water quality,1,Clean water,1,Drinking water quality,1,Water contamination
+20,1,1,1,1,landscape units,topography,geomorphology ,landscapes,1,Topography,1,Geography,1,Geomorphology,0,
+21,1,1,1,1,plant science,plants,plant science,vegetation and hydrology,1,Plant development,1,Crops,1,Plant physiology,1,Drought
+22,1,1,1,1,mining,mines,mining,mining,0,Mining,1,Mining,1,Mining,0,Mining
+23,1,1,1,1,invasive species,,fisheries,fisheries,1,Invasive fish,1,Fishery,1,Invasive species of fish,1,aquatic enviromental issues
+24,1,1,1,1,crustaceans and mollusks,marine organisms,mangrove ecosystems,"mollusks, shellfish, and mangroves",1,Mangroves,1,Aquatic species,1,Costal wetlands,1,Wetland
+25,1,1,0,1,volcanology,volcanoes,,vulcanology,0,Volcanic activity,1,Volcanology ,1,Volcanology,0,Volcanology
+26,1,1,0,0,field sampling,lab work,,,0,Sampling,1,Sampling,1,Water sampling and analysis,0,Field sampling
+27,1,1,0,1,toxicology,toxicity,,toxicity,1,Water pollution,1,Contamination,1,Water toxicity exposure,1,Enviromental quality
+28,1,1,0,1,temperature,solar radiation,,climate and weather,1,Temperature,1,Weather,1,Temperature ,0,temperature
+29,1,1,1,1,hydrologic processes at the catchment scale,rainfall - runoff,rainfall-runoff,watershed hydrology,1,Catchment,1,Hydrology,1,Precipitation,1,Erosion
+30,1,1,1,1,metal contamination,metal contamination,water quality,metals and water quality,1,Heavy metals,1,Contamination,1,Heavy metal pollution,1,Contamination
+31,1,1,1,1,water chemistry,chemistry,geochemistry,water chemistry,1,Water chemistry,1,Water quality,1,Aqueous geochemistry,1,water quality
+32,1,1,1,1,sociological study,community development,social ,community-scale social science,1,Community level,1,Community,1,Rural water management,1,social
+33,1,1,1,1,sea and ocean,marine,marine ,ocean and coastal study sites,1,Water depth,1,Coastal water,1,Costal morphology,0,
+34,1,1,1,1,type of crops,crop yields,agriculture production ,agriculture,1,Crop yield,1,Agriculture,1,Crop yields,1,agricultural production
+35,1,1,1,1,mapping,spatial scale,remote sensing ,geographical analysis,0,Spatial scale,1,Spatial ,1,Geography,1,GIS
+36,1,1,1,1,population genetics,population biology,genetics,genetics,0,Population genetics,1,Genetics,1,Evolutionary biology,0,
+37,1,1,1,1,freshwater and saltwater interactions,salinity,salinity ,water quality and salinity,1,Saltwater,1,Freshwater,1,Seawater intrussion,1,Sea water intrusion
+38,1,1,1,1,pesticide contamination,pesticides,agriculture contamination,pesticides and pharmecuticals,1,Chemical contaminants,1,Contamination,1,Pesticides contamination,1,Contamination
+39,1,1,0,1,soil science,soil,,soil,1,Soil,1,Soil,1,Groundwater unsaturated zone,1,Soil properties
+40,1,1,1,1,cost analysis in urban setting,water delivery,economy,water supply economics,1,Water services,1,Urban water,1,Urban hydroeconomics,0,
+41,1,1,1,1,energy,hydropower,energy ,energy,1,Energy use,1,Energy,1,Desalinization,1,Desalination
+42,0,1,0,0,Plant-rock interactions,,,,0,Substrate,1,Hydrogeology,0,,0,
+43,1,1,1,1,dams and reservoirs,reservoris,reservoirs,reservoirs,1,Reservoir management,1,Surface Reservoir,1,Hydropower reservoir,1,water storage
+44,1,1,0,1,solid wastes,waste ,,waste,1,Solid waste management,1,Waste,1,Water management,0,
+45,1,1,1,1,sedimentary geology,geology,groundwater geology,geology,1,Sediments,1,Geology,1,Geology,0,sedimentation
+46,1,1,1,1,agricultural practices,agriculture,agriculture management,agriculture,1,Agricultural soil,1,Agriculture,1,Agricultural systems,1,Agricultural
+47,0,0,0,0,,,,,0,Miscellaneous,0,,0,,0,
+48,1,1,1,1,oil,oil,oil ,oil,1,Oil contamination,1,Petroleum,1,Hydrocarbures pollution,0,Hydrocarbon
+49,1,0,1,1,"water, surface?",,water management,water supply management,1,Water resources,1,Water supply,1,Water allocation,1,Water surface
+50,1,1,1,1,irrigation,irrigation,agriculture,irrigation,1,Irrigation,1,Irrigation,1,Irrigation,1,irrigation
+51,1,1,1,1,politics and institutions,governance,water governance,social science,1,Water governance,1,Socioenvironemental,1,Water governance,0,social goverance
+52,1,1,1,1,sediment transport,sediment,groundwater soil composition ,sediment,1,Sedimentation,1,Sediment,1,Sediment transport,1,Sedimentation
+53,1,1,1,1,hurricane on islands,islands,hurricanes,islands and climate,1,Islands and extreme weather events,1,Storm,1,Extreme hydrologic events,1,extreme event
+54,1,1,1,1,zooplankton,zooplankton,marine ecology ,primary productivity,1,Plankton biomass,1,Ecology,1,Primary producers,1,Enviromental quality
+55,1,1,1,1,isotope analysis,isotope,isotopes,methodology: water tracers,0,Isotope,1,Isotope,1,Isotopic analysis,0,
+56,1,0,1,1,biofuel from sugar cane,, footprint,global agriculture and economics,0,Ethanol production,1,Water-energy-food nexus,1,Energy crops,1,Market
+57,1,0,0,1,wind,,,fluid dynamics,0,Movement,1,fluid dynamics,1,Oceanic current,0,
+58,1,1,1,1,coral reef,coral,reef ecosystems,coral reefs,1,Coral reefs,1,Marine study,1,Coral reefs,0,Coral reef
+59,0,0,0,0,,,,,0,Random words,0,,0,Spanish words,0,
+60,0,1,1,1,land cover,pasture / grassland management,land coverage,land cover,1,Land cover,1,Landscape,1,Forest conversion,1,land use and cover change
+61,1,1,1,1,Rainfall-canopy interaction,clouds,rainforest ,canopy hydrology,1,Forest precipitation,1,Forest hydrology,1,Forest hydrology,0,
+62,1,1,1,1,lake,lake,lakes,lakes,1,Lakes,1,Freshwater,1,Limnology,1,Lake
+63,1,1,1,1,atmospheric science,atmosphere,athmospheric science,clouds,1,Water vapour,1,Atmospheric science,1,Atmospheric vapor,0,
+64,1,1,1,1,wastewater,wastewater,wastewater,wastewater treatment,1,Wastewater treatment,1,Wastewater,1,Waterwater treatment,1,wastewater
+65,1,1,1,1,units of coastal landscape,shore line,coastal ,coastal,1,Coastal systems / beach,1,Coastal water,1,Costal geology,1,Coastal
+66,1,1,1,1,cost analysis in rural setting,agricultural adoption,economics,agricultural economics,1,Agricultural economics,1,Agronomy,1,Agricultural economics,1,Market
+67,1,1,1,0,flow operations,diversions,surface water,,1,Hydraulic engineering,1,Hydraulic,1,Water diversions,1,water allocation
+68,1,1,1,1,ocean plants,algae,algae ,algae,1,Algae,1,Ecology,1,Algae bloom,1,water quality
+69,1,1,1,1,glaciology,glaciers,glaciers,glaciers and snow hydrology,1,Glaciers,1,Glacier,1,Glacier hydrology,1,snow
+70,1,1,1,1,groundwater,groundwater,groundwater,groundwater,1,Groundwater,1,Groundwater,1,Groundwater,1,groundwater
+71,0,0,0,0,,,,,0,Random,0,,0,,0,
+72,1,1,1,1,basin scale terms,basin,basin ,basins,1,River basin,1,watershed,0,,1,Basin
+73,1,1,0,0,temporal analysis,temporal scale,,,0,Related to time,1,Temporal,0,,1,climate variability
+74,1,1,1,1,remote sensing,remote sensing,remote sensing ,remote sensing,0,Related to images,1,Remote sensing,1,Remote sensing,1,remote sensing
+75,1,1,1,1,policy and stakeholder,decision making,water policy,policy and decision-making,0,Management processes,1,Management,1,Environmental management,1,sustainability
+76,1,1,0,1,descriptive anatomy,,,aquatic species physiology,0,Species characteristics,0,,1,Species description,0,
+77,1,0,1,1,agencies,,water law,national and regional government,1,State management of water resources,1,Management,1,Water Governance,1,water governance
+78,1,1,1,1,modeling,simulation models,modeling,modeling,0,Models,1,Simulation moldeing,1,Modeling,0,modelization
+79,1,1,0,1,mercury contamination,food quality,,food contamination,0,Food quality,0,,1,Mercury bioaccumulation,0,metal
+80,1,1,1,1,geothermal systems,hot springs,groundwater springs,geohydrology and vulcanology,1,Hydrothermal systems,1,Geology,1,Geothermal water,1,well
+81,1,1,1,1,animal species,ecology,wildlife ,animals ,1,Wildlife habitats,1,Habitats,1,Species distribution,0,biodiversity
+82,1,1,1,1,risk assessment,risk management,risk assessments,environmental hazards,1,Hydrological risk,1,Risk management,1,Extreme events,1,vulerability
+83,1,1,1,1,ocean drilling,,groundwater-drilling,offshore geology and drilling,1,Marine geology,1,Petroleum,1,Hydrocarbures extraction,0,
+84,1,1,1,1,spectral analysis,tsunami,seismic ,waves and tides,1,Waves/Fluid dynamics,1,Tsunami,1,Tsunami,1,extreme event
+85,0,0,0,0,,,,,0,Random,0,,0,,0,
+86,1,1,1,1,experiments,experimental design,experimental studies,experimentation,0,Random,1,Experimental,0,,0,
+87,1,1,1,1,river and stream,rivers,streamflow,rivers,1,Rivers,1,River,1,Rivers,1,Rivers
+88,1,1,1,1,flood,amazon flood plain,floods,floodplains,1,Amazon River floods,1,Flood,1,Floodplain,1,flood
+89,1,1,1,1,forest,forestry,forest,trees and forests,1,Tropical forest systems,1,Foresty,1,Forest,0,Forest
+90,1,1,1,1,ecosystem,ecosystem management,conservation and restoration ,ecosystems,1,Ecosystem conservation,1,Environmental systems,1,Ecosystems conservation,1,Ecosystem service
+91,1,1,1,1,coastal water bodies,coastal,estuaries,coastal and estuarine,1,Coastal system / sea,1,Coastal Study,1,Costal ecosystems,0,coastal scale
+92,1,1,1,1,stream ecology,surface water,rivers,stream ecology,1,River streams,1,Hydrology,1,Riparian ecosystems,1,River quality
+93,1,1,1,1,wetlands,wetlands,wetlands,wetlands,1,Wetlands,1,Wetlands,1,Costal ecosystems,1,Wetland
+94,1,1,1,1,microbiology,microbiology,microbiology ,microbiology,1,Microorganisms,1,Microbiology,1,Microbs,1,bacteria ecology
+95,1,1,1,1,climate change impacts,climate change adaptation,climate change,climate change,1,Climate change,1,Climate Change,1,Climate change,1,Climate change
+96,1,1,1,1,species population,species,ecology,population ecology,1,Biodiversity,1,Habitats,1,Species abundance and distribution,1,Enviromental quality
+97,1,1,1,1,analytical chemistry,analytical chemistry,water chemistry,laboratory methodology,0,Lab tests?,1,Sampling,1,Sampling and analysis,1,Hidrology scenarios
+98,1,0,1,0,water quality and pollution,,water quality,,0,On-site water quality testing?,1,Water quality,1,Environmental impact,1,water quality
+99,0,0,0,0,,,,,0,Random,0,,0,,0,
+100,1,1,1,1,coring and datation,dating,paleodata ,methodology: long-term time scales,0,Random,0,,1,Paleorecords,1,Climate change
+101,1,1,1,1,precipitation,precipitation,climate variability ,climate and precipitation,1,Precipitation measurement,1,Hydroclimatology,1,Precipitation measurement ,1,Precipitation
+102,1,1,1,1,carbon budget,carbon emissions,carbon emissions,carbin emissions,0,CO2 and methane emissions,1,Ecosystem,1,Carbon emissions,1,Enviromental quality
+103,1,1,1,1,stream morphology,geomorphology,river geomorphology ,geomorphology,1,Morphodynamics of channels,1,Hydraulic,1,River morphology,1,Rivers
+104,1,1,1,1,nutrients,chemical elements,soil nutrients,nutrients,1,Nitrogen uptake,1,Environment,1,Nutrients concentration,1,Non-point source pollution
+105,1,1,1,1,adsorbed chemical species,,aqueous geochemistry,mass transport,1,Water treatment,1,Contamination,0,,1,water quality
