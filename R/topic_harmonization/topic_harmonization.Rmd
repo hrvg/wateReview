@@ -43,6 +43,6 @@ Column
 renderPlot({
     df <- data.frame(useful = unname(t(df_useful[input$topic, ])))
     df$useful <- factor(df$useful, levels = c(0, 1), labels = c("No", "Yes"))
-    ggplot(df, aes(x = useful)) + geom_bar() + coord_flip() + ylim(0, 8) + theme_minimal() +  theme(text = element_text(size=16))
+    ggplot(df, aes(x = useful)) + geom_bar() + coord_flip() + ylim(0, 9) + theme_minimal() +  theme(text = element_text(size=16))
 })    
 ```

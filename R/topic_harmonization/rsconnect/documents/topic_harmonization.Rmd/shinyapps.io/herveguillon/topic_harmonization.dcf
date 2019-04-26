@@ -5,8 +5,8 @@ account: herveguillon
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 890779
-bundleId: 2039144
+bundleId: 2042421
 url: https://guillon.shinyapps.io/topic_harmonization/
-when: 1556215893.48508
+when: 1556319206.49183
 asMultiple: FALSE
 asStatic: FALSE
