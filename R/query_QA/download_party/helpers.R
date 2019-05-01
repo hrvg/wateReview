@@ -113,3 +113,8 @@ update_database <- function(language, language_dfs){
 	}
 	return(language_dfs)
 }
+
+filter_database <- function(language, language_dfs){
+	df <- language_dfs[[language]]
+	return(df[which(!is.na(df$pdfs)), ])
+}

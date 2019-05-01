@@ -59,7 +59,7 @@ out.dir <- "exploitation/out/run79"
 ##############
 
 # 1. read csv databases
-load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated_2", ".rda")))
+load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated_3", ".rda")))
 
 # 2. get number of samples
 baseline_pct <- table(language_dfs$english$collected)[["in corpus"]] / nrow(language_dfs$english)
@@ -89,4 +89,4 @@ assign_articles_to_players("portuguese", number_of_players = n_players)
 # 6. update the databases
 # language_dfs <- update_database("portuguese", language_dfs)
 # language_dfs <- update_database("spanish", language_dfs)
-# save(language_dfs, file = file.path(root.dir, out.dir, paste0("language_dfs_updated_2", ".rda")))
+# save(language_dfs, file = file.path(root.dir, out.dir, paste0("language_dfs_updated_3", ".rda")))

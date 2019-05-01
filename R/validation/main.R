@@ -1,0 +1,32 @@
+data.dir <- "F:/hguillon/research/data/latin_america/validation_data"
+library(openxlsx)
+xlsxFile <- "english_validation.xlsx"
+l.df <- lapply(seq(12), function(i){
+	df <- read.xlsx(file.path(data.dir,xlsxFile), sheet = i, skipEmptyCols = TRUE, skipEmptyRows = TRUE, rows = 1:50, colNames = FALSE, rowNames = FALSE)
+	df <- rowr::buffer(df, 50, fill = NA)
+	return(df[, -1])
+})
+
+df <- do.call(cbind, l.df)
+colnames(df) <- paste0("X", seq(ncol(df)))
+ind <- apply(df, MARGIN = 1, function(row) !all(is.na(row)))
+df <- df[ind, ]
+rownames(df) <- c("title", "validation", "country_location", "state", "basin_location", "city", "study_years", "event", "day", "week", "year", "years_10", "years_100", "years_1000", "years_10000", "years_100000", "agricultural_field", "aquifer_groundwater", "basin_scale", "catchment _watershed", "city_urban", "coastal", "country_scale", "dam_reservoir", "glacier_alpine", "hydrologic_region", "irrigation_district", "lake", "ocean_sea", "river_stream", "rural", "wetland", "topic.1", "topic.2", "topic.3", "topic.4", "topic.5", paste0("funding.", seq(1:(nrow(df)-37))))
+df <- data.frame(t(df))
+df$country_location[is.na(df$country_location)] <- 0
+df$country_location[df$country_location == " 0"] <- 0
+
+lookup_table <- read.csv(file.path(data.dir, "lookup_lvls.csv"))[, -1]
+df <- cbind(df, lookup_table[as.numeric(df$country_location), ])
+
+df$title <- unlist(sapply(df$title, function(ttl) paste(unlist(strsplit(as.character(ttl), "_"))[-1], collapse = "_")))
+
+keeps <- c("title", "validation", "country_location", paste0("Country.", 1:8))
+write.csv(df[, colnames(df) %in% keeps], "validation_df_location.csv", row.names = FALSE)
+write.csv(df[, c(1, 2, 3, 17:32)], "validation_df_spatial.csv", row.names = FALSE)
+write.csv(df[, c(1, 2, 3, 7:16)], "validation_df_temporal.csv", row.names = FALSE)
+
+fundings <- as.matrix(df[, grep("funding", colnames(df))])
+dim(fundings) <- NULL
+fundings <- data.frame(funding = unique(fundings))
+write.csv(fundings, "funding.csv", row.names = FALSE)
