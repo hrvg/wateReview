@@ -4,49 +4,54 @@ library(OpenML)
 library(NLP)
 library(tm)
 library(data.table)
-
+library(mldr)
 # main
-
-
-
-# get DTM
-# lines <- readLines("F:/hguillon/research/exploitation/R/latin_america/data/corpus.dat")
-# vec <- VectorSource(lines)
-# obj_corpus <- Corpus(vec)
-# obj_dtm <- DocumentTermMatrix(obj_corpus)
-# saveRDS <- saveRDS(obj_dtm"F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm.Rds")
-
-# # modify the format of titles so that match between titleDocs and validationHumanReading
-# titleValidation <- as.character(validationHumanReading$title)
-# titleValidation <- gsub(".pdf", "", titleValidation)
-# titleValidation <- gsub(" ", "_", titleValidation)
-# titleValidation <- gsub("[^\x20-\x7E]", "", titleValidation)
-# titleValidation <- gsub("\\(", "", titleValidation)
-# titleValidation <- gsub("\\)", "", titleValidation)
-# titleValidation <- gsub("\\'", "", titleValidation)
-# titleValidation <- gsub(",", "", titleValidation)
-
-# # look for matches
-# titleInd <- sapply(titleValidation, function(t) grep(t, titleDocs)[1])
-
-## data prep
 
 # read data
 topicDocs <- readRDS("F:/hguillon/research/exploitation/R/latin_america/data/topicDocs.Rds")
 titleDocs <- readLines("F:/hguillon/research/exploitation/R/latin_america/data/info.dat")
 if (nrow(topicDocs) != length(titleDocs)) warning("Dimensions not matching")
-validationHumanReading <- read.csv("F:/hguillon/research/exploitation/R/latin_america/data/validation_df_temporal.csv")
+
+# scale_type <- "spatial"
+scale_type <- "temporal"
+
+validationHumanReading <- read.csv(paste0("F:/hguillon/research/exploitation/R/latin_america/data/validation_df_", scale_type, ".csv"))
 validationHumanReading <- validationHumanReading[validationHumanReading$title != "", ]
 
-obj_dtm <- readRDS("F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm.Rds")
+# get DTM
+dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm.Rds"
+if(!file.exists(dtm_file)){
+	lines <- readLines("F:/hguillon/research/exploitation/R/latin_america/data/corpus.dat")
+	vec <- VectorSource(lines)
+	obj_corpus <- Corpus(vec)
+	obj_dtm <- DocumentTermMatrix(obj_corpus)
+	saveRDS <- saveRDS(obj_dtm, dtm_file)
+}
+obj_dtm <- readRDS(dtm_file)
+obj_dtm <- removeSparseTerms(obj_dtm, 0.9)
 
-titleInd <- readRDS("F:/hguillon/research/exploitation/R/latin_america/data/titleInd.Rds")
+titleInd_file <- "F:/hguillon/research/exploitation/R/latin_america/data/titleInd.Rds"
+if(!file.exists(titleInd_file)){
+	# modify the format of titles so that match between titleDocs and validationHumanReading
+	titleValidation <- as.character(validationHumanReading$title)
+	titleValidation <- gsub(".pdf", "", titleValidation)
+	titleValidation <- gsub(" ", "_", titleValidation)
+	titleValidation <- gsub("[^\x20-\x7E]", "", titleValidation)
+	titleValidation <- gsub("\\(", "", titleValidation)
+	titleValidation <- gsub("\\)", "", titleValidation)
+	titleValidation <- gsub("\\'", "", titleValidation)
+	titleValidation <- gsub(",", "", titleValidation)
+	# look for matches
+	titleInd <- sapply(titleValidation, function(t) grep(t, titleDocs)[1])
+	saveRDS(titleInd, titleInd_file)
+}
+
+titleInd <- readRDS(titleInd_file)
 
 # check that all the papers are found and address issues
 table(is.na(titleInd))
 
 # identify the subset of paper with validation data
-
 validationHumanReading <- validationHumanReading[!is.na(titleInd), ]
 titleInd <- na.omit(unlist(titleInd))
 
@@ -55,6 +60,8 @@ titleInd <- unique(titleInd)
 
 validationTopicDocs <- topicDocs[titleInd, ]
 validationDTM <- obj_dtm[titleInd, ]
+
+## data prep
 
 # remove QA'd out papers
 validationTopicDocs <- validationTopicDocs[validationHumanReading$country_location != 0, ]
@@ -75,50 +82,4 @@ colnames(validationTopicDocs) <- paste0("Topic", seq(ncol(validationTopicDocs)))
 validationDTM <- as.matrix(validationDTM)
 colnames(validationDTM) <- paste0("Term", seq(ncol(validationDTM)))
 
-# preProc <- preProcess(validationDTM, method = c("nzv", "zv"))
-# print(preProc)
-# library(caret)
-# validationDTM <- predict(preProc, validationDTM)
-# validationDTM <- as.data.frame(validationDTM)
-
-# bind the validation data to the topicDocs
-validationHumanReadingTopicDocs <- cbind(validationTopicDocs, validationData)
-validationHumanReadingDTM <- cbind(validationDTM, validationData)
-
-# remove title, QA and location information
-target <- colnames(validationData)
-## SVM model or ANN
-
-set.seed(1789)
-spatial.task = makeMultilabelTask(data = validationHumanReadingDTM, target = target)
-spatial.task = makeMultilabelTask(data = validationHumanReadingTopicDocs, target = target)
-binary.learner = makeLearner("classif.svm")
-lrncc = makeMultilabelClassifierChainsWrapper(binary.learner)
-# rdesc = makeResampleDesc("RepCV", folds = 10, reps = 10)
-rdesc = makeResampleDesc("CV", iters = 10)
-r = resample(lrncc, spatial.task, rdesc, measures = multilabel.acc)
-
-
-
-n = getTaskSize(spatial.task)
-train.set = seq(1, n, by = 2)
-test.set = seq(2, n, by = 2)
-
-spatial.mod.cc = train(lrncc, spatial.task, subset = train.set)
-spatial.pred.cc = predict(spatial.mod.cc, task = spatial.task, subset = test.set)
-
-
-performance(spatial.pred.cc, measures = list(multilabel.hamloss, multilabel.subset01, multilabel.f1, multilabel.acc))
-
-lrnbr = makeMultilabelBinaryRelevanceWrapper(binary.learner)
-
-spatial.mod.br = train(lrnbr, spatial.task, subset = train.set)
-spatial.pred.br = predict(spatial.mod.br, task = spatial.task, subset = test.set)
-
-performance(spatial.pred.br, measures = list(multilabel.hamloss, multilabel.subset01, multilabel.f1, multilabel.acc))
-
-
-
-r = resample(lrnbr, spatial.task, rdesc, measures = multilabel.acc)
-
-
+trainingLabels <- validationData
