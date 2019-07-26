@@ -35,7 +35,7 @@ x <- setdiff(colnames(trainh2o),y)
 dl_model <-	h2o.deeplearning(x = x,
 	y = y,
 	training_frame = trainh2o,
-	nfolds = 10,
+	nfolds = 5,
 	epochs = 1e3)
 
 

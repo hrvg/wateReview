@@ -1,9 +1,8 @@
 # bind the validation data to the topicDocs
 # trainingData <- cbind(validationDTM, trainingLabels)
 
-
 trainingData <- cbind(validationDTM, trainingLabels)
-trainingData <- cbind(validationTopicDocs, trainingLabels)
+# trainingData <- cbind(validationTopicDocs, trainingLabels)
 # trainingData <- cbind(validationTopicDocs, validationDTM, trainingLabels)
 
 spatial_scale_MLDR <- mldr_from_dataframe(trainingData, 
@@ -18,5 +17,5 @@ plot(spatial_scale_MLDR, type = c("LSB"))
 plot(spatial_scale_MLDR, type = c("CH"))
 plot(spatial_scale_MLDR, type = c("AT"))
 
-if (scale_type == "temporal") trainingLabels <- trainingLabels[, -4]
-trainingData <- cbind(validationTopicDocs, trainingLabels)
+# if (scale_type == "temporal") trainingLabels <- trainingLabels[, -4]
+# trainingData <- cbind(validationTopicDocs, trainingLabels)

@@ -33,4 +33,4 @@ from pytorch_pretrained_bert.tokenization import BertTokenizer
 
 from fast_bert.data import BertDataBunch
 from fast_bert.learner import BertLearner
-from fast_bert.metrics import accuracy
+from fast_bert.metrics import accuracy 

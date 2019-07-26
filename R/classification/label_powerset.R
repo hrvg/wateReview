@@ -1,4 +1,3 @@
-# emotionsbr <- mldr_transform(emotions, type = "BR")
 spatial_scale_MLDR.lp <- mldr_transform(spatial_scale_MLDR, type = "LP", spatial_scale_MLDR$labels$index)
 
 set.seed(1789)

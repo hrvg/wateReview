@@ -28,7 +28,7 @@ if(!file.exists(dtm_file)){
 	saveRDS <- saveRDS(obj_dtm, dtm_file)
 }
 obj_dtm <- readRDS(dtm_file)
-obj_dtm <- removeSparseTerms(obj_dtm, 0.9)
+obj_dtm <- removeSparseTerms(obj_dtm, 0.99)
 
 titleInd_file <- "F:/hguillon/research/exploitation/R/latin_america/data/titleInd.Rds"
 if(!file.exists(titleInd_file)){
