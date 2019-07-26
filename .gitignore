@@ -1,4 +1,4 @@
 data/
-src/data/
-src/input/
-src/working/
+src/BERTpy/data/
+src/BERTpy/input/
+src/BERTpy/working/
