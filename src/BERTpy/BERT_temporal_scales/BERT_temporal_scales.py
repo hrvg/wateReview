@@ -41,6 +41,7 @@ test = pd.read_csv('../input/temporal_scales/test.csv')
 ID = 'fnames'
 DATA_COLUMN = 'clean'
 LABEL_COLUMNS = ['event', 'day', 'week', 'year', 'years_10', 'years_100', 'years_1000', 'years_10000', 'years_100000']
+# LABEL_COLUMNS = ['short_term', 'long_term', 'very_long_term']
 
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
@@ -83,6 +84,7 @@ def create_examples(df, labels_available=True):
             labels = row[2:]
         else:
             labels = [0,0,0,0,0,0,0,0,0] # should match number of labels
+            # labels = [0,0,0] # should match number of labels
         examples.append(
             InputExample(guid=guid, text_a=text_a, labels=labels))
     return examples
@@ -95,7 +97,7 @@ SIZE_TRAIN = int(TRAIN_VAL_RATIO*LEN)
 x_train = train[:SIZE_TRAIN]
 x_val = train[SIZE_TRAIN:]
 
-# Use the InputExample class from BERT's run_classifier code to create examples from the data
+# Use the InputExample class from BERT's run_classifier code to create_examples examples from the data
 train_examples = create_examples(x_train)    
 
 train.shape, x_train.shape, x_val.shape
@@ -186,7 +188,8 @@ def convert_examples_to_features(examples,  max_seq_length, tokenizer):
     return features
 
 # We'll set sequences to be at most 128 tokens long.
-MAX_SEQ_LENGTH = 128
+# MAX_SEQ_LENGTH = 128
+MAX_SEQ_LENGTH = 512
 
 def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
                  labels, num_labels, use_one_hot_embeddings):
@@ -347,9 +350,10 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
 
 # Compute train and warmup steps from batch size
 # These hyperparameters are copied from this colab notebook (https://colab.sandbox.google.com/github/tensorflow/tpu/blob/master/tools/colab/bert_finetuning_with_cloud_tpus.ipynb)
-BATCH_SIZE = 32
+# BATCH_SIZE = 32
+BATCH_SIZE = 6
 LEARNING_RATE = 2e-5
-NUM_TRAIN_EPOCHS = 2.0
+NUM_TRAIN_EPOCHS = 10.0
 
 # Warmup is a period of time where hte learning rate 
 # is small and gradually increases--usually helps training.
@@ -562,7 +566,7 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
         "input_ids": tf.FixedLenFeature([seq_length], tf.int64),
         "input_mask": tf.FixedLenFeature([seq_length], tf.int64),
         "segment_ids": tf.FixedLenFeature([seq_length], tf.int64),
-        "label_ids": tf.FixedLenFeature([9], tf.int64),
+        "label_ids": tf.FixedLenFeature([9], tf.int64), # should match the number of labels
         "is_real_example": tf.FixedLenFeature([], tf.int64),
     }
 
@@ -731,7 +735,7 @@ print("Predicting took time ", datetime.now() - current_time)
 
 
 
-x_test = test[125000:140000] 
+x_test = test#[125000:140000] 
 x_test = x_test.reset_index(drop=True) 
 predict_examples = create_examples(x_test,False)
 
@@ -757,7 +761,7 @@ def create_output(predictions):
 
 output_df = create_output(predictions)
 merged_df =  pd.concat([x_test, output_df], axis=1)
-submission = merged_df.drop(['comment_text'], axis=1)
+submission = merged_df.drop(['clean'], axis=1)
 submission.to_csv("sample_submission.csv", index=False)
 
 submission.tail()

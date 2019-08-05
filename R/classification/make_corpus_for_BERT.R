@@ -39,14 +39,19 @@ validationData <- do.call(data.frame, lapply(validationData, function(x) (as.int
 keep <- c("fnames", "clean")
 validationCorpus <- validationCorpus[, colnames(validationCorpus) %in% keep]
 
-trainingData <- cbind(validationCorpus, validationData)
+source("./R/classification/transform_temporal.R")
+
+# trainingData <- cbind(validationCorpus, validationData)
+trainingData <- cbind(validationCorpus, trainingLabels)
+
+print(head(trainingData[, -c(1:2)]))
 
 testing_training_ratio <- 0.15
 
-trainingData_file <- "F:/hguillon/research/exploitation/R/latin_america/data/training.csv"
+trainingData_file <- "F:/hguillon/research/exploitation/R/latin_america/data/train.csv"
 write.csv(trainingData[c(ceiling(testing_training_ratio * nrow(trainingData)):nrow(trainingData)), ], trainingData_file, row.names = FALSE)
 
-testingData_file <- "F:/hguillon/research/exploitation/R/latin_america/data/testing.csv"
+testingData_file <- "F:/hguillon/research/exploitation/R/latin_america/data/test.csv"
 write.csv(trainingData[c(1:floor(testing_training_ratio * nrow(trainingData))), c(1:2)], testingData_file, row.names = FALSE)
 
 testingLabels_file <- "F:/hguillon/research/exploitation/R/latin_america/data/test_labels.csv"
