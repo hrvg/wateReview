@@ -76,6 +76,7 @@ validationHumanReading <- validationHumanReading[, !colnames(validationHumanRead
 validationData <- do.call(data.frame, lapply(validationHumanReading, function(x) as.character(x))) 
 validationData <- do.call(data.frame, lapply(validationData, function(x) replace(x, which(!x %in% c("0", "1")), "0"))) 
 validationData <- do.call(data.frame, lapply(validationData, function(x) as.logical(as.integer(as.character(x))))) 
+
 # changing names
 colnames(validationTopicDocs) <- paste0("Topic", seq(ncol(validationTopicDocs)))
 
