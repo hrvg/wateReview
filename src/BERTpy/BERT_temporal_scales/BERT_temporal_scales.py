@@ -188,8 +188,8 @@ def convert_examples_to_features(examples,  max_seq_length, tokenizer):
     return features
 
 # We'll set sequences to be at most 128 tokens long.
-# MAX_SEQ_LENGTH = 128
-MAX_SEQ_LENGTH = 512
+MAX_SEQ_LENGTH = 128
+# MAX_SEQ_LENGTH = 512
 
 def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
                  labels, num_labels, use_one_hot_embeddings):
@@ -350,10 +350,10 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
 
 # Compute train and warmup steps from batch size
 # These hyperparameters are copied from this colab notebook (https://colab.sandbox.google.com/github/tensorflow/tpu/blob/master/tools/colab/bert_finetuning_with_cloud_tpus.ipynb)
-# BATCH_SIZE = 32
-BATCH_SIZE = 6
+BATCH_SIZE = 32
+# BATCH_SIZE = 6
 LEARNING_RATE = 2e-5
-NUM_TRAIN_EPOCHS = 10.0
+NUM_TRAIN_EPOCHS = 100.0
 
 # Warmup is a period of time where hte learning rate 
 # is small and gradually increases--usually helps training.
@@ -635,6 +635,7 @@ train_input_fn = input_fn_builder( features=train_features, seq_length=MAX_SEQ_L
 # Compute # train and warmup steps from batch size
 num_train_steps = int(len(train_examples) / BATCH_SIZE * NUM_TRAIN_EPOCHS)
 num_warmup_steps = int(num_train_steps * WARMUP_PROPORTION)
+
 
 file_based_convert_examples_to_features(
             train_examples, MAX_SEQ_LENGTH, tokenizer, train_file)
