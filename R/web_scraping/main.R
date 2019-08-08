@@ -1,17 +1,16 @@
-#####################
-##### LIBRARIES #####
-#####################
+#################
+### libraries ###
+#################
 
-library(ggplot2)
-library(forcats)
-library(plyr)
-library(dplyr)
-library(cowplot)
-library(gridExtra)
-library(multcompView)
+if(!require("rvest")) install.packages("rvest")
+library("rvest")
+
+if(!require("rscopus")) install.packages("rscopus")
+library("rscopus")
+rscopus::set_api_key("b8b0698af42a2a93b41dc902260bde9d")
 
 #################
-##### UTILS #####
+##### utils #####
 #################
 
 import::here(.from = "./R/utils/envpath.R", 
@@ -23,39 +22,6 @@ import::here(.from = "./R/utils/lib_query.R",
 	make_pretty_str
 	)
 
-##############
-#### INIT ####
-##############
-
-root.dir <- get_rootdir()
-languages <- c("english", "portuguese", "spanish")
-out.dir <- "exploitation/out/run79"
-
-##############
-#### MAIN ####
-##############
-
-load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated_2", ".rda")))
-
-
-in_corpus <- language_dfs$english[which(language_dfs$english$collected == "in corpus"), ]
-
-in_scopus <- in_corpus$ArticleURL[grepl("scopus", in_corpus$ArticleURL)]
-in_wos <- in_corpus[!grepl("scopus", in_corpus$ArticleURL), ]
-
-#################
-### libraries ###
-#################
-
-if(!require("rvest")) install.packages("rvest")
-library("rvest")
-
-##################
-### parameters ###
-##################
-
-idFileName <- "something.csv"
-
 #################
 ### functions ###
 #################
@@ -66,20 +32,31 @@ get.scopusAbstract <- function(urlScopus){
 	return(scopusAbstract)
 }
 
+get.wosAbstract <- function(DOI){
+	res <- abstract_retrieval(DOI, identifier = "doi", verbose = FALSE)
+	wosAbstract <- res$content$`abstracts-retrieval-response`$coredata$`dc:description`
+	return(wosAbstract)
+}
 
-rscopus::set_api_key("b8b0698af42a2a93b41dc902260bde9d")
+##############
+#### init ####
+##############
 
+root.dir <- get_rootdir()
+languages <- c("english", "portuguese", "spanish")
+out.dir <- "exploitation/out/run79"
 
-#previewAbstract1
+##############
+#### main ####
+##############
 
-# 10.1002/hyp.10995
+load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated_2", ".rda")))
 
-# urlScopus <- "https://www.scopus.com/results/results.uri?numberOfFields=0&src=s&clickedLink=&edit=&editSaveSearch=&origin=searchbasic&authorTab=&affiliationTab=&advancedTab=&scint=1&menu=search&tablin=&searchterm1=+10.1002%2Fhyp.10995&field1=DOI&dateType=Publication_Date_Type&yearFrom=Before+1960&yearTo=Present&loadDate=7&documenttype=All&accessTypes=All&resetFormLink=&st1=+10.1002%2Fhyp.10995&st2=&sot=b&sdt=b&sl=23&s=DOI%28+10.1002%2Fhyp.10995%29&sid=96c83fd35d964bf36a4c276d57a5e93b&searchId=96c83fd35d964bf36a4c276d57a5e93b&txGid=621df8975ccb5e827795e1ecc578e2a9&sort=plf-f&originationType=b&rr="
-# webpageScopus <- read_html(as.character(urlScopus))
+in_corpus <- language_dfs$english[which(language_dfs$english$collected == "in corpus"), ]
 
-############
-### main ###
-############
+in_scopus <- in_corpus$ArticleURL[grepl("scopus", in_corpus$ArticleURL)]
+in_wos <- in_corpus[!grepl("scopus", in_corpus$ArticleURL), ]
+in_wos <- in_wos$DOI
 
 scopusAbstracts<- list()
 for (i in seq_along(as.character(in_scopus))) {
@@ -109,3 +86,44 @@ for (i in seq_along(as.character(in_scopus))) {
     names(scopusAbstracts)[i] <- as.character(in_scopus)[i]
   }
 } 
+
+wosAbstracts <- list()
+for (i in seq_along(as.character(in_wos))) {
+  if (!(as.character(in_wos)[i] %in% names(wosAbstracts))) {
+    cat(paste("Doing", as.character(in_wos)[i], "..."))
+    ok <- FALSE
+    counter <- 0
+    while (ok == FALSE & counter <= 5) {
+      counter <- counter + 1
+      out <- tryCatch({                  
+        get.wosAbstract(as.character(in_wos)[i])
+      },
+      error = function(e) {
+        Sys.sleep(2)
+        e
+      }
+      )
+      if ("error" %in% class(out)) {
+        cat(".")
+      } else {
+        ok <- TRUE
+        cat(" Done.")
+      }
+    }
+    cat("\n")
+   wosAbstracts[[i]] <- ifelse(is.null(out), NA, out)
+   names(wosAbstracts)[i] <- as.character(in_wos)[i]
+  }
+}
+
+ind_scopus <- which(grepl("scopus", in_corpus$ArticleURL) == TRUE)
+ind_wos <- which(grepl("scopus", in_corpus$ArticleURL) == FALSE)
+in_corpus$abstract <- rep(NA, nrow(in_corpus))
+in_corpus$abstract[ind_scopus] <- scopusAbstracts
+in_corpus$abstract[ind_wos] <- wosAbstracts
+
+##############
+### saving ###
+##############
+
+saveRDS(in_corpus, "in_corpus.Rds")
