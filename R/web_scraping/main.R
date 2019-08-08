@@ -81,16 +81,16 @@ rscopus::set_api_key("b8b0698af42a2a93b41dc902260bde9d")
 ### main ###
 ############
 
-geneNames<- list()
-for (i in seq_along(as.character(data_ens$id))) {
-  if (!(as.character(data_ens$id)[i] %in% names(geneNames))) {
-    cat(paste("Doing", as.character(data_ens$id)[i], "..."))
+scopusAbstracts<- list()
+for (i in seq_along(as.character(in_scopus))) {
+  if (!(as.character(in_scopus)[i] %in% names(scopusAbstracts))) {
+    cat(paste("Doing", as.character(in_scopus)[i], "..."))
     ok <- FALSE
     counter <- 0
     while (ok == FALSE & counter <= 5) {
       counter <- counter + 1
       out <- tryCatch({                  
-        get.geneNameNCBI(as.character(data_ens$id)[i])
+        get.scopusAbstract(as.character(in_scopus)[i])
       },
       error = function(e) {
         Sys.sleep(2)
@@ -105,7 +105,7 @@ for (i in seq_along(as.character(data_ens$id))) {
       }
     }
     cat("\n")
-   geneNames[[i]] <- out
-    names(geneNames)[i] <- as.character(data_ens$id)[i]
+   scopusAbstracts[[i]] <- out
+    names(scopusAbstracts)[i] <- as.character(in_scopus)[i]
   }
 } 
