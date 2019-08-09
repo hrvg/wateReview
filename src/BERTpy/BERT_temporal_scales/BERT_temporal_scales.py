@@ -190,6 +190,7 @@ def convert_examples_to_features(examples,  max_seq_length, tokenizer):
 
 # We'll set sequences to be at most 128 tokens long.
 MAX_SEQ_LENGTH = 128
+# MAX_SEQ_LENGTH = 256
 # MAX_SEQ_LENGTH = 512
 
 def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
@@ -352,11 +353,12 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
 # Compute train and warmup steps from batch size
 # These hyperparameters are copied from this colab notebook (https://colab.sandbox.google.com/github/tensorflow/tpu/blob/master/tools/colab/bert_finetuning_with_cloud_tpus.ipynb)
 BATCH_SIZE = 32
+# BATCH_SIZE = 16
 # BATCH_SIZE = 6
-LEARNING_RATE = 2e-5
-NUM_TRAIN_EPOCHS = 2
+LEARNING_RATE = 1e-5
+NUM_TRAIN_EPOCHS = 1000
 
-# Warmup is a period of time where hte learning rate 
+# Warmup is a period of time where the learning rate 
 # is small and gradually increases--usually helps training.
 WARMUP_PROPORTION = 0.1
 # Model configs
@@ -637,6 +639,7 @@ train_input_fn = input_fn_builder( features=train_features, seq_length=MAX_SEQ_L
 num_train_steps = int(len(train_examples) / BATCH_SIZE * NUM_TRAIN_EPOCHS)
 num_warmup_steps = int(num_train_steps * WARMUP_PROPORTION)
 
+print(num_train_steps)
 
 file_based_convert_examples_to_features(
             train_examples, MAX_SEQ_LENGTH, tokenizer, train_file)
@@ -695,7 +698,7 @@ result = estimator.evaluate(input_fn=eval_input_fn, steps=eval_steps)
 
 eval_examples = create_examples(x_val)
 
-eval_features = convert_examples_to_features( eval_examples, MAX_SEQ_LENGTH, tokenizer)
+eval_features = convert_examples_to_features(eval_examples, MAX_SEQ_LENGTH, tokenizer)
 
 eval_steps = None
 
@@ -763,7 +766,8 @@ def create_output(predictions):
 
 output_df = create_output(predictions)
 merged_df =  pd.concat([x_test, output_df], axis=1)
-submission = merged_df.drop(['clean'], axis=1)
+# submission = merged_df.drop(['clean'], axis=1)
+submission = merged_df.drop(['abstract'], axis=1)
 submission.to_csv("sample_submission.csv", index=False)
 
 submission.tail()
