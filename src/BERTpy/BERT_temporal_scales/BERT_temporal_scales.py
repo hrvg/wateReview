@@ -34,12 +34,13 @@ tokenizer = tokenization.FullTokenizer(
       vocab_file=BERT_VOCAB, do_lower_case=True)
 
 
-train_data_path='../input/temporal_scales/train.csv'
+train_data_path='../input/temporal_scales_abstract/train.csv'
 train = pd.read_csv(train_data_path)
-test = pd.read_csv('../input/temporal_scales/test.csv')
+test = pd.read_csv('../input/temporal_scales_abstract/test.csv')
 
 ID = 'fnames'
-DATA_COLUMN = 'clean'
+# DATA_COLUMN = 'clean'
+DATA_COLUMN = 'abstract'
 LABEL_COLUMNS = ['event', 'day', 'week', 'year', 'years_10', 'years_100', 'years_1000', 'years_10000', 'years_100000']
 # LABEL_COLUMNS = ['short_term', 'long_term', 'very_long_term']
 
@@ -353,7 +354,7 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
 BATCH_SIZE = 32
 # BATCH_SIZE = 6
 LEARNING_RATE = 2e-5
-NUM_TRAIN_EPOCHS = 100.0
+NUM_TRAIN_EPOCHS = 2
 
 # Warmup is a period of time where hte learning rate 
 # is small and gradually increases--usually helps training.
