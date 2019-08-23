@@ -1,54 +1,25 @@
-# libraries
-library(mlr)
-library(OpenML)
-library(NLP)
-library(tm)
-library(data.table)
-library(mldr)
-# main
-
-# read data
-topicDocs <- readRDS("F:/hguillon/research/exploitation/R/latin_america/data/topicDocs.Rds")
-titleDocs <- readLines("F:/hguillon/research/exploitation/R/latin_america/data/info.dat")
-if (nrow(topicDocs) != length(titleDocs)) warning("Dimensions not matching")
-
 # scale_type <- "spatial"
-# scale_type <- "temporal"
 scale_type <- "location"
-
 validationHumanReading <- read.csv(paste0("F:/hguillon/research/exploitation/R/latin_america/data/validation_df_", scale_type, ".csv"))
 validationHumanReading <- validationHumanReading[validationHumanReading$title != "", ]
 
-# get DTM
-dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm.Rds"
-dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_abstract.Rds"
-if(!file.exists(dtm_file)){
-	lines <- readLines("F:/hguillon/research/exploitation/R/latin_america/data/corpus.dat")
-	vec <- VectorSource(lines)
-	obj_corpus <- Corpus(vec)
-	obj_dtm <- DocumentTermMatrix(obj_corpus)
-	saveRDS <- saveRDS(obj_dtm, dtm_file)
-}
-obj_dtm <- readRDS(dtm_file)
-obj_dtm <- removeSparseTerms(obj_dtm, 0.99)
-
 titleInd_file <- "F:/hguillon/research/exploitation/R/latin_america/data/titleInd.Rds"
-if(!file.exists(titleInd_file)){
-	# modify the format of titles so that match between titleDocs and validationHumanReading
-	titleValidation <- as.character(validationHumanReading$title)
-	titleValidation <- gsub(".pdf", "", titleValidation)
-	titleValidation <- gsub(" ", "_", titleValidation)
-	titleValidation <- gsub("[^\x20-\x7E]", "", titleValidation)
-	titleValidation <- gsub("\\(", "", titleValidation)
-	titleValidation <- gsub("\\)", "", titleValidation)
-	titleValidation <- gsub("\\'", "", titleValidation)
-	titleValidation <- gsub(",", "", titleValidation)
-	# look for matches
-	titleInd <- sapply(titleValidation, function(t) grep(t, titleDocs)[1])
-	saveRDS(titleInd, titleInd_file)
-}
-
 titleInd <- readRDS(titleInd_file)
+
+englishCorpus_file <- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
+englishCorpus <- readRDS(englishCorpus_file)
+
+in_corpus_file <- "in_corpus.Rds"
+in_corpus <- readRDS(in_corpus_file)
+
+EndNoteIdcorpus <- unname(sapply(in_corpus$pdfs, substr, start = 1, stop = 10))
+EndNoteIdLDA <- unname(sapply(englishCorpus$fnames, substr, start = 1, stop = 10))
+
+table(EndNoteIdLDA %in% EndNoteIdcorpus)
+
+EndNoteIdLDA <- EndNoteIdLDA[which(EndNoteIdLDA %in% EndNoteIdcorpus)]
+englishCorpus <- englishCorpus[which(EndNoteIdLDA %in% EndNoteIdcorpus), ]
+englishCorpus$abstract <- as.character(in_corpus$abstract[match(EndNoteIdLDA, EndNoteIdcorpus)])
 
 # check that all the papers are found and address issues
 table(is.na(titleInd))
@@ -60,8 +31,7 @@ titleInd <- na.omit(unlist(titleInd))
 validationHumanReading <- validationHumanReading[!duplicated(titleInd), ]
 titleInd <- unique(titleInd)
 
-validationTopicDocs <- topicDocs[titleInd, ]
-validationDTM <- obj_dtm[titleInd, ]
+validationCorpus <- englishCorpus[titleInd, ]
 
 ## data prep
 
@@ -84,7 +54,6 @@ if (scale_type == "temporal"){
 	validationData <- validationHumanReading
 }
 
-
 # changing names
 colnames(validationTopicDocs) <- paste0("Topic", seq(ncol(validationTopicDocs)))
 
@@ -102,3 +71,33 @@ if (scale_type == "location"){
 } else {
 	trainingLabels <- validationData
 }
+
+
+keep <- c("fnames", "abstract")
+validationCorpus <- validationCorpus[, colnames(validationCorpus) %in% keep]
+
+# source("./R/classification/transform_temporal.R")
+
+# trainingData <- cbind(validationCorpus, validationData)
+trainingData <- cbind(validationCorpus, trainingLabels)
+
+
+trainingData <- trainingData[which(!trainingData$abstract %in% c("NA", "NULL")), ]
+
+print(head(trainingData[, -c(1:2)]))
+
+testing_training_ratio <- 0
+
+set.seed(1989)
+ind_test <- seq(nrow(trainingData))
+ind_test <- sample(ind_test, ceiling(testing_training_ratio * nrow(trainingData)))
+ind_train <- setdiff(seq(nrow(trainingData)), ind_test)
+
+testingData_file <- "F:/hguillon/research/exploitation/R/latin_america/data/test.csv"
+write.csv(trainingData[ind_test, c(1:2)], testingData_file, row.names = FALSE)
+
+testingLabels_file <- "F:/hguillon/research/exploitation/R/latin_america/data/test_labels.csv"
+write.csv(trainingData[ind_test, -2], testingLabels_file, row.names = FALSE)
+
+trainingData_file <- "F:/hguillon/research/exploitation/R/latin_america/data/train.csv"
+write.csv(trainingData[ind_train, ], trainingData_file, row.names = FALSE)

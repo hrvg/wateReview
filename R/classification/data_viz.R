@@ -1,13 +1,13 @@
 # bind the validation data to the topicDocs
 # trainingData <- cbind(validationDTM, trainingLabels)
 
-# trainingData <- cbind(validationDTM, trainingLabels)
-trainingData <- cbind(validationTopicDocs, trainingLabels)
+trainingData <- cbind(validationDTM, trainingLabels)
+# trainingData <- cbind(validationTopicDocs, trainingLabels)
 # trainingData <- cbind(validationTopicDocs, validationDTM, trainingLabels)
 
-spatial_scale_MLDR <- mldr_from_dataframe(trainingData, 
+MLDR <- mldr_from_dataframe(trainingData, 
 	labelIndices = which(colnames(trainingData) %in% colnames(trainingLabels)), 
-	name = "spatial_scale_MLDR")
+	name = "MLDR")
 
 plot(spatial_scale_MLDR, type = c("LC"), labelIndices = spatial_scale_MLDR$labels$index)
 plot(spatial_scale_MLDR, type = c("LH"))
