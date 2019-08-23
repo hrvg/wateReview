@@ -99,6 +99,9 @@ if (scale_type == "location"){
 	colnames(trainingLabels) <- c("Irrelevant", levels(validationData$Country.1)[-1])
 	trainingLabels <- data.frame(trainingLabels)
 	trainingLabels <- trainingLabels[, which(sapply(apply(trainingLabels, 2, function(col) unique(col)), length) != 1)]
+	trainingLabels <- trainingLabels[, which(apply(apply(trainingLabels, 2, function(col) table(col)), 2, min) != 1)]
+	drops <- c("Bahamas", "Barbados", "Caribbean", "Haiti", "Trinidad.and.Tobago") # countries not in database
+	trainingLabels <- trainingLabels[, which(!colnames(trainingLabels) %in% drops)]
 } else {
 	trainingLabels <- validationData
 }

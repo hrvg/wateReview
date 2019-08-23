@@ -38,6 +38,18 @@ get.wosAbstract <- function(DOI){
 	return(wosAbstract)
 }
 
+get.wosAuthKeywords <- function(DOI){
+  res <- abstract_retrieval(DOI, identifier = "doi", verbose = FALSE)
+  wosAuthKeywords <- unlist(res$content$`abstracts-retrieval-response`$authkeywords)
+  wosAuthKeywords <- unname(wosAuthKeywords[c(FALSE, TRUE)])
+  return(wosAuthKeywords)
+}
+
+get.wosFullResult <- function(DOI){
+  res <- abstract_retrieval(DOI, identifier = "doi", verbose = FALSE)
+  return(res)
+}
+
 ##############
 #### init ####
 ##############
@@ -127,3 +139,37 @@ in_corpus$abstract[ind_wos] <- wosAbstracts
 ##############
 
 saveRDS(in_corpus, "in_corpus.Rds")
+
+###################
+### full_result ###
+###################
+
+wosFullResult <- list()
+n <- length(in_corpus$DOI)
+for (i in seq_along(as.character(in_corpus$DOI))) {
+  if (!(as.character(in_corpus$DOI)[i] %in% names(wosFullResult))) {
+    cat(paste0(round(i / n * 100), "% completed", " | Doing ", as.character(in_corpus$DOI)[i], " ..."))
+    ok <- FALSE
+    counter <- 0
+    while (ok == FALSE & counter <= 5) {
+      counter <- counter + 1
+      out <- tryCatch({                  
+        get.wosFullResult(as.character(in_corpus$DOI)[i])
+      },
+      error = function(e) {
+        Sys.sleep(2)
+        e
+      }
+      )
+      if ("error" %in% class(out)) {
+        cat(".")
+      } else {
+        ok <- TRUE
+        cat(" Done.")
+      }
+    }
+    cat('\n')
+   wosFullResult[[i]] <- ifelse(is.null(out), NA, out)
+   names(wosFullResult)[i] <- as.character(in_corpus$DOI)[i]
+  }
+}
