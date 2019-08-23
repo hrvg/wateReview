@@ -1,17 +1,24 @@
-set.seed(753)
 binary.learner <- makeLearner("classif.svm")
+binary.learner <- makeLearner("classif.saeDNN") # test this
 lrn.rfsrc <- makeLearner("multilabel.randomForestSRC")
 lrn.rFerns <- makeLearner("multilabel.rFerns")
+
 lrn.br <- makeMultilabelBinaryRelevanceWrapper(binary.learner)
-# lrn.db <- makeMultilabelDBRWrapper(binary.learner)
-# lrn.ns <- makeMultilabelNestedStackingWrapper(binary.learner)
-# lrn.st <- makeMultilabelStackingWrapper(binary.learner)
+# chainingOrder <- c("years_100000", "years_10000", "years_1000", "years_100", "day", "week", "event", "years_10", "year")
+chainingOrder <- c("very_long_term", "short_term", "long_term")
+lrn.cc <- makeMultilabelClassifierChainsWrapper(binary.learner, order = chainingOrder)
+lrn.db <- makeMultilabelDBRWrapper(binary.learner)
+lrn.ns <- makeMultilabelNestedStackingWrapper(binary.learner, order = chainingOrder)
+lrn.st <- makeMultilabelStackingWrapper(binary.learner)
 
-# lrns <- list(lrn.rfsrc, lrn.rFerns, lrn.br, lrn.db, lrn.ns, lrn.st)
-lrns <- list(lrn.rfsrc, lrn.rFerns, lrn.br)
+# lrns <- list(lrn.rfsrc, lrn.rFerns, lrn.br, lrn.cc, lrn.db, lrn.ns, lrn.st)
+# lrns <- list(lrn.rfsrc, lrn.rFerns, lrn.br, lrn.cc)
+lrns <- list(lrn.br, lrn.cc, lrn.db, lrn.ns, lrn.st)
 
-rdesc <- makeResampleDesc("CV", iters = 5)
-bmr <- benchmark(lrns, scale.task, rdesc, measures = list(multilabel.hamloss, multilabel.subset01, multilabel.acc, multilabel.tpr, multilabel.ppv, multilabel.f1))
+set.seed(753)
+# rdesc <- makeResampleDesc("RepCV", folds = 3, reps = 10)
+rdesc <- makeResampleDesc("Subsample", iters = 3, split = 3 / 4)
+bmr <- benchmark(lrns, scale.task, rdesc, measures = list(multilabel.hamloss, multilabel.subset01, multilabel.acc, multilabel.tpr, multilabel.ppv, multilabel.f1), keep.pred = FALSE)
 
 
 AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
@@ -20,7 +27,7 @@ print(AggrPerformances)
 MultilabelBinaryPerformance <- sapply(seq_along(lrns), function(i) getMultilabelBinaryPerformances(getBMRPredictions(bmr)[[1]][[i]], measures = list(acc)))
 rownames(MultilabelBinaryPerformance) <- target
 # colnames(MultilabelBinaryPerformance) <- c("RFSRC", "rFern", "BR", "DBR", "NS", "Stack")
-colnames(MultilabelBinaryPerformance) <- c("RFSRC", "rFern", "BR")
+colnames(MultilabelBinaryPerformance) <- c("RFSRC", "rFern", "BR", "CC")
 print(MultilabelBinaryPerformance)
 
 

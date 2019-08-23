@@ -1,48 +1,79 @@
-# This Python 3 environment comes with many helpful analytics libraries installed
-# It is defined by the kaggle/python docker image: https://github.com/kaggle/docker-python
-# For example, here's several helpful packages to load in 
+###############
+### modules ###
+###############
 
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-
-# Input data files are available in the "../input/" directory.
-# For example, running this (by clicking run or pressing Shift+Enter) will list the files in the input directory
-
+import pandas
 import os
 import collections
-print(os.listdir("../working/"))
-
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import tensorflow_hub as hub
 from datetime import datetime
-
 import bert
 from bert import run_classifier
 from bert import optimization
 from bert import tokenization
 from bert import modeling
 
-#import tokenization
-#import modeling
+#######################
+### BERT parameters ###
+#######################
+
 BERT_VOCAB= '../input/uncased-l12-h768-a12/vocab.txt'
-BERT_INIT_CHKPNT = '../input/uncased-l12-h768-a12/bert_model.ckpt'
+BERT_INIT_CHKPNT = '../input/uncased-l12-h768-a12/bert_model.ckpt' # this can be change for subsequent runs
 BERT_CONFIG = '../input/uncased-l12-h768-a12/bert_config.json'
 
-tokenization.validate_case_matches_checkpoint(True,BERT_INIT_CHKPNT)
-tokenizer = tokenization.FullTokenizer(
-      vocab_file=BERT_VOCAB, do_lower_case=True)
+### tokenization ###
+tokenization.validate_case_matches_checkpoint(True, BERT_INIT_CHKPNT)
+tokenizer = tokenization.FullTokenizer(vocab_file=BERT_VOCAB, do_lower_case=True)
+
+TRAIN_VAL_RATIO = 0.8
+MAX_SEQ_LENGTH = 64
+
+# Compute train and warmup steps from batch size
+BATCH_SIZE = 64
+LEARNING_RATE = 2e-5
+NUM_TRAIN_EPOCHS = 1
+
+# Warmup is a period of time where the learning rate is small and gradually increases--usually helps training.
+WARMUP_PROPORTION = 0.1
 
 
-train_data_path='../input/temporal_scales_abstract/train.csv'
+
+####################
+### loading data ###
+####################
+
+train_data_path='../input/temporal_scales_abstract_3/train.csv'
 train = pd.read_csv(train_data_path)
-test = pd.read_csv('../input/temporal_scales_abstract/test.csv')
+test = pd.read_csv('../input/temporal_scales_abstract_3/test.csv')
 
 ID = 'fnames'
-# DATA_COLUMN = 'clean'
 DATA_COLUMN = 'abstract'
-LABEL_COLUMNS = ['event', 'day', 'week', 'year', 'years_10', 'years_100', 'years_1000', 'years_10000', 'years_100000']
-# LABEL_COLUMNS = ['short_term', 'long_term', 'very_long_term']
+LABEL_COLUMNS = ['short_term', 'long_term', 'very_long_term']
+
+### training parameters ###
+LEN = train.shape[0]
+SIZE_TRAIN = int(TRAIN_VAL_RATIO*LEN)
+
+x_train = train[:SIZE_TRAIN]
+x_val = train[SIZE_TRAIN:]
+
+# Compute numbert of train and warmup steps from batch size
+num_train_steps = int(len(x_train) / BATCH_SIZE * NUM_TRAIN_EPOCHS)
+num_warmup_steps = int(num_train_steps * WARMUP_PROPORTION)
+print(num_train_steps)
+
+# Model configs
+SAVE_CHECKPOINTS_STEPS = 1
+SAVE_SUMMARY_STEPS = 1
+OUTPUT_DIR = "../working/output"
+
+##################################
+### creating examples for BERT ###
+##################################
 
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
@@ -64,7 +95,6 @@ class InputExample(object):
         self.text_b = text_b
         self.labels = labels
 
-
 class InputFeatures(object):
     """A single set of features of data."""
 
@@ -75,7 +105,7 @@ class InputFeatures(object):
         self.label_ids = label_ids,
         self.is_real_example=is_real_example
 
-def create_examples(df, labels_available=True):
+def create_examples(df, labels_available=True, def_labels = [0]*len(LABEL_COLUMNS)):
     """Creates examples for the training and dev sets."""
     examples = []
     for (i, row) in enumerate(df.values):
@@ -84,26 +114,16 @@ def create_examples(df, labels_available=True):
         if labels_available:
             labels = row[2:]
         else:
-            labels = [0,0,0,0,0,0,0,0,0] # should match number of labels
-            # labels = [0,0,0] # should match number of labels
+            labels = def_labels
         examples.append(
             InputExample(guid=guid, text_a=text_a, labels=labels))
     return examples
 
+train_examples = create_examples(x_train, labels_available=True, def_labels = [0]*len(LABEL_COLUMNS))    
 
-TRAIN_VAL_RATIO = 0.9
-LEN = train.shape[0]
-SIZE_TRAIN = int(TRAIN_VAL_RATIO*LEN)
-
-x_train = train[:SIZE_TRAIN]
-x_val = train[SIZE_TRAIN:]
-
-# Use the InputExample class from BERT's run_classifier code to create_examples examples from the data
-train_examples = create_examples(x_train)    
-
-train.shape, x_train.shape, x_val.shape
-
-import pandas
+##################################
+### creating features for BERT ###
+##################################
 
 def convert_examples_to_features(examples,  max_seq_length, tokenizer):
     """Loads a data file into a list of `InputBatch`s."""
@@ -188,13 +208,7 @@ def convert_examples_to_features(examples,  max_seq_length, tokenizer):
                               label_ids=labels_ids))
     return features
 
-# We'll set sequences to be at most 128 tokens long.
-MAX_SEQ_LENGTH = 128
-# MAX_SEQ_LENGTH = 256
-# MAX_SEQ_LENGTH = 512
-
-def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
-                 labels, num_labels, use_one_hot_embeddings):
+def create_model(bert_config, is_training, input_ids, input_mask, segment_ids, labels, num_labels, use_one_hot_embeddings):
     """Creates a classification model."""
     model = modeling.BertModel(
         config=bert_config,
@@ -229,7 +243,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
         logits = tf.nn.bias_add(logits, output_bias)
         
         # probabilities = tf.nn.softmax(logits, axis=-1) ### multiclass case
-        probabilities = tf.nn.sigmoid(logits)#### multi-label case
+        probabilities = tf.nn.sigmoid(logits) ### multi-label case
         
         labels = tf.cast(labels, tf.float32)
         tf.logging.info("num_labels:{};logits:{};labels:{}".format(num_labels, logits, labels))
@@ -246,10 +260,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
 
         return (loss, per_example_loss, logits, probabilities)
 
-
-def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
-                     num_train_steps, num_warmup_steps, use_tpu,
-                     use_one_hot_embeddings):
+def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate, num_train_steps, num_warmup_steps, use_tpu, use_one_hot_embeddings):
     """Returns `model_fn` closure for TPUEstimator."""
 
     def model_fn(features, labels, mode, params):  # pylint: disable=unused-argument
@@ -350,29 +361,6 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
 
     return model_fn
 
-# Compute train and warmup steps from batch size
-# These hyperparameters are copied from this colab notebook (https://colab.sandbox.google.com/github/tensorflow/tpu/blob/master/tools/colab/bert_finetuning_with_cloud_tpus.ipynb)
-BATCH_SIZE = 32
-# BATCH_SIZE = 16
-# BATCH_SIZE = 6
-LEARNING_RATE = 1e-5
-NUM_TRAIN_EPOCHS = 1000
-
-# Warmup is a period of time where the learning rate 
-# is small and gradually increases--usually helps training.
-WARMUP_PROPORTION = 0.1
-# Model configs
-SAVE_CHECKPOINTS_STEPS = 1000
-SAVE_SUMMARY_STEPS = 500
-
-OUTPUT_DIR = "../working/output"
-# Specify outpit directory and number of checkpoint steps to save
-run_config = tf.estimator.RunConfig(
-    model_dir=OUTPUT_DIR,
-    save_summary_steps=SAVE_SUMMARY_STEPS,
-    keep_checkpoint_max=1,
-    save_checkpoints_steps=SAVE_CHECKPOINTS_STEPS)
-
 def input_fn_builder(features, seq_length, is_training, drop_remainder):
   """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
@@ -424,7 +412,6 @@ def input_fn_builder(features, seq_length, is_training, drop_remainder):
 
   return input_fn
 
-
 class PaddingInputExample(object):
     """Fake example so the num input examples is a multiple of the batch size.
     When running eval/predict on the TPU, we need to pad the number of examples
@@ -435,8 +422,7 @@ class PaddingInputExample(object):
     battches could cause silent errors.
     """
 
-def convert_single_example(ex_index, example, max_seq_length,
-                           tokenizer):
+def convert_single_example(ex_index, example, max_seq_length, tokenizer):
     """Converts a single `InputExample` into a single `InputFeatures`."""
 
     if isinstance(example, PaddingInputExample):
@@ -526,9 +512,7 @@ def convert_single_example(ex_index, example, max_seq_length,
         is_real_example=True)
     return feature
 
-
-def file_based_convert_examples_to_features(
-        examples, max_seq_length, tokenizer, output_file):
+def file_based_convert_examples_to_features(examples, max_seq_length, tokenizer, output_file):
     """Convert a set of `InputExample`s to a TFRecord file."""
 
     writer = tf.python_io.TFRecordWriter(output_file)
@@ -560,16 +544,14 @@ def file_based_convert_examples_to_features(
         writer.write(tf_example.SerializeToString())
     writer.close()
 
-
-def file_based_input_fn_builder(input_file, seq_length, is_training,
-                                drop_remainder):
+def file_based_input_fn_builder(input_file, seq_length, is_training, drop_remainder):
     """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
     name_to_features = {
         "input_ids": tf.FixedLenFeature([seq_length], tf.int64),
         "input_mask": tf.FixedLenFeature([seq_length], tf.int64),
         "segment_ids": tf.FixedLenFeature([seq_length], tf.int64),
-        "label_ids": tf.FixedLenFeature([9], tf.int64), # should match the number of labels
+        "label_ids": tf.FixedLenFeature([3], tf.int64), # should match the number of labels
         "is_real_example": tf.FixedLenFeature([], tf.int64),
     }
 
@@ -608,7 +590,6 @@ def file_based_input_fn_builder(input_file, seq_length, is_training,
 
     return input_fn
 
-
 def _truncate_seq_pair(tokens_a, tokens_b, max_length):
     """Truncates a sequence pair in place to the maximum length."""
 
@@ -625,24 +606,24 @@ def _truncate_seq_pair(tokens_a, tokens_b, max_length):
         else:
             tokens_b.pop()
 
+# Specify outpit directory and number of checkpoint steps to save
+run_config = tf.estimator.RunConfig(
+    model_dir=OUTPUT_DIR,
+    save_summary_steps=SAVE_SUMMARY_STEPS,
+    keep_checkpoint_max=1,
+    save_checkpoints_steps=SAVE_CHECKPOINTS_STEPS)
+
 #from pathlib import Path
 train_file = os.path.join('../working', "train.tf_record")
 #filename = Path(train_file)
 if not os.path.exists(train_file):
     open(train_file, 'w').close()
 
+train_features = convert_examples_to_features(train_examples, MAX_SEQ_LENGTH, tokenizer)
 
-train_features = convert_examples_to_features( train_examples, MAX_SEQ_LENGTH, tokenizer)
-train_input_fn = input_fn_builder( features=train_features, seq_length=MAX_SEQ_LENGTH, is_training=True, drop_remainder=False)
+train_input_fn = input_fn_builder(features=train_features, seq_length=MAX_SEQ_LENGTH, is_training=True, drop_remainder=False)
 
-# Compute # train and warmup steps from batch size
-num_train_steps = int(len(train_examples) / BATCH_SIZE * NUM_TRAIN_EPOCHS)
-num_warmup_steps = int(num_train_steps * WARMUP_PROPORTION)
-
-print(num_train_steps)
-
-file_based_convert_examples_to_features(
-            train_examples, MAX_SEQ_LENGTH, tokenizer, train_file)
+file_based_convert_examples_to_features(train_examples, MAX_SEQ_LENGTH, tokenizer, train_file)
 tf.logging.info("***** Running training *****")
 tf.logging.info("  Num examples = %d", len(train_examples))
 tf.logging.info("  Batch size = %d", BATCH_SIZE)
@@ -655,6 +636,7 @@ train_input_fn = file_based_input_fn_builder(
     drop_remainder=True)
 
 bert_config = modeling.BertConfig.from_json_file(BERT_CONFIG)
+
 model_fn = model_fn_builder(
   bert_config=bert_config,
   num_labels= len(LABEL_COLUMNS),
@@ -670,10 +652,18 @@ estimator = tf.estimator.Estimator(
   config=run_config,
   params={"batch_size": BATCH_SIZE})
 
+################
+### training ###
+################
+
 print(f'Beginning Training!')
 current_time = datetime.now()
 estimator.train(input_fn=train_input_fn, max_steps=num_train_steps)
 print("Training took time ", datetime.now() - current_time)
+
+############
+### eval ###
+############
 
 eval_file = os.path.join('../working', "eval.tf_record")
 #filename = Path(train_file)
@@ -681,8 +671,7 @@ if not os.path.exists(eval_file):
     open(eval_file, 'w').close()
 
 eval_examples = create_examples(x_val)
-file_based_convert_examples_to_features(
-    eval_examples, MAX_SEQ_LENGTH, tokenizer, eval_file)
+file_based_convert_examples_to_features(eval_examples, MAX_SEQ_LENGTH, tokenizer, eval_file)
 
 # This tells the estimator to run through the entire set.
 eval_steps = None
@@ -692,18 +681,21 @@ eval_input_fn = file_based_input_fn_builder(
     input_file=eval_file,
     seq_length=MAX_SEQ_LENGTH,
     is_training=False,
-    drop_remainder=False)
+    drop_remainder=eval_drop_remainder)
 
 result = estimator.evaluate(input_fn=eval_input_fn, steps=eval_steps)
 
 eval_examples = create_examples(x_val)
-
 eval_features = convert_examples_to_features(eval_examples, MAX_SEQ_LENGTH, tokenizer)
 
 eval_steps = None
 
 eval_drop_remainder = False 
-eval_input_fn = input_fn_builder( features=eval_features, seq_length=MAX_SEQ_LENGTH, is_training=False, drop_remainder=eval_drop_remainder)
+eval_input_fn = input_fn_builder(
+    features=eval_features,
+    seq_length=MAX_SEQ_LENGTH, 
+    is_training=False, 
+    drop_remainder=eval_drop_remainder)
 
 result = estimator.evaluate(input_fn=eval_input_fn, steps=eval_steps)
 
@@ -715,59 +707,66 @@ with tf.gfile.GFile(output_eval_file, "w") as writer:
         writer.write("%s = %s\n" % (key, str(result[key])))
 
 
-x_test = test#[125000:140000]
-x_test = x_test.reset_index(drop=True)
+# CODE BELOW THIS LINE IS FOR TESTING
 
-test_file = os.path.join('../working', "test.tf_record")
-#filename = Path(train_file)
-if not os.path.exists(test_file):
-    open(test_file, 'w').close()
+# x_test = test#[125000:140000]
+# x_test = x_test.reset_index(drop=True)
 
-test_examples = create_examples(x_test, False)
-file_based_convert_examples_to_features(
-    test_examples, MAX_SEQ_LENGTH, tokenizer, test_file)
+# test_file = os.path.join('../working', "test.tf_record")
+# #filename = Path(train_file)
+# if not os.path.exists(test_file):
+#     open(test_file, 'w').close()
 
-predict_input_fn = file_based_input_fn_builder(
-    input_file=test_file,
-    seq_length=MAX_SEQ_LENGTH,
-    is_training=False,
-    drop_remainder=False)
+# test_examples = create_examples(x_test, False)
+# file_based_convert_examples_to_features(
+#     test_examples, MAX_SEQ_LENGTH, tokenizer, test_file)
 
-print('Begin predictions!')
-current_time = datetime.now()
-predictions = estimator.predict(predict_input_fn)
-print("Predicting took time ", datetime.now() - current_time)
+# predict_input_fn = file_based_input_fn_builder(
+#     input_file=test_file,
+#     seq_length=MAX_SEQ_LENGTH,
+#     is_training=False,
+#     drop_remainder=False)
+
+# print('Begin predictions!')
+# current_time = datetime.now()
+# predictions = estimator.predict(predict_input_fn)
+# print("Predicting took time ", datetime.now() - current_time)
 
 
 
-x_test = test#[125000:140000] 
-x_test = x_test.reset_index(drop=True) 
-predict_examples = create_examples(x_test,False)
+# x_test = test#[125000:140000] 
+# x_test = x_test.reset_index(drop=True) 
+# predict_examples = create_examples(x_test,False)
 
-test_features = convert_examples_to_features(predict_examples, MAX_SEQ_LENGTH, tokenizer)
+# test_features = convert_examples_to_features(predict_examples, MAX_SEQ_LENGTH, tokenizer)
 
-print(f'Beginning Training!') 
-current_time = datetime.now()
+# print(f'Beginning Training!') 
+# current_time = datetime.now()
 
-predict_input_fn = input_fn_builder(features=test_features, seq_length=MAX_SEQ_LENGTH, is_training=False, drop_remainder=False) 
-predictions = estimator.predict(predict_input_fn) 
-print("Training took time ", datetime.now() - current_time)
+# predict_input_fn = input_fn_builder(
+#     features=test_features, 
+#     seq_length=MAX_SEQ_LENGTH, 
+#     is_training=False, 
+#     drop_remainder=False)
 
-def create_output(predictions):
-    probabilities = []
-    for (i, prediction) in enumerate(predictions):
-        preds = prediction["probabilities"]
-        probabilities.append(preds)
-    dff = pd.DataFrame(probabilities)
-    dff.columns = LABEL_COLUMNS
+# predictions = estimator.predict(predict_input_fn) 
+# print("Training took time ", datetime.now() - current_time)
+
+# def create_output(predictions):
+#     probabilities = []
+#     for (i, prediction) in enumerate(predictions):
+#         preds = prediction["probabilities"]
+#         probabilities.append(preds)
+#     dff = pd.DataFrame(probabilities)
+#     dff.columns = LABEL_COLUMNS
     
-    return dff
+#     return dff
         
 
-output_df = create_output(predictions)
-merged_df =  pd.concat([x_test, output_df], axis=1)
-# submission = merged_df.drop(['clean'], axis=1)
-submission = merged_df.drop(['abstract'], axis=1)
-submission.to_csv("sample_submission.csv", index=False)
+# output_df = create_output(predictions)
+# merged_df =  pd.concat([x_test, output_df], axis=1)
+# # submission = merged_df.drop(['clean'], axis=1)
+# submission = merged_df.drop(['abstract'], axis=1)
+# submission.to_csv("sample_submission.csv", index=False)
 
-submission.tail()
+# submission.tail()

@@ -1,6 +1,6 @@
 short_term <- validationData[, c("event", "day", "week")]
 short_term <- apply(short_term, 1, function(x) any(x == TRUE))
-year <- validationData[, "year"]
+
 long_term <- validationData[, c("years_10", "years_100")]
 long_term <- apply(long_term, 1, function(x) any(x == TRUE))
 

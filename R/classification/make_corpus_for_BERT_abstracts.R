@@ -21,12 +21,6 @@ EndNoteIdLDA <- EndNoteIdLDA[which(EndNoteIdLDA %in% EndNoteIdcorpus)]
 englishCorpus <- englishCorpus[which(EndNoteIdLDA %in% EndNoteIdcorpus), ]
 englishCorpus$abstract <- as.character(in_corpus$abstract[match(EndNoteIdLDA, EndNoteIdcorpus)])
 
-string_list <- englishCorpus$abstract
-nl <- gsub("[^[:alnum:][:punct:][:space:]]", "",  string_list)
-nl <- gsub("ltigt", " ",  nl)
-nl <- gsub("\\s+", " ", nl)
-nl <- trimws(nl)
-
 # check that all the papers are found and address issues
 table(is.na(titleInd))
 
@@ -57,7 +51,7 @@ validationData <- do.call(data.frame, lapply(validationData, function(x) (as.int
 keep <- c("fnames", "abstract")
 validationCorpus <- validationCorpus[, colnames(validationCorpus) %in% keep]
 
-# source("./R/classification/transform_temporal.R")
+source("./R/classification/transform_temporal.R")
 
 trainingData <- cbind(validationCorpus, validationData)
 # trainingData <- cbind(validationCorpus, trainingLabels)
@@ -67,13 +61,18 @@ trainingData <- trainingData[which(!trainingData$abstract %in% c("NA", "NULL")),
 
 print(head(trainingData[, -c(1:2)]))
 
-testing_training_ratio <- 0.15
+testing_training_ratio <- 0
 
-trainingData_file <- "F:/hguillon/research/exploitation/R/latin_america/data/train.csv"
-write.csv(trainingData[c(ceiling(testing_training_ratio * nrow(trainingData)):nrow(trainingData)), ], trainingData_file, row.names = FALSE)
+set.seed(1989)
+ind_test <- seq(nrow(trainingData))
+ind_test <- sample(ind_test, ceiling(testing_training_ratio * nrow(trainingData)))
+ind_train <- setdiff(seq(nrow(trainingData)), ind_test)
 
 testingData_file <- "F:/hguillon/research/exploitation/R/latin_america/data/test.csv"
-write.csv(trainingData[c(1:floor(testing_training_ratio * nrow(trainingData))), c(1:2)], testingData_file, row.names = FALSE)
+write.csv(trainingData[ind_test, c(1:2)], testingData_file, row.names = FALSE)
 
 testingLabels_file <- "F:/hguillon/research/exploitation/R/latin_america/data/test_labels.csv"
-write.csv(trainingData[c(1:floor(testing_training_ratio * nrow(trainingData))), c(1:2)], testingLabels_file, row.names = FALSE)
+write.csv(trainingData[ind_test, -2], testingLabels_file, row.names = FALSE)
+
+trainingData_file <- "F:/hguillon/research/exploitation/R/latin_america/data/train.csv"
+write.csv(trainingData[ind_train, ], trainingData_file, row.names = FALSE)

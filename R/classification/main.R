@@ -20,6 +20,7 @@ validationHumanReading <- validationHumanReading[validationHumanReading$title !=
 
 # get DTM
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm.Rds"
+dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_abstract.Rds"
 if(!file.exists(dtm_file)){
 	lines <- readLines("F:/hguillon/research/exploitation/R/latin_america/data/corpus.dat")
 	vec <- VectorSource(lines)

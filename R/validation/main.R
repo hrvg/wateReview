@@ -30,3 +30,14 @@ fundings <- as.matrix(df[, grep("funding", colnames(df))])
 dim(fundings) <- NULL
 fundings <- data.frame(funding = unique(fundings))
 write.csv(fundings, "funding.csv", row.names = FALSE)
+
+
+countries <- as.matrix(df[, grepl("Country.", colnames(df))])
+dim(countries) <- NULL
+countries <- countries[countries != ""]
+countries <- data.frame(country = countries)
+
+ggplot(countries, aes(x = country)) + geom_bar() + coord_flip() + theme_minimal() + labs(x = "country", title = "Number of paper per country in the human-read English corpus")
+
+statistics <- sort(signif(table(countries[countries != 0]) / sum(table(countries[countries!= 0])) * 100, 2), decreasing = TRUE)
+print(statistics)
