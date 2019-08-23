@@ -1,8 +1,8 @@
 # bind the validation data to the topicDocs
 # trainingData <- cbind(validationDTM, trainingLabels)
 
-trainingData <- cbind(validationDTM, trainingLabels)
-# trainingData <- cbind(validationTopicDocs, trainingLabels)
+# trainingData <- cbind(validationDTM, trainingLabels)
+trainingData <- cbind(validationTopicDocs, trainingLabels)
 # trainingData <- cbind(validationTopicDocs, validationDTM, trainingLabels)
 
 spatial_scale_MLDR <- mldr_from_dataframe(trainingData, 

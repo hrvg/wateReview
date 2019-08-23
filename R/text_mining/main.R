@@ -1,0 +1,106 @@
+# Load Required Libraries
+library(parallel)
+library(NLP)
+library(tm)
+
+# libraries
+library(mlr)
+library(mldr)
+library(OpenML)
+###################################
+#         configuration           #
+###################################
+
+
+# read data
+topicDocs <- readRDS("F:/hguillon/research/exploitation/R/latin_america/data/topicDocs.Rds")
+titleDocs <- readLines("F:/hguillon/research/exploitation/R/latin_america/data/info.dat")
+# if (nrow(topicDocs) != length(titleDocs)) warning("Dimensions not matching")
+
+# scale_type <- "spatial"
+scale_type <- "temporal"
+
+validationHumanReading <- read.csv(paste0("F:/hguillon/research/exploitation/R/latin_america/data/validation_df_", scale_type, ".csv"))
+validationHumanReading <- validationHumanReading[validationHumanReading$title != "", ]
+
+englishCorpus_file <- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
+englishCorpus <- readRDS(englishCorpus_file)
+
+in_corpus_file <- "in_corpus.Rds"
+in_corpus <- readRDS(in_corpus_file)
+
+EndNoteIdcorpus <- unname(sapply(in_corpus$pdfs, substr, start = 1, stop = 10))
+EndNoteIdLDA <- unname(sapply(englishCorpus$fnames, substr, start = 1, stop = 10))
+
+EndNoteIdLDA <- EndNoteIdLDA[which(EndNoteIdLDA %in% EndNoteIdcorpus)]
+englishCorpus <- englishCorpus[which(EndNoteIdLDA %in% EndNoteIdcorpus), ]
+englishCorpus$abstract <- as.character(in_corpus$abstract[match(EndNoteIdLDA, EndNoteIdcorpus)])
+
+englishCorpus <- englishCorpus[which(titleDocs %in% englishCorpus$fnames), ]
+
+vec <- VectorSource(englishCorpus$abstract)
+obj_corpus <- Corpus(vec)
+obj_dtm <- DocumentTermMatrix(obj_corpus, 
+	control = list(
+		weighting = weightTfIdf, 
+		stemming = TRUE, 
+		removePunctuation = TRUE, 
+		stopwords = TRUE
+		)
+	)
+obj_dtm <- removeSparseTerms(obj_dtm, 1 - 1E-3)
+
+titleInd_file <- "F:/hguillon/research/exploitation/R/latin_america/data/titleInd.Rds"
+if(!file.exists(titleInd_file)){
+	# modify the format of titles so that match between titleDocs and validationHumanReading
+	titleValidation <- as.character(validationHumanReading$title)
+	titleValidation <- gsub(".pdf", "", titleValidation)
+	titleValidation <- gsub(" ", "_", titleValidation)
+	titleValidation <- gsub("[^\x20-\x7E]", "", titleValidation)
+	titleValidation <- gsub("\\(", "", titleValidation)
+	titleValidation <- gsub("\\)", "", titleValidation)
+	titleValidation <- gsub("\\'", "", titleValidation)
+	titleValidation <- gsub(",", "", titleValidation)
+	# look for matches
+	titleInd <- sapply(titleValidation, function(t) grep(t, titleDocs)[1])
+	saveRDS(titleInd, titleInd_file)
+}
+
+titleInd <- readRDS(titleInd_file)
+
+# check that all the papers are found and address issues
+table(is.na(titleInd))
+
+# identify the subset of paper with validation data
+validationHumanReading <- validationHumanReading[!is.na(titleInd), ]
+titleInd <- na.omit(unlist(titleInd))
+
+validationHumanReading <- validationHumanReading[!duplicated(titleInd), ]
+titleInd <- unique(titleInd)
+
+validationTopicDocs <- topicDocs[titleInd, ]
+validationDTM <- obj_dtm[titleInd, ]
+
+## data prep
+
+# remove QA'd out papers
+validationTopicDocs <- validationTopicDocs[validationHumanReading$country_location != 0, ]
+validationDTM <- validationDTM[validationHumanReading$country_location != 0, ]
+validationHumanReading <- validationHumanReading[validationHumanReading$country_location != 0, ]
+
+# remove title, QA and location information
+drops <- c("title", "country_location", "validation", "study_years")
+validationHumanReading <- validationHumanReading[, !colnames(validationHumanReading) %in% drops]
+
+# remove noisy information from human reading
+validationData <- do.call(data.frame, lapply(validationHumanReading, function(x) as.character(x))) 
+validationData <- do.call(data.frame, lapply(validationData, function(x) replace(x, which(!x %in% c("0", "1")), "0"))) 
+validationData <- do.call(data.frame, lapply(validationData, function(x) as.logical(as.integer(as.character(x))))) 
+
+# changing names
+# colnames(validationTopicDocs) <- paste0("Topic", seq(ncol(validationTopicDocs)))
+
+validationDTM <- as.matrix(validationDTM)
+colnames(validationDTM) <- paste0("Term", seq(ncol(validationDTM)))
+
+trainingLabels <- validationData
