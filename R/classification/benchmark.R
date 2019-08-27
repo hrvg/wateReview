@@ -1,7 +1,7 @@
-binary.learner <- makeLearner("classif.svm", predict.type="prob")
-binary.learner <- makeLearner("classif.rpart", predict.type="prob")
+binary.learner <- makeLearner("classif.IBk", predict.type="prob")
+# binary.learner <- makeLearner("classif.rpart", predict.type="prob")
 lrn.rfsrc <- makeLearner("multilabel.randomForestSRC", predict.type="prob")
-lrn.rFerns <- makeLearner("multilabel.rFerns", predict.type="prob")
+lrn.rFerns <- makeLearner("multilabel.rFerns")
 
 lrn.br <- makeMultilabelBinaryRelevanceWrapper(binary.learner)
 # chainingOrder <- c("years_100000", "years_10000", "years_1000", "years_100", "day", "week", "event", "years_10", "year")
@@ -12,12 +12,14 @@ lrn.db <- makeMultilabelDBRWrapper(binary.learner)
 lrn.ns <- makeMultilabelNestedStackingWrapper(binary.learner, order = chainingOrder)
 lrn.st <- makeMultilabelStackingWrapper(binary.learner)
 
-lrns <- list(lrn.rfsrc, lrn.rFerns, lrn.br)
+# lrns <- list(lrn.rfsrc, lrn.rFerns, lrn.br)
 # lrns <- list(lrn.rfsrc, lrn.rFerns, lrn.br, lrn.cc, lrn.db, lrn.ns, lrn.st)
 # lrns <- list(lrn.rfsrc, lrn.rFerns, lrn.br, lrn.cc)
-lrns <- list(lrn.br, lrn.cc, lrn.db, lrn.ns, lrn.st)
+# lrns <- list(lrn.br, lrn.cc, lrn.db, lrn.ns, lrn.st, lrn.rfsrc)
 
-lrns <- list(lrn.cc, lrn.rfsrc)
+# lrns <- list(lrn.cc, lrn.rfsrc, lrn.rFerns)
+# lrns <- list(lrn.rfsrc)
+lrns <- list(lrn.rfsrc)
 
 set.seed(753)
 # rdesc <- makeResampleDesc("RepCV", folds = 3, reps = 10)

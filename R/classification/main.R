@@ -20,8 +20,10 @@ validationHumanReading <- read.csv(paste0("F:/hguillon/research/exploitation/R/l
 validationHumanReading <- validationHumanReading[validationHumanReading$title != "", ]
 
 # get DTM
+# dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_abstract.Rds"
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm.Rds"
-dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_abstract.Rds"
+dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_country.Rds"
+dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm.Rds"
 if(!file.exists(dtm_file)){
 	lines <- readLines("F:/hguillon/research/exploitation/R/latin_america/data/corpus.dat")
 	vec <- VectorSource(lines)
@@ -30,7 +32,7 @@ if(!file.exists(dtm_file)){
 	saveRDS <- saveRDS(obj_dtm, dtm_file)
 }
 obj_dtm <- readRDS(dtm_file)
-obj_dtm <- removeSparseTerms(obj_dtm, 0.99)
+# obj_dtm <- removeSparseTerms(obj_dtm, 0.99)
 
 titleInd_file <- "F:/hguillon/research/exploitation/R/latin_america/data/titleInd.Rds"
 if(!file.exists(titleInd_file)){
