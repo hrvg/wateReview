@@ -1,6 +1,9 @@
 library("quanteda")
 
-obj_dfm <- dfm(englishCorpus_complete$raw, 
+englishCorpus_file <- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
+englishCorpus <- readRDS(englishCorpus_file)
+
+obj_dfm <- dfm(englishCorpus$raw, 
 	tolower = TRUE,
 	stem = TRUE,
 	remove = c(stopwords("en"), stopwords("es"), stopwords("pt")),
@@ -21,6 +24,11 @@ dic <- gsub("Costa.Rica", "Costa", dic)
 dic <- gsub("El.Salvador", "Salvador", dic)
 dic <- gsub("Honduras", "Hondura", dic)
 dic <- gsub("Belize", "Beliz", dic)
+
+
+obj_dtm <- sorted_dfm[, sapply(tolower(dic), function(c) which(feats == c))]
+dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"
+saveRDS(obj_dtm, dtm_file)
 
 geo_dic <- c("america", "amazon", "andes", "altiplano", "patagonia", "guiana", "orinoco", "savana", "swamp", "savan", "llano", "grassland", "parana", "plata", "pampa", "atacama", "iguazu", "highland", "pacif", "atlant", "gulf", "cordillera", "isthmus", "archipelago", "bravo", "sierra", "karst", "cenot", "titicaca", "cotopaxi")
 
