@@ -1,0 +1,80 @@
+# Temporal Scales
+
+|labels | input | model |
+|:---|:---|:---|
+|multilabel | DTM from cleaned corpus | algorithm adaptation |
+|multilabel | LDA topics membership | algorithm adaptation |
+|multilabel | DTM from cleaned corpus | binary relevance (and variations)|
+|multilabel | LDA topics membership | binary relevance (and variations) |
+|multilabel | DTM from cleaned corpus | label powerset |
+|multilabel | LDA topics membership | label powerset |
+
+
+**Simpler labels!**
+
+|labels | input | model |
+|:---|:---|:---|
+|multilabel (simple) | DTM from cleaned corpus | algorithm adaptation |
+|multilabel (simple) | LDA topics membership | algorithm adaptation |
+|multilabel (simple) | DTM from cleaned corpus | binary relevance (and variations)|
+|multilabel (simple) | LDA topics membership | binary relevance (and variations) |
+|multilabel (simple) | DTM from cleaned corpus | label powerset |
+|multilabel (simple) | LDA topics membership | label powerset |
+|multiclass | DTM from cleaned corpus | algorithm adaptation |
+
+**More complex models!**
+
+|labels | input | model |
+|:---|:---|:---|
+|multilabel | raw corpus | Google's BERT |
+|multilabel (simple) | raw corpus | Google's BERT |
+
+**Less noise in the inputs!**
+
+|labels | input | model |
+|:---|:---|:---|
+|multilabel (simple) | DTM from abstracts | algorithm adaptation |
+|multilabel (simple) | DTM from abstracts | binary relevance (and variations)|
+|multilabel (simple) | raw abstract | Google's BERT |
+|multiclass | raw abstract | Google's BERT |
+
+
+**Giving up!**
+
+# Country Tag
+
+|labels | input | model |
+|:---|:---|:---|
+|multilabel | raw abstract | Google's BERT |
+
+
+**Getting more data from keywords!**
+Training set from 1,500 to ~ 3,800
+
+
+|labels | input | model |
+|:---|:---|:---|
+|multilabel | DTM from raw abstract | algorithm adaptation |
+|multilabel | DTM from raw abstract | binary relevance (and variations)|
+
+**Observations with multilabel represent 2%**
+
+|labels | input | model |
+|:---|:---|:---|
+|multiclass | DTM from raw abstract | algorithm adaptation|
+|multiclass | DTM from raw abstract | binary relevance (and variations)|
+|multiclass | DTM from raw corpus | algorithm adaptation|
+|multiclass | DTM from raw corpus | binary relevance (and variations)|
+
+
+**Relevant information is absent from input**
+
+|labels | input | model |
+|:---|:---|:---|
+|multiclass | country count from DTM from raw corpus | random forest|
+
+---
+
+Hervé Guillon
+
+---
