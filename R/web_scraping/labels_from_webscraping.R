@@ -51,7 +51,7 @@ ind_HumanRead_hasTag <- which(englishCorpus_hasTag$fnames %in% englishCorpus[tit
 englishCorpus_hasTag <- englishCorpus_hasTag[-ind_HumanRead_hasTag, ]
 webscrapped_trainingLabels <- webscrapped_trainingLabels[-ind_HumanRead_hasTag, ]
 
-dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"
+dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_geo.Rds"
 obj_dtm <- readRDS(dtm_file)
 
 webscrapped_validationDTM <- obj_dtm[which(englishCorpus_complete$fnames %in% englishCorpus_hasTag$fnames), ]

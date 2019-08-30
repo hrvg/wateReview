@@ -24,7 +24,7 @@ validationHumanReading <- validationHumanReading[validationHumanReading$title !=
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm.Rds"
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_country.Rds"
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm.Rds"
-dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"
+dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_geo.Rds"
 if(!file.exists(dtm_file)){
 	lines <- readLines("F:/hguillon/research/exploitation/R/latin_america/data/corpus.dat")
 	vec <- VectorSource(lines)
@@ -103,8 +103,15 @@ if (scale_type == "location"){
 	trainingLabels <- data.frame(trainingLabels)
 	trainingLabels <- trainingLabels[, which(sapply(apply(trainingLabels, 2, function(col) unique(col)), length) != 1)]
 	trainingLabels <- trainingLabels[, which(apply(apply(trainingLabels, 2, function(col) table(col)), 2, min) != 1)]
-	drops <- c("Bahamas", "Barbados", "Caribbean", "Haiti", "Trinidad.and.Tobago") # countries not in database
+	# drops <- c("Bahamas", "Barbados", "Caribbean", "Haiti", "Trinidad.and.Tobago") # countries not in database
+	# trainingLabels <- trainingLabels[, which(!colnames(trainingLabels) %in% drops)]
+	drops <- setdiff(colnames(trainingLabels), colnames(webscrapped_trainingLabels)) # countries not in database
 	trainingLabels <- trainingLabels[, which(!colnames(trainingLabels) %in% drops)]
+	missingLabels <- setdiff(colnames(webscrapped_trainingLabels), colnames(trainingLabels))
+	missing_trainingLabels <- data.frame(matrix(FALSE, ncol = length(missingLabels), nrow = nrow(trainingLabels)))
+	colnames(missing_trainingLabels) <- missingLabels
+	trainingLabels <- cbind(trainingLabels, missing_trainingLabels)
+	trainingLabels <- trainingLabels[, match(colnames(webscrapped_trainingLabels), colnames(trainingLabels))]
 } else {
 	trainingLabels <- validationData
 }

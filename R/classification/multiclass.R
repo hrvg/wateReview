@@ -11,7 +11,8 @@ MLDR <- mldr_from_dataframe(trainingData,
 
 chainingOrder <- row.names(MLDR$labels)[order(MLDR$labels$count, decreasing = TRUE)]	
 
-trainingLabels <- trainingLabels[, order(MLDR$labels$count)]
+trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
+trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= 10)]
 
 countryLabel <- apply(trainingLabels, 1, function(row) which(row == TRUE)[1])
 

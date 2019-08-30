@@ -207,7 +207,12 @@ ind_naAuthKeywords <- sapply(wosAuthKeywords, function(el) any(is.na(el)))
 ind_validAuthKeywords <- apply(cbind(ind_nullAuthKeywords, ind_naAuthKeywords), 1, function(row) all(row == FALSE))
 validAuthKeywords <- wosAuthKeywords[ind_validAuthKeywords]
 
-relevant_countries <- c("Argentina", "Belize", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Ecuador", "El Salvador", "Guatemala", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", "Uruguay", "Venezuela", "Gulf of Mexico")
+# relevant_countries <- c("Argentina", "Belize", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Ecuador", "El Salvador", "Guatemala", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", "Uruguay", "Venezuela", "Gulf of Mexico")
+
+file <- '../latin_america_SQ_internship/data/countries_database.csv'
+countries_database <- read.csv(file, header = TRUE)
+relevant_countries <- as.character(countries_database$COUNTRY)
+relevant_countries <- c(relevant_countries, "Gulf of Mexico")
 
 
 grepped_AuthKeywords <- sapply(relevant_countries, function(country){

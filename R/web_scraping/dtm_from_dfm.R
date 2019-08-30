@@ -19,11 +19,15 @@ obj_dfm <- dfm_remove(obj_dfm, min_nchar = 4)
 sorted_dfm <- dfm_sort(obj_dfm, decreasing = TRUE, margin = c("features"))
 feats <- featnames(sorted_dfm)
 
-dic <- colnames(webscrapped_trainingLabels)[-1]
+country_tokens <- readRDS("./data/country_tokens.Rds")
+
 dic <- gsub("Costa.Rica", "Costa", dic)
 dic <- gsub("El.Salvador", "Salvador", dic)
 dic <- gsub("Honduras", "Hondura", dic)
 dic <- gsub("Belize", "Beliz", dic)
+dic <- gsub("Trinidad and Tobago", "Trinidad", dic)
+dic <- gsub("St. Lucia", "Lucia", dic)
+dic <- gsub("St. Litts", "Lucia", dic)
 
 
 obj_dtm <- sorted_dfm[, sapply(tolower(dic), function(c) which(feats == c))]
@@ -38,4 +42,11 @@ sort(sapply(tolower(full_dic), function(c) which(feats == c)))
 
 obj_dtm <- sorted_dfm[, c(86:(5000+86-1))]
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm.Rds"
+saveRDS(obj_dtm, dtm_file)
+
+geographical_tokens <- readRDS("./data/geographical_tokens.Rds")
+
+full_tokens <- unique(c(country_tokens, geographical_tokens))
+obj_dtm <- sorted_dfm[, na.omit(match(full_tokens, feats))]
+dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_geo.Rds"
 saveRDS(obj_dtm, dtm_file)
