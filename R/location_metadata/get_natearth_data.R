@@ -43,7 +43,11 @@ rivers_dic <- unique(rivers_dic)[table(rivers_dic) == 1]
 
 dictionnaries <- list(country_dic, states_provinces_dic, regions_dic, glaciers_dic, popplaces_dic, rivers_dic)
 dictionnaries <- list(country_dic, states_provinces_dic, regions_dic, glaciers_dic, rivers_dic)
-sapply(dictionnaries, length)
+dictionnaries <- list(country_dic, regions_dic, glaciers_dic, rivers_dic)
+dictionnaries <- list(country_dic, regions_dic, glaciers_dic, rivers_dic)
+dictionnaries <- list(country_dic, regions_dic)
+dictionnaries <- list(country_dic)
+print(sapply(dictionnaries, length))
 
 dictionnaries <- unlist(dictionnaries)
 dictionnaries <- sapply(dictionnaries, tolower)

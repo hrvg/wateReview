@@ -34,16 +34,18 @@ country_tokens <- readRDS("./data/country_tokens.Rds")
 # dic <- gsub("St. Lucia", "Lucia", dic)
 # dic <- gsub("St. Litts", "Lucia", dic)
 
+country_max <- max(sapply(tolower(country_tokens), function(c) which(feats == c)))
 
-obj_dtm <- sorted_dfm[, sapply(tolower(country_tokens), function(c) which(feats == c))]
+sorted_dfm <- sorted_dfm[, 1:country_max]
+feats <- featnames(sorted_dfm)
+
+obj_dtm <- sorted_dfm[, na.omit(match(country_tokens, feats))]
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"
 saveRDS(obj_dtm, dtm_file)
 
 geo_dic <- c("america", "amazon", "andes", "altiplano", "patagonia", "guiana", "orinoco", "savana", "swamp", "savan", "llano", "grassland", "parana", "plata", "pampa", "atacama", "iguazu", "highland", "pacif", "atlant", "gulf", "cordillera", "isthmus", "archipelago", "bravo", "sierra", "karst", "cenot", "titicaca", "cotopaxi")
 
 full_dic <- c(country_tokens, geo_dic)
-
-sort(sapply(tolower(full_dic), function(c) which(feats == c)))
 
 obj_dtm <- sorted_dfm[, c(86:(5000+86-1))]
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm.Rds"
