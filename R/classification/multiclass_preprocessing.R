@@ -20,6 +20,10 @@ validationDTM <- validationDTM[!is.na(countryLabel), ]
 validationDTM  <- as.data.frame(validationDTM)
 countryLabel <- countryLabel[!is.na(countryLabel)]
 countryLabel <- colnames(trainingLabels)[countryLabel]
+relevant <- which(countryLabel != "Irrelevant")
+countryLabel <- countryLabel[relevant]
+validationDTM <- validationDTM[relevant, ]
+
 countryLabel <- as.factor(countryLabel)
 
 trainingData <- cbind(validationDTM, countryLabel)

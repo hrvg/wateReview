@@ -42,9 +42,9 @@ lrn.rf$par.vals <- list(mtry = 6L)
 set.seed(1789)
 benchmark(lrn.rf, filter.task, rdesc, measures = list(acc, mmce, auc, ppv, tpr, fdr), keep.pred = TRUE)
 
-mod <-  train(lrn.rf, filter.task)
-pred <- predict(mod, task = filter.task)
-cm <- calculateConfusionMatrix(pred, sums = TRUE)
+modFilter <-  train(lrn.rf, filter.task)
+predFilter <- predict(modFilter, task = filter.task)
+cm <- calculateConfusionMatrix(predFilter, sums = TRUE)
 cm <- t(cm$result)
 
 tot_acc <- sum(diag(cm)[seq(nlevels(countryLabelFilter))]) / length(countryLabelFilter)
