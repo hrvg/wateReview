@@ -1,30 +1,3 @@
-leg_validationDTM <- validationDTM
-leg_trainingLabels <- trainingLabels
-
-validationDTM <- rbind(leg_validationDTM, webscrapped_validationDTM)
-trainingLabels <- rbind(leg_trainingLabels, webscrapped_trainingLabels)
-
-trainingData <- cbind(validationDTM, trainingLabels)
-MLDR <- mldr_from_dataframe(trainingData, 
-	labelIndices = which(colnames(trainingData) %in% colnames(trainingLabels)), 
-	name = "MLDR")
-
-chainingOrder <- row.names(MLDR$labels)[order(MLDR$labels$count, decreasing = TRUE)]	
-
-trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
-trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= 10)]
-
-countryLabel <- apply(trainingLabels, 1, function(row) which(row == TRUE)[1])
-
-validationDTM <- validationDTM[!is.na(countryLabel), ]
-validationDTM  <- as.data.frame(validationDTM)
-countryLabel <- countryLabel[!is.na(countryLabel)]
-countryLabel <- colnames(trainingLabels)[countryLabel]
-countryLabel <- as.factor(countryLabel)
-
-trainingData <- cbind(validationDTM, countryLabel)
-target <- "countryLabel"
-
 set.seed(1789)
 scale.task <- makeClassifTask(data = trainingData, target = target)
 print(scale.task)
@@ -41,6 +14,8 @@ AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
 print(AggrPerformances)
 
 lrn.rf$par.vals <- list(mtry = 6L)
+
+benchmark(lrn.rf, scale.task, rdesc, measures = list(acc, mmce, multiclass.au1u, multiclass.aunu), keep.pred = TRUE)
 
 mod <-  train(lrn.rf, scale.task)
 pred <- predict(mod, task = scale.task)
