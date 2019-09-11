@@ -1,0 +1,38 @@
+# Translating all comments to English
+
+# Cleaning the document
+* Removed columns with information that would not be useful in the analysis of the survey
+* Removed comments that were not useful (e.g., “thanks for inviting me”). The comment section was completely open rather than having specific questions. This limits the conclusions we can make (the fact that a respondent does not say something does not mean he does not believe it).
+* Inserted certain prefixes on the column headers in order to organize data appropriately in Atlas.ti. Open-ended questions are then treated differently from close-ended questions (single and multiple choice).
+
+# Imported into Atlas.ti
+* Each row in excel, corresponding to a different survey respondent, is treated as a separate document
+* Each column in excel is also organized. For columns with close-ended questions, each possible answer is treated as a ‘document group’. This makes it easy to see and select, for example, all respondents born in Brazil.
+* It produces a bar that shows all the survey comments. 
+
+# Analysis
+* *Coding:* These can then be coded. For instance, the quote “Funding is a very important resource that allows to develop research projects regarding climate change in water resources but it is scarce in Latin America” can be coded as Funding Difficulties. Similar comments will be tagged with this code as well, so that we can eventually see and quantify these comments.
+* *Links:* We can also show relationships between codes based on what was said by respondents. If respondents mention political issues that hamper funding availability, we code the two elements (e.g. “political issues” and “funding difficulties”, and then link them with the qualifier “[…] is the cause of […]”)
+* *Word cruncher:* Makes a frequency list of words from the survey results with their size proportional to the number of times they were used (Word Cloud only works with Microsoft)
+
+# Results
+There are 391 comments (out of the ~ 2000 survey responses)
+* 78 comments related to funding difficulties (20%)
+* 31 comments related to a perceived lack of collaboration
+* 15 comments related to the importance of interdisciplinary research
+* 13 comments emphasized international support of LA research (i.e. dependence on foreign funds, hope for more interest from foreign funders, etc)
+* 13 comments related to the importance of international collaborations
+* 12 comments related to politics as an obstacle
+* 12 comments related to the importance of climate change research
+* 10 comments related to the lack of value/recognition granted to water research
+* *Funding related issues* were the main concern brought up by respondents. These were often linked to political or economic trends in their countries. Available funds are also not distributed equally across countries, but also within countries, and across research areas.
+* *Collaboration* or the lack thereof was an important theme as well. Many respondents claimed that they collaborated more with North America, Europe and Australia than with other Latin American country, in large part due to funding opportunities. Many would be interested in more collaboration with other LA countries.
+* Not all comments were usable (many commented about the survey method, what research they have done or made generic statements about water being important)
+* There are differences between countries but also sometimes within countries, especially in the case of large countries like Brazil. 
+
+# Code-link relations of ‘funding difficulties’
+* Respondents argued that funding challenges were caused or aggravated by political and economic issues. 
+* They also associated funding challenges with the unequal distribution of research (overall lack of funding and distribution of funding within and across countries). 
+* 89% of respondents said their main source of funding is government funding, which explains their concern with the political and economic environment.
+* Funding difficulties are linked to a lack of value given to water research as well as to the long timeframes associated with (water) research (by decision makers who want quick answers).
+* Climate change research is considered to be affected by the lack of available funding. 
