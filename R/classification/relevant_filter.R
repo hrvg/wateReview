@@ -55,3 +55,8 @@ recall <- (cm['-n-', ] - cm['-err.-', ]) / cm['-n-', ]
 results <- data.frame(precision = precision[seq(ncol(trainingLabels))], recall = recall[seq(ncol(trainingLabels))])
 results$false.discovery.rate <- 1 - results$precision
 print(summary(results))
+
+targetFilter <- as.matrix(obj_dtm)
+colnames(targetFilter) <- colnames(validationDTM)
+totPredFilter <- predict(modFilter, newdata = data.frame(targetFilter))
+predRelevance <- totPredFilter$data$response

@@ -30,3 +30,9 @@ recall <- (cm['-n-', ] - cm['-err.-', ]) / cm['-n-', ]
 results <- data.frame(precision = precision[seq(ncol(trainingLabels))], recall = recall[seq(ncol(trainingLabels))])
 results$false.discovery.rate <- 1 - results$precision
 print(summary(results))
+
+totPred <- predict(mod, newdata = data.frame(targetFilter))
+predCountry <- totPred$data$response
+predCountry <- as.character(predCountry)
+predCountry[which(as.character(predRelevance) == "Irrelevant")] <- "Irrelevant"
+predCountry <- as.factor(predCountry)
