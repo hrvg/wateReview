@@ -1,0 +1,250 @@
+---
+title: "Research Opportunities in Latin America"
+runtime: shiny
+output: flexdashboard::flex_dashboard
+resource_files:
+- data/Americas.dbf
+- data/Americas.prj
+- data/Americas_README.txt
+- data/Americas.sbx
+- data/Americas.shp
+- data/Americas.shp.xml
+- data/Americas.shx
+- data/countries_database_final.csv
+- data/LAC.dbf
+- data/LAC.prj
+- data/LAC.sbn
+- data/LAC.sbx
+- data/LAC.shp
+- data/LAC.shp.xml
+- data/LAC.shx
+- data/survey_results.csv
+---
+
+```{r libraries, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE, results = "hide"}
+library("raster")
+library("tmap")
+library("ggplot2")
+library("Hmisc")
+library("corrplot")
+library("Amelia")
+library("oce")
+library("clValid")
+library("factoextra")
+library("cowplot")
+library("forcats")
+library("dplyr")
+```
+
+```{r data_loading, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+att_names <- readRDS("./data/att_names.Rds")
+att_maps <- readRDS("./data/att_maps.Rds")
+att_hists <- readRDS("./data/att_hists.Rds")
+pearson_corr <- readRDS("./data/pearson_corr.Rds")
+spearman_corr <- readRDS("./data/spearman_corr.Rds")
+l_dist <- readRDS("./data/l_dist.Rds")
+l_optimk_kmeans <- readRDS("./data/l_optimk_kmeans.Rds")
+l_optimk_hierarchical <- readRDS("./data/l_optimk_hierarchical.Rds")
+l_clStab_kmeans <- readRDS("./data/l_clStab_kmeans.Rds")
+l_clStab_hierarchical <- readRDS("./data/l_clStab_hierarchical.Rds")
+l_pkms <- readRDS("./data/l_pkms.Rds")
+l_phcs <- readRDS("./data/l_phcs.Rds")
+theme_phc <- readRDS("./data/theme_phc.Rds")
+
+
+select_list <- function(data_type){
+  which(c("country_descriptors", "survey_results", "survey_results_pct", "lda") == data_type)
+}
+
+```
+
+
+Introduction {data-orientation=rows}
+=====================================
+
+### Introduction
+This website hosts a database developed by the UC Davis Water Management Lab to describe the state of water research in Latin America and the Caribbean. The database combines publicly available country-level statistics, results from a survey of water researchers, and results from a topic model (LDA) of previous research.
+
+The visualizations on this website are intended to help analyze and interpret relationships present in the database. At this time, the database is divided into 3 subsections (country data, survey results, and LDA results) and should be interpreted separately. The results of the LDA model reflect the body of research we collected which was published in English and covers the entire region of Latin America and the Caribbean. These results can be used to understand trends in the region.
+
+The Data Visualizations tab shows mapped country descriptors and results from the survey. Variables can be chosen from a drop down menu. The Correlation Analysis and Distance Matrices tabs shows the relationships between each database entry. The subsection of the database (country data, survey results, and LDA results) can be chosen from a drop down menu. The Clustering Analysis tab shows how countries are grouped together based on country descriptors and survey results.
+
+Members of the research team should explore this website and record your major take-aways from the visualizations in the google doc which can be found in our shared folder: `water-mgmt_latin-america_review-paper/article/results`
+
+Data Visualization {data-orientation=rows}
+=====================================
+
+Sidebar {.sidebar}
+-------------------------------------
+```{r}
+selectInput("attribute", "Attribute", att_names, selected = "GDP_2015", multiple = FALSE,
+  selectize = TRUE, width = NULL, size = NULL)
+```
+
+Column
+-------------------------------------
+### Map
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+renderPlot({
+    att_maps[[which(att_names == input$attribute)]]
+})
+```
+
+### Histogram
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+renderPlot({
+    att_hists[[which(att_names == input$attribute)]]
+})
+```
+
+Correlation Analysis
+=====================================
+
+
+Sidebar {.sidebar}
+-------------------------------------
+```{r}
+selectInput("data_type_corr", "Data Source", c("country_descriptors", "survey_results", "survey_results_pct", "lda"), selected = "country_descriptors", multiple = FALSE,
+  selectize = TRUE, width = NULL, size = NULL)
+```
+
+
+Column {.tabset}
+-------------------------------------
+
+### Pearson's Correlation
+
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+renderPlot({
+    corrplot(pearson_corr[[select_list(input$data_type_corr)]], type = "upper")
+})
+```
+
+### Spearman's Correlation
+
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+renderPlot({
+    corrplot(spearman_corr[[select_list(input$data_type_corr)]], type = "upper")
+})
+```
+
+
+
+Distance Matrices
+=====================================
+
+Sidebar {.sidebar}
+-------------------------------------
+
+```{r}
+selectInput("data_type_dist", "Data Source", c("country_descriptors", "survey_results", "survey_results_pct", "lda"), selected = "country_descriptors", multiple = FALSE,
+  selectize = TRUE, width = NULL, size = NULL)
+```
+
+For the country descriptors and the survey results, distances correspond to Euclidian distances.
+
+For LDA themes, distances correspond to Kullback–Leibler divergences.
+
+Column
+-------------------------------------
+### Distance Matrix
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+renderPlot({
+   l_dist[[select_list(input$data_type_dist)]]
+})
+```
+
+Clustering Analysis {data-orientation=columns}
+=====================================
+
+Sidebar {.sidebar}
+-------------------------------------
+
+```{r}
+selectInput("data_type_clust", "Data Source", c("country_descriptors", "survey_results", "survey_results_pct"), selected = "country_descriptors", multiple = FALSE,
+  selectize = TRUE, width = NULL, size = NULL)
+```
+
+```{r}
+sliderInput("kmean_optik", label = "K-means Clusters",
+            min = 2, max = 10, value = 3, step = 1)
+```
+
+```{r}
+sliderInput("hc_optik", label = "Hierarchical Clusters",
+            min = 2, max = 10, value = 3, step = 1)
+```
+
+For country descriptors and survey results, clustering is performed on Euclidian distances following Ward's criterion .
+
+For LDA themes, clustering is performed on Kullback–Leibler divergences following maximum linkage.
+
+Column {.tabset}
+-------------------------------------
+
+### Country and Survey Clustering
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+# plots to compare
+renderPlot({
+  phc <- l_phcs[[select_list(input$data_type_clust)]][[input$hc_optik - 1]]
+  pkm <- l_pkms[[select_list(input$data_type_clust)]][[input$kmean_optik]]
+  gridExtra::grid.arrange(grobs = list(pkm, phc), nrow = 1)
+})
+```
+
+### LDA Themes Clustering
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+# plots to compare
+renderPlot({
+  theme_phc
+})
+```
+
+### Optimal Number of $k$-mean Clusters
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+renderPlot({
+  plot(l_optimk_kmeans[[select_list(input$data_type_clust)]])
+})
+```
+
+
+### Optimal Number of Hierarchical Clusters
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+renderPlot({
+  plot(l_optimk_hierarchical[[select_list(input$data_type_clust)]])
+})
+```
+
+### $k$-means Cluster Stability
+
+- APN: average proportion of observations not placed in the same cluster under both cases; how robust are the cluster under cross-validation
+- AD: average distance between observations placed in the same cluster under both cases; how the observations wiggle in the cluster
+- ADM: average distance between cluster centers for observations placed in the same cluster under both cases; how the cluster center wiggle
+- FOM: figure of merit: average intra-cluster variance of the deleted column,
+
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+renderPrint({
+    stab <- l_clStab_kmeans[[select_list(input$data_type_clust)]]$stab
+    optim_df <- l_clStab_kmeans[[select_list(input$data_type_clust)]]$optim_df
+    summary(stab)
+    print("Optimal Number of Cluster under One Std Rule")
+    print(optim_df)
+})
+```
+
+### Hierarchical Cluster Stability
+
+- APN: average proportion of observations not placed in the same cluster under both cases; how robust are the cluster under cross-validation
+- AD: average distance between observations placed in the same cluster under both cases; how the observations wiggle in the cluster
+- ADM: average distance between cluster centers for observations placed in the same cluster under both cases; how the cluster center wiggle
+- FOM: figure of merit: average intra-cluster variance of the deleted column,
+
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+renderPrint({
+    stab <- l_clStab_hierarchical[[select_list(input$data_type_clust)]]$stab
+    optim_df <- l_clStab_hierarchical[[select_list(input$data_type_clust)]]$optim_df
+    summary(stab)
+    print("Optimal Number of Cluster under One Std Rule")
+    print(optim_df)
+})    
+```
