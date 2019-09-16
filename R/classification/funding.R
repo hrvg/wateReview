@@ -8,7 +8,7 @@ corpusFile <- "../../../data/latin_america/water-management/english_corpus.rds"
 englishCorpus <- readRDS(corpusFile)
 
 ## funding look-up table
-fundingFile <- "data/funding_sources.csv"
+fundingFile <- "data/funding_sources2.csv"
 fundingLookup <- read.csv(fundingFile, header = FALSE)
 colnames(fundingLookup) <- c("text", "label")
 fundingLookup$text <- as.character(fundingLookup$text)
@@ -30,4 +30,4 @@ dic <- dictionary(dic)
 
 ## DFM
 dfm <- dfm(englishCorpus$raw, dictionary = dic)
-saveRDS(dfm, "funding_dfm.Rds")
+saveRDS(dfm, "funding_dfm.Rds")N
