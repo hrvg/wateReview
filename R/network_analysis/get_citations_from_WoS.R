@@ -26,8 +26,13 @@ get_citing <- function(res){
 	    	citing <- citing$`$`[citing["@idtype"] == "SGR"]
 	    	cited <- content$`abstracts-retrieval-response`$item$bibrecord$tail$bibliography$reference$`ref-info`$`refd-itemidlist`$itemid
 	    	cited <- cited$`$`[cited["@idtype"] == "SGR"]
-	    	citing <- rep(citing, length(cited))
-	    	return(data.frame(citing =citing, cited = cited))
+	    	cited <- cited[which(cited %in% source_ids)]
+	    	if (length(cited) >= 1){
+	    		citing <- rep(citing, length(cited))
+	    		return(data.frame(citing =citing, cited = cited))
+	    	} else {
+	    		return(NA)
+	    	}
 		}
 	}
 	return(NA)
@@ -50,6 +55,7 @@ if (!file.exists(citingFile)){
 	citing_df <- do.call(rbind, citing_dfs)
 	citing_df <- citing_df[which(citing_df$cited %in% source_ids), ]
 	saveRDS(citing_df, citingFile)
+	saveRDS(source_ids, "source_ids.Rds")
 } else {
 	citing_df <- readRDS(citingFile)
 }
