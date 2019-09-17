@@ -22,10 +22,9 @@ consolidated_results$source_ids <- source_ids_LDA
 
 consolidated_network <- consolidated_results[which(consolidated_results$country != "Irrelevant"), ]
 consolidated_network <- consolidated_network[which(consolidated_network$source_ids %in% citation_network$citing), ]
+
 relevant_network <- citation_network[citation_network$citing %in% consolidated_network$source_ids, ]
 relevant_network <- relevant_network[relevant_network$cited %in% consolidated_network$source_ids, ]
-
-
 relevant_network$citing_country <- consolidated_network$country[match(relevant_network$citing, consolidated_network$source_ids)]
 relevant_network$cited_country <- consolidated_network$country[match(relevant_network$cited, consolidated_network$source_ids)]
 relevant_network <- relevant_network[relevant_network$cited_country %in% relevant_network$citing_country, ]
@@ -85,4 +84,60 @@ for (i in seq(nrow(m))){
 }
 
 # 
-docTopics <- consolidated_results[, seq(62)]
+
+relevant_network <- citation_network[citation_network$citing %in% consolidated_network$source_ids, ]
+relevant_network <- relevant_network[relevant_network$cited %in% consolidated_network$source_ids, ]
+
+
+relevant_network$citing_country <- consolidated_network$country[match(relevant_network$citing, consolidated_network$source_ids)]
+relevant_network$cited_country <- consolidated_network$country[match(relevant_network$cited, consolidated_network$source_ids)]
+relevant_network <- relevant_network[relevant_network$cited_country %in% relevant_network$citing_country, ]
+relevant_network$citing_country <- as.factor(as.character(relevant_network$citing_country))
+relevant_network$cited_country <- factor(as.character(relevant_network$cited_country), levels = levels(relevant_network$citing_country))
+
+library("netdiffuseR")
+
+adj <- edgelist_to_adjmat(relevant_network[, 1:2])
+topicNetwork <- consolidated_network[which(consolidated_network$source_ids %in% colnames(adj)), ]
+topicNetwork <- topicNetwork[match(colnames(adj), topicNetwork$source_ids), ]
+docTopics <- topicNetwork[, seq(62)]
+
+network_results <- t(as.matrix(docTopics)) %*% as.matrix(adj) %*% as.matrix(docTopics)
+
+m <- network_results
+m <- apply(m, 1, function(row){
+	row[row <= quantile(row, 0.99)] <- 0
+	return(row)
+})
+m <- t(m)
+grid.col <- rev(rainbow(ncol(m)))
+
+# visualisation
+dev.new()
+circos.clear()
+par(mar = rep(0, 4), cex=1)
+circos.par(start.degree = 0)
+chordDiagram(x = m, directional = 1, 
+	grid.col = grid.col,
+	transparency = 0.2,
+	link.sort = TRUE,
+	self.link = 2,
+	link.decreasing = TRUE,
+	symmetric = FALSE,
+	diffHeight = .05,
+	annotationTrack = NULL,
+	preAllocateTracks = list(
+							list(track.height = circos.par("track.height")),
+                            list(track.height = 0.02, track.margin = c(0, 0))
+                            ),
+	big.gap = 45)
+circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
+  xlim = get.cell.meta.data("xlim")
+  ylim = get.cell.meta.data("ylim")
+  sector.name = get.cell.meta.data("sector.index")
+  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(0, 0.5))
+  # circos.axis(h = "top", labels.cex = 0.5, major.tick.percentage = 0.2, sector.index = sector.name, track.index = 1)
+}, bg.border = NA)
+for (i in seq(ncol(m))){
+	highlight.sector(colnames(m)[i], track.index = 2, col = grid.col[i])
+}
