@@ -19,12 +19,17 @@ source_ids_LDA <- source_ids[which(EndNoteIdcorpus %in% EndNoteIdLDA)]
 
 # loading consolidated results
 missing <- which(! EndNoteIdLDA %in% EndNoteIdcorpus)
+predCountryMembership <- readRDS("predCountryMembership.Rds")
+colnames(predCountryMembership) <- gsub("prob.", "", colnames(predCountryMembership))
 consolidated_results <- readRDS("consolidated_results.Rds")
 consolidated_results$ID <- EndNoteIdLDA[-missing]
 consolidated_results$source_ids <- source_ids_LDA
 
 consolidated_network <- consolidated_results[which(consolidated_results$country != "Irrelevant"), ]
 consolidated_network <- consolidated_network[which(consolidated_network$source_ids %in% citation_network$citing), ]
+
+consolidated_predCountryMembership <- predCountryMembership[which(consolidated_results$country != "Irrelevant"), ]
+consolidated_predCountryMembership <- consolidated_predCountryMembership[which(consolidated_network$source_ids %in% citation_network$citing), ]
 
 relevant_network <- citation_network[citation_network$citing %in% consolidated_network$source_ids, ]
 relevant_network <- relevant_network[relevant_network$cited %in% consolidated_network$source_ids, ]
@@ -35,16 +40,21 @@ relevant_network$citing_country <- as.factor(as.character(relevant_network$citin
 relevant_network$cited_country <- factor(as.character(relevant_network$cited_country), levels = levels(relevant_network$citing_country))
 
 # weighted adjacency matrix with country as vertex and number of citations as weight
-g <- graph_from_data_frame(relevant_network[, 3:4])
-counts <- as.matrix(get.adjacency(g))
-counts <- counts[, order(colnames(counts))]
-counts <- counts[order(rownames(counts)), ]
+# g <- graph_from_data_frame(relevant_network[, 3:4])
+g <- graph_from_data_frame(relevant_network[, 1:2])
+adj <- as.matrix(get.adjacency(g))
+
+consolidated_predCountryMembership$source_ids <- consolidated_network$source_ids
+countryNetwork <- consolidated_predCountryMembership[which(consolidated_network$source_ids %in% colnames(adj)), ]
+countryNetwork <- countryNetwork[match(colnames(adj), countryNetwork$source_ids), ]
+countryNetwork$source_ids <- NULL
+
+network_results <- t(as.matrix(countryNetwork)) %*% as.matrix(adj) %*% as.matrix(countryNetwork)
 
 library("circlize")
 
-countryColors <- readRDS("countryColors.Rds")[levels(consolidated_results$country)[levels(consolidated_results$country) != "Irrelevant"] %in% colnames(counts), ]
-
-m <- counts
+countryColors <- readRDS("countryColors.Rds")
+m <- network_results
 rownames(m) <- gsub("Costa.Rica", "Costa Rica", rownames(m))
 rownames(m) <- gsub("El.Salvador", "El Salvador", rownames(m))
 colnames(m) <- rownames(m)
@@ -108,7 +118,7 @@ network_results <- t(as.matrix(docTopics)) %*% as.matrix(adj) %*% as.matrix(docT
 
 m <- network_results
 m <- apply(m, 1, function(row){
-	row[row <= quantile(row, 0.99)] <- 0
+	row[row <= quantile(row, 0.9)] <- 0
 	return(row)
 })
 m <- t(m)

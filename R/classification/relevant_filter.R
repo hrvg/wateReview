@@ -20,7 +20,7 @@ lrn <- lrn.rf
 
 # set hyper-parameter space
 params <- makeParamSet(
-	makeIntegerParam("mtry",lower = 1, upper = (ncol(trainingData) - 1) %/% 2)
+	makeIntegerParam("mtry",lower = 1, upper = (ncol(trainingDataFilter) - 1) %/% 2)
 	)
 # set resampling strategy
 rdesc <- makeResampleDesc("CV", iters = 10, stratify = TRUE)

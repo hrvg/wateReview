@@ -1,6 +1,6 @@
-validationDTMFilter <- leg_validationDTM
+validationDTMFilter <- validationDTM
 # validationDTMFilter <- cbind(leg_validationDTM, validationTopicDocs)
-trainingLabelsFilter <- leg_trainingLabels
+trainingLabelsFilter <- trainingLabels
 
 trainingDataFilter <- cbind(validationDTMFilter, trainingLabelsFilter)
 MLDRFilter <- mldr_from_dataframe(trainingDataFilter, 

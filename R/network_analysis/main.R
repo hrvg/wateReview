@@ -4,12 +4,20 @@ library("circlize")
 
 # matrix multiplication
 consolidated_results <- readRDS("consolidated_results.Rds")
+predCountryMembership <- readRDS("predCountryMembership.Rds")
+colnames(predCountryMembership) <- gsub("prob.", "", colnames(predCountryMembership))
+
 consolidated_results <- consolidated_results[which(consolidated_results$country != "Irrelevant"), ]
+predCountryMembership <- predCountryMembership[which(consolidated_results$country != "Irrelevant"), ]
+
 docTopics <- consolidated_results[, seq(62)]
 country <- consolidated_results$country
 country <- as.character(country[country != "Irrelevant"])
 df_country <- createDummyFeatures(country)
 network_results <- t(as.matrix(df_country)) %*% as.matrix(docTopics)
+
+network_results <- t(predCountryMembership) %*% as.matrix(docTopics)
+
 dimnames(network_results) <- list(orig = rownames(network_results), dest = colnames(network_results))
 countryTopics <- rowSums(network_results)
 topicsCountry <- colSums(network_results)
@@ -23,24 +31,22 @@ topicsCountry <- colSums(network_results)
 
 m <- network_results
 # filter country with less than 30 papers
-indCountry <- which(table(country) >= 30)
-m <- m[indCountry, ]
+tab <- table(country)
+keepCountries <- names(tab)[which(tab >= 30)]
+m <- m[rownames(m) %in% keepCountries, ]
 m <- apply(m, 1, function(row){
 	row[row <= quantile(row, 0.90)] <- 0
 	return(row)
 })
 m <- t(m)
 m <- m[, which(colSums(m) != 0)]
-rownames(m) <- gsub("Costa.Rica", "Costa Rica", rownames(m))
-rownames(m) <- gsub("El.Salvador", "El Salvador", rownames(m))
-
-
-
 
 
 topic_names <- read.csv("./data/topic_names.csv")
-countryColors <- readRDS("countryColors.Rds")[indCountry, ][order(rownames(m), decreasing = TRUE), ]
+countryColors <- readRDS("countryColors.Rds")[colnames(predCountryMembership) %in% rownames(m), ][order(rownames(m), decreasing = TRUE), ]
 m <- m[order(rownames(m), decreasing = TRUE), ]
+rownames(m) <- gsub("Costa.Rica", "Costa Rica", rownames(m))
+rownames(m) <- gsub("El.Salvador", "El Salvador", rownames(m))
 
 # grid.col <- apply(countryColors, 1, function(row) DescTools::MixColor(row[1], row[2]))
 library(RColorBrewer)
@@ -65,6 +71,9 @@ cluster_descriptors <- cluster_descriptors[order(as.character(cluster_descriptor
 # rownames(lwd_mat) <- rownames(m)
 
 # visualisation
+
+
+
 dev.new()
 circos.clear()
 par(mar = rep(0, 4), cex=.75)
@@ -76,7 +85,7 @@ chordDiagram(x = m, directional = 1,
 	link.decreasing = TRUE,
 	symmetric = FALSE,
 	diffHeight = 0,
-	scale = TRUE,
+	scale = FALSE,
 	annotationTrack = NULL,
 	preAllocateTracks = list(
 							list(track.height = 0.03, track.margin = c(0, 0)),
