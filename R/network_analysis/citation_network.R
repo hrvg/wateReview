@@ -1,3 +1,6 @@
+# libs 
+library("igraph")
+
 # loading citation network
 citation_network <- readRDS("citingDf.Rds")
 source_ids <- readRDS("source_ids.Rds")
@@ -31,13 +34,11 @@ relevant_network <- relevant_network[relevant_network$cited_country %in% relevan
 relevant_network$citing_country <- as.factor(as.character(relevant_network$citing_country))
 relevant_network$cited_country <- factor(as.character(relevant_network$cited_country), levels = levels(relevant_network$citing_country))
 
-counts <- lapply(levels(relevant_network$citing_country), function(c){
-	df <- relevant_network[relevant_network$citing_country == c, ]
-	return(table(df$cited_country))
-})
-counts <- do.call(rbind, counts)
-rownames(counts) <- levels(relevant_network$citing_country)
-
+# weighted adjacency matrix with country as vertex and number of citations as weight
+g <- graph_from_data_frame(relevant_network[, 3:4])
+counts <- as.matrix(get.adjacency(g))
+counts <- counts[, order(colnames(counts))]
+counts <- counts[order(rownames(counts)), ]
 
 library("circlize")
 
@@ -95,9 +96,10 @@ relevant_network <- relevant_network[relevant_network$cited_country %in% relevan
 relevant_network$citing_country <- as.factor(as.character(relevant_network$citing_country))
 relevant_network$cited_country <- factor(as.character(relevant_network$cited_country), levels = levels(relevant_network$citing_country))
 
-library("netdiffuseR")
+# df <- as.matrix(get.adjacency(graph.data.frame(relevant_network[, 3:4])))
+g <- graph_from_data_frame(relevant_network[, 1:2])
+adj <- as.matrix(get.adjacency(g))
 
-adj <- edgelist_to_adjmat(relevant_network[, 1:2])
 topicNetwork <- consolidated_network[which(consolidated_network$source_ids %in% colnames(adj)), ]
 topicNetwork <- topicNetwork[match(colnames(adj), topicNetwork$source_ids), ]
 docTopics <- topicNetwork[, seq(62)]
