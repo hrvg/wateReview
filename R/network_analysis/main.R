@@ -2,6 +2,8 @@
 library("mlr")
 library("circlize")
 
+topic_names <- read.csv("./data/topic_names.csv")
+
 # matrix multiplication
 consolidated_results <- readRDS("consolidated_results.Rds")
 predCountryMembership <- readRDS("predCountryMembership.Rds")
@@ -29,17 +31,37 @@ topicsCountry <- colSums(network_results)
 # distance <- as.dist(dist_theme_KL)
 # p_dist <- fviz_dist(distance, gradient = list(low = "steelblue",  high = "white"), order = TRUE)
 
-m <- network_results
+method_topics <- as.character(topic_names$theme[grepl("methods", topic_names$description)])
+
+threshold <- 0.90
+
+# bright spots
+m <- network_results[, which(!colnames(network_results) %in% method_topics)]
 # filter country with less than 30 papers
 tab <- table(country)
 keepCountries <- names(tab)[which(tab >= 30)]
+
+
 m <- m[rownames(m) %in% keepCountries, ]
 m <- apply(m, 1, function(row){
-	row[row <= quantile(row, 0.90)] <- 0
+	row[row <= quantile(row, threshold)] <- 0
 	return(row)
 })
 m <- t(m)
 m <- m[, which(colSums(m) != 0)]
+
+# blind spots
+m2 <- 1 / network_results[, which(!colnames(network_results) %in% method_topics)]
+# filter country with less than 30 papers
+tab <- table(country)
+keepCountries <- names(tab)[which(tab >= 30)]
+m2 <- m2[rownames(m2) %in% keepCountries, ]
+m2 <- apply(m2, 1, function(row){
+	row[row <= quantile(row, threshold)] <- 0
+	return(row)
+})
+m2 <- t(m2)
+m2 <- m2[, which(colSums(m2) != 0)]
 
 
 topic_names <- read.csv("./data/topic_names.csv")
@@ -47,6 +69,10 @@ countryColors <- readRDS("countryColors.Rds")[colnames(predCountryMembership) %i
 m <- m[order(rownames(m), decreasing = TRUE), ]
 rownames(m) <- gsub("Costa.Rica", "Costa Rica", rownames(m))
 rownames(m) <- gsub("El.Salvador", "El Salvador", rownames(m))
+
+m2 <- m2[order(rownames(m2), decreasing = TRUE), ]
+rownames(m2) <- gsub("Costa.Rica", "Costa Rica", rownames(m2))
+rownames(m2) <- gsub("El.Salvador", "El Salvador", rownames(m2))
 
 # grid.col <- apply(countryColors, 1, function(row) DescTools::MixColor(row[1], row[2]))
 library(RColorBrewer)
@@ -73,44 +99,50 @@ cluster_descriptors <- cluster_descriptors[order(as.character(cluster_descriptor
 # visualisation
 
 
-
-dev.new()
-circos.clear()
-par(mar = rep(0, 4), cex=.75)
-circos.par(start.degree = -90)
-chordDiagram(x = m, directional = 1, 
-	transparency = 0.2,
-	grid.col = grid.col,
-	link.sort = TRUE,
-	link.decreasing = TRUE,
-	symmetric = FALSE,
-	diffHeight = 0,
-	scale = FALSE,
-	annotationTrack = NULL,
-	preAllocateTracks = list(
-							list(track.height = 0.03, track.margin = c(0, 0)),
-							list(track.height = circos.par("track.height")),
-                            list(track.height = 0.02, track.margin = c(0, 0)),
-                            list(track.height = 0.02, track.margin = c(0, 0)),
-                            list(track.height = 0.02, track.margin = c(0, 0))
-                            ),
-	big.gap = 45)
-circos.trackPlotRegion(track.index = 2, panel.fun = function(x, y) {
-  xlim = get.cell.meta.data("xlim")
-  ylim = get.cell.meta.data("ylim")
-  sector.name = get.cell.meta.data("sector.index")
-  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(0, 0.5))
-  # circos.axis(h = "top", labels.cex = 0.5, major.tick.percentage = 0.2, sector.index = sector.name, track.index = 1)
-}, bg.border = NA)
-for (i in seq(nrow(m))){
-	highlight.sector(rownames(m)[i], track.index = 3, col = countryColors[i, 1])
-	highlight.sector(rownames(m)[i], track.index = 4, col = countryColors[i, 2])
-	highlight.sector(rownames(m)[i], track.index = 5, col = countryColors[i, 3])
-	highlight.sector(rownames(m)[i], track.index = 1, col = cluster_descriptors$colour[i])
+VizSpots <- function(m, scaled = FALSE){
+	# grid.col <- apply(countryColors, 1, function(row) DescTools::MixColor(row[1], row[2]))
+	library(RColorBrewer)
+	library(ggsci)
+	grid.col <- rev(pal_igv("default")(nrow(m)))
+	grid.col <- rainbow(nrow(m))
+	grid.col <- c(grid.col, rep("#c2c2c2", ncol(m)))
+	# dev.new()
+	circos.clear()
+	par(mar = rep(0, 4), cex=.75)
+	circos.par(start.degree = -90)
+	chordDiagram(x = m, directional = 1, 
+		transparency = 0.2,
+		grid.col = grid.col,
+		link.sort = TRUE,
+		link.decreasing = TRUE,
+		symmetric = FALSE,
+		diffHeight = 0,
+		scale = scaled,
+		annotationTrack = NULL,
+		preAllocateTracks = list(
+								list(track.height = 0.03, track.margin = c(0, 0)),
+								list(track.height = circos.par("track.height")),
+	                            list(track.height = 0.02, track.margin = c(0, 0)),
+	                            list(track.height = 0.02, track.margin = c(0, 0)),
+	                            list(track.height = 0.02, track.margin = c(0, 0))
+	                            ),
+		big.gap = 45)
+	circos.trackPlotRegion(track.index = 2, panel.fun = function(x, y) {
+	  xlim = get.cell.meta.data("xlim")
+	  ylim = get.cell.meta.data("ylim")
+	  sector.name = get.cell.meta.data("sector.index")
+	  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(0, 0.5))
+	  # circos.axis(h = "top", labels.cex = 0.5, major.tick.percentage = 0.2, sector.index = sector.name, track.index = 1)
+	}, bg.border = NA)
+	for (i in seq(nrow(m))){
+		highlight.sector(rownames(m)[i], track.index = 3, col = countryColors[i, 1])
+		highlight.sector(rownames(m)[i], track.index = 4, col = countryColors[i, 2])
+		highlight.sector(rownames(m)[i], track.index = 5, col = countryColors[i, 3])
+		highlight.sector(rownames(m)[i], track.index = 1, col = cluster_descriptors$colour[i])
+	}
+	for (i in seq(ncol(m))){
+		highlight.sector(colnames(m)[i], track.index = 3, col = "#c2c2c2")
+		highlight.sector(colnames(m)[i], track.index = 4, col = "#c2c2c2")
+		highlight.sector(colnames(m)[i], track.index = 5, col = "#c2c2c2")
+	}
 }
-for (i in seq(ncol(m))){
-	highlight.sector(colnames(m)[i], track.index = 3, col = "#c2c2c2")
-	highlight.sector(colnames(m)[i], track.index = 4, col = "#c2c2c2")
-	highlight.sector(colnames(m)[i], track.index = 5, col = "#c2c2c2")
-}
-
