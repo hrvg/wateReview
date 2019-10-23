@@ -77,3 +77,4 @@ make_df_docs <- function(theme_type = "theme", description = NULL, save = FALSE)
 
 save_predCountryMembership(predCountryMembership)
 predCountry <- get_predCountry()
+consolidate_LDA_results(theme_type = "theme", save =TRUE)
