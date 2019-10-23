@@ -12,7 +12,7 @@ consolidate_LDA_results <- function(theme_type = "theme", description = NULL, sa
 	consolidated_results <- data.frame(year = year, country = as.character(predCountry))
 	consolidated_results <- cbind(theme_df_docs, consolidated_results)
 	if (save){
-		saveRDS(consolidated_results, paste0("consolidated_results_", theme_type, ".Rds"))
+		saveRDS(consolidated_results, paste0("consolidated_results_", ifelse(is.null(description), theme_type, description), ".Rds"))
 	} else {
 		return(consolidated_results)
 	}
@@ -40,7 +40,7 @@ save_predCountryMembership <- function(predCountryMembership){
 make_df_docs <- function(theme_type = "theme", description = NULL, save = FALSE){
 	stopifnot(theme_type %in% c("topic_name", "theme", "NSF_specific", "NSF_general"))
 	if (!is.null(description)){
-		stopifnot(description %in% c("spatial scale", "methods", "temporal scale", "water budget"))
+		stopifnot(description %in% c("spatial scale", "methods", "water budget"))
 	}
 	topicDocs <- readRDS("./data/topicDocs.Rds")
 	topic_names <- read.csv("./data/topic_names.csv")
@@ -75,6 +75,11 @@ make_df_docs <- function(theme_type = "theme", description = NULL, save = FALSE)
 	}
 }
 
-save_predCountryMembership(predCountryMembership)
+# save_predCountryMembership(predCountryMembership)
 predCountry <- get_predCountry()
-consolidate_LDA_results(theme_type = "theme", save =TRUE)
+consolidate_LDA_results(theme_type = "theme", save = TRUE)
+consolidate_LDA_results(theme_type = "NSF_general", save = TRUE)
+consolidate_LDA_results(theme_type = "NSF_specific", save = TRUE)
+consolidate_LDA_results(theme_type = "theme", description = "water budget", save = TRUE)
+consolidate_LDA_results(theme_type = "theme", description = "methods", save = TRUE)
+consolidate_LDA_results(theme_type = "theme", description = "spatial scale", save = TRUE)
