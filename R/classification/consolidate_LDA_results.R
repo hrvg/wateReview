@@ -19,12 +19,10 @@ consolidate_LDA_results <- function(theme_type = "theme", description = NULL, sa
 }
 
 get_predCountry <- function(){
-	predCountryMembership <- readRDS("predCountryMembership.Rds")
-	predCountry <- colnames(predCountryMembership)[apply(predCountryMembership, 1, which.max)]
-	predCountry <- gsub("prob.", "", predCountry)
+	predCountry <- readRDS("predCountry.Rds")
 }
 
-save_predCountryMembership <- function(predCountryMembership){
+save_predCountryMembership <- function(){
 	in_corpus_file <- "in_corpus.Rds"
 	in_corpus <- readRDS(in_corpus_file)
 	EndNoteIdcorpus <- unname(sapply(in_corpus$pdfs, substr, start = 1, stop = 10))
@@ -33,6 +31,8 @@ save_predCountryMembership <- function(predCountryMembership){
 	missing <- which(! EndNoteIdLDA %in% EndNoteIdcorpus)
 	year <- in_corpus_LDA$Year
 	predCountry <- predCountry[-missing]
+	saveRDS(predCountry, "predCountry.Rds")
+	predCountryMembership <- totPred$data
 	predCountryMembership <- totPred$data[-missing, colnames(predCountryMembership) != "response"]
 	saveRDS(predCountryMembership, "predCountryMembership.Rds")
 }
@@ -76,6 +76,7 @@ make_df_docs <- function(theme_type = "theme", description = NULL, save = FALSE)
 }
 
 # save_predCountryMembership(predCountryMembership)
+save_predCountryMembership()
 predCountry <- get_predCountry()
 consolidate_LDA_results(theme_type = "theme", save = TRUE)
 consolidate_LDA_results(theme_type = "NSF_general", save = TRUE)
