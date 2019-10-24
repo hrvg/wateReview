@@ -1,7 +1,4 @@
-library(dplyr)
-library(vegan)
-library(broom)
-
+################### ideas #########################
 # calculate diversity index 
 
 # community = location:
@@ -10,26 +7,6 @@ library(broom)
 # species = topics: 
 # NSF gemeral, NSF specific, theme, theme subsets, specific theme
 # species population = probability or sum of probability
-
-res <- readRDS("~/Downloads/consolidated_results.Rds")
-
-theme <- res %>%
-  filter(country != "Irrelevant") %>%
-  select(-c("year"))
-
-themeSubset <- res %>%
-  filter(country != "Irrelevant") %>%
-  select(-c("year",
-            "amazon floods",
-            "canopy interception",
-            "coastal ecology",
-            "desalination",
-            "fuel",
-            "glaciers",
-            "island and extreme weather",
-            "marine science",
-            "oceans",
-            "salt water"))
 
 
 # GOAL:
@@ -41,34 +18,95 @@ output <- output %>%
   mutate(theme = 0) %>%
   mutate(themesubset = 0) %>%
   mutate(themespecific = 0)
+
+################### libraries #########################
+library(dplyr)
+library(vegan)
+library(broom)
+library(reshape2)
+library(ggpubr)
+library(data.table)
+
+
+################### files #########################
+
+general <- readRDS("./consolidated_results_NSF_general.Rds")
+specific <- readRDS("./consolidated_results_NSF_specific.Rds")
+theme <- readRDS("./consolidated_results_theme.Rds")
+
+
+
+################### functions #########################
+
+diversity_country <- function(df) { 
+  df <- df %>%
+    select(-c("year"))
+  
+  df <- melt(df, 
+            id.vars = c("country"))
+  
+  df <- aggregate(df$value, by=list(df$country,df$variable), FUN=sum)
+  
+  df <- df %>%
+    rename(country = Group.1, sepcies = Group.2, population = x) # species is country*topic
+  
+  df <- group_by(df, country)
+  df <- do(df, tidy(diversity(.$population)))
+  
+  return(df)
+}
   
   
-# A. diversity of each paper
-a <- theme %>%
-  select(-c("country"))
-a2 <- diversity(a)
-
-boxplot(a2)
-densityplot(a2)
-
-# B. diversity in LAC
-b <- as.data.frame(colSums(a))
-b2 <- diversity(b)
+remove_year_country <- function(df) {
+  df <- df %>%
+    select(-c("year","country"))
+  
+  return(df)
+  
+}
 
 
+diversity_LAC <- function(df) { 
+  df <- colSums(df)
+  df <- diversity(df)
+  
+  return(df)
+}
 
-# C. diversity per country
-c <- melt(theme, 
-          id.vars = c("country"))
 
-c <- aggregate(c$value, by=list(c$country,c$variable), FUN=sum)
+################### analysis #########################
 
-c <- c %>%
-  rename(country = Group.1, sepcies = Group.2, population = x) # species is country*topic
+# calculate diversity by paper / for all of LAC
+clean <- remove_year_country(theme) #  specify which (species group)
+diversity_paper <- diversity(clean)
+diversity_LAC <- diversity_LAC(clean)
 
-c <- group_by(c, country)
-c <- do(c, tidy(diversity(.$population)))
+# calculate diversity by country
+general2 <- diversity_country(general)
+specific2 <- diversity_country(specific)
+theme2 <- diversity_country(theme)
 
-plot(c)
-densityplot(c$x)
+diversity_by_country<-cbind(general2, specific2,theme2)
+diversity_by_country <- diversity_by_country %>%
+  select(-c("country1","country2")) %>%
+  rename(NSFgeneral = x, NSFspecific = x1, theme = x2)
+
+fwrite(diversity_by_country, file = "./diversity/diversity by country.csv")
+
+################### graphs #########################
+
+diversity_by_country_graph <- melt(diversity_by_country, 
+           id.vars = c("country"))
+
+
+theme_graph <- subset(diversity_by_country_graph, variable == "NSFspecific")
+
+ggboxplot(theme_graph, x = "country", y= "value") +
+  rotate_x_text()
+
+ggdotchart(theme_graph, x = "country", y = "value", #add color = cluster
+           add = "segments", sorting = "descending", rotate = TRUE) +
+  geom_hline(yintercept = diversity_LAC, linetype = 2, color = "lightgray")
+  
+
 
