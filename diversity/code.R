@@ -26,7 +26,7 @@ library(broom)
 library(reshape2)
 library(ggpubr)
 library(data.table)
-
+library(wesanderson)
 
 
 ################### files #########################
@@ -107,7 +107,14 @@ sum_country <- function(df) {
   
 }
 
-
+sum_country_by_year <- function(df) {
+  
+  df<- aggregate(df$x, by=list(df$Group.2), FUN=sum)
+  
+  
+  return(df)
+  
+}
 
 ################### diversity analysis #########################
 
@@ -167,6 +174,13 @@ general_graph
 
 ggscatter(diversity_by_country, x = "NSFgeneral", y = "theme", color = "country")
 
+
+
+################### corpus analysis graphs #########################
+theme_corpus <- remove_year_country(theme) 
+theme_corpus <- melt(theme_corpus)
+
+
 ################### country level analysis #########################
 
 country_pick <- "Mexico"
@@ -177,14 +191,10 @@ theme_country2 <- sum_country(theme_country2)
 theme_country3 <- remove_country(theme_country)
 theme_country3 <- melt(theme_country3,
                        id.vars = "year")
+theme_country3 <- sum_country_by_year(theme_country3)
+theme_country3 <- subset(theme_country3, Group.1 != 2018)
+theme_country3$cum  <- cumsum(theme_country3$x)
 
-# theme_country3 <- theme_country3 %>%
-  #select(-c("variable"))
-theme_country3<- aggregate(theme_country3$value, 
-                           by=list(theme_country3$variable,theme_country3$year), 
-                           FUN=sum)
-
-ggline(theme_country3, x = "Group.2", y = "x", color = "Group.1")
 
 budget_country <- subset(budget, country == country_pick)
 budget_country2 <- remove_year_country(budget_country)
@@ -194,6 +204,9 @@ methods_country <- subset(methods, country == country_pick)
 methods_country2 <- remove_year_country(methods_country)
 methods_country2 <- sum_country(methods_country2)
 
+general_country <- subset(general, country == country_pick)
+general_country2 <- remove_year_country(general_country)
+general_country2 <- sum_country(general_country2)
 
 ################### country level graphs #########################
 
@@ -212,6 +225,23 @@ ggdotchart(methods_country2,
            x= "key", y = "value", 
            rotate = TRUE, add = "segments", sorting = "descending", 
            title = "methods")
+
+ggline(theme_country3, x = "Group.1", y = "x") # annual 
+ggline(theme_country3, x = "Group.1", y = "cum") # cummulative
+ggplot(theme_country3) +
+  geom_line(aes(x = Group.1, y = x), linetype = "dashed") + 
+  geom_line(aes(x = Group.1, y = cum)) +
+  theme_pubr() +
+  labs(y = "Number of papers on water in Mexico", x=NULL)
+
+
+pie(general_country2$value, labels = general_country2$key, main="Distribution of water research
+based on NSF general categories")
+
+ggpie(general_country2, "value", label = "key",
+      fill = "group",
+      palette = scale_fill_manual(values = wes_palette(n=5, name ="Darjeeling1")))
+
 
 ################### topic level analysis #########################
 
