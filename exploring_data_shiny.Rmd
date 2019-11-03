@@ -22,22 +22,33 @@ resource_files:
 ---
 
 ```{r libraries, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE, results = "hide"}
-library("Amelia")
-library("circlize")
-library("clValid")
-library("corrplot")
-library("cowplot")
-library("factoextra")
-library("forcats")
-library("ggplot2")
-library("ggsci")
-library("Hmisc")
-library("mlr")
-library("oce")
-library("raster")
-library("RColorBrewer")
-library("tmap")
-library("dplyr")
+libraries <- c(
+"Amelia",
+"circlize",
+"clValid",
+"corrplot",
+"cowplot",
+"factoextra",
+"forcats",
+"ggplot2",
+"ggsci",
+"Hmisc",
+"mlr",
+"oce",
+"raster",
+"RColorBrewer",
+"tmap",
+"dplyr"
+)
+
+for (x in libraries){
+   if (!require(x, character.only = TRUE)) {
+        install.packages(x, dependencies = TRUE, INSTALL_opts = c('--no-lock'))
+        library(x, character.only = TRUE)
+    } else {
+      library(x, character.only = TRUE)
+    }
+}
 
 ### functions ###
 import::here(.from = "./R/network_analysis/lib_network_analysis.R", 
@@ -292,17 +303,20 @@ checkboxInput("filter_method", label = "Filter methods themes", value = TRUE)
 ```
 
 ```{r}
-checkboxInput("country_filter", label = "Filter countries", value = FALSE)
-mdef <- get_network(type = "NSF_general", prob = TRUE, filter_method = TRUE, blindspot = FALSE, country.threshold = 0, percentile.threshold = 0)
+mdef <- get_network(type = "theme", prob = TRUE, filter_method = TRUE, blindspot = FALSE, country.threshold = 0, percentile.threshold = 0)
 selectInput("countries", "Countries", rownames(mdef), selected = NULL, multiple = TRUE,
   selectize = TRUE, width = NULL, size = NULL)
+checkboxInput("country_filter", label = "Filter countries", value = FALSE)
+selectInput("themes", "Themes", colnames(mdef), selected = NULL, multiple = TRUE,
+  selectize = TRUE, width = NULL, size = NULL)
+checkboxInput("theme_filter", label = "Filter themes", value = FALSE)
 ```
 
 **If the diagram fails to draw for some type of themes, lower the percentile threshold.**
 
 **The options "Select country" and "Country threshold" are mutually exclusive.**
 
-**When filtering by country, the percentile is applied to the network _after_ the country selection. This means that a 95% filter on Peru shows the top 5% themes for that country.**
+**The options "Select theme" and "Percentile threshold" are mutually exclusive.**
 
 Column
 -------------------------------------
@@ -311,7 +325,9 @@ Column
 
 ```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
 renderPlot({
-  m <- get_network(type = input$type, prob = TRUE, filter_method = input$filter_method, blindspot = input$blindspot, country.threshold = input$country.threshold, percentile.threshold = input$percentile.threshold, country_filter = input$country_filter, countries = input$countries)
+  m <- get_network(type = input$type, prob = TRUE, filter_method = input$filter_method, blindspot = input$blindspot, country.threshold = input$country.threshold, percentile.threshold = input$percentile.threshold, 
+    country_filter = input$country_filter, countries = input$countries,
+    theme_filter = input$theme_filter, themes = input$themes)
   VizSpots(m, input$scaled, cluster_color = FALSE)
 })   
 ```

@@ -1,10 +1,16 @@
-get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blindspot = FALSE, country.threshold = 30, percentile.threshold = 0.90, country_filter = FALSE, countries = NULL){
+get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blindspot = FALSE, country.threshold = 30, percentile.threshold = 0.90, country_filter = FALSE, countries = NULL, theme_filter = FALSE, themes = NULL){
 
 	ensure_mat <- function(network_results){
-		if (country_filter & !is.null(countries)){
-			if (length(countries) == 1){
+		if ((country_filter | theme_filter) & !is.matrix(network_results)){
+			if (country_filter & length(countries) == 1){
 				network_results <- t(as.matrix(network_results))
 				rownames(network_results) <- countries
+				if (ncol(network_results) == length(themes)) {
+					colnames(network_results) <- themes
+				}
+			} else if (theme_filter & length(themes) == 1){
+				network_results <- as.matrix(network_results)
+				colnames(network_results) <- themes
 			}
 		}
 		return(network_results)
@@ -32,14 +38,19 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 	rownames(network_results) <- gsub("Costa.Rica", "Costa Rica", rownames(network_results))
 	rownames(network_results) <- gsub("El.Salvador", "El Salvador", rownames(network_results))
 
-	if (filter_method & type == "theme"){
-		topic_names <- read.csv("./data/topic_names.csv")
-		method_topics <- as.character(topic_names$theme[grepl("methods", topic_names$description)])
-		network_results <- network_results[, which(!colnames(network_results) %in% method_topics)]
+	if (!theme_filter){
+		if (filter_method & type == "theme"){
+			topic_names <- read.csv("./data/topic_names.csv")
+			method_topics <- as.character(topic_names$theme[grepl("methods", topic_names$description)])
+			network_results <- network_results[, which(!colnames(network_results) %in% method_topics)]
+		}
 	}
-
 	if (country_filter & !is.null(countries)){
 		network_results <- network_results[rownames(network_results) %in% countries, ]
+		network_results <- ensure_mat(network_results)
+	}
+	if (theme_filter & !is.null(themes)){
+		network_results <- network_results[, colnames(network_results) %in% themes]
 		network_results <- ensure_mat(network_results)
 	}
 
@@ -53,29 +64,31 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 		network_results <- network_results[rownames(network_results) %in% keepCountries, ]
 	}
 
-	network_results <- apply(network_results, 1, function(row){
-		row[row <= quantile(row, percentile.threshold)] <- 0
-		return(row)
-	})
+	if(!theme_filter){
+		network_results <- apply(network_results, 1, function(row){
+			row[row <= quantile(row, percentile.threshold)] <- 0
+			return(row)
+		})
+		network_results <- t(network_results)
+	}
+	network_results <- ensure_mat(network_results)
 
-	network_results <- t(network_results)
 	network_results <- network_results[, which(colSums(network_results) != 0)]
-
 	network_results <- ensure_mat(network_results)
 
 	network_results <- network_results[order(rownames(network_results), decreasing = TRUE), ]
-
 	network_results <- ensure_mat(network_results)
-
 	dimnames(network_results) <- list(orig = rownames(network_results), dest = colnames(network_results))
-	countryTopics <- rowSums(network_results)
-	topicsCountry <- colSums(network_results)
+	# countryTopics <- rowSums(network_results)
+	# topicsCountry <- colSums(network_results)
 	return(network_results)
 }
 
 VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE){
 	countryColors <- readRDS("countryColors.Rds")
-	countryColors <- as.matrix(countryColors[match(rownames(m), countryColors$country_name), 1:3])
+	N <- nrow(countryColors)
+	ind <- match(rownames(m), countryColors$country_name)
+	countryColors <- as.matrix(countryColors[ind, 1:3])
 	
 	if (cluster_color){
 		l_phcs <- readRDS("./data/l_phcs.Rds")
@@ -84,14 +97,13 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE){
 		cluster_descriptors <- cluster_descriptors[order(as.character(cluster_descriptors$label), decreasing = TRUE), ]
 	}
 	
-	grid.col <- rev(pal_igv("default")(nrow(m)))
-	grid.col <- rainbow(nrow(m))
+	grid.col <- rainbow(N)[ind]
 	grid.col <- c(grid.col, rep("#c2c2c2", ncol(m)))
 	circos.clear()
 	par(mar = rep(0, 4), cex=.75)
 	circos.par(start.degree = -90)
 	chordDiagram(x = m, directional = 1, 
-		transparency = 0.2,
+		transparency = 0.3,
 		grid.col = grid.col,
 		link.sort = TRUE,
 		link.decreasing = TRUE,
