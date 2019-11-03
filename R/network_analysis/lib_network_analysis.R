@@ -1,4 +1,15 @@
-get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blindspot = FALSE, country.threshold = 30, percentile.threshold = 0.90){
+get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blindspot = FALSE, country.threshold = 30, percentile.threshold = 0.90, country_filter = FALSE, countries = NULL){
+
+	ensure_mat <- function(network_results){
+		if (country_filter & !is.null(countries)){
+			if (length(countries) == 1){
+				network_results <- t(as.matrix(network_results))
+				rownames(network_results) <- countries
+			}
+		}
+		return(network_results)
+	}
+
 	type_list <- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
 	stopifnot(type %in% type_list)
 	consolidated_results <- readRDS(paste0("consolidated_results_", type, ".Rds"))
@@ -18,45 +29,60 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 		network_results <- t(as.matrix(df_country)) %*% as.matrix(docTopics)
 	}
 
-	dimnames(network_results) <- list(orig = rownames(network_results), dest = colnames(network_results))
-	countryTopics <- rowSums(network_results)
-	topicsCountry <- colSums(network_results)
-	
+	rownames(network_results) <- gsub("Costa.Rica", "Costa Rica", rownames(network_results))
+	rownames(network_results) <- gsub("El.Salvador", "El Salvador", rownames(network_results))
+
 	if (filter_method & type == "theme"){
 		topic_names <- read.csv("./data/topic_names.csv")
 		method_topics <- as.character(topic_names$theme[grepl("methods", topic_names$description)])
 		network_results <- network_results[, which(!colnames(network_results) %in% method_topics)]
 	}
 
+	if (country_filter & !is.null(countries)){
+		network_results <- network_results[rownames(network_results) %in% countries, ]
+		network_results <- ensure_mat(network_results)
+	}
+
 	if(blindspot){
 		network_results <- 1 / network_results
 	}
 
-	tab <- table(country)
-	keepCountries <- names(tab)[which(tab >= country.threshold)]
+	if (!country_filter){
+		tab <- table(country)
+		keepCountries <- names(tab)[which(tab >= country.threshold)]
+		network_results <- network_results[rownames(network_results) %in% keepCountries, ]
+	}
 
-	network_results <- network_results[rownames(network_results) %in% keepCountries, ]
 	network_results <- apply(network_results, 1, function(row){
 		row[row <= quantile(row, percentile.threshold)] <- 0
 		return(row)
 	})
+
 	network_results <- t(network_results)
 	network_results <- network_results[, which(colSums(network_results) != 0)]
 
+	network_results <- ensure_mat(network_results)
+
 	network_results <- network_results[order(rownames(network_results), decreasing = TRUE), ]
-	rownames(network_results) <- gsub("Costa.Rica", "Costa Rica", rownames(network_results))
-	rownames(network_results) <- gsub("El.Salvador", "El Salvador", rownames(network_results))
+
+	network_results <- ensure_mat(network_results)
+
+	dimnames(network_results) <- list(orig = rownames(network_results), dest = colnames(network_results))
+	countryTopics <- rowSums(network_results)
+	topicsCountry <- colSums(network_results)
 	return(network_results)
 }
 
-VizSpots <- function(m, scaled = FALSE){
+VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE){
 	countryColors <- readRDS("countryColors.Rds")
 	countryColors <- as.matrix(countryColors[match(rownames(m), countryColors$country_name), 1:3])
 	
-	l_phcs <- readRDS("./data/l_phcs.Rds")
-	cluster_descriptors <- ggplot_build(l_phcs[[1]][[3]])$data[[2]][, c("label", "group", "colour")]
-	cluster_descriptors <- cluster_descriptors[which(cluster_descriptors$label %in% rownames(m)), ]
-	cluster_descriptors <- cluster_descriptors[order(as.character(cluster_descriptors$label), decreasing = TRUE), ]
+	if (cluster_color){
+		l_phcs <- readRDS("./data/l_phcs.Rds")
+		cluster_descriptors <- ggplot_build(l_phcs[[1]][[3]])$data[[2]][, c("label", "group", "colour")]
+		cluster_descriptors <- cluster_descriptors[which(cluster_descriptors$label %in% rownames(m)), ]
+		cluster_descriptors <- cluster_descriptors[order(as.character(cluster_descriptors$label), decreasing = TRUE), ]
+	}
 	
 	grid.col <- rev(pal_igv("default")(nrow(m)))
 	grid.col <- rainbow(nrow(m))
@@ -92,7 +118,7 @@ VizSpots <- function(m, scaled = FALSE){
 		highlight.sector(rownames(m)[i], track.index = 3, col = countryColors[i, 1])
 		highlight.sector(rownames(m)[i], track.index = 4, col = countryColors[i, 2])
 		highlight.sector(rownames(m)[i], track.index = 5, col = countryColors[i, 3])
-		highlight.sector(rownames(m)[i], track.index = 1, col = cluster_descriptors$colour[i])
+		if (cluster_color) highlight.sector(rownames(m)[i], track.index = 1, col = cluster_descriptors$colour[i])
 	}
 	for (i in seq(ncol(m))){
 		highlight.sector(colnames(m)[i], track.index = 3, col = "#c2c2c2")
