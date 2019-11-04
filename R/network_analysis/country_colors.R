@@ -1,6 +1,7 @@
 library("png")
 
 iso_codes <- c("ar", "bs", "bb", "bz", "bo", "br", "cl", "co", "cr", "cu", "ec", "sv", "gt", "ht", "hn", "jm", "mx", "ni", "pa", "py", "pe", "uy", "ve")
+country_names <- c("Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Cuba", "Ecuador", "El Salvador", "Guatemala", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", "Uruguay", "Venezuela")
 
 rgb2hex <- function(r,g,b) sprintf('#%s',paste(as.hexmode(c(r,g,b)),collapse = ''))
 
@@ -19,4 +20,6 @@ get.topColors <- function(iso, n = 3){
 countryColors <- lapply(iso_codes, get.topColors)
 countryColors <- do.call(rbind, countryColors)
 countryColors <- gsub("#000", "#000000", countryColors)
+countryColors <- as.data.frame(countryColors)
+countryColors$country_names <- country_names
 saveRDS(countryColors, "countryColors.Rds")
