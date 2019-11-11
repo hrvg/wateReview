@@ -19,37 +19,38 @@ resource_files:
 - data/LAC.shp.xml
 - data/LAC.shx
 - data/survey_results.csv
+- countryColors.Rds
+- consolidated_results_spatial scale.Rds
+- consolidated_results_methods.Rds
+- consolidated_results_water budget.Rds
+- consolidated_results_NSF_specific.Rds
+- consolidated_results_NSF_general.Rds
+- consolidated_results_theme.Rds
+- predCountryMembership.Rds
+- predCountry.Rds
 ---
 
 ```{r libraries, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE, results = "hide"}
-libraries <- c(
-"Amelia",
-"circlize",
-"clValid",
-"corrplot",
-"cowplot",
-"factoextra",
-"forcats",
-"ggplot2",
-"ggsci",
-"Hmisc",
-"mlr",
-"oce",
-"raster",
-"RColorBrewer",
-"tmap",
-"dplyr",
-"import"
-)
+library("Amelia")
+library("circlize")
+library("clValid")
+library("corrplot")
+library("cowplot")
+library("factoextra")
+library("forcats")
+library("ggplot2")
+library("reshape2")
+library("ggsci")
+library("Hmisc")
+library("mlr")
+library("oce")
+library("raster")
+library("RColorBrewer")
+library("tmap")
+library("dplyr")
+library("import")
+library("ggpubr")
 
-for (x in libraries){
-   if (!require(x, character.only = TRUE)) {
-        install.packages(x)
-        library(x, character.only = TRUE)
-    } else {
-      library(x, character.only = TRUE)
-    }
-}
 
 ### functions ###
 import::here(.from = "./R/network_analysis/lib_network_analysis.R", 
@@ -308,8 +309,11 @@ mdef <- get_network(type = "theme", prob = TRUE, filter_method = TRUE, blindspot
 selectInput("countries", "Countries", rownames(mdef), selected = NULL, multiple = TRUE,
   selectize = TRUE, width = NULL, size = NULL)
 checkboxInput("country_filter", label = "Filter countries", value = FALSE)
-selectInput("themes", "Themes", colnames(mdef), selected = NULL, multiple = TRUE,
-  selectize = TRUE, width = NULL, size = NULL)
+renderUI({
+  mdef <- get_network(type = input$type, prob = TRUE, filter_method = TRUE, blindspot = FALSE, country.threshold = 0, percentile.threshold = 0)
+  selectInput("themes", "Themes", colnames(mdef), selected = NULL, multiple = TRUE,
+    selectize = TRUE, width = NULL, size = NULL)
+})
 checkboxInput("theme_filter", label = "Filter themes", value = FALSE)
 ```
 
@@ -319,7 +323,7 @@ checkboxInput("theme_filter", label = "Filter themes", value = FALSE)
 
 **The options "Select theme" and "Percentile threshold" are mutually exclusive.**
 
-Column
+Column {.tabset}
 -------------------------------------
 
 ### Chord Diagrams for Country and Theme
@@ -331,4 +335,52 @@ renderPlot({
     theme_filter = input$theme_filter, themes = input$themes)
   VizSpots(m, input$scaled, cluster_color = FALSE)
 })   
+```
+
+### Time Analysis {data-orientation=columns}
+
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+remove_country <- function(df) {
+  df <- df %>%
+    select(-c("country"))
+  return(df)
+}
+
+get_topic_sums <- function(type = "theme", themes = c("air quality", "agriculture")){
+  type_list <- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
+  stopifnot(type %in% type_list)
+  consolidated_results <- readRDS(paste0("consolidated_results_", type, ".Rds"))
+  df <- remove_country(consolidated_results)
+  df <- melt(df, id.vars = "year")
+  sums <-aggregate(df$value, by=list(df$year,df$variable), FUN=sum)
+  names(sums) = c("year","topic","sum")
+  sums <- subset(sums, topic %in% themes)
+  cumulative_sum <- lapply(unique(sums$topic), function(topic_pick){
+    topic_subset <- subset(sums, topic == topic_pick)
+    return(cumsum(topic_subset$sum))
+  })
+  sums$cum <- unlist(cumulative_sum)
+  return(sums)
+}  
+```
+
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+renderPlot({
+  sums <- get_topic_sums(input$type, input$themes)
+  ggplot(sums, aes(color = topic)) +
+    geom_line(aes(x = year, y = sum), linetype = "dashed") + 
+    geom_line(aes(x = year, y = cum)) +
+    theme_pubr() +
+    labs(y = "Number of papers", x=NULL)
+})  
+# ## country
+# df3 <- remove_irrelevant(theme)
+# df3 <- melt(df3, id.vars = c("year","country"))
+# df3 <- subset(df3, df3$country %in% keep$`country_sums$country[country_sums$no.papers > 30]`)
+
+# sums3 <-aggregate(df3$value, by=list(df3$year,df3$variable,df3$country), FUN=sum)
+# names(sums3) = c("year","topic","country","sum")
+
+# country_subset2 <- subset(sums3, country == country_pick)
+# country_subset2 <- aggregate(country_subset2$sum, by = list(country_subset2$year), FUN = sum)
 ```

@@ -76,9 +76,7 @@ remove_year <- function(df) {
 remove_country <- function(df) {
   df <- df %>%
     select(-c("country"))
-  
   return(df)
-  
 }
 
 remove_irrelevant <- function(df) {

@@ -5,8 +5,8 @@ account: herveguillon
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 958237
-bundleId: 2349962
+bundleId: 2580680
 url: https://guillon.shinyapps.io/WRM_LAC/
-when: 1566602947.9199
+when: 1573493266.58612
 asMultiple: FALSE
 asStatic: FALSE
