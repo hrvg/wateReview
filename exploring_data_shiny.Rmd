@@ -404,3 +404,18 @@ renderPlot({
 })  
 
 ```
+
+### Diversity {data-orientation=columns}
+
+```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+diversity_by_country <- read.csv("./diversity/diversity by country.csv")
+names(diversity_by_country) <- c("country", "NSF_general", "NSF_specific", "theme")
+diversity_by_country_graph <- melt(diversity_by_country, id.vars = c("country"))
+renderPlot({
+theme_graphdf <- subset(diversity_by_country_graph, variable == input$type)
+theme_graph <- ggdotchart(theme_graphdf, x = "country", y = "value", #add color = cluster
+                          add = "segments", sorting = "descending", rotate = TRUE, title = input$type)
+scatter <- ggscatter(diversity_by_country, x = input$type, y = "theme", color = "country")
+gridExtra::grid.arrange(grobs = list(theme_graph, scatter), nrow = 1)
+})
+```

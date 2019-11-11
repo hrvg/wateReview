@@ -220,6 +220,7 @@ fwrite(diversity_by_country, file = "./diversity/diversity by country.csv")
 
 ################### diversity graphs #########################
 
+file = "./diversity/diversity by country.csv")
 diversity_by_country_graph <- melt(diversity_by_country, 
                                    id.vars = c("country"))
 
