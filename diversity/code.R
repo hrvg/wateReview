@@ -174,9 +174,16 @@ ggscatter(diversity_by_country, x = "NSFgeneral", y = "theme", color = "country"
 
 
 
-################### corpus analysis graphs #########################
+################### corpus analysis  #########################
+general_corpus <- remove_year_country(general) 
+general_corpus <- sum_country(general_corpus)
+
 theme_corpus <- remove_year_country(theme) 
-theme_corpus <- melt(theme_corpus)
+theme_corpus <- sum_country(theme_corpus)
+################### corpus analysis graphs #########################
+
+pie(general_corpus$value, labels = general_country2$key, main="Distribution of water research
+based on NSF general categories - corpus")
 
 
 ################### country level analysis #########################
@@ -236,9 +243,9 @@ ggplot(theme_country3) +
 pie(general_country2$value, labels = general_country2$key, main="Distribution of water research
 based on NSF general categories")
 
-ggpie(general_country2, "value", label = "key",
-      fill = "group",
-      palette = scale_fill_manual(values = wes_palette(n=5, name ="Darjeeling1")))
+# ggpie(general_country2, "value", label = "key",
+      #fill = "group",
+      #palette = scale_fill_manual(values = wes_palette(n=5, name ="Darjeeling1")))
 
 
 ################### topic level analysis #########################
@@ -254,10 +261,13 @@ theme_topic <- subset(theme_topic, variable == topic_pick)
 
 
 # sum by country
-df <- theme_topic %>%
+theme_topic <- theme_topic %>%
   select(-c("year","variable"))
-df<- aggregate(df$value, by=list(df$country), FUN=sum)
+theme_topic<- aggregate(theme_topic$value, by=list(theme_topic$country), FUN=sum)
 
+# compare to corpus
+theme_topic2 <- cbind(theme_topic,theme_graphdf)
+theme_topic2$perc <- theme_topic2$value / theme_topic2$x
 
 # sum by year
 df2 <- theme_topic %>%
@@ -314,3 +324,5 @@ ggplot(df2, aes(x = Group.1, y = value, color = variable)) +
   geom_area() +
   theme_pubr() +
   labs(title = topic_pick)
+
+
