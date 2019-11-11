@@ -28,6 +28,7 @@ resource_files:
 - consolidated_results_theme.Rds
 - predCountryMembership.Rds
 - predCountry.Rds
+- diversity/diversity by country.csv"
 ---
 
 ```{r libraries, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE, results = "hide"}
