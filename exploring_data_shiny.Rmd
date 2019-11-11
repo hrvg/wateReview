@@ -50,6 +50,7 @@ library("tmap")
 library("dplyr")
 library("import")
 library("ggpubr")
+library("plotly")
 
 
 ### functions ###
@@ -273,7 +274,7 @@ renderPrint({
 ```
 
 
-Network Analysis {data-orientation=columns}
+Results {data-orientation=columns}
 =====================================
 
 Sidebar {.sidebar}
@@ -346,41 +347,60 @@ remove_country <- function(df) {
   return(df)
 }
 
-get_topic_sums <- function(type = "theme", themes = c("air quality", "agriculture")){
+remove_irrelevant <- function(df) {
+  df <- df %>%
+    filter(country != "Irrelevant")
+  return(df)
+}
+
+range01 <- function(x){(x-min(x))/(max(x)-min(x))}
+
+get_topic_sums <- function(type = "theme", themes = c("air quality", "agriculture"), country_filter = input$country_filter, countries = input$countries){
   type_list <- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
   stopifnot(type %in% type_list)
   consolidated_results <- readRDS(paste0("consolidated_results_", type, ".Rds"))
-  df <- remove_country(consolidated_results)
-  df <- melt(df, id.vars = "year")
-  sums <-aggregate(df$value, by=list(df$year,df$variable), FUN=sum)
-  names(sums) = c("year","topic","sum")
-  sums <- subset(sums, topic %in% themes)
-  cumulative_sum <- lapply(unique(sums$topic), function(topic_pick){
-    topic_subset <- subset(sums, topic == topic_pick)
-    return(cumsum(topic_subset$sum))
-  })
-  sums$cum <- unlist(cumulative_sum)
+  if (country_filter == FALSE){
+    df <- remove_country(consolidated_results)
+    df <- melt(df, id.vars = "year")
+    sums <-aggregate(df$value, by=list(df$year,df$variable), FUN=sum)
+    names(sums) <- c("year","topic","sum")
+    sums <- subset(sums, topic %in% themes)
+    cumulative_sum <- lapply(unique(sums$topic), function(topic_pick){
+      topic_subset <- subset(sums, topic == topic_pick)
+      csum <- cumsum(topic_subset$sum)
+      if (input$scaled) csum <- range01(csum)
+      return(csum)
+    })
+    sums$cum <- unlist(cumulative_sum)
+  } else {
+    df <- remove_irrelevant(consolidated_results)
+    df <- melt(df, id.vars = c("year","country"))
+    df <- subset(df, df$country %in% countries)
+    sums <-aggregate(df$value, by=list(df$year,df$variable,df$country), FUN=sum)
+    names(sums) <- c("year","topic","country","sum")
+    sums <- subset(sums, topic %in% themes)
+  }
   return(sums)
 }  
 ```
 
 ```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
 renderPlot({
-  sums <- get_topic_sums(input$type, input$themes)
-  ggplot(sums, aes(color = topic)) +
-    geom_line(aes(x = year, y = sum), linetype = "dashed") + 
-    geom_line(aes(x = year, y = cum)) +
-    theme_pubr() +
-    labs(y = "Number of papers", x=NULL)
+  sums <- get_topic_sums(type = input$type, themes = input$themes, country_filter = input$country_filter, countries = input$countries)
+  p <- ggplot(sums, aes(color = topic)) + theme_pubr() 
+  if (input$scaled){
+    p <- p + geom_line(aes(x = year, y = cum))
+    p <- p + labs(y = "Normalized Cumulative Research Volume", x=NULL)
+  } else {
+    p <- p + geom_line(aes(x = year, y = sum), linetype = "dashed")
+    if (input$country_filter){
+      p <- p + labs(y = "Research Volume", x=NULL)    
+    } else {
+      p <- p + geom_line(aes(x = year, y = cum))
+      p <- p + labs(y = "Cumulative Research Volume", x=NULL)
+    }
+  }
+  p
 })  
-# ## country
-# df3 <- remove_irrelevant(theme)
-# df3 <- melt(df3, id.vars = c("year","country"))
-# df3 <- subset(df3, df3$country %in% keep$`country_sums$country[country_sums$no.papers > 30]`)
 
-# sums3 <-aggregate(df3$value, by=list(df3$year,df3$variable,df3$country), FUN=sum)
-# names(sums3) = c("year","topic","country","sum")
-
-# country_subset2 <- subset(sums3, country == country_pick)
-# country_subset2 <- aggregate(country_subset2$sum, by = list(country_subset2$year), FUN = sum)
 ```
