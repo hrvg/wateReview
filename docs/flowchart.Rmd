@@ -1,5 +1,16 @@
-install.packages("diagrammeR")
-install.packages("DiagrammeR")
+---
+output:
+  pdf_document: default
+---
+
+This might requires:
+
+```
+install.packages("webshot")
+webshot::install_phantomjs()
+```
+
+```{r}
 library("DiagrammeR")
 mermaid("
 graph TD
@@ -16,6 +27,5 @@ P --- F
 S --- F
 T --- F
 F(Goal: Identify bright spots and blind spots of past water research in Latin America)
-")
-install.packages("webshot")
-webshot::install_phantomjs()
+	")
+```
