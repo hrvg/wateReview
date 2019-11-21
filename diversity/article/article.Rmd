@@ -1,0 +1,13 @@
+---  
+title: My Report  
+output: html_document
+    toc: yes 
+---
+
+```
+{r child = 'intro.Rmd'}
+```
+
+```
+{r child = 'challenge.Rmd'}
+```

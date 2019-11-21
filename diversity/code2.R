@@ -82,7 +82,7 @@ col_sums <- function(df) {
 ###################  1) subject analysis  #########################
 
 ## define data frame
-df <- remove_year(budget) 
+df <- remove_year(theme) 
 df <- remove_irrelevant(df)
 df <- melt(df, id.vars = "country")
 
@@ -113,7 +113,7 @@ names(topic_sums) = c("topic","sum")
 
 
 ## topic
-topic_pick <- "reservoirs"
+topic_pick <- "island and extreme weather"
 topic_total <- topic_sums$sum[topic_sums$topic == topic_pick]
 
 topic_subset <- subset(sums, topic == topic_pick)

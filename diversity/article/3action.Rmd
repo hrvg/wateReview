@@ -1,0 +1,16 @@
+---
+title: "Bright Spots and Blind Spots"
+author: "Alyssa DeVincentis"
+	output: html_document
+	bibliography: /Users/ajdevincentis/R_code/LAC/diversity/article/bibliography.bib
+---
+
+## Action
+Our two-fold, novel and comprehensive research approach combines advanced computation with stakeholder engagement to describe past water research in Latin America.
+First, we assembled a corpus of water resources research articles were analyzed with Latent Dirichlet Allocation (LDA, [@Blei2003]), a generative Bayesian model, describing topics as a probability distribution over words and documents as a probability distribution over topics.
+Human reading validated the probabilities and provided the country of study of 2 000 articles.
+Combined with article metadata and text mining, this information was used to predict the country of study across the corpus with machine learning.
+In-corpus citing and cited references were used to build a citation network which, combined with topic and location information, infers connectivity between research communities.
+Second, we collected publicly available data and conducted an on line survey to understand the landscape of water research in Latin America.
+Countries within Latin America were statistically clustered into four groups with distinct physiographic and socioeconomic characteristics.
+To ground our data-driven results in the reality of the current research climate, we invited nearly 20 000 corresponding authors to share their experiences through the survey. 
