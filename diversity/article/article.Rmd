@@ -1,13 +1,28 @@
 ---  
-title: My Report  
+title: "Bright Spots and Blind Spots"
+subtitle: "A kick-ass project"
 output: html_document
-    toc: yes 
+author:
+- name: Alyssa DeVincentis
+  affiliation: University of California, Davis
+- name: Hervé Guillon
+  affiliation: University of California, Davis
+- name: Francine
+  affiliation: not at University of California, Davis
+date: "`r format(Sys.time(), '%d %B %Y')`"  
+bibliography: bibliography.bib
 ---
 
-```
-{r child = 'intro.Rmd'}
+```{r child = 'abstract.Rmd'}
 ```
 
+# Main Text
+
+```{r child = '1intro.Rmd'}
 ```
-{r child = 'challenge.Rmd'}
+
+```{r child = '2challenge.Rmd'}
+```
+
+```{r child = '3action.Rmd'}
 ```

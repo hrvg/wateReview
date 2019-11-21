@@ -1,6 +1,1 @@
----
-title: "Bright Spots and Blind Spots"
-author: "Alyssa DeVincentis"
-	output: html_document
-	bibliograpy: /Volumes/GoogleDrive/My Drive/Articles/WMLAC/bibliography.bib
----
+# Abstract

@@ -1,10 +1,3 @@
----
-title: "Bright Spots and Blind Spots"
-author: "Alyssa DeVincentis"
-	output: html_document
-	bibliography: /Users/ajdevincentis/R_code/LAC/diversity/article/bibliography.bib
----
-
 ## Action
 Our two-fold, novel and comprehensive research approach combines advanced computation with stakeholder engagement to describe past water research in Latin America.
 First, we assembled a corpus of water resources research articles were analyzed with Latent Dirichlet Allocation (LDA, [@Blei2003]), a generative Bayesian model, describing topics as a probability distribution over words and documents as a probability distribution over topics.
