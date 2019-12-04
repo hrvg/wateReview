@@ -1,10 +1,3 @@
----
-title: "Bright Spots and Blind Spots"
-author: "Alyssa DeVincentis"
-	output: html_document
-	bibliography: /Users/ajdevincentis/R_code/LAC/diversity/article/bibliography.bib
----
-
 ## Challenge
 Given these circumstances, it is critical to assess whether water resources research across Latin America contributes the knowledge necessary to successfully manage water.
 We performed an unprecedented, multilingual review of the state of water resources research literature across the region and a range of topics and disciplines to assess the state of this research.
