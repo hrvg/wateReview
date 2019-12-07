@@ -1,15 +1,11 @@
 ---  
 title: "Bright Spots and Blind Spots"
-subtitle: "A kick-ass project"
-output: html_document
-author:
-- name: Alyssa DeVincentis
-  affiliation: University of California, Davis
-- name: Hervé Guillon
-  affiliation: University of California, Davis
-- name: Francine
-  affiliation: not at University of California, Davis
-date: "`r format(Sys.time(), '%d %B %Y')`"  
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+subtitle: A kick-ass project
 bibliography: bibliography.bib
 ---
 

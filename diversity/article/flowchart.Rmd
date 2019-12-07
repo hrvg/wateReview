@@ -3,14 +3,12 @@ output:
   pdf_document: default
 ---
 
-This might requires:
+```{r, echo = FALSE}
 
-```
-install.packages("webshot")
-webshot::install_phantomjs()
-```
+# This might require
+# install.packages("webshot")
+# webshot::install_phantomjs()
 
-```{r}
 library("DiagrammeR")
 mermaid("
 graph TD

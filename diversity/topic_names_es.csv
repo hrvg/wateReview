@@ -1,66 +1,66 @@
 topic_id,topic_name,NSF_specific,NSF_general,despcription,topic_id_en
+24,Irrigación,agricultural engineering,engineering,0,50
+63,Agricultura,agronomy & crop science,life sciences,0,46
+19,Sequías,atmospheric science/meteorology,physical sciences,0,0
+37,Biología reproductiva acuática,biology,life sciences,0,7
+42,Morfología de organismos acuáticos,biology,life sciences,0,7
+44,Ficología,biology,life sciences,0,68
+61,Malacología,biology,life sciences,0,81
+9,Química del agua,chemistry,physical sciences,0,55
+20,Distribución de aguas urbanas,civil engineering,engineering,water budget,14
+32,Gestión de aguas urbanas,civil engineering,engineering,0,14
+54,Tratamiento de aguas,civil engineering,engineering,0,64
+62,Hidroeléctrica,civil engineering,engineering,water budget,0
+14,Ecología vegetal,ecology,life sciences,0,21
+30,Ecología,ecology,life sciences,0,0
+38,Economía,economics,social sciences,0,0
+27,Contaminación por fluor,environmental health,life sciences,0,19
 1,Contaminacion biológica del agua,environmental toxicology,life sciences,0,38
-2,NA,NA,NA,NA,NA
 3,Contaminación química por metales,environmental toxicology,life sciences,0,30
+58,Pesca,fishing & fisheries sciences/management,life sciences,0,0
+7,Geología,geology,physical sciences,0,0
+8,Geomorfología fluvial,geomorphology,physical sciences,0,103
+21,Geotérmia,geophysics & seismology,physical sciences,0,80
+23,Calidad de agua,hydrology & water resources,physical sciences,methods,98
+25,Inundación,hydrology & water resources,physical sciences,0,0
+34,Humedales,hydrology & water resources,physical sciences,0,93
+41,Cíclo del agua,hydrology & water resources,physical sciences,0,0
+46,Gestión del agua,hydrology & water resources,physical sciences,0,75
+49,Aguas Subterraneas,hydrology & water resources,physical sciences,water budget,70
+17,Ecología de zooplancton,microbiology,life sciences,0,54
+2,NA,NA,NA,NA,NA
 4,Modelación hidráulica,NA,NA,methods,78
 5,NA,NA,NA,NA,NA
 6,Península de Yucatán,NA,NA,spatial scale,0
-7,Geología,geology,physical sciences,0,0
-8,Geomorfología fluvial,geomorphology,physical sciences,0,103
-9,Química del agua,chemistry,physical sciences,0,55
 10,NA,NA,NA,NA,NA
 11,Cuencas hidrólogicas,NA,NA,spatial scale,13
 12,NA,NA,NA,NA,NA
 13,Region centro-occidente de México,NA,NA,spatial scale,0
-14,Ecología vegetal,ecology,life sciences,0,21
 15,NA,NA,NA,NA,NA
 16,NA,NA,NA,NA,NA
-17,Ecología de zooplancton,microbiology,life sciences,0,54
 18,NA,NA,NA,NA,NA
-19,Sequías,atmospheric science/meteorology,physical sciences,0,0
-20,Distribución de aguas urbanas,civil engineering,engineering,water budget,14
-21,Geotérmia,geophysics & seismology,physical sciences,0,80
-22,Edafología,"soil sciences, other",life sciences,0,39
-23,Calidad de agua,hydrology & water resources,physical sciences,methods,98
-24,Irrigación,agricultural engineering,engineering,0,50
-25,Inundación,hydrology & water resources,physical sciences,0,0
 26,NA,NA,NA,NA,NA
-27,Contaminación por fluor,environmental health,life sciences,0,19
 28,NA,NA,NA,NA,NA
 29,NA,NA,NA,NA,NA
-30,Ecología,ecology,life sciences,0,0
 31,Cuencas transfronterizas,NA,NA,spatial scale,72
-32,Gestión de aguas urbanas,civil engineering,engineering,0,14
 33,NA,NA,NA,NA,NA
-34,Humedales,hydrology & water resources,physical sciences,0,93
 35,NA,NA,NA,NA,NA
 36,NA,NA,NA,NA,NA
-37,Biología reproductiva acuática,biology,life sciences,0,7
-38,Economía,economics,social sciences,0,0
-39,Mapeo participativo social,sociology,social sciences,0,32
 40,NA,NA,NA,NA,NA
-41,Cíclo del agua,hydrology & water resources,physical sciences,0,0
-42,Morfología de organismos acuáticos,biology,life sciences,0,7
 43,Brazil,NA,NA,spatial scale,0
-44,Ficología,biology,life sciences,0,68
 45,Lagos,NA,NA,spatial scale,62
-46,Gestión del agua,hydrology & water resources,physical sciences,0,75
 47,Cuba,NA,NA,spatial scale,0
-48,Conflicto social por minería,sociology,social sciences,0,0
-49,Aguas Subterraneas,hydrology & water resources,physical sciences,water budget,70
 50,México,NA,NA,spatial scale,0
 51,Argentina,NA,NA,spatial scale,0
-52,Sistemas Costeros,ocean/marine science,physical sciences,0,65
-53,Ejidos,sociology,social sciences,0,0
-54,Tratamiento de aguas,civil engineering,engineering,0,64
-55,Crustáceos,wildlife biology,life sciences,0,81
 56,Sensor remoto de radar,NA,NA,methods,74
 57,Baja California,NA,NA,spatial scale,0
-58,Pesca,fishing & fisheries sciences/management,life sciences,0,0
 59,Chile,NA,NA,spatial scale,0
+52,Sistemas Costeros,ocean/marine science,physical sciences,0,65
 60,Costas,ocean/marine science,physical sciences,0,65
-61,Malacología,biology,life sciences,0,81
-62,Hidroeléctrica,civil engineering,engineering,water budget,0
-63,Agricultura,agricultural sciences,life sciences,0,46
-64,Gobernanza del agua,political science & governance,social sciences,0,51
-64,Gobernanza del agua,political science & governance,social sciences,0,51
+64,Gobernanza del agua,political science & government,social sciences,0,51
+64,Gobernanza del agua,political science & government,social sciences,0,51
+39,Mapeo participativo social,sociology,social sciences,0,32
+48,Conflicto social por minería,sociology,social sciences,0,0
+53,Ejidos,sociology,social sciences,0,0
+22,Edafología,"soil sciences, other",life sciences,0,39
+55,Crustáceos,wildlife biology,life sciences,0,81
