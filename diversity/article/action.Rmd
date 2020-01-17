@@ -1,6 +1,6 @@
 ## Action
 Our two-fold, novel and comprehensive research approach combines advanced computation with stakeholder engagement to describe past water research in Latin America.
-First, we assembled a corpus of water resources research articles were analyzed with Latent Dirichlet Allocation (LDA, [@Blei2003]), a generative Bayesian model, describing topics as a probability distribution over words and documents as a probability distribution over topics.
+First, we assembled a corpus of water resources research articles that were analyzed with Latent Dirichlet Allocation (LDA, [@Blei2003]), a generative Bayesian model, describing topics as a probability distribution over words and documents as a probability distribution over topics.
 Human reading validated the probabilities and provided the country of study of 2 000 articles.
 Combined with article metadata and text mining, this information was used to predict the country of study across the corpus with machine learning.
 In-corpus citing and cited references were used to build a citation network which, combined with topic and location information, infers connectivity between research communities.
