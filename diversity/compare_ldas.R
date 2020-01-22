@@ -1,7 +1,10 @@
 library(dplyr)
 library(reshape2)
 library(ggpubr)
+library(tidyr)
+library(ggplot2)
 
+######## load data #############
 en <- read.csv("./topic_names_en.csv")
 es <- read.csv("./topic_names_es.csv")
 pt <- read.csv("./topic_names_pt.csv", na.strings=c("","NA"))
@@ -19,33 +22,40 @@ pt2 <- melt(pt,
 
 
 x <- rbind(en2,es2,pt2)
+x <- na.omit(x)
 
-
+######## filter #############
 x2 <- x %>%
   filter(variable == "NSF_specific") %>%
-  filter(value != "NA") %>%
   group_by(value, lang) %>%
   tally
 
 
-
-
-ggdotchart(x2, x = "value", y = "n", 
-           color = "lang",
-           palette = c("#00AFBB", "#FC4E07",  "#E7B800"),
-           #group = "lang", 
-           add = "segments",
-           add.params = list(color = "lightgray", size = 1),
-           rotate = TRUE)
-
+######## dot chart #############
 ggbarplot(x2, x = "value", y = "n", 
            fill = "lang",
           color = "white",
            palette = c("#00AFBB", "#FC4E07",  "#E7B800"),
            rotate = TRUE)
 
-# NEED TO REORDER
+######## heat map #############
 
-# 13 subjects in all 3 languages
+# need to order based on engligh numbers
+lvls <- as.character(x2$value[x2$lang=="en"])[order(x2$n[x2$lang=="en"])]
+x2$value <- factor(x2$value, levels = lvls)
+x2 <- na.omit(x2)
 
-# Matrix + frequency distribution
+
+a <- ggplot(data = x2, aes(x = lang, y = value)) +
+  geom_tile(aes(fill = n, width=0.9, height=0.9)) # edit for specific vs. general
+a
+a <- a + 
+  scale_fill_gradient(low = "lightsteelblue1", high = "lightsteelblue4") +
+  labs(title= "LDA coverage",
+       y="NSF specific categories",
+       x = "LDA for each language")+
+  theme_pubr() 
+
+a
+
+plotly::ggplotly(a)
