@@ -9,8 +9,10 @@ library(wesanderson)
 
 
 ################### files #########################
+
+setwd("~/R_code/LAC")
 general <- readRDS("./consolidated_results_NSF_general.Rds")
-specific <- readRDS("./consolidated_results_NSF_specific.Rds")
+specific <- readRDS("./consolidated_results_NSF_specific.Rds") # 45 themes
 theme <- readRDS("./consolidated_results_theme.Rds")
 methods <- readRDS("./consolidated_results_methods.Rds")
 budget <- readRDS("./consolidated_results_water budget.Rds")
@@ -79,10 +81,10 @@ col_sums <- function(df) {
 }
 
 
-###################  1) subject analysis  #########################
+################### subject analysis  #########################
 
 ## define data frame
-df <- remove_year(theme) 
+df <- remove_year(budget) 
 df <- remove_irrelevant(df)
 df <- melt(df, id.vars = "country")
 
@@ -112,6 +114,35 @@ names(topic_sums) = c("topic","sum")
 
 
 
+
+################### PCA ##############
+
+# includes all countries (not just with 30+ papers)
+## diversity of topic research
+topic_diversity <- sums %>%
+  group_by(topic) %>%
+  mutate(diversity.score = diversity(sum)) %>%
+  select(-c("country","sum")) %>%
+  distinct()
+
+
+
+pca <- merge(topic_sums, topic_diversity) # combine topic_sum with topic_diversity
+
+# hard to differentiate between diversitiy scores 
+pca$diversity.score.scale <- scale(pca$diversity.score)
+pca$diversity.score.log <- log(pca$diversity.score)
+pca$diversity.score.exp <- exp(pca$diversity.score)
+
+pca.graph <- ggscatter(pca, x= "diversity.score", y = "sum",
+          label = "topic",
+          label.rectangle = TRUE)
+
+pca.graph
+
+
+################### individual topic/country analysis  #########################
+
 ## topic
 topic_pick <- "island and extreme weather"
 topic_total <- topic_sums$sum[topic_sums$topic == topic_pick]
@@ -126,7 +157,7 @@ ggdotchart(topic_subset,
            x= "country", y = "perc", 
            rotate = TRUE, add = "segments", sorting = "descending", 
            title = topic_pick) + 
-          xlab(NULL) +
+  xlab(NULL) +
   ylab("Percent of research on topic")
 
 
@@ -151,11 +182,7 @@ ggdotchart(country_subset,
   ylab("Probability research is on each topic")
 
 
-
-
-
-
-###################  2) time analysis  #########################
+################### time analysis  #########################
 
 ## topic
 df2 <- remove_country(budget)
@@ -247,7 +274,7 @@ ggscatter(diversity_by_country, x = "NSFgeneral", y = "theme", color = "country"
 
 
 
-###################  pie charts #########################
+################### pie charts #########################
 df3 <- remove_year_country(general)
 df3 <- col_sums(df2)
 
