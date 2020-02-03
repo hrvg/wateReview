@@ -335,7 +335,7 @@ renderPlot({
   m <- get_network(type = input$type, prob = TRUE, filter_method = input$filter_method, blindspot = input$blindspot, country.threshold = input$country.threshold, percentile.threshold = input$percentile.threshold, 
     country_filter = input$country_filter, countries = input$countries,
     theme_filter = input$theme_filter, themes = input$themes)
-  VizSpots(m, input$scaled, cluster_color = FALSE)
+  VizSpots(m, input$scaled, cluster_color = TRUE, NSF_general_color = TRUE, type = input$type)
 })   
 ```
 

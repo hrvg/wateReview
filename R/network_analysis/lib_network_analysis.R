@@ -84,7 +84,7 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 	return(network_results)
 }
 
-VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE){
+VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color = TRUE, type = "theme", sort_topic = TRUE){
 	countryColors <- readRDS("countryColors.Rds")
 	N <- nrow(countryColors)
 	ind <- match(rownames(m), countryColors$country_name)
@@ -95,6 +95,16 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE){
 		cluster_descriptors <- ggplot_build(l_phcs[[1]][[3]])$data[[2]][, c("label", "group", "colour")]
 		cluster_descriptors <- cluster_descriptors[which(cluster_descriptors$label %in% rownames(m)), ]
 		cluster_descriptors <- cluster_descriptors[order(as.character(cluster_descriptors$label), decreasing = TRUE), ]
+	}
+
+	if (NSF_general_color & type == "NSF_specific"){
+		topic_names <- read.csv("./data/topic_names.csv")
+		lvls <- as.numeric(topic_names$NSF_general[match(colnames(m), topic_names$NSF_specific)])
+		if (sort_topic){
+			m <- m[, order(lvls)]
+			lvls <- as.numeric(topic_names$NSF_general[match(colnames(m), topic_names$NSF_specific)])
+		}
+		NSF_general_colors <- RColorBrewer::brewer.pal(5, "Set1")[lvls]
 	}
 	
 	grid.col <- rainbow(N)[ind]
@@ -132,9 +142,17 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE){
 		highlight.sector(rownames(m)[i], track.index = 5, col = countryColors[i, 3])
 		if (cluster_color) highlight.sector(rownames(m)[i], track.index = 1, col = cluster_descriptors$colour[i])
 	}
-	for (i in seq(ncol(m))){
-		highlight.sector(colnames(m)[i], track.index = 3, col = "#c2c2c2")
-		highlight.sector(colnames(m)[i], track.index = 4, col = "#c2c2c2")
-		highlight.sector(colnames(m)[i], track.index = 5, col = "#c2c2c2")
-	}
+	if (NSF_general_color & type == "NSF_specific"){
+		for (i in seq(ncol(m))){	
+			highlight.sector(colnames(m)[i], track.index = 3, col = NSF_general_colors[i])
+			highlight.sector(colnames(m)[i], track.index = 4, col = NSF_general_colors[i])
+			highlight.sector(colnames(m)[i], track.index = 5, col = NSF_general_colors[i])
+		}
+	} else {
+		for (i in seq(ncol(m))){
+			highlight.sector(colnames(m)[i], track.index = 3, col = "#c2c2c2")
+			highlight.sector(colnames(m)[i], track.index = 4, col = "#c2c2c2")
+			highlight.sector(colnames(m)[i], track.index = 5, col = "#c2c2c2")
+		}
+	}	
 }
