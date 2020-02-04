@@ -6,6 +6,7 @@ library(reshape2)
 library(ggpubr)
 library(data.table)
 library(wesanderson)
+library(ggplot2)
 
 
 ################### files #########################
@@ -13,9 +14,9 @@ library(wesanderson)
 setwd("~/R_code/LAC")
 general <- readRDS("./consolidated_results_NSF_general.Rds")
 specific <- readRDS("./consolidated_results_NSF_specific.Rds") # 45 themes
-theme <- readRDS("./consolidated_results_theme.Rds")
 methods <- readRDS("./consolidated_results_methods.Rds")
 budget <- readRDS("./consolidated_results_water budget.Rds")
+theme <- readRDS("./consolidated_results_theme.Rds")
 
 
 
@@ -84,7 +85,7 @@ col_sums <- function(df) {
 ################### subject analysis  #########################
 
 ## define data frame
-df <- remove_year(budget) 
+df <- remove_year(methods) # pick data to work with
 df <- remove_irrelevant(df)
 df <- melt(df, id.vars = "country")
 
@@ -100,57 +101,72 @@ keep <- as.data.frame(country_sums$country[country_sums$no.papers > 30])
 
 ## subset countries with > 30 papers
 df<- subset(df, df$country %in% keep$`country_sums$country[country_sums$no.papers > 30]`)
+names(df) = c("country","topic","value")
 
-sums <-aggregate(df$value, by=list(df$country,df$variable), FUN=sum)
+## summarize country x topic
+sums <-aggregate(df$value, by=list(df$country,df$topic), FUN=sum) # re - summarize after removing countries w/ < 30 papers
 names(sums) = c("country","topic","sum")
 
-## calculate country + topic sums
-country_sums <- aggregate(sums$sum, by=list(sums$country), FUN=sum) # no. papers per country
-names(country_sums) = c("country","no.papers")
-
-topic_sums <- aggregate(sums$sum, by=list(sums$topic), FUN=sum)
-names(topic_sums) = c("topic","sum")
+# SAVE for mapping
+# write.csv(sums,'./diversity/csvs/nsfspecific.csv')
 
 
 
-
-
-################### PCA ##############
-
-# includes all countries (not just with 30+ papers)
-## diversity of topic research
-topic_diversity <- sums %>%
-  group_by(topic) %>%
-  mutate(diversity.score = diversity(sum)) %>%
-  select(-c("country","sum")) %>%
+## country description
+country <- df %>%
+  group_by(country) %>%
+  mutate(total = sum(value)) %>% # total = # of papers
+  select(-c("topic","value")) %>%
   distinct()
 
 
 
-pca <- merge(topic_sums, topic_diversity) # combine topic_sum with topic_diversity
+## topic description
 
-# hard to differentiate between diversitiy scores 
-pca$diversity.score.scale <- scale(pca$diversity.score)
-pca$diversity.score.log <- log(pca$diversity.score)
-pca$diversity.score.exp <- exp(pca$diversity.score)
+topic <- df %>% # uses df of individual papers
+  select(-c("country")) %>%
+  group_by(topic) %>%
+  mutate(total = sum(value)) %>%
+  mutate(sd = sd(value)) %>%
+  mutate(mean = mean(value)) %>%
+  mutate(var = var(value)) %>%
+  mutate(cv = sd/mean) %>%
+  select(-c("value")) %>%
+  distinct()
+topic$prop <- topic$total/sum(topic$total)
 
-pca.graph <- ggscatter(pca, x= "diversity.score", y = "sum",
+topic_other<- sums %>% # use sums df
+  group_by(topic) %>%
+  mutate(total = sum(sum)) %>%
+  mutate(sd = sd(sum)) %>%
+  mutate(mean = mean(sum)) %>%
+  mutate(var = var(sum)) %>%
+  mutate(cv = sd/mean) %>%
+  select(-c("country","sum")) %>%
+  distinct()
+topic_other$prop <- topic_other$total/sum(topic_other$total)
+
+
+
+
+pca <- ggscatter(topic, x= "prop", y = "var",
           label = "topic",
-          label.rectangle = TRUE)
+          label.rectangle = TRUE,
+          repel = TRUE
+)
 
-pca.graph
+pca
 
 
 ################### individual topic/country analysis  #########################
 
 ## topic
-topic_pick <- "island and extreme weather"
-topic_total <- topic_sums$sum[topic_sums$topic == topic_pick]
+topic_pick <- "glaciers"
+topic_total <- topic$total[topic$topic == topic_pick]
 
 topic_subset <- subset(sums, topic == topic_pick)
-topic_subset <- cbind(topic_subset, country_sums)
-topic_subset[4] <- NULL
-topic_subset$perc <- topic_subset$sum / topic_subset$no.papers * 100
+topic_subset <- merge(topic_subset, country)
+topic_subset$perc <- topic_subset$sum / topic_subset$total * 100
 
 
 ggdotchart(topic_subset, 
@@ -166,16 +182,13 @@ country_pick <- "Mexico"
 country_total <- country_sums$no.papers[country_sums$country == country_pick]
 
 country_subset <- subset(sums, country == country_pick)
-country_subset <- cbind(country_subset, topic_sums)
-country_subset[4] <- NULL
-colnames(country_subset)[4] <- "total"
+country_subset <- merge(country_subset, topic)
 country_subset$perc <- country_subset$sum / country_subset$total * 100
-country_subset$rel <- country_subset$sum / country_total
 
 
 
 ggdotchart(country_subset, 
-           x= "topic", y = "rel", 
+           x= "topic", y = "perc", 
            rotate = TRUE, add = "segments", sorting = "descending", 
            title = country_pick) + 
   xlab(NULL) +
@@ -217,17 +230,17 @@ country_subset2 <- aggregate(country_subset2$sum, by = list(country_subset2$year
 ################### diversity analysis #########################
 
 # calculate diversity by paper / for all of LAC
-clean <- remove_year_country(general) #  specify which (species group)
+clean <- remove_year_country(specific) #  specify which (species group)
 diversity_LA <- diversity_LAC(clean)
 diversity_paper <- diversity(clean)
 
 # check - diveristy function from vegan package works
-check <- as.data.frame(colSums(clean))
-sum <- sum(check)
-check$pi <- check$`colSums(clean)`/sum
-check$lnpi <- log(check$pi)
-check$pilnpi <- check$pi * check$lnpi
-H <- -sum(check$pilnpi)
+# check <- as.data.frame(colSums(clean))
+# sum <- sum(check)
+# check$pi <- check$`colSums(clean)`/sum
+# check$lnpi <- log(check$pi)
+# check$pilnpi <- check$pi * check$lnpi
+# H <- -sum(check$pilnpi)
 
 # calculate diversity by country
 general2 <- remove_irrelevant(general)
@@ -243,7 +256,8 @@ diversity_by_country <- diversity_by_country %>%
   select(-c("country1","country2")) %>%
   rename(NSFgeneral = x, NSFspecific = x1, theme = x2)
 
-fwrite(diversity_by_country, file = "./diversity/diversity by country.csv")
+# SAVE
+write.csv(diversity_by_country, file = "./diversity/csvs/diversity.csv")
 
 ################### diversity graphs #########################
 
