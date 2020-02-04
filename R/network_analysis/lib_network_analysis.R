@@ -128,12 +128,12 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color 
 	                            list(track.height = 0.02, track.margin = c(0, 0)),
 	                            list(track.height = 0.02, track.margin = c(0, 0))
 	                            ),
-		big.gap = 45)
+		big.gap = 60)
 	circos.trackPlotRegion(track.index = 2, panel.fun = function(x, y) {
 	  xlim = get.cell.meta.data("xlim")
 	  ylim = get.cell.meta.data("ylim")
 	  sector.name = get.cell.meta.data("sector.index")
-	  circos.text(mean(xlim), ylim[1] + .1, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(0, 0.5))
+	  circos.text(mean(xlim), mean(ylim), sector.name, facing = "downward", niceFacing = TRUE, adj = c(0, 0.5))
 	  # circos.axis(h = "top", labels.cex = 0.5, major.tick.percentage = 0.2, sector.index = sector.name, track.index = 1)
 	}, bg.border = NA)
 	for (i in seq(nrow(m))){
