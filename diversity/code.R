@@ -346,3 +346,22 @@ ggplot(pivot_long, aes(x=years, y=prop, fill=topic)) +
   scale_fill_viridis(discrete = T) +
   ggtitle("Topics over time")
 
+general <- readRDS("./consolidated_results_NSF_general.Rds")
+general <- general[6:7]
+general <- remove_irrelevant(general)
+pivot <- with(general, tapply(country, list(year, country), length))
+years <- row.names(pivot)
+rownames(pivot) <- NULL
+pivot <- cbind.data.frame(years, pivot)
+pivot <- pivot[!(pivot$years == 2018),]
+pivot$years = strtoi(pivot$years)
+pivot <- complete(pivot, 
+                  years = full_seq(years, period = 1))
+pivot_long <- gather(pivot, country, prop, Argentina:Venezuela, factor_key = TRUE)
+ggplot(pivot_long, aes(x=years, y=prop, fill=country)) + 
+  geom_area(alpha=0.6 , size=.5, colour="white") +
+  scale_y_continuous(trans='pseudo_log') +
+  scale_fill_viridis(discrete = T) +
+  ggtitle("Topics over time")
+
+                              
