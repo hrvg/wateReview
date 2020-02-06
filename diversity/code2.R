@@ -85,7 +85,7 @@ col_sums <- function(df) {
 ################### subject analysis  #########################
 
 ## define data frame
-df <- remove_year(general) # pick data to work with
+df <- remove_year(specific) # pick data to work with
 df <- remove_irrelevant(df)
 df <- melt(df, id.vars = "country")
 
@@ -131,25 +131,14 @@ topic <- df %>% # uses df of individual papers
   mutate(mean = mean(value)) %>%
   mutate(var = var(value)) %>% # Variance measures the dispersion of a set of data points around their mean value
   mutate(cv = sd/mean) %>% # extent of variability in relation to the mean of the population
+  mutate(diversity = diversity(value)) %>%
   select(-c("value")) %>%
   distinct()
 topic$prop <- topic$total/sum(topic$total)
 
-# topic_other<- sums %>% # use sums df
-#   group_by(topic) %>%
-#   mutate(total = sum(sum)) %>%
-#   mutate(sd = sd(sum)) %>%
-#   mutate(mean = mean(sum)) %>%
-#   mutate(var = var(sum)) %>%
-#   mutate(cv = sd/mean) %>%
-#   select(-c("country","sum")) %>%
-#   distinct()
-# topic_other$prop <- topic_other$total/sum(topic_other$total)
 
 
-
-
-pca <- ggscatter(topic, x= "prop", y = "sd",
+pca <- ggscatter(topic, x= "prop", y = "diversity",
           label = "topic",
           label.rectangle = TRUE,
           repel = TRUE,
