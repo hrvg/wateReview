@@ -123,19 +123,12 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color 
 		annotationTrack = NULL,
 		preAllocateTracks = list(
 								list(track.height = 0.03, track.margin = c(0, 0)),
-								list(track.height = circos.par("track.height")),
+								list(track.height = 2.25 * circos.par("track.height")),
 	                            list(track.height = 0.02, track.margin = c(0, 0)),
 	                            list(track.height = 0.02, track.margin = c(0, 0)),
 	                            list(track.height = 0.02, track.margin = c(0, 0))
 	                            ),
-		big.gap = 60)
-	circos.trackPlotRegion(track.index = 2, panel.fun = function(x, y) {
-	  xlim = get.cell.meta.data("xlim")
-	  ylim = get.cell.meta.data("ylim")
-	  sector.name = get.cell.meta.data("sector.index")
-	  circos.text(mean(xlim), mean(ylim), sector.name, facing = "downward", niceFacing = TRUE, adj = c(0, 0.5))
-	  # circos.axis(h = "top", labels.cex = 0.5, major.tick.percentage = 0.2, sector.index = sector.name, track.index = 1)
-	}, bg.border = NA)
+		big.gap = 30)
 	for (i in seq(nrow(m))){
 		highlight.sector(rownames(m)[i], track.index = 3, col = countryColors[i, 1])
 		highlight.sector(rownames(m)[i], track.index = 4, col = countryColors[i, 2])
@@ -155,4 +148,54 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color 
 			highlight.sector(colnames(m)[i], track.index = 5, col = "#c2c2c2")
 		}
 	}	
+	# circos.trackPlotRegion(track.index = 2, panel.fun = function(x, y) {
+	#   xlim = get.cell.meta.data("xlim")
+	#   ylim = get.cell.meta.data("ylim")
+	#   sector.name = get.cell.meta.data("sector.index")
+	#   circos.text(mean(xlim), mean(ylim), sector.name, facing = "clockwise", niceFacing = TRUE, text.vjust = "6mm")
+	#   # circos.axis(h = "top", labels.cex = 0.5, major.tick.percentage = 0.2, sector.index = sector.name, track.index = 1)
+	# }, bg.border = NA)
+	top_topics <- data.frame(NSF_general = topic_names$NSF_general[match(colnames(m), topic_names$NSF_specific)],
+			NSF_specific = colnames(m),
+			volume = colSums(m)
+		)
+	top_topics <- top_topics %>% 
+		# group_by(NSF_general) %>%
+		filter(volume >= quantile(volume, 0.75))
+	for (NSF_spe in top_topics$NSF_specific){
+		highlight.sector(NSF_spe,
+			track.index = 2,
+			text = NSF_spe,
+			col = NA, 
+			border = NA, 
+			facing = "clockwise",
+			niceFacing = TRUE
+			)
+	}	
+	for (country in row.names(m)){
+		highlight.sector(country,
+			track.index = 2,
+			text = country,
+			cex = 1.5,
+			col = NA, 
+			border = NA, 
+			facing = "clockwise",
+			niceFacing = TRUE			)
+	}
+	for (i in seq_along(levels(topic_names$NSF_general))){
+		NSF_gen <- levels(topic_names$NSF_general)[i]
+		ind <- which(colnames(m) %in% topic_names$NSF_specific[topic_names$NSF_general == NSF_gen])
+		highlight.sector(colnames(m)[ind],
+			track.index = c(1,2),
+			text = NSF_gen,
+			col = NA, 
+			border = RColorBrewer::brewer.pal(5, "Set1")[i], 
+			facing = "bending.inside",
+			niceFacing = TRUE,
+			text.vjust = "30mm",
+			cex = 1.5
+			)
+	}
 }
+
+

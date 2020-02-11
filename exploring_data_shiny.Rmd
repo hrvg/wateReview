@@ -282,7 +282,7 @@ Sidebar {.sidebar}
 -------------------------------------
 
 ```{r}
-selectInput("type", "Type of themes", c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget"), selected = "theme", multiple = FALSE,
+selectInput("type", "Type of themes", c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget"), selected = "NSF_specific", multiple = FALSE,
   selectize = TRUE, width = NULL, size = NULL)
 ```
 
