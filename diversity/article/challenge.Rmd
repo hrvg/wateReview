@@ -5,5 +5,8 @@ output:
 ---
 ## Challenge
 Given these circumstances, it is critical to assess whether water resources research across Latin America contributes the knowledge necessary to successfully manage water.
-We performed an unprecedented, multilingual review of the state of water resources research literature across the region and a range of topics and disciplines to assess the state of this research.
-This literature review reveals bright spots and blind spots of past water research to provide insight for scientists to advance the relevance and impact of future scientific inquiry and for decision-makers to design effective policy solutions to resource management challenges.
+
+While others did......... there are shortcomings.
+
+To assess the state of this research, we performed an unprecedented, multi-lingual review of the state of water resources research literature in the region and across a range of topics and disciplines.
+This literature review reveals bright spots and blind spots of past water research and provides insights for scientists and decision-makers to advance the relevance and impact of future scientific inquiries and to design effective policy solutions to resource management challenges.

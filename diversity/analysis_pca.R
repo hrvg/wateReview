@@ -15,7 +15,7 @@
 ################### code #########################
 
 # define subset
-probs <- reduce_docs_for_JSd(budget)
+probs <- reduce_docs_for_JSd(specific)
 
 # x axis
 # calculate distance from normal for %  of research done in each country
@@ -38,6 +38,8 @@ get_JSd('reservoirs', plot = T)
 
 # y axis
 # calculate distance from normal for all documents
+
+## RE DO - MEDIAN OF COUNTRIES?
 df <- probs %>%
   group_by(country) %>%
   mutate(prop = value/sum(value)) %>% # added proportion to account for influence of country
@@ -52,6 +54,9 @@ names(topic_distance) <- unique(df$topic)
 
 
 ################### graph #########################
+
+# REDO _ FIX AXES
+
 country_distance <- as.data.frame(country_distance)
 
 
@@ -68,5 +73,6 @@ ggscatter(distance, y = "country_distance", x = "topic_distance",
           repel = TRUE)
 
 # interactive graphs
-# a <- ggplot(distance, aes(x = country_distance, y = topic_distance, group = topic)) + geom_point() + theme_pubr()
-# ggplotly(a, tooltip = c('topic'))
+
+a <- ggplot(distance, aes(y = country_distance, x = topic_distance, group = topic)) + geom_point() + theme_pubr()
+ggplotly(a, tooltip = c('topic'))
