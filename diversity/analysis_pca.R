@@ -15,7 +15,7 @@
 ################### code #########################
 
 # define subset
-probs <- reduce_docs_for_JSd(general)
+probs <- reduce_docs_for_JSd(budget)
 
 # x axis
 # calculate distance from normal for %  of research done in each country
@@ -33,7 +33,7 @@ df <- sums %>%
 country_distance<- sapply(unique(df$topic), get_JSd)
 names(country_distance) <- unique(df$topic)
 
-# get_JSd('rivers', plot = T)
+get_JSd('reservoirs', plot = T)
 
 
 # y axis
@@ -57,9 +57,12 @@ country_distance <- as.data.frame(country_distance)
 
 topic_distance <- as.data.frame(topic_distance)
 distance <- cbind(country_distance, topic_distance)
+
 distance$topic <- rownames(distance)
 
-ggscatter(distance, y= "country_distance", x = "topic_distance",
+
+
+ggscatter(distance, y = "country_distance", x = "topic_distance",
           label = "topic",
           label.rectangle = TRUE,
           repel = TRUE)

@@ -103,7 +103,7 @@ get_JSd <- function(top, plot = FALSE){
   g <- ggplot_build(p)
   gdata <- g$data[[1]]$y / sum(g$data[[1]]$y)
   normdata <- g$data[[2]]$y / sum(g$data[[2]]$y)
-  return(sqrt(as.numeric(JSD(rbind(gdata, normdata)))))
+  return(1 - sqrt(as.numeric(JSD(rbind(gdata, normdata)))))
 }
 
 
