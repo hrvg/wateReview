@@ -323,45 +323,4 @@ ggplot(df2, aes(x = Group.1, y = value, color = variable)) +
   theme_pubr() +
   labs(title = topic_pick)
 
-################### chronological analysis #########################
-library(viridis)
-library(hrbrthemes)
 
-general <- readRDS("./consolidated_results_NSF_general.Rds")
-general <- subset(general, select = -c(country))
-general_long <- gather(general, topic, prop, 'physical sciences':'social sciences', factor_key = TRUE)
-pivot <- with(general_long, tapply(prop, list(year, topic), sum))
-pivot <- pivot[!(row.names(pivot) %in% 2018),]
-years <- row.names(pivot)
-rownames(pivot) <- NULL
-pivot <- cbind.data.frame(years, pivot)
-pivot$years = strtoi(pivot$years)
-pivot <- complete(pivot, 
-                  years = full_seq(years, period = 1), 
-                  fill = list(`social sciences` = 0, `physical sciences` = 0, `life sciences` = 0, `mathematics & statistics`=0,engineering=0))
-pivot_long <- gather(pivot, topic, prop, 'physical sciences':'social sciences', factor_key = TRUE)
-ggplot(pivot_long, aes(x=years, y=prop, fill=topic)) + 
-  geom_area(alpha=0.6 , size=.5, colour="white") +
-  scale_y_continuous(trans='pseudo_log') +
-  scale_fill_viridis(discrete = T) +
-  ggtitle("Topics over time")
-
-general <- readRDS("./consolidated_results_NSF_general.Rds")
-general <- general[6:7]
-general <- remove_irrelevant(general)
-pivot <- with(general, tapply(country, list(year, country), length))
-years <- row.names(pivot)
-rownames(pivot) <- NULL
-pivot <- cbind.data.frame(years, pivot)
-pivot <- pivot[!(pivot$years == 2018),]
-pivot$years = strtoi(pivot$years)
-pivot <- complete(pivot, 
-                  years = full_seq(years, period = 1))
-pivot_long <- gather(pivot, country, prop, Argentina:Venezuela, factor_key = TRUE)
-ggplot(pivot_long, aes(x=years, y=prop, fill=country)) + 
-  geom_area(alpha=0.6 , size=.5, colour="white") +
-  scale_y_continuous(trans='pseudo_log') +
-  scale_fill_viridis(discrete = T) +
-  ggtitle("Topics over time")
-
-                              
