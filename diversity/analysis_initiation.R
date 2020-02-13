@@ -11,7 +11,9 @@ library(data.table)
 library(wesanderson)
 library(ggplot2)
 library(philentropy)
-
+library(scales)
+library(ggplotify)
+library(plotly)
 ################### files #########################
 general <- readRDS("./consolidated_results_NSF_general.Rds")
 specific <- readRDS("./consolidated_results_NSF_specific.Rds") # 45 themes

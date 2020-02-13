@@ -26,47 +26,32 @@ names(country_sums) = c("country","no.papers")
 sums <-aggregate(df$value, by=list(df$country,df$topic), FUN=sum) # re - summarize after removing countries w/ < 30 papers
 names(sums) = c("country","topic","sum")
 
-# SAVE for mapping
-# write.csv(sums,'./diversity/csvs/nsfspecific.csv')
-
-
-
-## calculate distance from normal for %  of research done in each country (x axis)
-
-
 sums <- sums %>%
   group_by(country) %>%
   mutate(prop = sum/sum(sum))
 
 
+# SAVE for mapping
+# write.csv(sums,'./diversity/csvs/nsfspecific.csv')
 
-x <- as.data.frame(rnorm(12)) # set to # of countries (# of observations)
-x2 <- subset(sums, topic == "oceanography")
-ks.test(x, x2$prop)
-
-
-
-
-
-## calculate distance from normal topic probabilities
+## describe tpoics
 
 topic <- df %>% # uses df of individual papers
   select(-c("country")) %>%
   group_by(topic) %>%
   mutate(total = sum(value)) %>%
-  #mutate(sd = sd(value)) %>%
-  #mutate(mean = mean(value)) %>%
-  #mutate(var = var(value)) %>% # Variance measures the dispersion of a set of data points around their mean value
-  #mutate(cv = sd/mean) %>% # extent of variability in relation to the mean of the population
-  #mutate(diversity = diversity(value)) %>%
+  mutate(sd = sd(value)) %>%
+  mutate(mean = mean(value)) %>%
+  mutate(var = var(value)) %>% # Variance measures the dispersion of a set of data points around their mean value
+  mutate(cv = sd/mean) %>% # extent of variability in relation to the mean of the population
+  mutate(diversity = diversity(value)) %>%
   select(-c("value")) %>%
   distinct()
 topic$prop <- topic$total/sum(topic$total)
 
 
 
-a <- remove_year_country(budget)
-b <- distance(a, use.row.names = TRUE)
+
 
 ################### graph  #########################
 pca <- ggscatter(topic, x= "prop", y = "diversity",
