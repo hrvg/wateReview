@@ -3,3 +3,4 @@ src/BERTpy/data/
 src/BERTpy/input/
 src/BERTpy/working/
 .Rproj.user
+.RData
