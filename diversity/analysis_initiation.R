@@ -14,6 +14,9 @@ library(philentropy)
 library(scales)
 library(ggplotify)
 library(plotly)
+library(tidyr)
+library(tidyverse)
+
 ################### files #########################
 general <- readRDS("./consolidated_results_NSF_general.Rds")
 specific <- readRDS("./consolidated_results_NSF_specific.Rds") # 45 themes

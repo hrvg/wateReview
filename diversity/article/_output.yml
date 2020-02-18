@@ -1,8 +1,8 @@
- html_document:
-   toc: true
-   toc_float: true
-   code_folding: hide
-   theme: readable
+ # #html_document:
+ #   toc: true
+ #   toc_float: true
+ #   code_folding: hide
+ #   theme: readable
   
 pdf_document:
   toc: true
@@ -10,8 +10,8 @@ pdf_document:
   code_folding: hide
   theme: readable
 
- word_document:
-   toc: true
-   toc_float: true
-   code_folding: hide
-   theme: readable
+ # word_document:
+ #   toc: true
+ #   toc_float: true
+ #   code_folding: hide
+ #   theme: readable

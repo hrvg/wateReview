@@ -63,23 +63,24 @@ col_sums <- function(df) {
 
 reduce_docs_for_JSd <- function(df){
   
-  df <- remove_year(df) # pick data to work with
-  df <- remove_irrelevant(df)
-  df <- melt(df, id.vars = "country")
+  a <- remove_year(df) # pick data to work with
+  a <- remove_irrelevant(a)
+  a <- melt(a, id.vars = "country")
 
 ## count # papers per country
-  sums <- aggregate(df$value, by=list(df$country,df$variable), FUN=sum)
+  sums <- aggregate(a$value, by=list(a$country,a$variable), FUN=sum)
   names(sums) = c("country","topic","sum")
   country_sums <- aggregate(sums$sum, by=list(sums$country), FUN=sum) # no. papers per country
   names(country_sums) = c("country","no.papers")
   remove <- as.data.frame(country_sums$country[country_sums$no.papers < 30]) # list countries w/ < 30 papers
   keep <- as.data.frame(country_sums$country[country_sums$no.papers > 30])
+  names(keep) <- "country"
 
 ## subset countries with > 30 papers
-  df<- subset(df, df$country %in% keep$`country_sums$country[country_sums$no.papers > 30]`)
-  names(df) = c("country","topic","value")
+  a <- subset(a, a$country %in% keep$country)
+  names(a) = c("country","topic","value")
 
-return(df)
+return(a)
 
 }
 
@@ -89,8 +90,25 @@ return(df)
 
 
 
-get_JSd <- function(top, plot = FALSE){
+get_JSd_country <- function(top, plot = FALSE){
   p <- ggplot(subset(df, topic == top)) +
+    geom_density(aes(x = scaled, y = ..density.., fill= top)) +
+    xlim(c(-5, 5)) +
+    stat_function(fun = dnorm, n = 512, args = list(mean = 0, sd = 1)) +
+    labs(x = "scaled desntiy", 
+         y = "probability of research (rescaled)") +
+    theme_pubr()
+  p 
+  if (plot) return(p)
+  
+  g <- ggplot_build(p)
+  gdata <- g$data[[1]]$y / sum(g$data[[1]]$y)
+  normdata <- g$data[[2]]$y / sum(g$data[[2]]$y)
+  return(1 - sqrt(as.numeric(JSD(rbind(gdata, normdata)))))
+}
+
+get_JSd_corpus <- function(top, plot = FALSE){
+  p <- ggplot(subset(df, countrytopic == top)) +
     geom_density(aes(x = scaled, y = ..density.., fill= top)) +
     xlim(c(-5, 5)) +
     stat_function(fun = dnorm, n = 512, args = list(mean = 0, sd = 1)) +
