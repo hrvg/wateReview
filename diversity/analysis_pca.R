@@ -16,7 +16,7 @@
 
 # define subset
 probs <- reduce_docs_for_JSd(budget)
-# probs <- probs %>% mutate(topic = replace(topic, topic == "groundwater flow", "groundwater"))
+probs <- probs %>% mutate(topic = replace(topic, topic == "groundwater flow", "groundwater"))
 
 
 ############### across countries ###########
@@ -67,71 +67,7 @@ topic_distance <- topic_distance %>%
   distinct()
 
 
-
-################### graph #########################
+# combine and save separate csvs
 distance <- merge(country_distance, topic_distance, by = "topic")
 
-budget <- ggscatter(distance, y = "country_distance", x = "topic_distance",
-          label = "topic",
-          label.rectangle = TRUE,
-          repel = TRUE,
-          xlab = "Normality across topics",
-          ylab = "Normality across countries")  # SAVE BUDGET & METHODS SEPARATE
-
-
-
-
-# interactive graphs
-# b <- ggplot(distance, aes(y = country_distance, x = topic_distance, group = topic)) + geom_point() + theme_pubr()
-# ggplotly(b, tooltip = c('topic'))
-
-# combine into 1
-
-methods.edit <- 
-  methods +
-  theme(axis.text = element_blank()) +
-  ylim(.58,.92) +
-  xlim(.25,.63) +
-  labs(title = "Research methods")
-
-
-budget.edit <- 
-  budget +
-  theme(axis.text = element_blank()) +
-  ylim(.58,.92) +
-  xlim(.25,.63) +
-  labs(title = "Components of water budget")
-
-joined <- ggarrange(budget.edit, methods.edit,
-          ncol = 2, nrow = 1)
-
-
-
-
-# add guide
-
-reservoir <- get_JSd_country('reservoirs', plot = T) 
-rivers <- get_JSd_country('rivers', plot = T)
-
-reservoir.edit <- 
-  reservoir +
-  rremove("legend") +
-  clean_theme() +
-  labs(title = "Less normal")
-
-rivers.edit <-
-  rivers +
-  rremove("legend") +
-  ylim(0,0.8) +
-  clean_theme() +
-  labs(title = "More normal")
-
-text <- paste("Normality describes how similar a topic's distribution is to 'normal'.", sep = " ")
-text.p <- ggparagraph(text = text, face = "italic", size = 16, color = "black")
-reference2 <- ggarrange(text.p, reservoir.edit, rivers.edit,
-                       ncol = 3, nrow = 1)
-
-ggarrange(reference2, joined,
-          ncol = 1, nrow = 2,
-          heights = c(1,5))
-# SAVE AS jpeg 1000x900
+write.csv(distance, file = "./diversity/csvs/methodsdistance.csv")

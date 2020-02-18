@@ -17,7 +17,7 @@ library(plotly)
 library(tidyr)
 library(tidyverse)
 
-################### files #########################
+################### raw files #########################
 general <- readRDS("./consolidated_results_NSF_general.Rds")
 specific <- readRDS("./consolidated_results_NSF_specific.Rds") # 45 themes
 methods <- readRDS("./consolidated_results_methods.Rds")
