@@ -84,7 +84,7 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 	return(network_results)
 }
 
-VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color = TRUE, type = "theme", sort_topic = TRUE){
+VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color = TRUE, type = "theme", sort_topic = TRUE, topic_threshold = 0.75){
 	countryColors <- readRDS("countryColors.Rds")
 	N <- nrow(countryColors)
 	ind <- match(rownames(m), countryColors$country_name)
@@ -161,7 +161,7 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color 
 		)
 	top_topics <- top_topics %>% 
 		# group_by(NSF_general) %>%
-		filter(volume >= quantile(volume, 0.75))
+		filter(volume >= quantile(volume, topic_threshold))
 	for (NSF_spe in top_topics$NSF_specific){
 		highlight.sector(NSF_spe,
 			track.index = 2,
