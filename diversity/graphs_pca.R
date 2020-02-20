@@ -1,3 +1,6 @@
+######## methods + budget #########
+
+
 budget <- read.csv("./diversity/csvs/waterbudgetdistance.csv")
 methods <- read.csv("./diversity/csvs/methodsdistance.csv")
 
@@ -53,7 +56,6 @@ joined <- ggarrange(budget.edit, methods.edit,
 reservoir <- get_JSd_country('reservoirs', plot = T) 
 rivers <- get_JSd_country('rivers', plot = T)
 
-
 reservoir.edit <- 
   reservoir +
   rremove("legend") +
@@ -76,3 +78,20 @@ ggarrange(reference, joined,
           ncol = 1, nrow = 2,
           heights = c(1,5))
 # SAVE AS jpeg 1000x900
+
+
+######## themes ##########
+
+
+theme <- read.csv("./diversity/csvs/themesdistance.csv")
+
+
+ggscatter(theme, y = "country_distance", x = "topic_distance",
+                    label = "topic",
+                    label.rectangle = TRUE,
+                    repel = TRUE,
+                    xlab = "Normality across documents",
+                    ylab = "Normality across countries") 
+# interactive graphs
+b <- ggplot(theme, aes(y = country_distance, x = topic_distance, group = topic)) + geom_point() + theme_pubr()
+ggplotly(b, tooltip = c('topic'))

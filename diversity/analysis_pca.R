@@ -15,7 +15,7 @@
 ################### code #########################
 
 # define subset
-probs <- reduce_docs_for_JSd(budget)
+probs <- reduce_docs_for_JSd(theme)
 probs <- probs %>% mutate(topic = replace(topic, topic == "groundwater flow", "groundwater"))
 
 
@@ -41,6 +41,9 @@ country_distance <- as.data.frame(country_distance)
 country_distance$topic <- rownames(country_distance)
 
 
+get_JSd_country('climate change impacts', plot = T)
+
+get_JSd_country('agriculture', plot = T)
 
 ############### across documents ###########
 
@@ -70,4 +73,4 @@ topic_distance <- topic_distance %>%
 # combine and save separate csvs
 distance <- merge(country_distance, topic_distance, by = "topic")
 
-write.csv(distance, file = "./diversity/csvs/methodsdistance.csv")
+write.csv(distance, file = "./diversity/csvs/themesdistance.csv")
