@@ -62,8 +62,11 @@ pivot_long <- gather(pivot, country, count, Braz_Mex:Colom_Boliv, factor_key = T
 
 ggplot(pivot_long, aes(x=years, y=count, fill=country)) +
   geom_area(alpha=0.6 , size=.5, colour="white") +
-  # scale_y_continuous(trans='pseudo_log') +
-  scale_fill_viridis(discrete = T) +
-  ggtitle("Country clusters over time") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  theme(axis.title = element_text(hjust = 0))
+  scale_fill_manual(values = c("#F8766D", "#00BFC4", "#7CAE00"),
+                    labels=c("Brazil, etc.", "Chile, etc.", "Colombia, etc.")) +
+  scale_x_continuous(minor_breaks = seq(1980, 2020, by=1), breaks = seq(1980, 2020, by=5)) +
+  theme(axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5),
+        legend.title=element_blank()) +
+  labs(y = "New articles") + 
+  ggtitle("Country clusters over time") 
+
