@@ -16,6 +16,7 @@ library(ggplotify)
 library(plotly)
 library(tidyr)
 library(tidyverse)
+library(ggrepel)
 
 ################### raw files #########################
 general <- readRDS("./consolidated_results_NSF_general.Rds")

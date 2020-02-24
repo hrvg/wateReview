@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  16 FEB 2020 19:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  23 FEB 2020 16:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -602,8 +602,9 @@ e
 File: article_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (type pdf)
 <use article_files/figure-latex/unnamed-chunk-6-1.pdf>
 Package pdftex.def Info: article_files/figure-latex/unnamed-chunk-6-1.pdf  used
- on input line 191.
+ on input line 234.
 (pdftex.def)             Requested size: 469.75494pt x 114.08333pt.
+[2]
 
 ! Package inputenc Error: Unicode character ́ (U+0301)
 (inputenc)                not set up for use with LaTeX.
@@ -612,15 +613,15 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.202 Kjellén, and Abel Mejı́
+l.245 Kjellén, and Abel Mejı́
                                 a-Betancourt. 2015. \emph{Water and Cities in 
 Here is how much of TeX's memory you used:
- 12121 strings out of 492616
- 176054 string characters out of 6129482
+ 12130 strings out of 492616
+ 176140 string characters out of 6129482
  289453 words of memory out of 5000000
  15894 multiletter control sequences out of 15000+600000
- 28598 words of font info for 44 fonts, out of 8000000 for 9000
+ 28847 words of font info for 47 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 32i,4n,38p,970b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 32i,4n,38p,970b,381s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 !  ==> Fatal error occurred, no output PDF file produced!

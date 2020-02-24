@@ -1,10 +1,7 @@
 ---  
 title: "Bright Spots and Blind Spots"
-date: "`r format(Sys.time(), '%d %B %Y')`"
-output:
-  pdf_document: default
-  #html_document: default
-  #word_document: default
+date: '`r format(Sys.time(), '%d %B %Y')`'
+output: pdf_document
 subtitle: A kick-ass project
 bibliography: bibliography.bib
 ---

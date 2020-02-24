@@ -15,9 +15,8 @@
 ################### code #########################
 
 # define subset
-probs <- reduce_docs_for_JSd(theme)
+probs <- reduce_docs_for_JSd(budget)
 probs <- probs %>% mutate(topic = replace(topic, topic == "groundwater flow", "groundwater"))
-
 
 ############### across countries ###########
 
@@ -40,10 +39,10 @@ names(country_distance) <- unique(df$topic)
 country_distance <- as.data.frame(country_distance)
 country_distance$topic <- rownames(country_distance)
 
+# graphs for guide
+reservoir <- get_JSd_country('reservoirs', plot = T) 
+rivers <- get_JSd_country('rivers', plot = T)
 
-get_JSd_country('climate change impacts', plot = T)
-
-get_JSd_country('agriculture', plot = T)
 
 ############### across documents ###########
 
