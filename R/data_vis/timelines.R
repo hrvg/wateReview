@@ -7,6 +7,7 @@ library(viridis)
 library(hrbrthemes)
 library(ggplot2)
 library(tidyr)
+library(pracma)
 
 ################### Topics chronology #########################
 
@@ -58,6 +59,7 @@ pivot <- pivot[!(pivot$years == 2018),]
 pivot$years = strtoi(pivot$years)
 pivot <- pivot[(pivot$years > 1979),]
 pivot <- complete(pivot, years = full_seq(years, period = 1))
+pivot[is.na(pivot)] <- 0
 pivot_long <- gather(pivot, country, count, Braz_Mex:Colom_Boliv, factor_key = TRUE)
 
 ggplot(pivot_long, aes(x=years, y=count, fill=country)) +
@@ -69,4 +71,30 @@ ggplot(pivot_long, aes(x=years, y=count, fill=country)) +
         legend.title=element_blank()) +
   labs(y = "New articles") + 
   ggtitle("Country clusters over time") 
+
+################### Optional: Detrending #########################
+B_log = log(pivot$Braz_Mex + 1)
+Ch_log = log(pivot$Chile_Argen + 1)
+Co_log = log(pivot$Colom_Boliv + 1)
+years = pivot$years
+pivot_log = data_frame(years, B_log, Ch_log, Co_log)
+pivot_log_long = melt(pivot_log, id = "years")
+
+ggplot(data = pivot_log_long,
+  aes(x = years, y = value, colour = variable)) +
+  geom_line()
+
+for (i in sequence(3)) {
+  if (i == 1) {title = "Brazil, Mexico, etc."} 
+  if (i == 2) {title = "Chile, Argentina, etc."} 
+  if (i == 3) {title = "Colombia, Bolivia, etc."}
+  model = lm(as.matrix(pivot_log[i+1]) ~ years)
+  resid = resid(model)
+  plot(years, cluster, main=title)
+  abline(lm(cluster ~ years))
+  plot(years, resid, xlab="years", ylab="residuals", main=title)
+  abline(0,0)
+}
+
+
 
