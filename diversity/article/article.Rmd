@@ -1,8 +1,7 @@
 ---  
 title: "Bright Spots and Blind Spots"
-date: '`r format(Sys.time(), '%d %B %Y')`'
-output: pdf_document
 subtitle: A kick-ass project
+date: "`r format(Sys.time(), '%d %B %Y')`"
 bibliography: bibliography.bib
 ---
 
@@ -20,8 +19,6 @@ bibliography: bibliography.bib
 ```{r child = 'action.Rmd'}
 ```
 
-```{r child = 'flowchart.Rmd'}
-```
 
 --- 
 

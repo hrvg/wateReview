@@ -14,7 +14,7 @@ Second, to understand the landscape of water research in Latin America, we colle
 Countries within Latin America were statistically clustered into four groups with distinct physiographic and socioeconomic characteristics.
 To ground our data-driven results in the reality of the current research climate, we invited nearly 20,000 corresponding authors to share their experiences through a survey focused on research discipline, accessibility and connectivity.
 
-[//]: # figure 1
+[//]: # chord diagram
 
 A chord diagram describes the composition of water research in Latin America and the Caribbean and reveals inequalities in locations and themes of research (figure 1).
 The chord widths indicate the proportion of a specific research theme within the top 25% of research for a given country.
@@ -24,21 +24,31 @@ Similarly, water research is not distributed equally among disciplines and resul
 While Mexico contributes most to the social science research, it is a small proportion of its overall output.
 Water research is conducted primarily in the physical and life sciences, with Mexico and Argentina alternating for second highest output after Brazil, respectively.
 
-
-
-[//]: # figures 2 and 3
-
 After assessing trends in the corpus, we further analyzed results from the topic model and text mining to identify bright spots and blind spots of water research in Latin America and the Caribbean.
-We define successful research as having a distribution that is close to normal, standard distribution and with high entropy.
+We define successful research as having a distribution that is close to the standard normal distribution and with high entropy.
 When applied to our corpus, these concepts highlight locations and themes that are relatively under-researched.
+
+[//]: # normality
 
 Water research in Latin America and the Caribbean has generally higher normality across countries than documents (figure 2).
 A look at the normalities of the components of the water budget validates our analysis approach.
-Rivers and precipitation, which must be monitored and understood to manage water resources, have distributions closest to normal, while glaciers are far from normally distribution because few countries have glaciers to study.
+Rivers and precipitation, which must be monitored and understood to manage water resources, have distributions closest to normal, while glaciers are far from normal distribution because few countries have glaciers to study.
 Assuming that high normality indicates success, we can identify statistics, quantitative methods and water sampling as bright spot of research methods.
 Niche topics, such as irrigation and isotopes, have high normality across countries but low normality across documents, and lie somewhere between bright and blind spots.
 Such research topics are either infrequently mentioned or, if mentioned, are the main subject of a paper.
 The least normality is seen in two topics of great importance for water management: reservoirs and risk assessment.
+
+[//]: # map
+
+
+
+
+[//]: # time line
+
+
+[//]: # lda performance
+
+
 
 
 

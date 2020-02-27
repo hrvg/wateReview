@@ -25,7 +25,7 @@ budget.base <- ggplot(budget,aes(topic_distance,country_distance, label = topic)
 
 methods.edit <- 
   methods.base +
-  grids() +
+  #grids() +
   coord_fixed() +
   ylim(0.55,0.95) +
   xlim(0.25,0.65) +
@@ -33,7 +33,7 @@ methods.edit <-
 
 budget.edit <- 
   budget.base +
-  grids() +
+  #grids() +
   ylim(0.55,0.95) +
   xlim(0.25,0.65) +
   coord_fixed() +

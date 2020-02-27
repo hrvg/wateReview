@@ -1,6 +1,7 @@
 pdf_document:
   toc: true
   latex_engine: xelatex
+classoption: twocolumns
   
 html_document:
   toc: true
