@@ -48,18 +48,28 @@ x2$lang <- factor(x2$lang, labels = c("English", "Spanish", "Portuguese"))
 
 ######## heat map #############
 
-a <- ggplot(data = x2, aes(x = lang, 
-                           y = fct_reorder(value, nlang))) +
-  geom_tile(aes(fill = nlang,
-                width=0.9, height=0.9)) # edit for specific vs. general
+a <- ggplot(data = x2, aes(x = lang, y = fct_reorder(value, nlang))) +
+  geom_tile(aes(fill = nlang, width=0.9, height=0.9)) +
+  geom_text(aes(label = n))
+a
+
 a + 
-  scale_fill_gradient(low = "#6fb6fd",
-                      high = "#012345") +
+  scale_fill_gradient(low = "grey89",
+                      high = "grey50") +
   labs(title= "LDA coverage",
        y="NSF specific categories",
        x = "LDA for each language") +
-  theme_pubr() 
-
+  theme_pubr() +  
+  theme(axis.text.y = element_text(face = c('plain','plain','plain', 'plain', 'plain', 'plain', 'plain',
+                                            'plain', 'bold', 'plain', 'plain', 'plain',
+                                            'plain', 'plain', 'plain', 'plain', 'plain',
+                                            'plain', 'plain', 'plain', 'plain', 'plain',
+                                            'plain', 'bold', 'plain', 'plain', 'plain',
+                                            'bold', 'bold', 'plain', 'bold', 'bold', 
+                                            'bold', 'plain', 'bold','plain', 'plain', # 6-10
+                                            'bold', 'bold', 'bold','bold','bold' # 1-5
+                                            ))) +
+  rremove("legend")
 
 
 
