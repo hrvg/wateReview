@@ -8,6 +8,8 @@ library(hrbrthemes)
 library(ggplot2)
 library(tidyr)
 library(pracma)
+library(ggpubr)
+library(wesanderson)
 
 ################### Topics chronology #########################
 
@@ -88,13 +90,32 @@ for (i in sequence(3)) {
   if (i == 1) {title = "Brazil, Mexico, etc."} 
   if (i == 2) {title = "Chile, Argentina, etc."} 
   if (i == 3) {title = "Colombia, Bolivia, etc."}
-  model = lm(as.matrix(pivot_log[i+1]) ~ years)
-  resid = resid(model)
-  plot(years, cluster, main=title)
-  abline(lm(cluster ~ years))
+  model <- lm(as.matrix(pivot_log[i+1]) ~ years)
+  resid <- resid(model)
+  if (i == 1) {pivot_log$B_resid <- resid
+  ylabel <- "Residuals for Brazil, Mexico"} 
+  if (i == 2) {pivot_log$Ch_resid <- resid
+  ylabel <- "Chile, Argentina, etc."} 
+  if (i == 3) {pivot_log$Co_resid <- resid
+  ylabel <- "Colombia, Bolivia, etc."}
+  sd <- sd(resid)
+  plot(years, pivot_log[i+1][[1]], main=title)
+  abline(lm(pivot_log[i+1][[1]] ~ years))
   plot(years, resid, xlab="years", ylab="residuals", main=title)
   abline(0,0)
+  pivot_log$signif <- resid > 0
+  pivot_log$signif[abs(resid) < sd] <- NA
+  
+  print(ggplot(data=pivot_log, aes(x=years, y=resid, color = resid > 0, fill = signif)) +
+    theme_pubr(legend="none") +
+    scale_fill_manual(values = wes_palette(n=2, "FantasticFox1")) +
+    scale_color_manual(values = wes_palette(n=2, "FantasticFox1")) +
+    labs(y = ylabel) +
+    ylim(-1.25, .75) +
+    geom_bar(stat="identity") +
+    theme(axis.title.x = element_blank(), legend.position = "none") +
+    scale_x_continuous(minor_breaks = seq(1980, 2020, by=1)) +
+    grids(axis = c("xy"), color = "grey92", size = NULL,
+          linetype = NULL))
 }
-
-
-
+  
