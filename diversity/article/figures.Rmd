@@ -1,0 +1,10 @@
+# Figures
+
+![Time line](./figures/timeline.pdf)
+
+![Chord diagram](./figures/chord.pdf)
+
+![Normality describes bright and blind spots in water budget and methodologies](./figures/normality.pdf)
+
+![Topic model performance](./figures/lda.pdf)
+

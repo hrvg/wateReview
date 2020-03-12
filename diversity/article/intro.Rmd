@@ -1,4 +1,5 @@
-## Intro
+# Introduction
+
 The famous Blue Marble photograph taken by the crew of Apollo 17 embodies the abundance of water that supported the emergence of life on Earth and is intrinsically linked to human health, ecosystem function, and economic prosperity. 
 Yet, this iconic picture belies the pressures facing freshwater resources today, brought about by anthropogenic threats of human population growth and urbanization [@Jenerette2006; @Immerzeel2019], climate variability and change [@Gosling2016], economic growth and consumption patterns [@Mcdonald2014; @Odorico2018], and the spread of misinformation and mistrust in science [@IPCC2014]. 
 To support societal and ecological water needs in this context, decision-making must be based on evidence from robust water resources research in a diversity of scientific fields [@Uzzi2013].
@@ -13,4 +14,4 @@ The city of Sāo Paulo nearly ran out of water during a 2014 drought, while Mexi
 Urban pressures on water resources are compounded by poor farming practices, unregulated industries, and aging infrastructure across the region.
 These water challenges are expected to intensify due to climate change as variations in precipitation, temperature, and evaporation threaten water availability for current and future water users around the globe, and particularly in Latin America [@Dussaillant2019; @Garreaud2017; @Gesualdo2019; @Zaninelli2019].
 Uncertainty surrounds the reliability of water supplies to meet future needs as well as the availability of funds for scientific research to address future water scarcity [@Andrade2019].
-
+There is a need for comparative research within Latin America, rather than comparisons within and between the United States and Europe where scientific and monetary resources have been comparatively more plentiful.

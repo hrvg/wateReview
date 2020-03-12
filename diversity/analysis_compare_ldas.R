@@ -56,9 +56,9 @@ a
 a + 
   scale_fill_gradient(low = "grey89",
                       high = "grey50") +
-  labs(title= "LDA coverage",
+  labs(title= "Topic model coverage",
        y="NSF specific categories",
-       x = "LDA for each language") +
+       x = "Topic model for each language") +
   theme_pubr() +  
   theme(axis.text.y = element_text(face = c('plain','plain','plain', 'plain', 'plain', 'plain', 'plain',
                                             'plain', 'bold', 'plain', 'plain', 'plain',

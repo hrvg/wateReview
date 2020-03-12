@@ -8,18 +8,18 @@ bibliography: bibliography.bib
 ```{r child = 'abstract.Rmd'}
 ```
 
-# Main Text
-
 ```{r child = 'intro.Rmd'}
 ```
 
 ```{r child = 'challenge.Rmd'}
 ```
 
-```{r child = 'action.Rmd'}
+
+```{r child = 'methods.Rmd'}
 ```
 
+```{r child = 'results.Rmd'}
+```
 
---- 
 
 # References
