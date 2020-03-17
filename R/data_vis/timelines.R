@@ -65,14 +65,15 @@ pivot[is.na(pivot)] <- 0
 pivot_long <- gather(pivot, country, count, Braz_Mex:Colom_Boliv, factor_key = TRUE)
 
 ggplot(pivot_long, aes(x=years, y=count, fill=country)) +
+  theme_pubr(legend="none") +
   geom_area(alpha=0.6 , size=.5, colour="white") +
   scale_fill_manual(values = c("#F8766D", "#00BFC4", "#7CAE00"),
-                    labels=c("Brazil, etc.", "Chile, etc.", "Colombia, etc.")) +
+                    labels=c("Cluster 1", "Cluster 2", "Cluster 3")) +
   scale_x_continuous(minor_breaks = seq(1980, 2020, by=1), breaks = seq(1980, 2020, by=5)) +
   theme(axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5),
         legend.title=element_blank()) +
-  labs(y = "New articles") + 
-  ggtitle("Country clusters over time") 
+  labs(y = "New water resources articles") 
+  # ggtitle("Country clusters over time") 
 
 ################### Optional: Detrending #########################
 B_log = log(pivot$Braz_Mex + 1)
@@ -87,35 +88,41 @@ ggplot(data = pivot_log_long,
   geom_line()
 
 for (i in sequence(3)) {
-  if (i == 1) {title = "Brazil, Mexico, etc."} 
-  if (i == 2) {title = "Chile, Argentina, etc."} 
-  if (i == 3) {title = "Colombia, Bolivia, etc."}
+  if (i == 1) {title = "Cluster 1"} 
+  if (i == 2) {title = "Cluster 2"} 
+  if (i == 3) {title = "Cluster 3"}
   model <- lm(as.matrix(pivot_log[i+1]) ~ years)
   resid <- resid(model)
   if (i == 1) {pivot_log$B_resid <- resid
-  ylabel <- "Residuals for Brazil, Mexico"} 
+  title <- "Cluster 1"} 
   if (i == 2) {pivot_log$Ch_resid <- resid
-  ylabel <- "Chile, Argentina, etc."} 
+  title <- "Cluster 2"} 
   if (i == 3) {pivot_log$Co_resid <- resid
-  ylabel <- "Colombia, Bolivia, etc."}
+  title <- "Cluster 3"}
   sd <- sd(resid)
-  plot(years, pivot_log[i+1][[1]], main=title)
-  abline(lm(pivot_log[i+1][[1]] ~ years))
-  plot(years, resid, xlab="years", ylab="residuals", main=title)
-  abline(0,0)
-  pivot_log$signif <- resid > 0
-  pivot_log$signif[abs(resid) < sd] <- NA
+  # plot(years, pivot_log[i+1][[1]], main=title)
+  # abline(lm(pivot_log[i+1][[1]] ~ years))
+  # plot(years, resid, xlab="years", ylab="residuals", main=title)
+  # abline(0,0)
+  # pivot_log$signif <- resid > 0
+  # pivot_log$signif[abs(resid) < sd] <- NA
   
   print(ggplot(data=pivot_log, aes(x=years, y=resid, color = resid > 0, fill = signif)) +
     theme_pubr(legend="none") +
-    scale_fill_manual(values = wes_palette(n=2, "FantasticFox1")) +
-    scale_color_manual(values = wes_palette(n=2, "FantasticFox1")) +
-    labs(y = ylabel) +
-    ylim(-1.25, .75) +
+    scale_fill_manual(values = c("black","black")) +
+    scale_color_manual(values = c("grey20","grey20")) +
+    geom_hline(yintercept = sd, linetype="dashed", color="grey50") +
+    geom_hline(yintercept = -sd, linetype="dashed", color="grey50") +
+    labs(title = title, y="Growth trend residuals") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ylim(-.5, .5) +
     geom_bar(stat="identity") +
     theme(axis.title.x = element_blank(), legend.position = "none") +
-    scale_x_continuous(minor_breaks = seq(1980, 2020, by=1)) +
-    grids(axis = c("xy"), color = "grey92", size = NULL,
-          linetype = NULL))
+    scale_x_continuous(minor_breaks = seq(1980, 2020, by=1), breaks=seq(1980, 2020, 5))) +
+    # grids(axis = c("xy"), color = "grey92", size = NULL,
+    # linetype = NULL)) +
+    theme(panel.grid.major.x = element_line(size=.3, linetype="solid", color = "grey62")) +
+    ggsave(filename = file.path("R/data_vis/figs",paste("cluster",substr(title,9,9),".png",sep="")), 
+           device="png", units="in", width=6, height=3, dpi = 600)
 }
   
