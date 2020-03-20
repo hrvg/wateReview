@@ -1,7 +1,8 @@
 ---  
 title: "Bright Spots and Blind Spots"
-subtitle: A kick-ass project
 date: "`r format(Sys.time(), '%d %B %Y')`"
+output: word_document
+subtitle: A kick-ass project
 bibliography: bibliography.bib
 ---
 
@@ -14,12 +15,13 @@ bibliography: bibliography.bib
 ```{r child = 'challenge.Rmd'}
 ```
 
-
 ```{r child = 'methods.Rmd'}
 ```
 
 ```{r child = 'results.Rmd'}
 ```
 
+```{r child = 'resolution.Rmd'}
+```
 
 # References

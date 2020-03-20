@@ -1,10 +1,8 @@
-# Figures
+![Time line showing evolution of water resources articles published per year.](./figures/timeline.pdf)
 
-![Time line](./figures/timeline.pdf)
+![A chord diagram displays the relationship between countries and topics of research, grouped by categories of the National Science Foundation.](./figures/chord.pdf)
 
-![Chord diagram](./figures/chord.pdf)
-
-![Normality describes bright and blind spots in water budget and methodologies](./figures/normality.pdf)
+![A quantification of normality identifies bright and blind spots in research in Latin America that is focused on components of the water budget and uses specific methodologies.](./figures/normality.pdf)
 
 ![Topic model performance](./figures/lda.pdf)
 
