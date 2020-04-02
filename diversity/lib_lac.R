@@ -95,17 +95,19 @@ get_JSd_country <- function(top, plot = FALSE){
     geom_density(aes(x = scaled, y = ..density.., fill= top)) +
     xlim(c(-5, 5)) +
     stat_function(fun = dnorm, n = 512, args = list(mean = 0, sd = 1)) +
-    labs(x = "scaled desntiy", 
+    labs(x = "scaled density", 
          y = "probability of research (rescaled)") +
     theme_pubr()
   p 
   if (plot) return(p)
   
   g <- ggplot_build(p)
-  gdata <- g$data[[1]]$y / sum(g$data[[1]]$y)
-  normdata <- g$data[[2]]$y / sum(g$data[[2]]$y)
+  gdata <- g$data[[1]]$y / sum(g$data[[1]]$y) # topic - normalized 
+  normdata <- g$data[[2]]$y / sum(g$data[[2]]$y) # standard, normal - normalized
   return(1 - sqrt(as.numeric(JSD(rbind(gdata, normdata)))))
 }
+
+
 
 get_JSd_corpus <- function(top, plot = FALSE){
   p <- ggplot(subset(df, countrytopic == top)) +
