@@ -118,6 +118,7 @@ docTopics <- topicNetwork[, seq(62)]
 network_results <- t(as.matrix(docTopics)) %*% as.matrix(adj) %*% as.matrix(docTopics)
 
 m <- network_results
+saveRDS(m, "rawTopicNetwork.Rds")
 m <- apply(m, 1, function(row){
 	row[row <= quantile(row, 0.9)] <- 0
 	return(row)
