@@ -113,7 +113,7 @@ adj <- as.matrix(get.adjacency(g))
 
 topicNetwork <- consolidated_network[which(consolidated_network$source_ids %in% colnames(adj)), ]
 topicNetwork <- topicNetwork[match(colnames(adj), topicNetwork$source_ids), ]
-docTopics <- topicNetwork[, seq(62)]
+docTopics <- dplyr::select(topicNetwork, -c("year", "ID", "source_ids", "country"))
 
 network_results <- t(as.matrix(docTopics)) %*% as.matrix(adj) %*% as.matrix(docTopics)
 
