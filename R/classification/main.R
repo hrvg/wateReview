@@ -19,6 +19,10 @@ scale_type <- "location"
 validationHumanReading <- read.csv(paste0("F:/hguillon/research/exploitation/R/latin_america/data/validation_df_", scale_type, ".csv"))
 validationHumanReading <- validationHumanReading[validationHumanReading$title != "", ]
 
+
+webscrapped_validationDTM <- readRDS("webscrapped_validationDTM.Rds")
+webscrapped_trainingLabels <- readRDS("webscrapped_trainingLabels.Rds")
+
 # get DTM
 # dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_abstract.Rds"
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm.Rds"
