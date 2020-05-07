@@ -58,3 +58,6 @@ webscrapped_validationDTM <- obj_dtm[which(englishCorpus_complete$fnames %in% en
 webscrapped_validationDTM <- as.matrix(webscrapped_validationDTM)
 colnames(webscrapped_validationDTM) <- paste0("Term", seq(ncol(webscrapped_validationDTM)))
 colnames(webscrapped_trainingLabels) <- gsub(" ", ".", colnames(webscrapped_trainingLabels))
+
+saveRDS(webscrapped_validationDTM, "webscrapped_validationDTM.Rds")
+saveRDS(webscrapped_trainingLabels, "webscrapped_trainingLabels.Rds")
