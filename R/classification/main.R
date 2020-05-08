@@ -25,9 +25,9 @@ webscrapped_trainingLabels <- readRDS("webscrapped_trainingLabels.Rds")
 
 # get DTM
 # dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_abstract.Rds"
-dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm.Rds"
-dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_country.Rds"
-dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm.Rds"
+# dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm.Rds"
+# dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_country.Rds"
+# dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm.Rds"
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_geo.Rds"
 if(!file.exists(dtm_file)){
 	lines <- readLines("F:/hguillon/research/exploitation/R/latin_america/data/corpus.dat")

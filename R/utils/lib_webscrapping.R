@@ -171,3 +171,136 @@ get.ind_hasCountryTag <- function(boolean_AuthKeywords){
   ind_hasCountryTag <- apply(boolean_AuthKeywords, 1, function(row) any(row == TRUE))
   return(ind_hasCountryTag)
 }
+
+#' Tokenize labels, here a list of relevant countries
+#' @param webscrapped_trainingLabels data.frame of multiple labels
+#' @return Tokenized labels
+make.country_tokens <- function(webscrapped_trainingLabels){
+  dic <- tokens(colnames(webscrapped_trainingLabels)[-1], 
+    remove_punct = TRUE,
+    remove_symbols = TRUE,
+    remove_numbers = TRUE,
+    remove_separators = TRUE,
+    remove_hyphens = TRUE,
+    remove_url = TRUE)
+  dic <- tokens_wordstem(dic)
+  dic <- tokens_select(dic, min_nchar = 4)
+  dic <- unname(unlist(dic))
+  dic <- tolower(dic)
+  return(dic)
+}
+
+#' get document ID from EndNote query corpus database
+#' @param in_corpus corpus database
+#' @return list of document IDs
+get.EndNoteIdcorpus <- function(in_corpus){
+  EndNoteIdcorpus <- unname(sapply(in_corpus$pdfs, substr, start = 1, stop = 10))
+  return(EndNoteIdcorpus)
+}
+
+#' get document ID from LDA corpus database
+#' @param englishCorpus LDA corpus database
+#' @return list of document IDs
+get.EndNoteIdLDA <- function(englishCorpus){
+  EndNoteIdLDA <- unname(sapply(englishCorpus$fnames, substr, start = 1, stop = 10))
+  return(EndNoteIdLDA)
+}
+
+#' Performs a quick QA on both sources for document ID
+#' @param EndNoteIdcorpus
+#' @param EndNoteIdLDA
+#' @return none
+QA.EndNoteIdCorpusLDA <- function(EndNoteIdLDA, EndNoteIdcorpus) table(EndNoteIdLDA %in% EndNoteIdcorpus)
+
+#' Align databases based on shared ID
+#' @param EndNoteIdLDA 
+#' @param EndNoteIdcorpus
+#' @return EndNoteIdLDA with matching records in both databases
+align.EndNoteIdLDA <- function(EndNoteIdLDA, EndNoteIdcorpus){
+  EndNoteIdLDA <- EndNoteIdLDA[which(EndNoteIdLDA %in% EndNoteIdcorpus)]
+  return(EndNoteIdLDA)
+}
+
+#' Align databases based on shared ID
+#' @param EndNoteIdcorpus
+#' @param EndNoteIdLDA 
+#' @return EndNoteIdcorpus with matching records in both databases
+align.EndNoteIdcorpus <- function(EndNoteIdcorpus, EndNoteIdLDA){
+  EndNoteIdcorpus <- EndNoteIdcorpus[which(EndNoteIdcorpus %in% EndNoteIdLDA)]
+  return(EndNoteIdcorpus)
+}
+
+#' Align englishCorpus with matching records in both databases and assign webscrapped abstracts
+#' @param englishCorpus corpus of document
+#' @param EndNoteIdcorpus
+#' @param EndNoteIdLDA 
+#' @return englishCorpus with matching records in both databases and webscrapped abstracts
+align.englishCorpus <- function(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus, in_corpus){
+  englishCorpus <- englishCorpus[which(EndNoteIdLDA %in% EndNoteIdcorpus), ]
+  englishCorpus$abstract <- as.character(in_corpus$abstract[match(EndNoteIdLDA, EndNoteIdcorpus)])
+  return(englishCorpus)
+}
+
+#' Align data with matching records in both databases and assign webscrapped abstracts
+#' @param data data: corpus of documents, indices of tagged document, ...
+#' @param EndNoteIdcorpus
+#' @param EndNoteIdLDA 
+#' @return data with matching records in both databases and webscrapped abstracts
+align.data <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
+  if(is.null(dim(data))){
+    data <- data[match(EndNoteIdLDA, EndNoteIdcorpus)]
+  } else {
+    data <- data[which(EndNoteIdLDA %in% EndNoteIdcorpus), ]
+  }
+  return(data)
+}
+
+#' Create a data.frame of multilabels using the webscrapped author keywords
+#' @param boolean_AuthKeywords data.frame of multilabels webscrapped author keywords
+#' @param ind_hasCountryTag list of boolean indicating if an entry has at least one label
+#' @param englishCorpus databse of corpus of document with abstracts
+#' @param englishCorpus_file file path to the complete corpus
+#' @return list with 3 elements: country_tokens: tokenized country labels, webscrapped_validationDTM: a document term matrix derived from the tokenized country labels, webscrapped_trainingLabels: webscrapped multilabels
+make.webscrapped_trainingData <- function(boolean_AuthKeywords, ind_hasCountryTag, englishCorpus, englishCorpus_file){
+  # subset database for which entries have a label
+  englishCorpus_hasTag <- englishCorpus[ind_hasCountryTag, ]
+  boolean_AuthKeywords_hasTag <- boolean_AuthKeywords[ind_hasCountryTag, ]
+
+  # make webscrapped_trainingLabels
+  irrelevant <- rep(FALSE, nrow(boolean_AuthKeywords_hasTag))
+  webscrapped_trainingLabels <- cbind(irrelevant, boolean_AuthKeywords_hasTag)
+  colnames(webscrapped_trainingLabels) <- c("Irrelevant", colnames(boolean_AuthKeywords_hasTag))
+
+  # removing NULL abstract
+  ind_nonNullnonNA <- which(!(englishCorpus_hasTag$abstract == "NULL" | englishCorpus_hasTag$abstract == "NA"))
+  englishCorpus_hasTag <- englishCorpus_hasTag[ind_nonNullnonNA, ]
+  webscrapped_trainingLabels <- webscrapped_trainingLabels[ind_nonNullnonNA, ]
+
+  # removing human read files
+  titleInd_file <- "F:/hguillon/research/exploitation/R/latin_america/data/titleInd.Rds"
+  titleInd <- readRDS(titleInd_file)
+  englishCorpus_complete <- readRDS(englishCorpus_file)
+  ind_HumanRead_hasTag <- which(englishCorpus_hasTag$fnames %in% englishCorpus[titleInd, ]$fnames)
+  englishCorpus_hasTag <- englishCorpus_hasTag[-ind_HumanRead_hasTag, ]
+  webscrapped_trainingLabels <- webscrapped_trainingLabels[-ind_HumanRead_hasTag, ]
+
+  # read document term matrix file
+  dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_geo.Rds"
+  obj_dtm <- readRDS(dtm_file)
+  webscrapped_validationDTM <- obj_dtm[which(englishCorpus_complete$fnames %in% englishCorpus_hasTag$fnames), ]
+  webscrapped_validationDTM <- as.matrix(webscrapped_validationDTM)
+
+  # get country tokens
+  country_tokens <- make.country_tokens(webscrapped_trainingLabels)
+  
+  # adjust colnames
+  colnames(webscrapped_validationDTM) <- paste0("Term", seq(ncol(webscrapped_validationDTM)))
+  colnames(webscrapped_trainingLabels) <- gsub(" ", ".", colnames(webscrapped_trainingLabels))
+  
+  webscrapped_trainingData <- list(
+    country_tokens = country_tokens,
+    webscrapped_validationDTM = webscrapped_validationDTM,
+    webscrapped_trainingLabels = webscrapped_trainingLabels
+    )
+  return(webscrapped_trainingData)
+}
