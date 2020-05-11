@@ -14,17 +14,17 @@ Global health, ecosystem function, and economic prosperity are unquestionably li
 
 ## File map
 
-- ```./data``` : data-source
-	+ ```./data/README.md``` : indicate the data source and link to them
-- ```./docs``` : Package reference documentation.	
-- ```./R``` : contains the ```R``` code
-	+ ```./R/sub_project_name``` : code to run a sub-project
-		- ```./R/sub_project_name/helpers.R``` : sub-routines for the sub-project
-	+ ```./R/utils``` : shared functions between sub-projects
-	+ ```./R/misc``` : unconsolidated code snippets
-- ```src``` : 
-	+ ```python``` code
-- ```./requirements.txt``` : dependencies
+- `./data` : data-source
+	+ `./data/README.md` : indicate the data source and link to them
+- `./docs` : Package reference documentation.	
+- `./R` : contains the `R` code
+	+ `./R/sub_project_name` : code to run a sub-project
+		- `./R/sub_project_name/helpers.R` : sub-routines for the sub-project
+	+ `./R/utils` : shared functions between sub-projects
+	+ `./R/misc` : unconsolidated code snippets
+- `src` : `python` code
+	+ `BERTpy`: various versions of `python` scripts to run [Google BERT](https://github.com/google-research/bert); as this development was abandonned, code has not been refactored to production-level
+- `./requirements.txt` : dependencies
 
 ## About
 
