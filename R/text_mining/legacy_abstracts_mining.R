@@ -1,3 +1,5 @@
+# HG 2020-05-11: I am not sure what is the purpose of the following code. It is likely that it is some development code related to the use of BERT. Flagged as legacy.
+
 # validation_type <- "spatial"
 # validation_type <- "temporal"
 validation_type <- "location"
