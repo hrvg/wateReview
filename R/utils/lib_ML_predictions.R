@@ -29,3 +29,48 @@ make.humanReadingTrainingLabels <- function(validationHumanReading, scale_type =
 	}
 	return(trainingLabels)
 }
+
+#' Make training data
+#' @param validationHumanReadingDTM document-term matrix from human reading
+#' @param humanReadingTrainingLabels labels from human-reading
+#' @param webscrapped_validationDTM document-term matrix from webscrapping
+#' @param webscrapped_trainingLabels labels from webscrapping
+#' @return a data.frame with nrow == nrow(validationHumanReading) + nrow(webscrapped_validationDTM) and ncol == ncol(validationHumanReadingDTM) + ncol(humanReadingTrainingLabels)
+make.trainingData <- function(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = "location"){
+	humanReadingTrainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
+	if (scale_type == "location"){
+		webscrappedTrainingData <- cbind(webscrapped_validationDTM, webscrapped_trainingLabels)
+		trainingData <- rbind(humanReadingTrainingData, webscrappedTrainingData)
+	} else {
+		trainingData <- humanReadingTrainingData
+	}
+	return(trainingData)
+}
+
+
+#' Performs a simple visualization of multilabel training data using mldr package
+#' @param trainingData data.frame of training data
+#' @param validationHumanReadingDTM document-term matrix from human reading
+#' @param humanReadingTrainingLabels labels from human-reading
+EDA.trainingData <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels){
+	MLDR <- mldr_from_dataframe(trainingData, 
+		labelIndices = which(colnames(trainingData) %in% colnames(humanReadingTrainingLabels)), 
+		name = "MLDR")
+	layout(matrix(c(1, 2, 2, 2, 1, 2, 2, 2, 3, 4, 4, 4, 3, 4, 4, 4), 4, 4, byrow = TRUE))
+	plot(MLDR, type = c("AT", "LB", "CH", "LC"), ask = FALSE, labelIndices = MLDR$labels$index)
+	humanReadingTrainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
+	humanReadingMLDR <- mldr_from_dataframe(
+		humanReadingTrainingData, 
+		labelIndices = which(colnames(humanReadingTrainingData) %in% colnames(humanReadingTrainingLabels)), 
+		name = "MLDR"
+		)
+	comparisonDF <- cbind(country = rownames(MLDR$labels), 
+		human_reading = humanReadingMLDR$labels$count, 
+		human_reading_webscrapping = MLDR$labels$count
+		) %>% as.data.frame() %>%
+	dplyr::mutate(human_reading = as.numeric(as.character(human_reading)), 
+	human_reading_webscrapping = as.numeric(as.character(human_reading_webscrapping)) 
+		) %>%
+	dplyr::mutate(webscrapping = human_reading_webscrapping - human_reading)
+	print(comparisonDF)
+}

@@ -1,4 +1,3 @@
-
 get_endnote_xml <- function(language){
 	pdf.dir <- paste0("data/latin_america/corpus_pdf/", language)	
 	doc <- xmlParse(file.path(root.dir, pdf.dir, paste0(language, "_database.xml")))

@@ -119,7 +119,7 @@ QA.alignedData <- function(alignedData, scale_type = "location"){
 	validationHumanReading <- validationHumanReading[, !colnames(validationHumanReading) %in% drops]
 
 	# remove noisy information from human reading
-	if (scale_type == "temporal"){
+	if (scale_type %in% c("temporal", "spatial")){
 		validationHumanReading <- do.call(data.frame, lapply(validationHumanReading, function(x) as.character(x))) 
 		validationHumanReading <- do.call(data.frame, lapply(validationHumanReading, function(x) replace(x, which(!x %in% c("0", "1")), "0"))) 
 		validationHumanReading <- do.call(data.frame, lapply(validationHumanReading, function(x) as.logical(as.integer(as.character(x))))) 

@@ -20,7 +20,9 @@ import::here(.from = "./R/utils/lib_shared.R",
 )
 
 import::here(.from = "./R/utils/lib_ML_predictions.R", 
-	make.humanReadingTrainingLabels
+	make.humanReadingTrainingLabels,
+	make.trainingData,
+	EDA.trainingData
 )
 
 ### main
@@ -42,9 +44,13 @@ DTM <- get_DTM()
 table(is.na(titleInd))
 alignedData <- align.humanReadingTopicModel(titleInd, validationHumanReading, topicDocs, DTM)
 alignedData <- QA.alignedData(alignedData, scale_type = SCALE_TYPE)
-validationHumanReading <- alignedData$validationHumanReading
 validationTopicDocs <- alignedData$validationTopicDocs
-validationDTM <- alignedData$validationDTM
+validationHumanReading <- alignedData$validationHumanReading
+validationHumanReadingDTM <- alignedData$validationDTM
 
 # get humanReadingTrainingLabels
 humanReadingTrainingLabels <- make.humanReadingTrainingLabels(validationHumanReading, scale_type = SCALE_TYPE, webscrapped_trainingLabels)
+trainingData <- make.trainingData(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = SCALE_TYPE)
+
+# exploratory data analysis
+EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
