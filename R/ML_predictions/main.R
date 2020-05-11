@@ -29,6 +29,8 @@ import::here(.from = "./R/utils/lib_ML_predictions.R",
 
 # param
 SCALE_TYPE <- "location"
+MODEL_TYPE <- "multiclass" # one of multiclass, binary_relevance, label_powerset
+AGGREGATE <- FALSE
 
 # data reading
 topicDocs <- get_topicDocs()
@@ -50,7 +52,7 @@ validationHumanReadingDTM <- alignedData$validationDTM
 
 # get humanReadingTrainingLabels
 humanReadingTrainingLabels <- make.humanReadingTrainingLabels(validationHumanReading, scale_type = SCALE_TYPE, webscrapped_trainingLabels)
-trainingData <- make.trainingData(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = SCALE_TYPE)
+trainingData <- make.trainingData(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = SCALE_TYPE, aggregate_labels = AGGREGATE)
 
 # exploratory data analysis
 EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
