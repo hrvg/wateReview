@@ -277,8 +277,8 @@ make.webscrapped_trainingData <- function(boolean_AuthKeywords, ind_hasCountryTa
   webscrapped_trainingLabels <- webscrapped_trainingLabels[ind_nonNullnonNA, ]
 
   # removing human read files
-  titleInd_file <- "F:/hguillon/research/exploitation/R/latin_america/data/titleInd.Rds"
-  titleInd <- readRDS(titleInd_file)
+  import::here(.from = "./R/utils/lib_shared.R", get_titleInd)
+  titleInd <- get_titleInd()
   englishCorpus_complete <- readRDS(englishCorpus_file)
   ind_HumanRead_hasTag <- which(englishCorpus_hasTag$fnames %in% englishCorpus[titleInd, ]$fnames)
   englishCorpus_hasTag <- englishCorpus_hasTag[-ind_HumanRead_hasTag, ]
