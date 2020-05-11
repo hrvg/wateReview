@@ -1,5 +1,5 @@
 library(sp)
-
+# part of this code was provided by Arthur Koehl
 
 construct_urls = function(cc)
 {
