@@ -133,7 +133,7 @@ get.chainingOrder <- function(trainingData, validationHumanReadingDTM, scale_typ
 	return(chainingOrder)
 }
 
-#' Perform a benchmark between RFSRC multilabel and binary relevance wrappers
+#' Perform a benchmark between algorithm adaptation and multilabel and binary relevance wrappers
 #' @param trainingData training data
 #' @param validationHumanReadingDTM training data from human reading, used to extract target column names
 #' @param model_type type of predictions
@@ -143,9 +143,9 @@ get.chainingOrder <- function(trainingData, validationHumanReadingDTM, scale_typ
 #' @return benchmark object
 multilabelBenchmark <- function(trainingData, validationHumanReadingDTM, model_type, scale_type = "location", aggregated_labels = FALSE, obs_threshold = 10){
 	trainingData <- trainingData[, colSums(trainingData) >= obs_threshold]
-	lrn.rfsrc <- makeLearner("multilabel.randomForestSRC", predict.type="prob")
 	lrns <- get.binaryRelevanceLearners(lrn = "classif.svm", trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE)
-	lrns[[length(lrns) + 1]] <- lrn.rfsrc
+	lrns[[length(lrns) + 1]] <- makeLearner("multilabel.randomForestSRC", predict.type="prob")
+	# lrns[[length(lrns) + 1]] <- makeLearner("multilabel.rFerns")
 	set.seed(753)
 	learning.task <- make.task(trainingData, validationHumanReadingDTM, model_type)
 	print(learning.task)
