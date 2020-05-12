@@ -10,7 +10,6 @@ lrns <- list(lrn.rf, lrn.svm, lrn.knn, lrn.nn, lrn.multinom)
 lrns <- list(lrn.rf, lrn.svm)
 rdesc <- makeResampleDesc("CV", iters = 10, stratify = TRUE)
 bmr <- benchmark(lrns, filter.task, rdesc, measures = list(acc, mmce, auc, ppv, tpr, fdr), keep.pred = TRUE)
-
 AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
 print(AggrPerformances)
 

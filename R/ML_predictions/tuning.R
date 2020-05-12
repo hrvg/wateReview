@@ -1,24 +1,23 @@
 # select learner
-lrn <- lrn.rf 
-
-# set hyper-parameter space
-params <- makeParamSet(
-	makeIntegerParam("mtry",lower = 1, upper = (ncol(trainingData) - 1) %/% 2)
+lrn <- makeLearner("classif.randomForest", predict.type = "prob") 
+ps <- makeParamSet(
+	makeIntegerParam("mtry",lower = 1, upper = (ncol(trainingDataMulticlassFilter) - 1) %/% 2)
 	)
-
-# set resampling strategy
-rdesc <- makeResampleDesc("CV", iters = 5, stratify = TRUE)
-
-# set optimization technique
 ctrl <- makeTuneControlGrid(resolution=20L)
+rdesc <- makeResampleDesc("CV", iters = 10, stratify = TRUE)
+
+mes <- list(auc, mmce, acc, ppv, tpr, fdr)
+parallelStartSocket(8, level = "mlr.resample", load.balancing = TRUE)
+clusterSetRNGStream(iseed = 1789)
 
 # start tuning
-tune <- tuneParams(learner = lrn, task = scale.task, 
+tune <- tuneParams(learner = lrn, task = learning.task, 
 	resampling = rdesc, 
-	measures = list(acc, mmce, multiclass.au1u, multiclass.aunu), 
-	par.set = params, 
+	measures = mes, 
+	par.set = ps, 
 	control = ctrl, 
 	show.info = TRUE)
+parallelStop()
 
-plotHyperParsEffect(generateHyperParsEffectData(tune), x = "mtry", y = "acc.test.mean",
+plotHyperParsEffect(generateHyperParsEffectData(tune), x = "mtry", y = "auc.test.mean",
   plot.type = "line")

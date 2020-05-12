@@ -162,8 +162,9 @@ multilabelBenchmark <- function(trainingData, validationHumanReadingDTM, model_t
 #' @param trainingData training data
 #' @param validationHumanReadingDTM training data from human reading, used to extract target column names
 #' @param model_type type of predictions
-#' @return list with multiple elements, one of them being an MLR task
-make.task <- function(trainingData, validationHumanReadingDTM, model_type){
+#' @param filter logical, if true create task for a binary classification Irrelevant/Relevant
+#' @return a MLR task
+make.task <- function(trainingData, validationHumanReadingDTM, model_type, filter = FALSE){
 	if (model_type == "binary_relevance"){
 		target <- colnames(trainingData[, which(!colnames(trainingData) %in% colnames(validationHumanReadingDTM))])
 		learning.task <- makeMultilabelTask(data = trainingData, target = target)
@@ -172,7 +173,11 @@ make.task <- function(trainingData, validationHumanReadingDTM, model_type){
 		MLDR.lp <- mldr_transform(MLDR, type = "LP", MLDR$labels$index)
 		learning.task <- makeClassifTask(data = MLDR.lp, target = "classLabel")
 	} else if (model_type == "multiclass"){
-		learning.task <- NULL
+		if(filter){
+			learning.task <- makeClassifTask(data = trainingData, target = "countryLabel", positive = "Relevant")
+		} else {
+			learning.task <- makeClassifTask(data = trainingData, target = "countryLabel")
+		}
 	}
 	return(learning.task)
 }
@@ -221,21 +226,32 @@ PerfVisMultilabel <- function(AggrPerformances){
 #' @param filter logical, if true create training data for a binary classification Irrelevant/Relevant
 #' @return a data.frame containing the training data with a target column "countryLabelFilter" or "countryLabel"
 make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE){
-	MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
-	validationDTM <- rbind(validationHumanReadingDTM, webscrapped_validationDTM)
-	trainingLabels <- rbind(humanReadingTrainingLabels, webscrapped_trainingLabels)
-	trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
-	trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= 10)]
-	countryLabel <- apply(trainingLabels, 1, function(row) which(row == TRUE)[1])
-	validationDTM <- validationDTM[!is.na(countryLabel), ]
-	validationDTM  <- as.data.frame(validationDTM)
-	countryLabel <- countryLabel[!is.na(countryLabel)]
-	countryLabel <- colnames(trainingLabels)[countryLabel]
 	if (filter){
+		trainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
+		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
+		validationDTM <- validationHumanReadingDTM
+		trainingLabels <- humanReadingTrainingLabels
+		trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
+		trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= 10)]
+		countryLabel <- apply(trainingLabels, 1, function(row) which(row == TRUE)[1])
+		validationDTM <- validationDTM[!is.na(countryLabel), ]
+		validationDTM  <- as.data.frame(validationDTM)
+		countryLabel <- countryLabel[!is.na(countryLabel)]
+		countryLabel <- colnames(trainingLabels)[countryLabel]
 		countryLabel[which(countryLabel != "Irrelevant")] <- "Relevant"
 		countryLabel <- as.factor(countryLabel)
 		trainingData <- cbind(validationDTM, countryLabel)
 	} else {
+		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
+		validationDTM <- rbind(validationHumanReadingDTM, webscrapped_validationDTM)
+		trainingLabels <- rbind(humanReadingTrainingLabels, webscrapped_trainingLabels)
+		trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
+		trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= 10)]
+		countryLabel <- apply(trainingLabels, 1, function(row) which(row == TRUE)[1])
+		validationDTM <- validationDTM[!is.na(countryLabel), ]
+		validationDTM  <- as.data.frame(validationDTM)
+		countryLabel <- countryLabel[!is.na(countryLabel)]
+		countryLabel <- colnames(trainingLabels)[countryLabel]
 		relevant <- which(countryLabel != "Irrelevant")
 		countryLabel <- countryLabel[relevant]
 		validationDTM <- validationDTM[relevant, ]
@@ -244,3 +260,53 @@ make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM,
 	}
 	return(trainingData)
 }
+
+#' Perform a benchmark between non-tuned algorithm adaptation and multilabel and binary relevance wrappers
+#' @param trainingData training data
+#' @param model_type type of predictions
+#' @param filter logical, if true create task for a binary classification Irrelevant/Relevant
+#' @return benchmark object
+multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune = FALSE){
+	learning.task <- make.task(trainingData, NULL, model_type, filter)
+	print(learning.task)
+	learners <- list(
+		makeLearner("classif.featureless", predict.type = "prob"),
+		makeLearner("classif.randomForest", predict.type = "prob"),
+		makeLearner("classif.svm", predict.type = "prob"),
+		makeLearner("classif.IBk", predict.type = "prob"),
+		makeLearner("classif.nnet", predict.type = "prob"),
+		makeLearner("classif.multinom", predict.type = "prob"),
+		makeLearner("classif.logreg", predict.type =  "prob"),
+		makeLearner("classif.xgboost", predict.type =  "prob")
+	)
+	rdesc <- makeResampleDesc("CV", iters = 10, stratify = TRUE)
+	mes <- list(auc, mmce, acc, ppv, tpr, fdr)
+	print(paste("Optimizing against:", mes[[1]]$id))
+	bmrs <- list()
+	parallelStop()
+	cwd_bak <- getwd()
+	setwd("F:/hguillon/research")
+	for (i in seq_along(learners)){
+		set.seed(1789, "L'Ecuyer-CMRG")
+		if (learners[[i]]$id %in% c("h2o.deeplearning", "h2o.gbm", "h2o.glm")){
+			localH2o <- h2o.init(nthreads = 8, min_mem_size='10G', max_mem_size = "20G")
+			h2o.removeAll() ## clean slate - just in case the cluster was already running
+			h2o.no_progress()
+			bmr <- benchmark(learners[[i]], learning.task, rdesc, measures = mes, models = TRUE, keep.extract = TRUE)
+			h2o.shutdown(prompt = FALSE)
+		} else {
+			parallelStartSocket(8, level = "mlr.resample", load.balancing = TRUE)
+			# parallelStartSocket(8, level = "mlr.tuneParams", load.balancing = TRUE)
+			clusterSetRNGStream(iseed = 1789)
+			bmr <- benchmark(learners[[i]], learning.task, rdesc, measures = mes, models = TRUE, keep.extract = TRUE)
+			parallelStop()
+		}
+		bmrs[[i]] <- bmr
+	}
+	bmr <- mergeBenchmarkResults(bmrs)
+	setwd(cwd_bak)
+	return(bmr)
+}
+
+
+

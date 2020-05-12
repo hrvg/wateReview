@@ -1,5 +1,7 @@
 ### libraries
 library("mlr")
+library("parallelMap")
+library("parallel")
 library("OpenML")
 library("NLP")
 library("tm")
@@ -26,14 +28,16 @@ import::here(.from = "./R/utils/lib_ML_predictions.R",
 	make.trainingData,
 	EDA.trainingData,
 	multilabelBenchmark,
-	PerfVisMultilabel
+	PerfVisMultilabel,
+	make.trainingDataMulticlass,
+	multiclassBenchmark
 )
 
 ### main
 
 # param
 SCALE_TYPE <- "location"
-MODEL_TYPE <- "binary_relevance" # multiclass or binary_relevance
+MODEL_TYPE <- "multiclass" # multiclass or binary_relevance
 AGGREGATE <- FALSE
 
 # data reading
@@ -62,16 +66,20 @@ trainingData <- make.trainingData(validationHumanReadingDTM, humanReadingTrainin
 EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
 
 # multilabel: binary relevance and algorithm adaptation
-bmr <- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
-AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
-PerfVisMultilabel(AggrPerformances)
+# bmr <- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
+# AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
+# PerfVisMultilabel(AggrPerformances)
 
 # multiclass
 
 ## filter
-trainingDataMulticlassFilter <- make.trainingDataMulticlass(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = TRUE)
+trainingDataMulticlassFilter <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = TRUE)
 
-trainingDataMulticlass <- make.trainingDataMulticlass(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE)
+bmr <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
+AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
+
+
+# trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE)
 
 ## predictions
 
