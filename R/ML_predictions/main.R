@@ -30,7 +30,7 @@ import::here(.from = "./R/utils/lib_ML_predictions.R",
 
 # param
 SCALE_TYPE <- "location"
-MODEL_TYPE <- "binary_relevance" # one of multiclass, binary_relevance, label_powerset
+MODEL_TYPE <- "binary_relevance" # multiclass or binary_relevance
 AGGREGATE <- FALSE
 
 # data reading
@@ -58,8 +58,7 @@ trainingData <- make.trainingData(validationHumanReadingDTM, humanReadingTrainin
 # exploratory data analysis
 EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
 
-# multilabel: binary relevance
+# multilabel: binary relevance and algorithm adaptation
 bmr <- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
-
 AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
 print(AggrPerformances)

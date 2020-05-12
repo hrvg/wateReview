@@ -175,6 +175,8 @@ make.task <- function(trainingData, validationHumanReadingDTM, model_type){
 	return(learning.task)
 }
 
+#' Legacy function to assess performance of learner that learned the fine temporal scale against the aggregated temporal scale
+#' @param lrn learner, used to access associated benchmark predictions
 get_short_long_term_pred <- function(lrn){
 	rfpred <- getBMRPredictions(bmr, as.df = TRUE, learner.ids = lrn$id)
 	short_term_col.truth <- c("truth.event", "truth.day", "truth.week")
