@@ -269,42 +269,64 @@ make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM,
 multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune = FALSE){
 	learning.task <- make.task(trainingData, NULL, model_type, filter)
 	print(learning.task)
-	learners <- list(
-		makeLearner("classif.featureless", predict.type = "prob"),
-		makeLearner("classif.randomForest", predict.type = "prob"),
-		makeLearner("classif.svm", predict.type = "prob"),
-		makeLearner("classif.IBk", predict.type = "prob"),
-		makeLearner("classif.nnet", predict.type = "prob"),
-		makeLearner("classif.multinom", predict.type = "prob"),
-		makeLearner("classif.logreg", predict.type =  "prob"),
-		makeLearner("classif.xgboost", predict.type =  "prob")
-	)
 	rdesc <- makeResampleDesc("CV", iters = 10, stratify = TRUE)
 	mes <- list(auc, mmce, acc, ppv, tpr, fdr)
 	print(paste("Optimizing against:", mes[[1]]$id))
-	bmrs <- list()
-	parallelStop()
-	cwd_bak <- getwd()
-	setwd("F:/hguillon/research")
-	for (i in seq_along(learners)){
-		set.seed(1789, "L'Ecuyer-CMRG")
-		if (learners[[i]]$id %in% c("h2o.deeplearning", "h2o.gbm", "h2o.glm")){
-			localH2o <- h2o.init(nthreads = 8, min_mem_size='10G', max_mem_size = "20G")
-			h2o.removeAll() ## clean slate - just in case the cluster was already running
-			h2o.no_progress()
-			bmr <- benchmark(learners[[i]], learning.task, rdesc, measures = mes, models = TRUE, keep.extract = TRUE)
-			h2o.shutdown(prompt = FALSE)
-		} else {
-			parallelStartSocket(8, level = "mlr.resample", load.balancing = TRUE)
-			# parallelStartSocket(8, level = "mlr.tuneParams", load.balancing = TRUE)
-			clusterSetRNGStream(iseed = 1789)
-			bmr <- benchmark(learners[[i]], learning.task, rdesc, measures = mes, models = TRUE, keep.extract = TRUE)
-			parallelStop()
+	if (tune){
+		# select learner
+		lrn <- makeLearner("classif.randomForest", predict.type = "prob") 
+		ps <- makeParamSet(
+			makeIntegerParam("mtry",lower = 1, upper = (ncol(trainingDataMulticlassFilter) - 1) %/% 2)
+			)
+		ctrl <- makeTuneControlGrid(resolution=20L)
+
+		parallelStartSocket(8, level = "mlr.resample", load.balancing = TRUE)
+		clusterSetRNGStream(iseed = 1789)
+		# start tuning
+		bmr <- tuneParams(
+			learner = lrn, 
+			task = learning.task, 
+			resampling = rdesc, 
+			measures = mes, 
+			par.set = ps, 
+			control = ctrl, 
+			show.info = TRUE)
+		parallelStop()
+	} else {
+		learners <- list(
+			makeLearner("classif.featureless", predict.type = "prob"),
+			makeLearner("classif.randomForest", predict.type = "prob"),
+			makeLearner("classif.svm", predict.type = "prob"),
+			makeLearner("classif.IBk", predict.type = "prob"),
+			makeLearner("classif.nnet", predict.type = "prob"),
+			makeLearner("classif.multinom", predict.type = "prob"),
+			makeLearner("classif.logreg", predict.type =  "prob"),
+			makeLearner("classif.xgboost", predict.type =  "prob")
+		)
+		bmrs <- list()
+		parallelStop()
+		cwd_bak <- getwd()
+		setwd("F:/hguillon/research")
+		for (i in seq_along(learners)){
+			set.seed(1789, "L'Ecuyer-CMRG")
+			if (learners[[i]]$id %in% c("h2o.deeplearning", "h2o.gbm", "h2o.glm")){
+				localH2o <- h2o.init(nthreads = 8, min_mem_size='10G', max_mem_size = "20G")
+				h2o.removeAll() ## clean slate - just in case the cluster was already running
+				h2o.no_progress()
+				bmr <- benchmark(learners[[i]], learning.task, rdesc, measures = mes, models = TRUE, keep.extract = TRUE)
+				h2o.shutdown(prompt = FALSE)
+			} else {
+				parallelStartSocket(8, level = "mlr.resample", load.balancing = TRUE)
+				# parallelStartSocket(8, level = "mlr.tuneParams", load.balancing = TRUE)
+				clusterSetRNGStream(iseed = 1789)
+				bmr <- benchmark(learners[[i]], learning.task, rdesc, measures = mes, models = TRUE, keep.extract = TRUE)
+				parallelStop()
+			}
+			bmrs[[i]] <- bmr
 		}
-		bmrs[[i]] <- bmr
-	}
-	bmr <- mergeBenchmarkResults(bmrs)
-	setwd(cwd_bak)
+		bmr <- mergeBenchmarkResults(bmrs)
+		setwd(cwd_bak)
+	}	
 	return(bmr)
 }
 

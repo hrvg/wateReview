@@ -77,7 +77,7 @@ trainingDataMulticlassFilter <- make.trainingDataMulticlass(trainingData, valida
 
 bmr <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
 AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
-
+tune <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = TRUE)
 
 # trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE)
 
