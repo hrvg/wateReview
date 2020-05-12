@@ -133,6 +133,14 @@ get.chainingOrder <- function(trainingData, validationHumanReadingDTM, scale_typ
 	return(chainingOrder)
 }
 
+#' Perform a benchmark between RFSRC multilabel and binary relevance wrappers
+#' @param trainingData training data
+#' @param validationHumanReadingDTM training data from human reading, used to extract target column names
+#' @param model_type type of predictions
+#' @param scale_type One of "location", "spatial", "temporal", default to "location"
+#' @param aggregated_labels logical
+#' @param obs_threshold remove columns with less than this threshold
+#' @return benchmark object
 multilabelBenchmark <- function(trainingData, validationHumanReadingDTM, model_type, scale_type = "location", aggregated_labels = FALSE, obs_threshold = 10){
 	trainingData <- trainingData[, colSums(trainingData) >= obs_threshold]
 	lrn.rfsrc <- makeLearner("multilabel.randomForestSRC", predict.type="prob")
@@ -144,8 +152,8 @@ multilabelBenchmark <- function(trainingData, validationHumanReadingDTM, model_t
 	rdesc <- makeResampleDesc("Subsample", iters = 10, split = 3 / 4)
 	bmr <- benchmark(lrns, learning.task, rdesc, 
 		measures = list(multilabel.hamloss, multilabel.subset01, multilabel.acc, multilabel.tpr, multilabel.ppv, multilabel.f1), keep.pred = TRUE)
-	AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
-	print(AggrPerformances)
+	return(bmr)
+
 }
 
 #' Make an MLR task
@@ -157,6 +165,12 @@ make.task <- function(trainingData, validationHumanReadingDTM, model_type){
 	if (model_type == "binary_relevance"){
 		target <- colnames(trainingData[, which(!colnames(trainingData) %in% colnames(validationHumanReadingDTM))])
 		learning.task <- makeMultilabelTask(data = trainingData, target = target)
+	} else if (model_type == "label_powerset"){ # this is kept as legacy of the code to make a LP task, there's little value with our data
+		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
+		MLDR.lp <- mldr_transform(MLDR, type = "LP", MLDR$labels$index)
+		learning.task <- makeClassifTask(data = MLDR.lp, target = "classLabel")
+	} else if (model_type == "multiclass"){
+		learning.task <- NULL
 	}
 	return(learning.task)
 }

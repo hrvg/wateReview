@@ -58,4 +58,8 @@ trainingData <- make.trainingData(validationHumanReadingDTM, humanReadingTrainin
 # exploratory data analysis
 EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
 
-multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
+# multilabel: binary relevance
+bmr <- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
+
+AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
+print(AggrPerformances)
