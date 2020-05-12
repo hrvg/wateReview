@@ -30,7 +30,9 @@ import::here(.from = "./R/utils/lib_ML_predictions.R",
 	multilabelBenchmark,
 	PerfVisMultilabel,
 	make.trainingDataMulticlass,
-	multiclassBenchmark
+	multiclassBenchmark,
+	make.RFpredictions,
+	make.targetData
 )
 
 ### main
@@ -75,9 +77,17 @@ EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLa
 ## filter
 trainingDataMulticlassFilter <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = TRUE)
 
+### selecting a model to tune
 bmr <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
-AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
+print(bmr)
+
+### tuning model (hard coded)
 tune <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = TRUE)
+
+### predict
+targetData <- make.targetData(DTM)
+predRelevance <- make.RFpredictions(mtry = 6L, trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = TRUE)
+
 
 # trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE)
 

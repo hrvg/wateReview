@@ -331,4 +331,32 @@ multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune =
 }
 
 
+#' Make randomForest prediction
+#' @param mtry best tune value for mtry hyper-parameter
+#' @param trainingData data to train the model
+#' @param targetData data used to predict
+#' @param model_type 
+#' @param filter logical, if true will train and predict for the relevance filter
+#' @return prediction or membership
+make.RFpredictions <- function(mtry = 6L, trainingData, targetData, model_type, filter = TRUE){
+	learning.task <- make.task(trainingData, NULL, model_type, filter = filter)
+	lrn.rf <- makeLearner("classif.randomForest", predict.type="prob")
+	lrn.rf$par.vals <- list(mtry = mtry)
+	model <-  train(lrn.rf, learning.task)
+	predTarget <- predict(model, newdata = targetData)
+	if (filter){
+		return(predTarget$data$response)
+	} else {
+		return(predTarget$data)
+	}
+}
 
+#' Create the target data to predict from
+#' @param DTM the complete document-term matrix
+#' @return a data.frame
+make.targetData <- function(DTM){
+	targetData <- as.matrix(DTM)
+	colnames(targetData) <- paste0("Term", seq(ncol(DTM)))
+	targetData <- data.frame(targetData)
+	return(targetData)
+}
