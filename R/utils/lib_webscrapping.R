@@ -250,7 +250,7 @@ align.data <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
   if(is.null(dim(data))){
     data <- data[match(EndNoteIdLDA, EndNoteIdcorpus)]
   } else {
-    data <- data[which(EndNoteIdLDA %in% EndNoteIdcorpus), ]
+    data <- data[match(EndNoteIdLDA, EndNoteIdcorpus), ]
   }
   return(data)
 }

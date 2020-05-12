@@ -5,6 +5,8 @@ library("NLP")
 library("tm")
 library("data.table")
 library("mldr")
+library("reshape2")
+library("ggplot2")
 
 ### utils ###
 import::here(.from = "./R/utils/lib_shared.R", 
@@ -23,7 +25,8 @@ import::here(.from = "./R/utils/lib_ML_predictions.R",
 	make.humanReadingTrainingLabels,
 	make.trainingData,
 	EDA.trainingData,
-	multilabelBenchmark
+	multilabelBenchmark,
+	PerfVisMultilabel
 )
 
 ### main
@@ -61,4 +64,14 @@ EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLa
 # multilabel: binary relevance and algorithm adaptation
 bmr <- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
 AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
-print(AggrPerformances)
+PerfVisMultilabel(AggrPerformances)
+
+# multiclass
+
+## filter
+trainingDataMulticlassFilter <- make.trainingDataMulticlass(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = TRUE)
+
+trainingDataMulticlass <- make.trainingDataMulticlass(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE)
+
+## predictions
+

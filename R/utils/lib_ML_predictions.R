@@ -30,11 +30,13 @@ make.humanReadingTrainingLabels <- function(validationHumanReading, scale_type =
 	return(trainingLabels)
 }
 
-#' Make training data
+#' Create training data for a multilabel classification
 #' @param validationHumanReadingDTM document-term matrix from human reading
 #' @param humanReadingTrainingLabels labels from human-reading
 #' @param webscrapped_validationDTM document-term matrix from webscrapping
 #' @param webscrapped_trainingLabels labels from webscrapping
+#' @param scale_type One of "location", "spatial", "temporal", default to "location"
+#' @param aggregate_labels logical, for temporal scale, option to aggregate into three larger classes
 #' @return a data.frame with nrow == nrow(validationHumanReading) + nrow(webscrapped_validationDTM) and ncol == ncol(validationHumanReadingDTM) + ncol(humanReadingTrainingLabels)
 make.trainingData <- function(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = "location", aggregate_labels = FALSE){
 	humanReadingTrainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
@@ -192,4 +194,53 @@ get_short_long_term_pred <- function(lrn){
 	long_term.response <- apply(rfpred[, colnames(rfpred) %in% long_term_col.response], 1, function(row) any(row == TRUE))
 	print(table(short_term.response == short_term.truth))
 	print(table(long_term.response == long_term.truth))
+}
+
+
+#' Make a performance plot for multilabel classification
+#' @param AggrPerformances data.frame of aggregated performance from getBMRAggrPerformances
+#' @return ggplot plot
+PerfVisMultilabel <- function(AggrPerformances){
+	p_AggrPerformances <- AggrPerformances[, -1]
+	colnames(p_AggrPerformances) <- c("learner.id", "Hamming.Loss", "Subset.0_1", "Acc", "Recall", "Precision", "F1")
+	mp_AggrPerformances <- melt(p_AggrPerformances)
+	ggplot(mp_AggrPerformances, aes(x = learner.id, y = value, group = learner.id, color = learner.id, fill = learner.id)) +
+		geom_bar(stat="identity")+
+		facet_wrap(variable ~ .) +
+		cowplot::theme_cowplot() +
+		labs(title = "Learner Multilabel Performance") +
+		theme(axis.text.x = element_text(angle = 90, hjust = 1))
+}
+
+#' Create training data for a multiclass classification
+#' @param trainingData the already aggreated validation data 
+#' @param validationHumanReadingDTM document-term matrix from human reading
+#' @param humanReadingTrainingLabels labels from human-reading
+#' @param webscrapped_validationDTM document-term matrix from webscrapping
+#' @param webscrapped_trainingLabels labels from webscrapping
+#' @param filter logical, if true create training data for a binary classification Irrelevant/Relevant
+#' @return a data.frame containing the training data with a target column "countryLabelFilter" or "countryLabel"
+make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE){
+	MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
+	validationDTM <- rbind(validationHumanReadingDTM, webscrapped_validationDTM)
+	trainingLabels <- rbind(humanReadingTrainingLabels, webscrapped_trainingLabels)
+	trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
+	trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= 10)]
+	countryLabel <- apply(trainingLabels, 1, function(row) which(row == TRUE)[1])
+	validationDTM <- validationDTM[!is.na(countryLabel), ]
+	validationDTM  <- as.data.frame(validationDTM)
+	countryLabel <- countryLabel[!is.na(countryLabel)]
+	countryLabel <- colnames(trainingLabels)[countryLabel]
+	if (filter){
+		countryLabel[which(countryLabel != "Irrelevant")] <- "Relevant"
+		countryLabel <- as.factor(countryLabel)
+		trainingData <- cbind(validationDTM, countryLabel)
+	} else {
+		relevant <- which(countryLabel != "Irrelevant")
+		countryLabel <- countryLabel[relevant]
+		validationDTM <- validationDTM[relevant, ]
+		countryLabel <- as.factor(countryLabel)
+		trainingData <- cbind(validationDTM, countryLabel)
+	}
+	return(trainingData)
 }
