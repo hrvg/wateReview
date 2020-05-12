@@ -59,15 +59,23 @@ make.trainingData <- function(validationHumanReadingDTM, humanReadingTrainingLab
 	return(trainingData)
 }
 
+#' internal function to get MLDR
+#' @param trainingData data.frame of training data
+#' @param validationHumanReadingDTM document-term matrix from human reading
+#' @return MLDR a multilabel data.frame from mldr package
+get.MLDR <- function(trainingData, validationHumanReadingDTM){
+	MLDR <- mldr_from_dataframe(trainingData, 
+		labelIndices = which(!colnames(trainingData) %in% colnames(validationHumanReadingDTM)), 
+		name = "MLDR")
+	return(MLDR)
+}
 
 #' Performs a simple visualization of multilabel training data using mldr package
 #' @param trainingData data.frame of training data
 #' @param validationHumanReadingDTM document-term matrix from human reading
 #' @param humanReadingTrainingLabels labels from human-reading
 EDA.trainingData <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels){
-	MLDR <- mldr_from_dataframe(trainingData, 
-		labelIndices = which(!colnames(trainingData) %in% colnames(validationHumanReadingDTM)), 
-		name = "MLDR")
+	MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
 	layout(matrix(c(1, 2, 2, 2, 1, 2, 2, 2, 3, 4, 4, 4, 3, 4, 4, 4), 4, 4, byrow = TRUE))
 	plot(MLDR, type = c("AT", "LB", "CH", "LC"), ask = FALSE, labelIndices = MLDR$labels$index)
 	humanReadingTrainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
@@ -85,4 +93,87 @@ EDA.trainingData <- function(trainingData, validationHumanReadingDTM, humanReadi
 		) %>%
 	dplyr::mutate(webscrapping = human_reading_webscrapping - human_reading)
 	print(comparisonDF)
+}
+
+#' Convience legacy function to create binary relance wrappers from MLR
+#' @param lrn a base learner, default to "classif.svm"
+#' @param trainingData data.frame of training data
+#' @param validationHumanReadingDTM document-term matrix from human reading
+#' @param scale_type One of "location", "spatial", "temporal", default to "location"
+#' @param aggregated_labels logical
+#' @return a list of learners
+get.binaryRelevanceLearners <- function(lrn = "classif.svm", trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE){
+	binary.learner <- makeLearner(lrn)
+	chainingOrder <- get.chainingOrder(trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE)
+	lrn.cc <- makeMultilabelClassifierChainsWrapper(binary.learner, order = chainingOrder)
+	lrn.br <- makeMultilabelBinaryRelevanceWrapper(binary.learner)
+	lrn.ns <- makeMultilabelNestedStackingWrapper(binary.learner, order = chainingOrder)
+	lrn.db <- makeMultilabelDBRWrapper(binary.learner)
+	lrn.st <- makeMultilabelStackingWrapper(binary.learner)
+	lrns <- list(lrn.cc, lrn.br, lrn.ns, lrn.db, lrn.st)
+	return(lrns)
+}
+
+#' Get chaining order from MLDR
+#' @param trainingData data.frame of training data
+#' @param validationHumanReadingDTM document-term matrix from human reading
+#' @param scale_type One of "location", "spatial", "temporal", default to "location"
+#' @param aggregated_labels logical
+get.chainingOrder <- function(trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE){
+	if (scale_type == "temporal"){
+		if (aggregated_labels){
+			chainingOrder <- c("very_long_term", "short_term", "long_term")
+		} else {
+			chainingOrder <- c("years_100000", "years_10000", "years_1000", "years_100", "day", "week", "event", "years_10", "year")
+		}
+	} else {
+		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
+		chainingOrder <- row.names(MLDR$labels)[order(MLDR$labels$count, decreasing = TRUE)]
+	}
+	return(chainingOrder)
+}
+
+multilabelBenchmark <- function(trainingData, validationHumanReadingDTM, model_type, scale_type = "location", aggregated_labels = FALSE, obs_threshold = 10){
+	trainingData <- trainingData[, colSums(trainingData) >= obs_threshold]
+	lrn.rfsrc <- makeLearner("multilabel.randomForestSRC", predict.type="prob")
+	lrns <- get.binaryRelevanceLearners(lrn = "classif.svm", trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE)
+	lrns[[length(lrns) + 1]] <- lrn.rfsrc
+	set.seed(753)
+	learning.task <- make.task(trainingData, validationHumanReadingDTM, model_type)
+	print(learning.task)
+	rdesc <- makeResampleDesc("Subsample", iters = 10, split = 3 / 4)
+	bmr <- benchmark(lrns, learning.task, rdesc, 
+		measures = list(multilabel.hamloss, multilabel.subset01, multilabel.acc, multilabel.tpr, multilabel.ppv, multilabel.f1), keep.pred = TRUE)
+	AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
+	print(AggrPerformances)
+}
+
+#' Make an MLR task
+#' @param trainingData training data
+#' @param validationHumanReadingDTM training data from human reading, used to extract target column names
+#' @param model_type type of predictions
+#' @return list with multiple elements, one of them being an MLR task
+make.task <- function(trainingData, validationHumanReadingDTM, model_type){
+	if (model_type == "binary_relevance"){
+		target <- colnames(trainingData[, which(!colnames(trainingData) %in% colnames(validationHumanReadingDTM))])
+		learning.task <- makeMultilabelTask(data = trainingData, target = target)
+	}
+	return(learning.task)
+}
+
+get_short_long_term_pred <- function(lrn){
+	rfpred <- getBMRPredictions(bmr, as.df = TRUE, learner.ids = lrn$id)
+	short_term_col.truth <- c("truth.event", "truth.day", "truth.week")
+	long_term_col.truth <-  c("truth.years_10", "truth.years_100", "truth.years_1000", "truth.years_10000", "truth.years_100000")
+
+	short_term.truth <- apply(rfpred[, colnames(rfpred) %in% short_term_col.truth], 1, function(row) any(row == TRUE))
+	long_term.truth <- apply(rfpred[, colnames(rfpred) %in% long_term_col.truth], 1, function(row) any(row == TRUE))
+
+	short_term_col.response <- c("response.event", "response.day", "response.week")
+	long_term_col.response <-  c("response.years_10", "response.years_100", "response.years_1000", "response.years_10000", "response.years_100000")
+
+	short_term.response <- apply(rfpred[, colnames(rfpred) %in% short_term_col.response], 1, function(row) any(row == TRUE))
+	long_term.response <- apply(rfpred[, colnames(rfpred) %in% long_term_col.response], 1, function(row) any(row == TRUE))
+	print(table(short_term.response == short_term.truth))
+	print(table(long_term.response == long_term.truth))
 }

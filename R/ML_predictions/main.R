@@ -22,14 +22,15 @@ import::here(.from = "./R/utils/lib_shared.R",
 import::here(.from = "./R/utils/lib_ML_predictions.R", 
 	make.humanReadingTrainingLabels,
 	make.trainingData,
-	EDA.trainingData
+	EDA.trainingData,
+	multilabelBenchmark
 )
 
 ### main
 
 # param
 SCALE_TYPE <- "location"
-MODEL_TYPE <- "multiclass" # one of multiclass, binary_relevance, label_powerset
+MODEL_TYPE <- "binary_relevance" # one of multiclass, binary_relevance, label_powerset
 AGGREGATE <- FALSE
 
 # data reading
@@ -56,3 +57,5 @@ trainingData <- make.trainingData(validationHumanReadingDTM, humanReadingTrainin
 
 # exploratory data analysis
 EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
+
+multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
