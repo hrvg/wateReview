@@ -103,3 +103,6 @@ predCountry <- make.RFpredictions(mtry = 5L, trainingDataMulticlass, targetData,
 ## predictions
 
 # 
+# predCountry_new <- as.character(predCountry$response)
+# predCountry_new[which(as.character(predRelevance) == "Irrelevant")] <- "Irrelevant"
+# predCountry_old <- as.character(readRDS("./predCountry.Rds"))
