@@ -243,8 +243,10 @@ make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM,
 		trainingData <- cbind(validationDTM, countryLabel)
 	} else {
 		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
-		validationDTM <- rbind(validationHumanReadingDTM, webscrapped_validationDTM)
-		trainingLabels <- rbind(humanReadingTrainingLabels, webscrapped_trainingLabels)
+		# validationDTM <- rbind(validationHumanReadingDTM, webscrapped_validationDTM)
+		# trainingLabels <- rbind(humanReadingTrainingLabels, webscrapped_trainingLabels)
+		validationDTM <- validationHumanReadingDTM
+		trainingLabels <- humanReadingTrainingLabels
 		trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
 		trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= 10)]
 		countryLabel <- apply(trainingLabels, 1, function(row) which(row == TRUE)[1])

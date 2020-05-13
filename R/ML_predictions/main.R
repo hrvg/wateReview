@@ -97,12 +97,11 @@ bmr <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE)
 print(bmr)
 tune <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = TRUE)
 
-predCountry <- make.RFpredictions(mtry = 5L, trainingDataMulticlass, targetData, MODEL_TYPE, filter = FALSE)
+predCountry <- make.RFpredictions(mtry = 6L, trainingDataMulticlass, targetData, MODEL_TYPE, filter = FALSE)
 
 
 ## predictions
-
-# 
-# predCountry_new <- as.character(predCountry$response)
-# predCountry_new[which(as.character(predRelevance) == "Irrelevant")] <- "Irrelevant"
-# predCountry_old <- as.character(readRDS("./predCountry.Rds"))
+predCountry_new <- as.character(predCountry$response)
+predCountry_new[which(as.character(predRelevance) == "Irrelevant")] <- "Irrelevant"
+predCountry_old <- as.character(readRDS("./predCountry.Rds"))
+table(predCountry_old == predCountry_new[-missing]) / sum(table(predCountry_old == predCountry_new[-missing]) )
