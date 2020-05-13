@@ -267,16 +267,20 @@ make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM,
 #' @param filter logical, if true create task for a binary classification Irrelevant/Relevant
 #' @return benchmark object
 multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune = FALSE){
-	learning.task <- make.task(trainingData, NULL, model_type, filter)
+	learning.task <- make.task(trainingData, NULL, model_type, filter = filter)
 	print(learning.task)
 	rdesc <- makeResampleDesc("CV", iters = 10, stratify = TRUE)
-	mes <- list(auc, mmce, acc, ppv, tpr, fdr)
+	if (filter){
+		mes <- list(auc, mmce, acc, ppv, tpr, fdr)
+	} else {
+		mes <- list(multiclass.au1u, acc, mmce, multiclass.aunu, timetrain)
+	}
 	print(paste("Optimizing against:", mes[[1]]$id))
 	if (tune){
 		# select learner
 		lrn <- makeLearner("classif.randomForest", predict.type = "prob") 
 		ps <- makeParamSet(
-			makeIntegerParam("mtry",lower = 1, upper = (ncol(trainingDataMulticlassFilter) - 1) %/% 2)
+			makeIntegerParam("mtry",lower = 1, upper = (ncol(trainingData) - 1) %/% 2)
 			)
 		ctrl <- makeTuneControlGrid(resolution=20L)
 
@@ -300,7 +304,6 @@ multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune =
 			makeLearner("classif.IBk", predict.type = "prob"),
 			makeLearner("classif.nnet", predict.type = "prob"),
 			makeLearner("classif.multinom", predict.type = "prob"),
-			makeLearner("classif.logreg", predict.type =  "prob"),
 			makeLearner("classif.xgboost", predict.type =  "prob")
 		)
 		bmrs <- list()

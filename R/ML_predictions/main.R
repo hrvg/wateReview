@@ -68,28 +68,38 @@ trainingData <- make.trainingData(validationHumanReadingDTM, humanReadingTrainin
 EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
 
 # multilabel: binary relevance and algorithm adaptation
+
 # bmr <- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
 # AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
 # PerfVisMultilabel(AggrPerformances)
 
 # multiclass
 
-## filter
+# ## relevance filter
 trainingDataMulticlassFilter <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = TRUE)
 
-### selecting a model to tune
-bmr <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
-print(bmr)
+# ### selecting a model to tune
+# bmr <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
+# print(bmr)
 
-### tuning model (hard coded)
-tune <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = TRUE)
+# ### tuning model (hard coded)
+# tune <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = TRUE)
 
-### predict
+# ### predict
 targetData <- make.targetData(DTM)
 predRelevance <- make.RFpredictions(mtry = 6L, trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = TRUE)
 
+## country
+trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE)
 
-# trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE)
+### selecting a model to tune
+bmr <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE)
+print(bmr)
+tune <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = TRUE)
+
+predCountry <- make.RFpredictions(mtry = 5L, trainingDataMulticlass, targetData, MODEL_TYPE, filter = FALSE)
+
 
 ## predictions
 
+# 
