@@ -387,8 +387,7 @@ multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune =
 	}	
 	bmrs <- list()
 	parallelStop()
-	cwd_bak <- getwd()
-	setwd("F:/hguillon/research")
+
 	for (i in seq_along(learners)){
 		set.seed(1789, "L'Ecuyer-CMRG")
 		if (learners[[i]]$id %in% c("h2o.deeplearning", "h2o.gbm", "h2o.glm")){
@@ -410,7 +409,6 @@ multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune =
 		bmrs[[i]] <- bmr
 	}
 	bmr <- mergeBenchmarkResults(bmrs)
-	setwd(cwd_bak)
 	return(bmr)
 }
 
@@ -453,10 +451,14 @@ make.predictions <- function(lrn, parvals, trainingData, targetData, model_type,
 #' Create the target data to predict from
 #' @param DTM the complete document-term matrix
 #' @return a data.frame
-make.targetData <- function(DTM){
+make.targetData <- function(DTM, addTopicDocs = FALSE, topicDocs = NULL){
 	targetData <- as.matrix(DTM)
 	colnames(targetData) <- paste0("Term", seq(ncol(DTM)))
 	targetData <- data.frame(targetData)
+	if (addTopicDocs){
+		colnames(topicDocs) <- paste0("Topic", seq(ncol(topicDocs)))
+		targetData <- cbind(topicDocs, targetData)
+	} 
 	return(targetData)
 }
 
@@ -530,3 +532,75 @@ transform.DTM <- function(DTM, change.col = TRUE){
 	if(change.col) colnames(DTM) <- paste0("Term", seq(ncol(DTM)))
 	return(DTM)
 }	
+
+#' this function performs a quick quality analysis and difference with historical predictions
+QA.oldXnewPredictions <- function(predCountry){
+	missing <- get.missing()
+	predCountry_new <- as.character(predCountry$response)
+	predCountry_new[which(as.character(predRelevance) == "Irrelevant")] <- "Irrelevant"
+	predCountry_old <- as.character(readRDS("./predCountry_bak.Rds"))
+	table(predCountry_old == predCountry_new[-missing]) / sum(table(predCountry_old == predCountry_new[-missing]) )
+}
+
+
+#' Consolidates lda results by adding year and country prediction to the topicDocs
+#' @param theme_type one of topic_name, theme, NSF_specific, NSF_general, passed to make_df_docs
+#' @param description one of spatial_scale, methods, water budget, passed to make_df_docs
+#' @param save boolean, if true, write the results, if false, return the consolidated results
+#' @param topicDocs the output from the topicdata, aligned with the corpus
+#' @param in_corpus the corpus database containing the variable Year
+#' @param predCountry the complete probabilities predicted from ML
+#' @return see save
+consolidate_LDA_results <- function(theme_type = "theme", description = NULL, save = FALSE, .topicDocs = topicDocs, .in_corpus = in_corpus, .predCountry = predCountry){
+	theme_df_docs <- make_df_docs(theme_type = theme_type, description = description, topicDocs = .topicDocs)
+	year <- .in_corpus$Year
+	consolidated_results <- data.frame(year = year, country = .predCountry %>% pull(response) %>% as.character())
+	consolidated_results <- cbind(theme_df_docs, consolidated_results)
+	if (save){
+		saveRDS(consolidated_results, paste0("consolidated_results_", ifelse(is.null(description), theme_type, description), ".Rds"))
+	} else {
+		return(consolidated_results)
+	}
+}
+
+#' Creates a subset of the LDA topics dataframe into theme dataframe
+#' @param theme_type one of topic_name, theme, NSF_specific, NSF_general, passed to make_df_docs
+#' @param description one of spatial_scale, methods, water budget, passed to make_df_docs
+#' @param save boolean, if true, write the results, if false, return the theme dataframe
+#' @param topicDocs the output from the topicdata, aligned with the corpus
+make_df_docs <- function(theme_type = "theme", description = NULL, save = FALSE, topicDocs = .topicDocs){
+	stopifnot(theme_type %in% c("topic_name", "theme", "NSF_specific", "NSF_general"))
+	if (!is.null(description)){
+		stopifnot(description %in% c("spatial scale", "methods", "water budget"))
+	}
+	topic_names <- read.csv("./data/topic_names.csv")
+	topic_names$description <- as.character(topic_names$description)
+	topic_names <- topic_names[match(seq(nrow(topic_names)), topic_names$topic_id), ]
+	topicDocs <- as.data.frame(topicDocs)
+	colnames(topicDocs) <- topic_names$topic_name
+	if (!is.null(description)){
+		theme_type <- "topic_name"
+		themes <- unique(topic_names[[theme_type]][grepl(description, topic_names$description)])
+	} else {
+		themes <- unique(topic_names[[theme_type]][!is.na(topic_names[[theme_type]])])
+	}
+	theme_df_docs <- lapply(themes, function(th){
+	    ind <- which(topic_names[[theme_type]] == th)
+	    if (length(ind) == 1){
+	      return(topicDocs[, ind])
+	    } else {
+	      return(rowSums(topicDocs[, ind]))
+	    }
+	})
+	theme_df_docs <- do.call(cbind, theme_df_docs)
+	rownames(theme_df_docs) <- rownames(topicDocs)
+	colnames(theme_df_docs) <- themes
+	rm(topicDocs)
+	rSums <- rowSums(theme_df_docs)
+	theme_df_docs <- sweep(theme_df_docs, 1, rSums, "/")
+	if (save){
+		saveRDS(object = theme_df_docs, paste0("./data/", ifelse(is.null(description), theme_type, description), "_df_docs.Rds"))
+	} else {
+		return(theme_df_docs)
+	}
+}

@@ -80,6 +80,10 @@ trainingData <- make.trainingData(validationHumanReadingDTM, humanReadingTrainin
 # exploratory data analysis
 EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
 
+
+cwd_bak <- getwd()
+setwd("F:/hguillon/research")
+
 # multilabel: binary relevance and algorithm adaptation
 
 # bmr <- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
@@ -99,22 +103,23 @@ bmr_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filt
 print(bmr_filter)
 make.AUCPlot(bmr_filter, binary = TRUE)
 saveRDS(bmr_filter, "bmr_filter.Rds")
-# based on the result of the AUC plot comparison, svm and RF are selected for tuning benchmark
+# based on the result of the AUC plot comparison, svm, multinom and RF are selected for tuning benchmark
 
 # ### tuning model
 bmr_tune_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = list("classif.svm", "classif.randomForest", "classif.multinom"))
 saveRDS(bmr_tune_filter, "bmr_tune_filter.Rds")
 make.AUCPlot(bmr_tune_filter, binary = TRUE)
-# RF and SVM have similar performance, we pick RF
+# RF and multninomal have similar performance, we pick multinom (better hyper-parameter constrains)
 
 # ### predict
-targetData <- make.targetData(DTM)
-predRelevance <- make.predictions("classif.randomForest", 
-	list(mtry = get.tuningPar(bmr_tune_filter, "mtry")),
+targetData <- make.targetData(DTM, addTopicDocs = TRUE, topicDocs = topicDocs)
+predRelevance <- make.predictions("classif.multinom", 
+	list(mtry = get.tuningPar(bmr_tune_filter, "decay")),
 	trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = TRUE)
+table(predRelevance)
 
 ## country
-trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE, filterIrrelevant = FALSE)
+trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE)
 
 ### selecting a model to tune
 bmr_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE)
@@ -122,44 +127,17 @@ print(bmr_country)
 make.AUCPlot(bmr_country)
 saveRDS(bmr_country, "bmr_country.Rds")
 
-bmr_tune_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = list("classif.randomForest", "classif.svm"))
-make.AUCPlot(bmr_tune_country)
-saveRDS(bmr_tune_country, "bmr_tune_country.Rds")
+# bmr_tune_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = list("classif.randomForest"))
+# make.AUCPlot(bmr_tune_country)
+# saveRDS(bmr_tune_country, "bmr_tune_country.Rds")
 
 # ### predict
 targetData <- make.targetData(DTM)
-predCountry <- make.predictions("classif.multinom", 
-	list(decay = get.tuningPar(bmr_tune_filter, "decay")),
-	trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = FALSE)
+predCountry <- make.predictions("classif.randomForest", 
+	list(mtry = floor(sqrt(ncol(trainingDataMulticlass) - 1))),
+	trainingDataMulticlass, targetData, MODEL_TYPE, filter = FALSE)
 
 
-## predictions
-predCountry_new <- as.character(predCountry$response)
-predCountry_new[which(as.character(predRelevance) == "Irrelevant")] <- "Irrelevant"
-predCountry_old <- as.character(readRDS("./predCountry.Rds"))
-table(predCountry_old == predCountry_new[-missing]) / sum(table(predCountry_old == predCountry_new[-missing]) )
-
-
-predHumanWebscrapped <- trainingDataMulticlass[, ncol(trainingDataMulticlass)]
-testDTM <- trainingDataMulticlass[, -ncol(trainingDataMulticlass)]
-colnames(testDTM) <- colnames(get_DTM() %>% transform.DTM(change.col = FALSE))
-testDTM <- sweep(testDTM, 1, 1, "+")
-testDTM <- sweep(testDTM, 1, rowSums(testDTM), "/")
-
-predMining <- apply(testDTM, 1, function(row) colnames(testDTM)[which.max(row)]) %>% unname() %>% unlist()
-
-table(predHumanWebscrapped == predMining) / length(predMining)
-
-print("False Negative")
-table(factor(predHumanWebscrapped[which(predHumanWebscrapped != predMining)], levels = unique(predHumanWebscrapped)))
-
-print("False Negative Rate")
-signif(table(factor(predHumanWebscrapped[which(predHumanWebscrapped != predMining)], levels = unique(predHumanWebscrapped))) /
-table(factor(predHumanWebscrapped, levels = unique(predHumanWebscrapped))), digits = 2)
-
-print("True Positive")
-table(factor(predHumanWebscrapped[which(predHumanWebscrapped == predMining)], levels = unique(predHumanWebscrapped)))
-
-print("True Positive Rate")
-signif(table(factor(predHumanWebscrapped[which(predHumanWebscrapped == predMining)], levels = unique(predHumanWebscrapped))) /
-table(factor(predHumanWebscrapped, levels = unique(predHumanWebscrapped))), digits = 2)
+setwd(cwd_bak)
+saveRDS(predRelevance, "predRelevance.Rds")
+saveRDS(predCountry, "predCountryMembership.Rds")
