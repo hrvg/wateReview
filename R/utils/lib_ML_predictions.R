@@ -225,14 +225,14 @@ PerfVisMultilabel <- function(AggrPerformances){
 #' @param webscrapped_trainingLabels labels from webscrapping
 #' @param filter logical, if true create training data for a binary classification Irrelevant/Relevant
 #' @return a data.frame containing the training data with a target column "countryLabelFilter" or "countryLabel"
-make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = FALSE){
+make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = FALSE, obs_threshold = 10){
 	if (filter){
 		trainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
 		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
 		validationDTM <- validationHumanReadingDTM
 		trainingLabels <- humanReadingTrainingLabels
 		trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
-		trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= 10)]
+		trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= obs_threshold)]
 		countryLabel <- apply(trainingLabels, 1, function(row) which(row == TRUE)[1])
 		validationDTM <- validationDTM[!is.na(countryLabel), ]
 		validationDTM  <- as.data.frame(validationDTM)
@@ -251,7 +251,7 @@ make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM,
 			trainingLabels <- humanReadingTrainingLabels
 		}
 		trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
-		trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= 10)]
+		trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= obs_threshold)]
 		countryLabel <- apply(trainingLabels, 1, function(row) which(row == TRUE)[1])
 		validationDTM <- validationDTM[!is.na(countryLabel), ]
 		validationDTM  <- as.data.frame(validationDTM)
@@ -361,7 +361,7 @@ multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune =
 	learning.task <- make.task(trainingData, NULL, model_type, filter = filter)
 	print(learning.task)
 	set.seed(1789)
-	rdesc <- makeResampleDesc("Subsample", iters = 100,  stratify = TRUE)
+	rdesc <- makeResampleDesc("RepCV", reps = 10, folds = 10, stratify = TRUE)
 	if (filter){
 		mes <- list(auc, mmce, acc, ppv, tpr, fdr, timetrain)
 	} else {
