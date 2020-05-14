@@ -19,18 +19,6 @@ import::here(.from = "./R/utils/lib_webscrapping.R",
   get.ind_hasCountryTag
 )
 
-import::here(.from = "./R/utils/lib_webscrapping.R",
-  get.scopusAbstract,
-  get.wosAbstract,
-  get.wosAuthKeywords,
-  get.wosFullResult,
-  get.allMetadata,
-  add.abstractsToCorpus,
-  get.relevantCountries,
-  get.allAuthKeywords,
-  QA.AuthKeywords,
-  get.boolean_AuthKeywords,
-)
 
 ### main ###
 

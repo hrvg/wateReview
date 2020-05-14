@@ -89,17 +89,20 @@ EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLa
 # multiclass
 
 # ## relevance filter
-trainingDataMulticlassFilter <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = TRUE)
+trainingDataMulticlassFilter <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, 
+	filter = TRUE, 
+	addTopicDocs = TRUE, 
+	validationTopicDocs = validationTopicDocs)
 
 # ### selecting a model to tune
 bmr_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
-saveRDS(bmr_filter, "bmr_filter.Rds")
 print(bmr_filter)
 make.AUCPlot(bmr_filter, binary = TRUE)
+saveRDS(bmr_filter, "bmr_filter.Rds")
 # based on the result of the AUC plot comparison, svm and RF are selected for tuning benchmark
 
 # ### tuning model
-bmr_tune_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = list("classif.svm", "classif.randomForest"))
+bmr_tune_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = list("classif.svm", "classif.randomForest", "classif.multinom"))
 saveRDS(bmr_tune_filter, "bmr_tune_filter.Rds")
 make.AUCPlot(bmr_tune_filter, binary = TRUE)
 # RF and SVM have similar performance, we pick RF
@@ -111,7 +114,7 @@ predRelevance <- make.predictions("classif.randomForest",
 	trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = TRUE)
 
 ## country
-trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE)
+trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE, filterIrrelevant = FALSE)
 
 ### selecting a model to tune
 bmr_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE)
@@ -119,7 +122,8 @@ print(bmr_country)
 make.AUCPlot(bmr_country)
 saveRDS(bmr_country, "bmr_country.Rds")
 
-bmr_tune_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = list("classif.multinom"))
+bmr_tune_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = list("classif.randomForest", "classif.svm"))
+make.AUCPlot(bmr_tune_country)
 saveRDS(bmr_tune_country, "bmr_tune_country.Rds")
 
 # ### predict

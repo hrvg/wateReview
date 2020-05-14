@@ -225,7 +225,7 @@ PerfVisMultilabel <- function(AggrPerformances){
 #' @param webscrapped_trainingLabels labels from webscrapping
 #' @param filter logical, if true create training data for a binary classification Irrelevant/Relevant
 #' @return a data.frame containing the training data with a target column "countryLabelFilter" or "countryLabel"
-make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = FALSE, obs_threshold = 10){
+make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = FALSE, obs_threshold = 10, filterIrrelevant = TRUE, addTopicDocs = FALSE, validationTopicDocs = NULL){
 	if (filter){
 		trainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
 		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
@@ -234,6 +234,7 @@ make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM,
 		trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
 		trainingLabels <- trainingLabels[, which(sort(MLDR$labels$count, decreasing = FALSE) >= obs_threshold)]
 		countryLabel <- apply(trainingLabels, 1, function(row) which(row == TRUE)[1])
+		if (addTopicDocs) validationTopicDocs <- validationTopicDocs[!is.na(countryLabel), ]
 		validationDTM <- validationDTM[!is.na(countryLabel), ]
 		validationDTM  <- as.data.frame(validationDTM)
 		countryLabel <- countryLabel[!is.na(countryLabel)]
@@ -241,6 +242,7 @@ make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM,
 		countryLabel[which(countryLabel != "Irrelevant")] <- "Relevant"
 		countryLabel <- as.factor(countryLabel)
 		trainingData <- cbind(validationDTM, countryLabel)
+		if (addTopicDocs) trainingData <- cbind(validationTopicDocs, trainingData)
 	} else {
 		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
 		if (addWebscrapped){
@@ -257,9 +259,11 @@ make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM,
 		validationDTM  <- as.data.frame(validationDTM)
 		countryLabel <- countryLabel[!is.na(countryLabel)]
 		countryLabel <- colnames(trainingLabels)[countryLabel]
-		relevant <- which(countryLabel != "Irrelevant")
-		countryLabel <- countryLabel[relevant]
-		validationDTM <- validationDTM[relevant, ]
+		if (filterIrrelevant){
+			relevant <- which(countryLabel != "Irrelevant")
+			countryLabel <- countryLabel[relevant]
+			validationDTM <- validationDTM[relevant, ]
+		}
 		countryLabel <- as.factor(countryLabel)
 		trainingData <- cbind(validationDTM, countryLabel)
 	}
