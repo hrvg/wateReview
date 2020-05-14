@@ -210,24 +210,37 @@ get.EndNoteIdLDA <- function(englishCorpus){
 #' @param EndNoteIdcorpus
 #' @param EndNoteIdLDA
 #' @return none
-QA.EndNoteIdCorpusLDA <- function(EndNoteIdLDA, EndNoteIdcorpus) table(EndNoteIdLDA %in% EndNoteIdcorpus)
+QA.EndNoteIdCorpusLDA <- function(EndNoteIdLDA, EndNoteIdcorpus){
+  print("LDA in Corpus")
+  print(table(EndNoteIdLDA %in% EndNoteIdcorpus))
+  print("Corpus in LDA")
+  print(table(EndNoteIdcorpus %in% EndNoteIdLDA))
+}
 
 #' Align databases based on shared ID
 #' @param EndNoteIdLDA 
 #' @param EndNoteIdcorpus
 #' @return EndNoteIdLDA with matching records in both databases
-align.EndNoteIdLDA <- function(EndNoteIdLDA, EndNoteIdcorpus){
-  EndNoteIdLDA <- EndNoteIdLDA[which(EndNoteIdLDA %in% EndNoteIdcorpus)]
-  return(EndNoteIdLDA)
+align.dataWithEndNoteIdLDA <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
+     if(is.null(dim(data))){
+    data <- data[which(EndNoteIdLDA %in% EndNoteIdcorpus)]
+  } else {
+    data <- data[which(EndNoteIdLDA %in% EndNoteIdcorpus), ]
+  }
+  return(data)
 }
 
 #' Align databases based on shared ID
 #' @param EndNoteIdcorpus
 #' @param EndNoteIdLDA 
 #' @return EndNoteIdcorpus with matching records in both databases
-align.EndNoteIdcorpus <- function(EndNoteIdcorpus, EndNoteIdLDA){
-  EndNoteIdcorpus <- EndNoteIdcorpus[which(EndNoteIdcorpus %in% EndNoteIdLDA)]
-  return(EndNoteIdcorpus)
+align.dataWithEndNoteIdcorpus <- function(data, EndNoteIdcorpus, EndNoteIdLDA){
+    if(is.null(dim(data))){
+    data <- data[which(EndNoteIdcorpus %in% EndNoteIdLDA)]
+  } else {
+    data <- data[which(EndNoteIdcorpus %in% EndNoteIdLDA), ]
+  }
+  return(data)
 }
 
 #' Align englishCorpus with matching records in both databases and assign webscrapped abstracts
@@ -237,16 +250,16 @@ align.EndNoteIdcorpus <- function(EndNoteIdcorpus, EndNoteIdLDA){
 #' @return englishCorpus with matching records in both databases and webscrapped abstracts
 align.englishCorpus <- function(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus, in_corpus){
   englishCorpus <- englishCorpus[which(EndNoteIdLDA %in% EndNoteIdcorpus), ]
-  englishCorpus$abstract <- as.character(in_corpus$abstract[match(EndNoteIdLDA, EndNoteIdcorpus)])
+  englishCorpus$abstract <- as.character(in_corpus$abstract[which(EndNoteIdcorpus %in% EndNoteIdLDA)][match(EndNoteIdLDA, EndNoteIdcorpus)])
   return(englishCorpus)
 }
 
-#' Align data with matching records in both databases and assign webscrapped abstracts
+#' Order data to LDA order
 #' @param data data: corpus of documents, indices of tagged document, ...
 #' @param EndNoteIdcorpus
 #' @param EndNoteIdLDA 
 #' @return data with matching records in both databases and webscrapped abstracts
-align.data <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
+order.data <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
   if(is.null(dim(data))){
     data <- data[match(EndNoteIdLDA, EndNoteIdcorpus)]
   } else {
@@ -267,22 +280,20 @@ make.webscrapped_trainingData <- function(boolean_AuthKeywords, ind_hasCountryTa
   boolean_AuthKeywords_hasTag <- boolean_AuthKeywords[ind_hasCountryTag, ]
 
   # make webscrapped_trainingLabels
-  irrelevant <- rep(FALSE, nrow(boolean_AuthKeywords_hasTag))
-  webscrapped_trainingLabels <- cbind(irrelevant, boolean_AuthKeywords_hasTag)
-  colnames(webscrapped_trainingLabels) <- c("Irrelevant", colnames(boolean_AuthKeywords_hasTag))
+  webscrapped_trainingLabels <- boolean_AuthKeywords_hasTag %>% dplyr::mutate(Irrelevant = FALSE)
 
   # removing NULL abstract
-  ind_nonNullnonNA <- which(!(englishCorpus_hasTag$abstract == "NULL" | englishCorpus_hasTag$abstract == "NA"))
-  englishCorpus_hasTag <- englishCorpus_hasTag[ind_nonNullnonNA, ]
-  webscrapped_trainingLabels <- webscrapped_trainingLabels[ind_nonNullnonNA, ]
+  # ind_nonNullnonNA <- which(!(englishCorpus_hasTag$abstract == "NULL" | englishCorpus_hasTag$abstract == "NA"))
+  # englishCorpus_hasTag <- englishCorpus_hasTag[ind_nonNullnonNA, ]
+  # webscrapped_trainingLabels <- webscrapped_trainingLabels[ind_nonNullnonNA, ]
 
   # removing human read files
-  import::here(.from = "./R/utils/lib_shared.R", get_titleInd)
-  titleInd <- get_titleInd()
+  # import::here(.from = "./R/utils/lib_shared.R", get_titleInd)
+  # titleInd <- get_titleInd()
   englishCorpus_complete <- readRDS(englishCorpus_file)
-  ind_HumanRead_hasTag <- which(englishCorpus_hasTag$fnames %in% englishCorpus[titleInd, ]$fnames)
-  englishCorpus_hasTag <- englishCorpus_hasTag[-ind_HumanRead_hasTag, ]
-  webscrapped_trainingLabels <- webscrapped_trainingLabels[-ind_HumanRead_hasTag, ]
+  # ind_HumanRead_hasTag <- which(englishCorpus_hasTag$fnames %in% englishCorpus[titleInd, ]$fnames)
+  # englishCorpus_hasTag <- englishCorpus_hasTag[-ind_HumanRead_hasTag, ]
+  # webscrapped_trainingLabels <- webscrapped_trainingLabels[-ind_HumanRead_hasTag, ]
 
   # read document term matrix file
   dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_geo.Rds"

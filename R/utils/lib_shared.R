@@ -129,7 +129,7 @@ QA.alignedData <- function(alignedData, scale_type = "location"){
 	colnames(validationTopicDocs) <- paste0("Topic", seq(ncol(validationTopicDocs)))
 
 	validationDTM <- as.matrix(validationDTM)
-	colnames(validationDTM) <- paste0("Term", seq(ncol(validationDTM)))
+	# colnames(validationDTM) <- paste0("Term", seq(ncol(validationDTM)))
 	res <- list(validationHumanReading = validationHumanReading,
 		validationTopicDocs = validationTopicDocs,
 		validationDTM = validationDTM) 

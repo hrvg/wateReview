@@ -9,6 +9,10 @@ library("data.table")
 library("mldr")
 library("reshape2")
 library("ggplot2")
+library("rstatix")
+library("ggpubr")
+library("dplyr")
+
 
 ### utils ###
 import::here(.from = "./R/utils/lib_shared.R", 
@@ -26,13 +30,19 @@ import::here(.from = "./R/utils/lib_shared.R",
 import::here(.from = "./R/utils/lib_ML_predictions.R", 
 	make.humanReadingTrainingLabels,
 	make.trainingData,
+	get.MLDR,
 	EDA.trainingData,
+	get.binaryRelevanceLearners,
+	get.chainingOrder,
 	multilabelBenchmark,
+	make.task,
+	get_short_long_term_pred,
 	PerfVisMultilabel,
 	make.trainingDataMulticlass,
 	multiclassBenchmark,
-	make.RFpredictions,
-	make.targetData
+	make.predictions,
+	make.targetData,
+	transform.DTM
 )
 
 ### main
@@ -46,10 +56,13 @@ AGGREGATE <- FALSE
 topicDocs <- get_topicDocs()
 titleDocs <- get_titleDocs(topicDocs)
 validationHumanReading <-  get_validationHumanReading(scale_type = SCALE_TYPE)
+DTM <- get_DTM()
 webscrapped_validationDTM <- get_webscrapped_validationDTM()
+colnames(webscrapped_validationDTM) <- colnames(DTM)
+webscrapped_validationDTM <- transform.DTM(webscrapped_validationDTM)
+DTM <- transform.DTM(DTM)
 webscrapped_trainingLabels <- get_webscrapped_trainingLabels()
 titleInd <- get_titleInd(humanReadingDatabase = validationHumanReading, topicModelTitles = titleDocs)
-DTM <- get_DTM()
 
 # sanity check
 # check if all the papers are found, address issues, align databases
@@ -79,25 +92,41 @@ EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLa
 trainingDataMulticlassFilter <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = TRUE)
 
 # ### selecting a model to tune
-# bmr <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
-# print(bmr)
+bmr_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
+saveRDS(bmr_filter, "bmr_filter.Rds")
+print(bmr_filter)
+make.AUCPlot(bmr_filter, binary = TRUE)
+# based on the result of the AUC plot comparison, svm and RF are selected for tuning benchmark
 
-# ### tuning model (hard coded)
-# tune <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = TRUE)
+# ### tuning model
+bmr_tune_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = list("classif.svm", "classif.randomForest"))
+saveRDS(bmr_tune_filter, "bmr_tune_filter.Rds")
+make.AUCPlot(bmr_tune_filter, binary = TRUE)
+# RF and SVM have similar performance, we pick RF
 
 # ### predict
 targetData <- make.targetData(DTM)
-predRelevance <- make.RFpredictions(mtry = 6L, trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = TRUE)
+predRelevance <- make.predictions("classif.randomForest", 
+	list(mtry = get.tuningPar(bmr_tune_filter, "mtry")),
+	trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = TRUE)
 
 ## country
-trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE)
+trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE)
 
 ### selecting a model to tune
-bmr <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE)
-print(bmr)
-tune <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = TRUE)
+bmr_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE)
+print(bmr_country)
+make.AUCPlot(bmr_country)
+saveRDS(bmr_country, "bmr_country.Rds")
 
-predCountry <- make.RFpredictions(mtry = 6L, trainingDataMulticlass, targetData, MODEL_TYPE, filter = FALSE)
+bmr_tune_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = list("classif.multinom"))
+saveRDS(bmr_tune_country, "bmr_tune_country.Rds")
+
+# ### predict
+targetData <- make.targetData(DTM)
+predCountry <- make.predictions("classif.multinom", 
+	list(decay = get.tuningPar(bmr_tune_filter, "decay")),
+	trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = FALSE)
 
 
 ## predictions
@@ -105,3 +134,28 @@ predCountry_new <- as.character(predCountry$response)
 predCountry_new[which(as.character(predRelevance) == "Irrelevant")] <- "Irrelevant"
 predCountry_old <- as.character(readRDS("./predCountry.Rds"))
 table(predCountry_old == predCountry_new[-missing]) / sum(table(predCountry_old == predCountry_new[-missing]) )
+
+
+predHumanWebscrapped <- trainingDataMulticlass[, ncol(trainingDataMulticlass)]
+testDTM <- trainingDataMulticlass[, -ncol(trainingDataMulticlass)]
+colnames(testDTM) <- colnames(get_DTM() %>% transform.DTM(change.col = FALSE))
+testDTM <- sweep(testDTM, 1, 1, "+")
+testDTM <- sweep(testDTM, 1, rowSums(testDTM), "/")
+
+predMining <- apply(testDTM, 1, function(row) colnames(testDTM)[which.max(row)]) %>% unname() %>% unlist()
+
+table(predHumanWebscrapped == predMining) / length(predMining)
+
+print("False Negative")
+table(factor(predHumanWebscrapped[which(predHumanWebscrapped != predMining)], levels = unique(predHumanWebscrapped)))
+
+print("False Negative Rate")
+signif(table(factor(predHumanWebscrapped[which(predHumanWebscrapped != predMining)], levels = unique(predHumanWebscrapped))) /
+table(factor(predHumanWebscrapped, levels = unique(predHumanWebscrapped))), digits = 2)
+
+print("True Positive")
+table(factor(predHumanWebscrapped[which(predHumanWebscrapped == predMining)], levels = unique(predHumanWebscrapped)))
+
+print("True Positive Rate")
+signif(table(factor(predHumanWebscrapped[which(predHumanWebscrapped == predMining)], levels = unique(predHumanWebscrapped))) /
+table(factor(predHumanWebscrapped, levels = unique(predHumanWebscrapped))), digits = 2)
