@@ -15,7 +15,7 @@ import::here(.from = "./R/utils/lib_webscrapping.R",
   QA.EndNoteIdCorpusLDA,
   align.dataWithEndNoteIdLDA,
   align.dataWithEndNoteIdcorpus,
-  order.data,
+  order.data
 )
 
 import::here(.from = "./R/utils/lib_MLR_predictions.R",

@@ -140,4 +140,4 @@ predCountry <- make.predictions("classif.randomForest",
 
 setwd(cwd_bak)
 saveRDS(predRelevance, "predRelevance.Rds")
-saveRDS(predCountry, "predCountryMembership.Rds")
+saveRDS(predCountry, "predCountry.Rds")
