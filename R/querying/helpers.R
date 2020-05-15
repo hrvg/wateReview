@@ -10,7 +10,6 @@ check_duplicate_title <- function(citation_dataframe){
 	return(citation_dataframe[which(duplicated(citation_dataframe$Title) == FALSE) ,])
 }
 
-
 write_citation_dataframe <- function(root.dir, csv.dir){
 	write.csv(citation_dataframe, file.path(root.dir, csv.dir, "citation_dataframe.csv"), row.names = FALSE)
 }

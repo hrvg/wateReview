@@ -1,0 +1,31 @@
+---
+title: "Location Prediction"
+author: Hervé Guillon
+output:
+  pdf_document:
+    toc: true
+date: "`r format(Sys.time(), '%d %B %Y')`"
+bibliography: /home/justpwd/thesis/production/latex/bibliography/hegui.bib      
+---
+
+# Location Prediction
+
+Machine learning predicts the location of the country of study of each papers.
+The training labels were provided by human-reading randomly chosen articles from the corpus (1,428 human-derived labels) and from text mining the article metadata (2,482 text-mined labels).
+Interestingly, the human-reading provided 563 observations of irrelevant country locations.
+The predictors consists of the text document term matrix derived from the cleaned corpus text.
+
+A benchmark of the five following models was conducted: random forest, support vector machine, nearest-neighbors, neural network and logistic regression.
+
+Relevance filter
+Country prediction
+
+Using additional geographical tokens (e.g. rivers and mountain ranges names), multilabel classifications (e.g. binary relevance, label powerset) or deep learning models of natural language processing (e.g. BERT) both on full texts and abstracts only yield unsatisfactory results.
+
+- tokens: `get_natearth_data.R`
+- document frequency matrix: `dtm_from_dfm.R`
+- webscrapped labels: `labels_from_webscraping.R`
+- getting training data: `classification/main.R`
+- merge the training data from human and webscrape sources: `classification/data_viz.R`
+- setup training task: `training_setup.R`
+- benchmark multiclass: `multiclass.R`

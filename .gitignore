@@ -3,4 +3,10 @@ src/BERTpy/data/
 src/BERTpy/input/
 src/BERTpy/working/
 .Rproj.user
+<<<<<<< HEAD
 .RData
+=======
+.Rproj
+.Rhistory
+.Rdata
+>>>>>>> b5433ad40839b24abf3ba8e3b993a6cffc69f258

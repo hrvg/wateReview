@@ -1,0 +1,128 @@
+################### libraries #########################
+library(dplyr)
+library(vegan)
+library(broom)
+library(reshape2)
+library(viridis)
+library(hrbrthemes)
+library(ggplot2)
+library(tidyr)
+library(pracma)
+library(ggpubr)
+library(wesanderson)
+
+################### Topics chronology #########################
+
+general <- readRDS("./consolidated_results_NSF_general.Rds")
+general <- subset(general, select = -c(country))
+general_long <- gather(general, topic, prop, 'physical sciences':'social sciences', factor_key = TRUE)
+pivot <- with (general_long, tapply( prop, list(year, topic), sum))
+years <- row.names(pivot)
+rownames(pivot) <- NULL
+pivot <- cbind.data.frame(years, pivot)
+pivot <- pivot[!(pivot$years == 2018),]
+pivot$years = strtoi(pivot$years)
+pivot <- pivot[(pivot$years > 1979),]
+pivot <- complete(pivot, years = full_seq(years, period = 1))
+pivot_long <- gather(pivot, topic, prop, 'physical sciences':'social sciences', factor_key = TRUE)
+
+ggplot(pivot_long, aes(x=years, y=prop, fill=topic)) +
+  geom_area(alpha=0.6 , size=.5, colour="white") +
+  scale_fill_viridis(discrete = T) +
+  theme_ipsum() +
+  ggtitle("Topics over time") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.title = element_text(hjust = 0))
+
+################### Countries chronology #########################
+
+general <- readRDS("./consolidated_results_NSF_general.Rds")
+general <- subset(general, select = c(year, country))
+general <- general[general$country != "Irrelevant", ]
+general$country <- as.character(general$country)
+
+# arrange country clusters
+braz_mex <- c("Mexico", "Brazil")
+chile_argen <- c("Chile", "Argentina", "Uruguay", "Suriname", "Guyana", "Belize", "Paraguay", "Costa.Rica", "Cuba", "Panama", "Venezuela")
+colom_boliv <- c("Colombia", "Bolivia", "Jamaica", "Nicaragua", "El.Salvador", "Ecuador", "Honduras", "Guatemala", "Peru", "Dominican Republic")
+
+general$country[which(!is.na(match(general$country, braz_mex)))] <- "Braz_Mex"
+general$country[which(!is.na(match(general$country, chile_argen)))] <- "Chile_Argen"
+general$country[which(!is.na(match(general$country, colom_boliv)))] <- "Colom_Boliv"
+
+# Drop rows with caribbean countries excluded from clusters?
+general <- general[!(general$country == "Bahamas" | general$country == "Haiti"),]
+
+pivot <- with(general, tapply(country, list(year, country), length))
+years <- row.names(pivot)
+rownames(pivot) <- NULL
+pivot <- cbind.data.frame(years, pivot)
+pivot <- pivot[!(pivot$years == 2018),]
+pivot$years = strtoi(pivot$years)
+pivot <- pivot[(pivot$years > 1979),]
+pivot <- complete(pivot, years = full_seq(years, period = 1))
+pivot[is.na(pivot)] <- 0
+pivot_long <- gather(pivot, country, count, Braz_Mex:Colom_Boliv, factor_key = TRUE)
+
+ggplot(pivot_long, aes(x=years, y=count, fill=country)) +
+  theme_pubr(legend="none") +
+  geom_area(alpha=0.6 , size=.5, colour="white") +
+  scale_fill_manual(values = c("#F8766D", "#00BFC4", "#7CAE00"),
+                    labels=c("Cluster 1", "Cluster 2", "Cluster 3")) +
+  scale_x_continuous(minor_breaks = seq(1980, 2020, by=1), breaks = seq(1980, 2020, by=5)) +
+  theme(axis.title.x = element_blank(), plot.title = element_text(hjust = 0.5),
+        legend.title=element_blank()) +
+  labs(y = "New water resources articles") 
+  # ggtitle("Country clusters over time") 
+
+################### Optional: Detrending #########################
+B_log = log(pivot$Braz_Mex + 1)
+Ch_log = log(pivot$Chile_Argen + 1)
+Co_log = log(pivot$Colom_Boliv + 1)
+years = pivot$years
+pivot_log = data_frame(years, B_log, Ch_log, Co_log)
+pivot_log_long = melt(pivot_log, id = "years")
+
+ggplot(data = pivot_log_long,
+  aes(x = years, y = value, colour = variable)) +
+  geom_line()
+
+for (i in sequence(3)) {
+  if (i == 1) {title = "Cluster 1"} 
+  if (i == 2) {title = "Cluster 2"} 
+  if (i == 3) {title = "Cluster 3"}
+  model <- lm(as.matrix(pivot_log[i+1]) ~ years)
+  resid <- resid(model)
+  if (i == 1) {pivot_log$B_resid <- resid
+  title <- "Cluster 1"} 
+  if (i == 2) {pivot_log$Ch_resid <- resid
+  title <- "Cluster 2"} 
+  if (i == 3) {pivot_log$Co_resid <- resid
+  title <- "Cluster 3"}
+  sd <- sd(resid)
+  # plot(years, pivot_log[i+1][[1]], main=title)
+  # abline(lm(pivot_log[i+1][[1]] ~ years))
+  # plot(years, resid, xlab="years", ylab="residuals", main=title)
+  # abline(0,0)
+  # pivot_log$signif <- resid > 0
+  # pivot_log$signif[abs(resid) < sd] <- NA
+  
+  print(ggplot(data=pivot_log, aes(x=years, y=resid, color = resid > 0, fill = signif)) +
+    theme_pubr(legend="none") +
+    scale_fill_manual(values = c("black","black")) +
+    scale_color_manual(values = c("grey20","grey20")) +
+    geom_hline(yintercept = sd, linetype="dashed", color="grey50") +
+    geom_hline(yintercept = -sd, linetype="dashed", color="grey50") +
+    labs(title = title, y="Growth trend residuals") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ylim(-.5, .5) +
+    geom_bar(stat="identity") +
+    theme(axis.title.x = element_blank(), legend.position = "none") +
+    scale_x_continuous(minor_breaks = seq(1980, 2020, by=1), breaks=seq(1980, 2020, 5))) +
+    # grids(axis = c("xy"), color = "grey92", size = NULL,
+    # linetype = NULL)) +
+    theme(panel.grid.major.x = element_line(size=.3, linetype="solid", color = "grey62")) +
+    ggsave(filename = file.path("R/data_vis/figs",paste("cluster",substr(title,9,9),".png",sep="")), 
+           device="png", units="in", width=6, height=3, dpi = 600)
+}
+  

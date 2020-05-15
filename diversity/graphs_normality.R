@@ -1,8 +1,9 @@
-budget <- read.csv("./diversity/csvs/waterbudgetdistance.csv")
-methods <- read.csv("./diversity/csvs/methodsdistance.csv")
-theme <- read.csv("./diversity/csvs/themesdistance.csv")
-general <- read.csv("./diversity/csvs/generaldistance.csv")
-specific <- read.csv("./diversity/csvs/specificdistance.csv")
+budget <- read.csv("./diversity/csvs/waterbudgetdistance2.csv") 
+methods <- read.csv("./diversity/csvs/methodsdistance2.csv") 
+theme <- read.csv("./diversity/csvs/themesdistance2.csv")
+general <- read.csv("./diversity/csvs/generaldistance2.csv")
+specific <- read.csv("./diversity/csvs/specificdistance2.csv")
+
 
 ######## methods #########
 methods.base <- ggplot(methods,aes(topic_distance,country_distance, label = topic)) +
@@ -15,8 +16,9 @@ methods.edit <-
   methods.base +
   #grids() +
   coord_fixed() +
-  ylim(0.55,0.95) +
-  xlim(0.25,0.65) +
+  ylim(0.53,0.93) +
+  xlim(0.29,0.67) +
+  coord_fixed() +
   labs(title = "Research methods")
 
 ######## budget #########
@@ -29,8 +31,8 @@ budget.base <- ggplot(budget,aes(topic_distance,country_distance, label = topic)
 budget.edit <- 
   budget.base +
   #grids() +
-  ylim(0.55,0.95) +
-  xlim(0.25,0.65) +
+  ylim(0.53,0.93) +
+  xlim(0.29,0.67) +
   coord_fixed() +
   labs(title = "Components of water budget")
 
@@ -66,8 +68,6 @@ general.edit <-
   general.base +
   #grids() +
   coord_fixed() +
-  #ylim(0.55,0.95) +
-  #xlim(0.25,0.65) +
   labs(title = "General topics")
 
 ######## specific ##########
@@ -117,8 +117,8 @@ rivers.edit <-
 
 methods.edit
 budget.edit
-reservoir.edit
-rivers.edit
+# reservoir.edit
+# rivers.edit
 themes.edit
 general.edit
 specific.edit

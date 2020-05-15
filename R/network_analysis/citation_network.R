@@ -10,7 +10,7 @@ in_corpus_file <- "in_corpus.Rds"
 in_corpus <- readRDS(in_corpus_file)
 
 EndNoteIdcorpus <- unname(sapply(in_corpus$pdfs, substr, start = 1, stop = 10))
-titleDocs <- readLines("/media/hguillon/hrvg/research/data/latin_america/water-management/topic-model/data/info.dat")
+titleDocs <- readLines("../../../data/latin_america/water-management/topic-model/data/info.dat")
 EndNoteIdLDA <- unname(sapply(titleDocs, substr, start = 1, stop = 10))
 
 in_corpus_LDA <- in_corpus[which(EndNoteIdcorpus %in% EndNoteIdLDA), ]
@@ -58,6 +58,7 @@ m <- network_results
 rownames(m) <- gsub("Costa.Rica", "Costa Rica", rownames(m))
 rownames(m) <- gsub("El.Salvador", "El Salvador", rownames(m))
 colnames(m) <- rownames(m)
+saveRDS(m, "countryNetwork.Rds")
 grid.col <- rev(rainbow(ncol(m)))
 
 # visualisation
@@ -112,16 +113,18 @@ adj <- as.matrix(get.adjacency(g))
 
 topicNetwork <- consolidated_network[which(consolidated_network$source_ids %in% colnames(adj)), ]
 topicNetwork <- topicNetwork[match(colnames(adj), topicNetwork$source_ids), ]
-docTopics <- topicNetwork[, seq(62)]
+docTopics <- dplyr::select(topicNetwork, -c("year", "ID", "source_ids", "country"))
 
 network_results <- t(as.matrix(docTopics)) %*% as.matrix(adj) %*% as.matrix(docTopics)
 
 m <- network_results
+saveRDS(m, "rawTopicNetwork.Rds")
 m <- apply(m, 1, function(row){
 	row[row <= quantile(row, 0.9)] <- 0
 	return(row)
 })
 m <- t(m)
+saveRDS(m, "topicNetwork.Rds")
 grid.col <- rev(rainbow(ncol(m)))
 
 # visualisation
