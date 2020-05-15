@@ -61,6 +61,8 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 	if (!country_filter){
 		tab <- table(country)
 		keepCountries <- names(tab)[which(tab >= country.threshold)]
+		keepCountries <- gsub("Costa.Rica", "Costa Rica", keepCountries)
+		keepCountries <- gsub("El.Salvador", "El Salvador", keepCountries)
 		network_results <- network_results[rownames(network_results) %in% keepCountries, ]
 	}
 
@@ -198,4 +200,82 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color 
 	}
 }
 
+#' Creates a weighted adjacency matrix of probability of citation between countries
+#' @param source_ids source_ids
+#' @param citation_network an edge data.frame
+#' @return a weighted adjacency matrix of probability of citation between countries
+make.countryNetwork <- function(source_ids, citation_network){
+	consolidated_results <- readRDS("consolidated_results_topic_name.Rds")
+	consolidated_results$source_ids <- source_ids
 
+	consolidated_network <- consolidated_results[which(consolidated_results$country != "Irrelevant"), ]
+	consolidated_network <- consolidated_network[which(consolidated_network$source_ids %in% citation_network$citing), ]
+
+	consolidated_predCountryMembership <- predCountryMembership[which(consolidated_results$country != "Irrelevant"), ]
+	consolidated_predCountryMembership <- consolidated_predCountryMembership[which(consolidated_network$source_ids %in% citation_network$citing), ]
+
+	relevant_network <- citation_network[citation_network$citing %in% consolidated_network$source_ids, ]
+	relevant_network <- relevant_network[relevant_network$cited %in% consolidated_network$source_ids, ]
+	relevant_network$citing_country <- consolidated_network$country[match(relevant_network$citing, consolidated_network$source_ids)]
+	relevant_network$cited_country <- consolidated_network$country[match(relevant_network$cited, consolidated_network$source_ids)]
+	relevant_network <- relevant_network[relevant_network$cited_country %in% relevant_network$citing_country, ]
+	relevant_network$citing_country <- as.factor(as.character(relevant_network$citing_country))
+	relevant_network$cited_country <- factor(as.character(relevant_network$cited_country), levels = levels(relevant_network$citing_country))
+
+	# weighted adjacency matrix with country as vertex and number of citations as weight
+	g <- graph_from_data_frame(relevant_network[, 1:2])
+	adj <- as.matrix(get.adjacency(g))
+
+	consolidated_predCountryMembership$source_ids <- consolidated_network$source_ids
+	countryNetwork <- consolidated_predCountryMembership[which(consolidated_network$source_ids %in% colnames(adj)), ]
+	countryNetwork <- countryNetwork[match(colnames(adj), countryNetwork$source_ids), ]
+	countryNetwork$source_ids <- NULL
+
+	network_results <- t(as.matrix(countryNetwork)) %*% as.matrix(adj) %*% as.matrix(countryNetwork)
+
+	m <- network_results
+	rownames(m) <- gsub("Costa.Rica", "Costa Rica", rownames(m))
+	rownames(m) <- gsub("El.Salvador", "El Salvador", rownames(m))
+	colnames(m) <- rownames(m)
+	saveRDS(m, "countryNetwork.Rds")
+	return(m)
+}
+
+#' Creates a weighted adjacency matrix of probability of citation between topics
+#' @param source_ids source_ids
+#' @param citation_network an edge data.frame
+#' @return a weighted adjacency matrix of probability of citation between topics
+make.topicNetwork <- function(source_ids, citation_network, type = "NSF_specific", percentile.threshold = 0.90){
+	type_list <- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
+	stopifnot(type %in% type_list)
+	consolidated_results <- readRDS(paste0("consolidated_results_", type, ".Rds"))
+	consolidated_results$source_ids <- source_ids
+	relevant_network <- citation_network[citation_network$citing %in% consolidated_network$source_ids, ]
+	relevant_network <- relevant_network[relevant_network$cited %in% consolidated_network$source_ids, ]
+
+	relevant_network$citing_country <- consolidated_network$country[match(relevant_network$citing, consolidated_network$source_ids)]
+	relevant_network$cited_country <- consolidated_network$country[match(relevant_network$cited, consolidated_network$source_ids)]
+	relevant_network <- relevant_network[relevant_network$cited_country %in% relevant_network$citing_country, ]
+	relevant_network$citing_country <- as.factor(as.character(relevant_network$citing_country))
+	relevant_network$cited_country <- factor(as.character(relevant_network$cited_country), levels = levels(relevant_network$citing_country))
+
+	# df <- as.matrix(get.adjacency(graph.data.frame(relevant_network[, 3:4])))
+	g <- graph_from_data_frame(relevant_network[, 1:2])
+	adj <- as.matrix(get.adjacency(g))
+
+	topicNetwork <- consolidated_network[which(consolidated_network$source_ids %in% colnames(adj)), ]
+	topicNetwork <- topicNetwork[match(colnames(adj), topicNetwork$source_ids), ]
+	docTopics <- dplyr::select(topicNetwork, -c("year", "source_ids", "country"))
+
+	network_results <- t(as.matrix(docTopics)) %*% as.matrix(adj) %*% as.matrix(docTopics)
+
+	m <- network_results
+	saveRDS(m, paste0("rawTopicNetwork_", type, ".Rds"))
+	m <- apply(m, 1, function(row){
+		row[row <= quantile(row, percentile.threshold)] <- 0
+		return(row)
+	})
+	m <- t(m)
+	saveRDS(m, paste0("topicNetwork_", type, ".Rds"))
+
+}
