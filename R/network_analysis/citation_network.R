@@ -1,15 +1,56 @@
-# libs 
+### libraries ###
+library("mlr")
+library("OpenML")
+library("NLP")
+library("tm")
+library("data.table")
+library("mldr")
+library("dplyr")
 library("igraph")
 
-# loading citation network
-citation_network <- readRDS("citingDf.Rds")
-source_ids <- readRDS("source_ids.Rds")
+### utils ###
+import::here(.from = "./R/utils/lib_webscrapping.R",
+  get.EndNoteIdcorpus,
+  get.EndNoteIdLDA,
+  QA.EndNoteIdCorpusLDA,
+  align.dataWithEndNoteIdLDA,
+  align.dataWithEndNoteIdcorpus,
+  order.data
+)
 
-# load paper id
+# data loading
+englishCorpus_file <- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
+englishCorpus <- readRDS(englishCorpus_file)
+
 in_corpus_file <- "in_corpus.Rds"
 in_corpus <- readRDS(in_corpus_file)
 
-EndNoteIdcorpus <- unname(sapply(in_corpus$pdfs, substr, start = 1, stop = 10))
+citation_network <- readRDS("citingDf.Rds")
+source_ids <- readRDS("source_ids.Rds")
+
+# get document IDs
+EndNoteIdcorpus <- get.EndNoteIdcorpus(in_corpus)
+EndNoteIdLDA <- get.EndNoteIdLDA(englishCorpus)
+QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+
+# align databases 
+in_corpus <- align.dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
+source_ids <- align.dataWithEndNoteIdcorpus(source_ids, EndNoteIdcorpus, EndNoteIdLDA)
+
+englishCorpus <- align.dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
+
+EndNoteIdLDA <- align.dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
+EndNoteIdcorpus <- align.dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
+
+QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+
+# order them according to LDA database
+in_corpus <- order.data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
+
+# loading citation network
+
+
+# load paper id
 titleDocs <- readLines("../../../data/latin_america/water-management/topic-model/data/info.dat")
 EndNoteIdLDA <- unname(sapply(titleDocs, substr, start = 1, stop = 10))
 

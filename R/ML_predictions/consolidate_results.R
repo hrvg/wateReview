@@ -15,10 +15,10 @@ import::here(.from = "./R/utils/lib_webscrapping.R",
   QA.EndNoteIdCorpusLDA,
   align.dataWithEndNoteIdLDA,
   align.dataWithEndNoteIdcorpus,
-  order.data,
+  order.data
 )
 
-import::here(.from = "./R/utils/lib_MLR_predictions.R",
+import::here(.from = "./R/utils/lib_ML_predictions.R",
 	consolidate_LDA_results,
 	make_df_docs
 )
@@ -59,6 +59,7 @@ saveRDS(predRelevance, "predRelevance.Rds")
 saveRDS(predCountry %>% pull(response), "predCountry.Rds")
 saveRDS(predCountry %>% select(-response), "predCountryMembership.Rds")
 
+consolidate_LDA_results(theme_type = "topic_name", save = TRUE)
 consolidate_LDA_results(theme_type = "theme", save = TRUE)
 consolidate_LDA_results(theme_type = "NSF_general", save = TRUE)
 consolidate_LDA_results(theme_type = "NSF_specific", save = TRUE)
