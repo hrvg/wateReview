@@ -51,9 +51,6 @@ in_corpus <- order.data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
 
 
 # load paper id
-
-get_titleDocs <- function(topicDocs, fname = "F:/hguillon/research/exploitation/R/latin_america/data/info.dat")
-
 titleDocs <- readLines("../../../data/latin_america/water-management/topic-model/data/info.dat")
 EndNoteIdLDA <- unname(sapply(titleDocs, substr, start = 1, stop = 10))
 
