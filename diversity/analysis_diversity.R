@@ -14,9 +14,13 @@ diversity_paper <- diversity(clean)
 ################### analysis #########################
 
 # calculate diversity by country
-general2 <-  diversity_country(general)
-specific2 <- diversity_country(specific)
-budget2 <- diversity_country(budget)
+general2 <- remove_irrelevant(general)
+specific2 <- remove_irrelevant(specific)
+budget2 <- remove_irrelevant(budget)
+
+general2 <-  diversity_country(general2)
+specific2 <- diversity_country(specific2)
+budget2 <- diversity_country(budget2)
 
 diversity_by_country<-cbind(general2, specific2, budget2)
 diversity_by_country <- diversity_by_country %>%
@@ -58,5 +62,4 @@ ggplot(diversity_by_country,aes(NSFgeneral,NSFspecific, label = country)) +
   geom_text_repel() +
   geom_point() +
   theme_pubr() +
-  labs(x = "NSFgeneral",y = "NSFspecific") +
-  geom_
+  labs(x = "NSFgeneral",y = "NSFspecific")

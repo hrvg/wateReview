@@ -15,7 +15,7 @@
 ################### code #########################
 
 # define subset
-probs <- reduce_docs_for_JSd(themes)
+probs <- reduce_docs_for_JSd(theme)
 # probs <- probs %>% mutate(topic = replace(topic, topic == "groundwater flow", "groundwater"))
 
 ############### across countries ###########
@@ -72,4 +72,4 @@ topic_distance <- topic_distance %>%
 # combine and save separate csvs
 distance <- merge(country_distance, topic_distance, by = "topic")
 
-write.csv(distance, file = "./diversity/csvs/themesdistance2.csv")
+#write.csv(distance, file = "./diversity/csvs/themedistance.csv")

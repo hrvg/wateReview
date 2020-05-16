@@ -10,22 +10,26 @@ bibliography: /home/justpwd/thesis/production/latex/bibliography/hegui.bib
 
 # Location Prediction
 
-Machine learning predicts the location of the country of study of each papers.
-The training labels were provided by human-reading randomly chosen articles from the corpus (1,428 human-derived labels) and from text mining the article metadata (2,482 text-mined labels).
-Interestingly, the human-reading provided 563 observations of irrelevant country locations.
-The predictors consists of the text document term matrix derived from the cleaned corpus text.
+Machine learning predicts the location of the country of study of each paper.
+The training labels were provided by human-reading randomly chosen articles from the corpus (1,428 human-derived labels) and from text mining the article metadata (2,663 text-mined labels).
+Interestingly, the human-reading provided 563 observations of irrelevant country locations or irrelevant subjects of study.
 
-A benchmark of the five following models was conducted: random forest, support vector machine, nearest-neighbors, neural network and logistic regression.
+The human-derived labels are first used for constructing a relevance filter based on simple binary classification between "Relevant" and "Irrelevant" documents ($n = 1,386$).
+The predictors consist of the text document term matrix derived from the cleaned corpus text using tokens related to country names and of the topic membership output by the topic model ($p = 138$).
+A benchmark of the six following models was conducted: featureless (baseline), random forest, support vector machine, naive Bayes, multinomial regression and extreme gradient boosting.
+The hyper-parameters are initially set at standard default value.
+The resampling scheme is 10 repeats of 10-fold cross-validation.
+The random forest, multinomal and support vector machine models are the best-performing model and show no statistical difference in the distribution of their performance measured by area-under-curve (AUC).
+These models are selected for further tuning using a nested cross-validation with a simple hold-out inner loop and 10 repeats of 10-fold cross-validation as outer loop.
+The size of the tuning grid is set to 16 between standard values for each hyper-parameters.
+Random forest and multinomial are the best-performing tuned models and show no statistical difference in the distribution of their performance measured by AUC.
+The distribution of the hyper-parameter resulting from the nested cross-validation shows a better constraint for the multinomial model and it is selected for predictions.
+The performance of such multinomial model corresponds to a mean AUC of 0.82, a mean accuracy of 77% and a true positive rate of 86%.
 
-Relevance filter
-Country prediction
-
-Using additional geographical tokens (e.g. rivers and mountain ranges names), multilabel classifications (e.g. binary relevance, label powerset) or deep learning models of natural language processing (e.g. BERT) both on full texts and abstracts only yield unsatisfactory results.
-
-- tokens: `get_natearth_data.R`
-- document frequency matrix: `dtm_from_dfm.R`
-- webscrapped labels: `labels_from_webscraping.R`
-- getting training data: `classification/main.R`
-- merge the training data from human and webscrape sources: `classification/data_viz.R`
-- setup training task: `training_setup.R`
-- benchmark multiclass: `multiclass.R`
+The prediction of the location of study for each document is performed using both human-derived and text-mined labels ($n = 3,494$).
+The predictors consist of the text document term matrix derived from the cleaned corpus text using tokens related to country names ($p = 33$).
+Models and resampling scheme are similar than the ones used for the relevance filter.
+The hyper-parameters are initially set at standard default value.
+Random forest outperforms every other model with a mean multiclass AUC of 0.99 and a mean accuracy of 96%.
+No further tuning is performed and the random forest with default hyper-parameters is used for predictions.
+More complex approaches were investigated: using additional geographical tokens (e.g. rivers and mountain ranges names), multilabel classifications (e.g. binary relevance, label powerset) or deep learning models of natural language processing (e.g. BERT) both on full texts and abstracts with little benefits.

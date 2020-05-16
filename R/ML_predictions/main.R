@@ -42,7 +42,9 @@ import::here(.from = "./R/utils/lib_ML_predictions.R",
 	multiclassBenchmark,
 	make.predictions,
 	make.targetData,
-	transform.DTM
+	transform.DTM,
+	make.AUCPlot,
+	get.tuningPar
 )
 
 ### main
@@ -99,15 +101,23 @@ trainingDataMulticlassFilter <- make.trainingDataMulticlass(trainingData, valida
 	validationTopicDocs = validationTopicDocs)
 
 # ### selecting a model to tune
-bmr_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
-print(bmr_filter)
+if (!file.exists("bmr_filter.Rds")){
+	bmr_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
+	saveRDS(bmr_filter, "bmr_filter.Rds")
+} else {
+	bmr_filter <- readRDS("bmr_filter.Rds")
+}
 make.AUCPlot(bmr_filter, binary = TRUE)
-saveRDS(bmr_filter, "bmr_filter.Rds")
 # based on the result of the AUC plot comparison, svm, multinom and RF are selected for tuning benchmark
 
 # ### tuning model
-bmr_tune_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = list("classif.svm", "classif.randomForest", "classif.multinom"))
-saveRDS(bmr_tune_filter, "bmr_tune_filter.Rds")
+
+if(!file.exists("bmr_tune_filter.Rds")){
+	bmr_tune_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = list("classif.svm", "classif.randomForest", "classif.multinom"))
+	saveRDS(bmr_tune_filter, "bmr_tune_filter.Rds")
+} else {
+	bmr_tune_filter <- readRDS("bmr_tune_filter.Rds")
+}
 make.AUCPlot(bmr_tune_filter, binary = TRUE)
 # RF and multninomal have similar performance, we pick multinom (better hyper-parameter constrains)
 
@@ -122,10 +132,13 @@ table(predRelevance)
 trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE)
 
 ### selecting a model to tune
-bmr_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE)
-print(bmr_country)
+if (!file.exists("bmr_country.Rds")){
+	bmr_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE)
+	saveRDS(bmr_country, "bmr_country.Rds")
+} else {
+	bmr_country <- readRDS("bmr_country.Rds")
+}
 make.AUCPlot(bmr_country)
-saveRDS(bmr_country, "bmr_country.Rds")
 
 # bmr_tune_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = list("classif.randomForest"))
 # make.AUCPlot(bmr_tune_country)
@@ -137,7 +150,11 @@ predCountry <- make.predictions("classif.randomForest",
 	list(mtry = floor(sqrt(ncol(trainingDataMulticlass) - 1))),
 	trainingDataMulticlass, targetData, MODEL_TYPE, filter = FALSE)
 
+predCountry$response <- as.character(predCountry$response)
+predCountry$response[as.character(predRelevance) == "Irrelevant"] <- "Irrelevant"
+predCountry$response <- as.factor(predCountry$response)
 
 setwd(cwd_bak)
+
 saveRDS(predRelevance, "predRelevance.Rds")
-saveRDS(predCountry, "predCountryMembership.Rds")
+saveRDS(predCountry, "predCountry.Rds")
