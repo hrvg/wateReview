@@ -250,6 +250,13 @@ make.topicNetwork <- function(source_ids, citation_network, type = "NSF_specific
 	stopifnot(type %in% type_list)
 	consolidated_results <- readRDS(paste0("consolidated_results_", type, ".Rds"))
 	consolidated_results$source_ids <- source_ids
+
+	consolidated_network <- consolidated_results[which(consolidated_results$country != "Irrelevant"), ]
+	consolidated_network <- consolidated_network[which(consolidated_network$source_ids %in% citation_network$citing), ]
+
+	consolidated_predCountryMembership <- predCountryMembership[which(consolidated_results$country != "Irrelevant"), ]
+	consolidated_predCountryMembership <- consolidated_predCountryMembership[which(consolidated_network$source_ids %in% citation_network$citing), ]
+
 	relevant_network <- citation_network[citation_network$citing %in% consolidated_network$source_ids, ]
 	relevant_network <- relevant_network[relevant_network$cited %in% consolidated_network$source_ids, ]
 
@@ -277,5 +284,4 @@ make.topicNetwork <- function(source_ids, citation_network, type = "NSF_specific
 	})
 	m <- t(m)
 	saveRDS(m, paste0("topicNetwork_", type, ".Rds"))
-
 }
