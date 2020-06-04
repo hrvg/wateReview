@@ -1,0 +1,6 @@
+| Language   | Number of non-duplicate query returns | Number of documents automatically collected | Number of document manually collected | Total Corpus Size |
+|:-----------|:--------------------------------------|:--------------------------------------------|:--------------------------------------|:------------------|
+| English    | 29,365                                | 21,197  (72%)                               | 0                                     | 21,197 (72%)      |
+| Spanish    | 1,411                                 | 122  (8.6%)                                 | 875                                   | 997 (71%)         |
+| Portuguese | 777                                   | 300  (39%)                                  | 261                                   | 561 (72%)         |
+|            |                                       |                                             |                                       |                   |
