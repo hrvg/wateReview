@@ -62,11 +62,11 @@ a +
   theme_pubr() +  
   theme(axis.text.y = element_text(face = c('plain','plain','plain', 'plain', 'plain', 'plain', 'plain',
                                             'plain', 'bold', 'plain', 'plain', 'plain',
+                                            'plain', 'plain', 'plain', 'bold', 'plain',
                                             'plain', 'plain', 'plain', 'plain', 'plain',
-                                            'plain', 'plain', 'plain', 'plain', 'plain',
-                                            'plain', 'bold', 'plain', 'plain', 'plain',
-                                            'bold', 'bold', 'plain', 'bold', 'bold', 
-                                            'bold', 'plain', 'bold','plain', 'plain', # 6-10
+                                            'plain', 'bold', 'plain', 'plain', 'bold',
+                                            'bold', 'bold', 'plain', 'plain', 'bold', 
+                                            'bold', 'plain', 'bold','bold', 'bold', # 6-10
                                             'bold', 'bold', 'bold','bold','bold' # 1-5
                                             ))) +
   rremove("legend")

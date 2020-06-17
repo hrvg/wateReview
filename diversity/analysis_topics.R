@@ -1,7 +1,7 @@
 ################### analysis  #########################
 
 ## define data frame
-df <- remove_year(budget) # pick data to work with
+df <- remove_year(methods) # pick data to work with
 df <- remove_irrelevant(df)
 df <- melt(df, id.vars = "country")
 
@@ -12,15 +12,14 @@ names(sums) = c("country","topic","sum")
 country_sums <- aggregate(sums$sum, by=list(sums$country), FUN=sum) # no. papers per country
 names(country_sums) = c("country","no.papers")
 
-remove <- as.data.frame(country_sums$country[country_sums$no.papers < 30]) # list countries w/ < 30 papers
-keep <- as.data.frame(country_sums$country[country_sums$no.papers > 30])
+# remove <- as.data.frame(country_sums$country[country_sums$no.papers < 30]) # list countries w/ < 30 papers
+# keep <- as.data.frame(country_sums$country[country_sums$no.papers > 30])
 
 ## subset countries with > 30 papers
-df<- subset(df, df$country %in% keep$`country_sums$country[country_sums$no.papers > 30]`)
-names(df) = c("country","topic","value")
-country_sums <- aggregate(sums$sum, by=list(sums$country), FUN=sum) 
-names(country_sums) = c("country","no.papers")
-
+# df<- subset(df, df$country %in% keep$`country_sums$country[country_sums$no.papers > 30]`)
+# names(df) = c("country","topic","value")
+# country_sums <- aggregate(sums$sum, by=list(sums$country), FUN=sum) 
+# names(country_sums) = c("country","no.papers")
 
 ## summarize country x topic
 sums <-aggregate(df$value, by=list(df$country,df$topic), FUN=sum) # re - summarize after removing countries w/ < 30 papers
@@ -30,11 +29,17 @@ sums <- sums %>%
   group_by(country) %>%
   mutate(prop = sum/sum(sum))
 
+# SAVE
+write.csv(sums,'./diversity/csvs/methods-sums.csv')
 
-# SAVE for mapping
-# write.csv(sums,'./diversity/csvs/nsfspecific.csv')
 
-## describe tpoics
+
+
+
+
+
+
+## describe topics
 
 topic <- df %>% # uses df of individual papers
   select(-c("country")) %>%

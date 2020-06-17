@@ -27,6 +27,7 @@ remove_irrelevant <- function(df) {
   return(df)
   
 }
+
 diversity_country <- function(df) { 
   df <- df %>%
     select(-c("year"))
@@ -42,8 +43,15 @@ diversity_country <- function(df) {
   df <- group_by(df, country)
   df <- do(df, tidy(diversity(.$population)))
   
+  df$y <- rank(df$x)
+  
+  names(df) = c("country","entropy","entropy-rank")
+  
   return(df)
 }
+
+
+
 diversity_LAC <- function(df) { 
   df <- colSums(df)
   df <- diversity(df)
@@ -58,6 +66,42 @@ col_sums <- function(df) {
   return(sumdf)
   
 }
+
+diversity_country_2 <- function(df){
+  a <- remove_year(df) # pick data to work with
+  a <- remove_irrelevant(a)
+  a <- melt(a, id.vars = "country")
+  
+  ## count # papers per country
+  sums <- aggregate(a$value, by=list(a$country,a$variable), FUN=sum)
+  names(sums) = c("country","topic","sum")
+  country_sums <- aggregate(sums$sum, by=list(sums$country), FUN=sum) # no. papers per country
+  names(country_sums) = c("country","no.papers")
+  remove <- as.data.frame(country_sums$country[country_sums$no.papers < 30]) # list countries w/ < 30 papers
+  keep <- as.data.frame(country_sums$country[country_sums$no.papers > 30])
+  names(keep) <- "country"
+  
+  ## subset countries with > 30 papers
+  a <- subset(a, a$country %in% keep$country)
+
+  a <- aggregate(a$value, by=list(a$country,a$variable), FUN=sum)
+  
+  a <- a %>%
+    rename(country = Group.1, sepcies = Group.2, population = x) # species is country*topic
+  
+  a <- group_by(a, country)
+  a <- do(a, tidy(diversity(.$population)))
+  
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -82,6 +126,19 @@ reduce_docs_for_JSd <- function(df){
 
 return(a)
 
+}
+
+
+
+reduce_docs_for_JSd_2 <- function(df){
+  
+  a <- remove_year(df) # pick data to work with
+  a <- remove_irrelevant(a)
+  a <- melt(a, id.vars = "country")
+  names(a) = c("country","topic","value")
+  
+  return(a)
+  
 }
 
 
