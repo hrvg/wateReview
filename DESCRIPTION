@@ -1,0 +1,37 @@
+Package: latinAmerica
+Title: Computational literature review of water resources research in Latin America
+Version: 0.1
+Authors@R: c(
+    person(given = "Hervé",
+           family = "Guillon",
+           role = c("aut", "cre"),
+           email = "herve@guillon.xyz",
+           comment = c(ORCID = "0000-0002-6297-8253")),
+    person(given = "Alyssa",
+           family = "DeVincentis",
+           role = c("aut"),
+           email = "nkpatterson@ucdavis.edu",
+           comment = c(ORCID = "0000-0002-6418-5548")),      
+    person(given = "Noelle",
+           family = "Patterson",
+           role = c("aut"),
+           email = "ajdevincentis@ucdavis.edu",
+           comment = c(ORCID = "0000-0003-3592-0301")),
+    person(given = "Romia",
+           family = "Diaz Gomez",
+           role = c("aut"),
+           email = "rdiazgomez@ucdavis.edu",
+           comment = c(ORCID = "0000-0002-8919-554X")),       
+Description: This package performs a computational literature review of water resources research in Latin America.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+Suggests: 
+    knitr,
+    rmarkdown,
+    pkgdown,
+    testthat
+VignetteBuilder: knitr

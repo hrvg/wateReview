@@ -1,0 +1,23 @@
+language: r 
+r: 
+  - 3.6.1
+cache: packages
+
+before_install:
+  - sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+  - sudo apt-get -q update
+  - sudo apt-get -y install libgdal-dev libgeos-dev libproj-dev 
+
+warnings_are_errors: false
+
+after_success:
+  - Rscript -e 'pkgdown::build_site()'
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_PAT
+  keep-history: true
+  local-dir: docs
+  on:
+    branch: master

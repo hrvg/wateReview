@@ -1,4 +1,5 @@
 data/
+src/
 src/BERTpy/data/
 src/BERTpy/input/
 src/BERTpy/working/
@@ -6,3 +7,4 @@ src/BERTpy/working/
 .Rproj
 .Rhistory
 .Rdata
+docs
