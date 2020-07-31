@@ -7,14 +7,10 @@ src/BERTpy/working/
 
 # Project files
 .Rproj.user
-.Rproj
 
-# History files
-.Rhistory
-<<<<<<< HEAD
 .Rdata
 docs
-=======
+
 .Rapp.history
 
 # Session Data files
@@ -52,4 +48,4 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
->>>>>>> 28c5dcf64b32647e1b70f0276ada3176e00a3a96
+
