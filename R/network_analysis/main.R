@@ -18,5 +18,5 @@ m <- get_network(type = "NSF_specific", prob = TRUE, filter_method = TRUE, blind
 VizSpots(m)
 
 # blind spots
-m2 <- get_network(type = "theme", prob = TRUE, filter_method = TRUE, blindspot = TRUE)
+m2 <- get_network(type = "NSF_specific", prob = TRUE, filter_method = TRUE, blindspot = TRUE)
 VizSpots(m2)
