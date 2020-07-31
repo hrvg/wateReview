@@ -86,17 +86,34 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 	return(network_results)
 }
 
-VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color = TRUE, type = "theme", sort_topic = TRUE, topic_threshold = 0.75){
+#' Produces a chord diagram visualization with country cluster colors and topics categories
+#' @param m matrix, weighted adjacency matrix with rows indicating origin and columns indicating destination
+#' @param scaled logical, default to FALSE
+#' @param cluster_color logical, default to TRUE
+#' @param NSF_general_color logical, default to TRUE
+#' @param type character, default to "theme"
+#' @param sort_topic logical, default to TRUE
+#' @param topic_threshold numeric, a percentile to cut the display of topic names
+#' @param reorder_cluster logical, default to FALSE, controls if the origin is re-ordered by cluster
+#' @returm a chord diagram figure
+VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color = TRUE, type = "theme", sort_topic = TRUE, topic_threshold = 0.75, reorder_cluster = FALSE){
 	countryColors <- readRDS("countryColors.Rds")
 	N <- nrow(countryColors)
 	ind <- match(rownames(m), countryColors$country_name)
 	countryColors <- as.matrix(countryColors[ind, 1:3])
-	
+
 	if (cluster_color){
 		l_phcs <- readRDS("./data/l_phcs.Rds")
 		cluster_descriptors <- ggplot_build(l_phcs[[1]][[3]])$data[[2]][, c("label", "group", "colour")]
 		cluster_descriptors <- cluster_descriptors[which(cluster_descriptors$label %in% rownames(m)), ]
 		cluster_descriptors <- cluster_descriptors[order(as.character(cluster_descriptors$label), decreasing = TRUE), ]
+		if (reorder_cluster){
+			cluster_descriptors$group[cluster_descriptors$group == 1] <- 3 # fixing the random ordering from statistical clustering
+			ind_reorder <- order(cluster_descriptors$group)
+			m <- m[ind_reorder, ]
+			countryColors <- countryColors[ind_reorder, ]
+			cluster_descriptors <- cluster_descriptors[ind_reorder, ]
+		}
 	}
 
 	if (NSF_general_color & type == "NSF_specific"){
@@ -109,13 +126,13 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color 
 		NSF_general_colors <- RColorBrewer::brewer.pal(5, "Set1")[lvls]
 	}
 	
-	grid.col <- rainbow(N)[ind]
+	grid.col <- inlmisc::GetColors(N, scheme = "smooth rainbow", reverse = TRUE, bias = 0.9, start = 0.1, end = .9)[ind]
 	grid.col <- c(grid.col, rep("#c2c2c2", ncol(m)))
 	circos.clear()
 	par(mar = rep(0, 4), cex=.75)
 	circos.par(start.degree = -90)
 	chordDiagram(x = m, directional = 1, 
-		transparency = 0.3,
+		transparency = 0.1,
 		grid.col = grid.col,
 		link.sort = TRUE,
 		link.decreasing = TRUE,
@@ -250,6 +267,13 @@ make.topicNetwork <- function(source_ids, citation_network, type = "NSF_specific
 	stopifnot(type %in% type_list)
 	consolidated_results <- readRDS(paste0("consolidated_results_", type, ".Rds"))
 	consolidated_results$source_ids <- source_ids
+
+	consolidated_network <- consolidated_results[which(consolidated_results$country != "Irrelevant"), ]
+	consolidated_network <- consolidated_network[which(consolidated_network$source_ids %in% citation_network$citing), ]
+
+	consolidated_predCountryMembership <- predCountryMembership[which(consolidated_results$country != "Irrelevant"), ]
+	consolidated_predCountryMembership <- consolidated_predCountryMembership[which(consolidated_network$source_ids %in% citation_network$citing), ]
+
 	relevant_network <- citation_network[citation_network$citing %in% consolidated_network$source_ids, ]
 	relevant_network <- relevant_network[relevant_network$cited %in% consolidated_network$source_ids, ]
 
@@ -277,5 +301,4 @@ make.topicNetwork <- function(source_ids, citation_network, type = "NSF_specific
 	})
 	m <- t(m)
 	saveRDS(m, paste0("topicNetwork_", type, ".Rds"))
-
 }
