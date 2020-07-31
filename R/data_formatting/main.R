@@ -15,7 +15,7 @@ import::here(.from = "./R/utils/envpath.R",
 
 import::here(.from = "./R/data_formatting/helpers.R",
 	get_pdf_files,
-	get_duplicate_pdfs,
+	get_non_duplicate_pdfs,
 	article_selection,
 	assign_articles_to_readers)
 
@@ -26,6 +26,7 @@ import::here(.from = "./R/data_formatting/helpers.R",
 root.dir <- get_rootdir()
 languages <- c("english", "portuguese", "spanish")
 out.dir <- "exploitation/out/run79"
+out.dir <- file.path(root.dir, out.dir)
 
 ################
 ##### MAIN #####
@@ -39,7 +40,7 @@ pdf.dir <- "data/latin_america/corpus_pdf/english/english.Data/"
 # out.dir <- "data/latin_america/corpus_pdf/portuguese/"
 # out.dir <- "data/latin_america/corpus_pdf"
 
-l <- get_pdf_files(root.dir, pdf.dir)
+l <- get_pdf_files(file.path(root.dir, pdf.dir))
 full.names <- unname(l$full.names)
 full.full.names <- l$full.full.names
 
@@ -78,7 +79,7 @@ if (lang == "english"){
 }
 
 
-non_duplicate_index <- get_duplicate_pdfs(names)
+non_duplicate_index <- get_non_duplicate_pdfs(names)
 
 select_ind <- article_selection(full.names, non_duplicate_index, ratio = 0.2) 
 

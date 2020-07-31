@@ -53,3 +53,4 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 >>>>>>> 28c5dcf64b32647e1b70f0276ada3176e00a3a96
+inst/doc
