@@ -14,10 +14,9 @@ import::here(.from = "./R/network_analysis/lib_network_analysis.R",
 ### main ###
 
 # bright spots
-m <- get_network(type = "theme", prob = TRUE, filter_method = TRUE, blindspot = FALSE)
-# blind spots
-m2 <- get_network(type = "theme", prob = TRUE, filter_method = TRUE, blindspot = TRUE)
-
-# visualisation
+m <- get_network(type = "NSF_specific", prob = TRUE, filter_method = TRUE, blindspot = FALSE, percentile.threshold= 0.75)
 VizSpots(m)
+
+# blind spots
+m2 <- get_network(type = "NSF_specific", prob = TRUE, filter_method = TRUE, blindspot = TRUE)
 VizSpots(m2)
