@@ -1,0 +1,2752 @@
+country,type,topic,sum,prop
+Argentina,theme,air quality,5.164726754,0.003057861
+Bahamas,theme,air quality,0.000106644,0.000106644
+Belize,theme,air quality,0.200427425,0.002745581
+Bolivia,theme,air quality,1.058026128,0.004464245
+Brazil,theme,air quality,28.77575008,0.005119329
+Chile,theme,air quality,6.08079826,0.005704314
+Colombia,theme,air quality,1.353128199,0.003676979
+Costa.Rica,theme,air quality,1.384458754,0.007565348
+Cuba,theme,air quality,0.008031725,0.002007931
+Ecuador,theme,air quality,0.792089247,0.002901426
+El.Salvador,theme,air quality,0.004020397,0.00050255
+Guatemala,theme,air quality,0.018178345,0.00121189
+Honduras,theme,air quality,0.00069847,0.000232823
+Jamaica,theme,air quality,0.00038956,0.00038956
+Mexico,theme,air quality,11.73021917,0.005135823
+Nicaragua,theme,air quality,0.000855432,0.000855432
+Panama,theme,air quality,0.19104118,0.001721092
+Paraguay,theme,air quality,0.026530143,0.000803944
+Peru,theme,air quality,1.012478566,0.002852052
+Uruguay,theme,air quality,0.529221671,0.003600147
+Venezuela,theme,air quality,2.147105584,0.015014724
+Argentina,theme,seasonal variability,8.066332812,0.004775804
+Bahamas,theme,seasonal variability,0.002666098,0.002666098
+Belize,theme,seasonal variability,0.561423088,0.007690727
+Bolivia,theme,seasonal variability,3.11713347,0.013152462
+Brazil,theme,seasonal variability,52.00420223,0.009251771
+Chile,theme,seasonal variability,4.163746371,0.003905953
+Colombia,theme,seasonal variability,3.006797572,0.008170646
+Costa.Rica,theme,seasonal variability,2.863915173,0.01564981
+Cuba,theme,seasonal variability,0.032468948,0.008117237
+Ecuador,theme,seasonal variability,2.067970204,0.007574982
+El.Salvador,theme,seasonal variability,0.183213357,0.02290167
+Guatemala,theme,seasonal variability,0.107317675,0.007154512
+Honduras,theme,seasonal variability,0.018561155,0.006187052
+Jamaica,theme,seasonal variability,0.00038956,0.00038956
+Mexico,theme,seasonal variability,17.45207026,0.007641011
+Nicaragua,theme,seasonal variability,0.000855432,0.000855432
+Panama,theme,seasonal variability,3.480341651,0.031354429
+Paraguay,theme,seasonal variability,0.296757313,0.008992646
+Peru,theme,seasonal variability,2.378674504,0.006700492
+Uruguay,theme,seasonal variability,0.509874606,0.003468535
+Venezuela,theme,seasonal variability,2.206437883,0.015429636
+Argentina,theme,plants,35.77887387,0.021183466
+Bahamas,theme,plants,0.004265757,0.004265757
+Belize,theme,plants,0.908074819,0.012439381
+Bolivia,theme,plants,1.777730441,0.007500972
+Brazil,theme,plants,91.19175728,0.016223405
+Chile,theme,plants,20.63582103,0.019358181
+Colombia,theme,plants,6.161035171,0.016741943
+Costa.Rica,theme,plants,4.263887645,0.023299932
+Cuba,theme,plants,0.009591087,0.002397772
+Ecuador,theme,plants,3.053663751,0.011185582
+El.Salvador,theme,plants,0.05736773,0.007170966
+Guatemala,theme,plants,0.073608218,0.004907215
+Honduras,theme,plants,0.309611723,0.103203908
+Jamaica,theme,plants,0.00077912,0.00077912
+Mexico,theme,plants,36.94586246,0.016175947
+Nicaragua,theme,plants,0.001710864,0.001710864
+Panama,theme,plants,6.633684066,0.05976292
+Paraguay,theme,plants,0.068003374,0.002060708
+Peru,theme,plants,2.542635989,0.007162355
+Uruguay,theme,plants,1.409274334,0.0095869
+Venezuela,theme,plants,5.036160897,0.035217908
+Argentina,theme,fauna,34.48509734,0.020417464
+Bahamas,theme,fauna,0.002879386,0.002879386
+Belize,theme,fauna,2.945630116,0.040351097
+Bolivia,theme,fauna,3.537857802,0.01492767
+Brazil,theme,fauna,107.4248741,0.019111346
+Chile,theme,fauna,13.02182318,0.012215594
+Colombia,theme,fauna,13.74287695,0.037344774
+Costa.Rica,theme,fauna,3.567880202,0.019496613
+Cuba,theme,fauna,0.011763311,0.002940828
+Ecuador,theme,fauna,3.108433737,0.011386204
+El.Salvador,theme,fauna,0.019820669,0.002477584
+Guatemala,theme,fauna,0.608287031,0.040552469
+Honduras,theme,fauna,0.010753468,0.003584489
+Jamaica,theme,fauna,0.003765745,0.003765745
+Mexico,theme,fauna,34.58791475,0.01514357
+Nicaragua,theme,fauna,0.005988024,0.005988024
+Panama,theme,fauna,2.040686158,0.01838456
+Paraguay,theme,fauna,0.146774183,0.004447703
+Peru,theme,fauna,6.641459225,0.018708336
+Uruguay,theme,fauna,4.829394581,0.032853024
+Venezuela,theme,fauna,2.30215408,0.01609898
+Argentina,theme,chemistry,94.29531598,0.05582908
+Bahamas,theme,chemistry,0.096192812,0.096192812
+Belize,theme,chemistry,3.306556582,0.045295296
+Bolivia,theme,chemistry,7.337389174,0.030959448
+Brazil,theme,chemistry,278.5636864,0.049557674
+Chile,theme,chemistry,46.14159396,0.043284797
+Colombia,theme,chemistry,15.6817681,0.0426135
+Costa.Rica,theme,chemistry,6.196918352,0.033862942
+Cuba,theme,chemistry,0.225239972,0.056309993
+Ecuador,theme,chemistry,8.019396851,0.02937508
+El.Salvador,theme,chemistry,0.423353862,0.052919233
+Guatemala,theme,chemistry,0.532816856,0.035521124
+Honduras,theme,chemistry,0.019037761,0.00634592
+Jamaica,theme,chemistry,0.003895598,0.003895598
+Mexico,theme,chemistry,106.5694969,0.046659149
+Nicaragua,theme,chemistry,0.015397776,0.015397776
+Panama,theme,chemistry,3.572069597,0.032180807
+Paraguay,theme,chemistry,1.667436416,0.050528376
+Peru,theme,chemistry,14.61489395,0.041168715
+Uruguay,theme,chemistry,5.10579115,0.034733273
+Venezuela,theme,chemistry,12.02282932,0.084075729
+Argentina,theme,fish,17.94228056,0.01062302
+Bahamas,theme,fish,0.001599659,0.001599659
+Belize,theme,fish,0.840052952,0.011507575
+Bolivia,theme,fish,1.201423718,0.005069298
+Brazil,theme,fish,79.62604948,0.014165816
+Chile,theme,fish,10.52147724,0.009870054
+Colombia,theme,fish,3.65461302,0.009931014
+Costa.Rica,theme,fish,1.189793132,0.006501602
+Cuba,theme,fish,0.020854985,0.005213746
+Ecuador,theme,fish,1.098291367,0.004023045
+El.Salvador,theme,fish,0.003028011,0.000378501
+Guatemala,theme,fish,0.006635139,0.000442343
+Honduras,theme,fish,0.004347806,0.001449269
+Jamaica,theme,fish,0.004544864,0.004544864
+Mexico,theme,fish,20.21550809,0.008850923
+Nicaragua,theme,fish,0.052181352,0.052181352
+Panama,theme,fish,0.239039963,0.002153513
+Paraguay,theme,fish,0.18271277,0.005536751
+Peru,theme,fish,1.749192973,0.004927304
+Uruguay,theme,fish,3.589684941,0.024419625
+Venezuela,theme,fish,1.917285334,0.01340759
+Argentina,theme,biology,27.13542361,0.01606597
+Bahamas,theme,biology,0.013757065,0.013757065
+Belize,theme,biology,1.158679567,0.015872323
+Bolivia,theme,biology,0.63182448,0.002665926
+Brazil,theme,biology,54.14096055,0.009631909
+Chile,theme,biology,16.25721963,0.015250675
+Colombia,theme,biology,2.037863778,0.005537673
+Costa.Rica,theme,biology,1.633625987,0.008926918
+Cuba,theme,biology,0.008804856,0.002201214
+Ecuador,theme,biology,0.763667019,0.002797315
+El.Salvador,theme,biology,0.004955612,0.000619451
+Guatemala,theme,biology,0.025087157,0.001672477
+Honduras,theme,biology,0.001806605,0.000602202
+Jamaica,theme,biology,0.000129853,0.000129853
+Mexico,theme,biology,17.67213798,0.007737363
+Nicaragua,theme,biology,0.002566296,0.002566296
+Panama,theme,biology,0.15387595,0.00138627
+Paraguay,theme,biology,0.243652176,0.007383399
+Peru,theme,biology,2.734878203,0.007703882
+Uruguay,theme,biology,2.292001361,0.015591846
+Venezuela,theme,biology,0.589498106,0.004122364
+Argentina,theme,microbiology,68.80698588,0.040738298
+Bahamas,theme,microbiology,0.407166471,0.407166471
+Belize,theme,microbiology,2.76327141,0.037853033
+Bolivia,theme,microbiology,3.657268175,0.015431511
+Brazil,theme,microbiology,209.8891811,0.037340185
+Chile,theme,microbiology,27.29860959,0.025608452
+Colombia,theme,microbiology,11.13359049,0.030254322
+Costa.Rica,theme,microbiology,3.213940758,0.017562518
+Cuba,theme,microbiology,0.395911764,0.098977941
+Ecuador,theme,microbiology,3.291897507,0.012058233
+El.Salvador,theme,microbiology,0.064792486,0.008099061
+Guatemala,theme,microbiology,0.362189363,0.024145958
+Honduras,theme,microbiology,0.003927686,0.001309229
+Jamaica,theme,microbiology,0.003116478,0.003116478
+Mexico,theme,microbiology,72.60752011,0.031789632
+Nicaragua,theme,microbiology,0.010265184,0.010265184
+Panama,theme,microbiology,2.426912937,0.021864081
+Paraguay,theme,microbiology,0.273831235,0.008297916
+Peru,theme,microbiology,7.503136305,0.021135595
+Uruguay,theme,microbiology,7.194000722,0.04893878
+Venezuela,theme,microbiology,5.140702252,0.035948967
+Argentina,theme,geology,62.12952706,0.0367848
+Bahamas,theme,geology,0.144395862,0.144395862
+Belize,theme,geology,1.556855073,0.021326782
+Bolivia,theme,geology,9.978311123,0.042102579
+Brazil,theme,geology,133.5355743,0.023756551
+Chile,theme,geology,41.00373301,0.03846504
+Colombia,theme,geology,11.67714408,0.03173137
+Costa.Rica,theme,geology,6.18401554,0.033792435
+Cuba,theme,geology,0.033335584,0.008333896
+Ecuador,theme,geology,8.792135386,0.032205624
+El.Salvador,theme,geology,1.857350896,0.232168862
+Guatemala,theme,geology,1.317765411,0.087851027
+Honduras,theme,geology,0.008344084,0.002781361
+Jamaica,theme,geology,0.003116478,0.003116478
+Mexico,theme,geology,113.7243532,0.049791748
+Nicaragua,theme,geology,0.005132592,0.005132592
+Panama,theme,geology,2.475395802,0.022300863
+Paraguay,theme,geology,0.983529783,0.029803933
+Peru,theme,geology,11.65077148,0.032819075
+Uruguay,theme,geology,4.108782454,0.027950901
+Venezuela,theme,geology,4.795574386,0.033535485
+Argentina,theme,methods,367.8083742,0.217766947
+Bahamas,theme,methods,0.101738296,0.101738296
+Belize,theme,methods,13.62480081,0.186641107
+Bolivia,theme,methods,44.54712175,0.187962539
+Brazil,theme,methods,1202.355609,0.213904218
+Chile,theme,methods,248.213606,0.232845784
+Colombia,theme,methods,76.64505826,0.208274615
+Costa.Rica,theme,methods,39.59831287,0.216384223
+Cuba,theme,methods,1.417517273,0.354379318
+Ecuador,theme,methods,58.95407295,0.215948985
+El.Salvador,theme,methods,2.145073228,0.268134153
+Guatemala,theme,methods,3.869757816,0.257983854
+Honduras,theme,methods,0.883642597,0.294547532
+Jamaica,theme,methods,0.333722893,0.333722893
+Mexico,theme,methods,476.7327964,0.208727144
+Nicaragua,theme,methods,0.391787853,0.391787853
+Panama,theme,methods,24.74267663,0.222906997
+Paraguay,theme,methods,7.126903138,0.215966762
+Peru,theme,methods,80.55205635,0.226907201
+Uruguay,theme,methods,32.73201418,0.222666763
+Venezuela,theme,methods,27.08104306,0.189377924
+Argentina,theme,watershed,17.8369615,0.010560664
+Bahamas,theme,watershed,0.001066439,0.001066439
+Belize,theme,watershed,0.808893259,0.01108073
+Bolivia,theme,watershed,2.88696324,0.012181279
+Brazil,theme,watershed,92.35095047,0.01642963
+Chile,theme,watershed,18.3924947,0.017253747
+Colombia,theme,watershed,5.783089697,0.015714918
+Costa.Rica,theme,watershed,6.013880767,0.032862736
+Cuba,theme,watershed,0.030583708,0.007645927
+Ecuador,theme,watershed,11.87958015,0.043514946
+El.Salvador,theme,watershed,0.321412213,0.040176527
+Guatemala,theme,watershed,0.246057223,0.016403815
+Honduras,theme,watershed,0.053307963,0.017769321
+Jamaica,theme,watershed,0.000259707,0.000259707
+Mexico,theme,watershed,30.37458369,0.013298855
+Nicaragua,theme,watershed,0.00855432,0.00855432
+Panama,theme,watershed,5.760950604,0.051900456
+Paraguay,theme,watershed,0.379944243,0.011513462
+Peru,theme,watershed,6.373621097,0.017953862
+Uruguay,theme,watershed,2.558814823,0.017406904
+Venezuela,theme,watershed,1.6431956,0.011490878
+Argentina,theme,water resources management,69.61637826,0.041217512
+Bahamas,theme,water resources management,0.005758771,0.005758771
+Belize,theme,water resources management,3.022762521,0.041407706
+Bolivia,theme,water resources management,18.11627042,0.07643996
+Brazil,theme,water resources management,323.0409263,0.057470366
+Chile,theme,water resources management,64.25815656,0.060279697
+Colombia,theme,water resources management,29.11312446,0.079111751
+Costa.Rica,theme,water resources management,10.54121178,0.05760225
+Cuba,theme,water resources management,0.178737421,0.044684355
+Ecuador,theme,water resources management,19.6793772,0.072085631
+El.Salvador,theme,water resources management,0.281890045,0.035236256
+Guatemala,theme,water resources management,0.659182852,0.043945523
+Honduras,theme,water resources management,0.031465439,0.01048848
+Jamaica,theme,water resources management,0.03895598,0.03895598
+Mexico,theme,water resources management,146.3086795,0.064058091
+Nicaragua,theme,water resources management,0.018819504,0.018819504
+Panama,theme,water resources management,3.281836843,0.029566098
+Paraguay,theme,water resources management,2.833118416,0.085852073
+Peru,theme,water resources management,24.34651274,0.068581726
+Uruguay,theme,water resources management,5.982519706,0.040697413
+Venezuela,theme,water resources management,6.120689856,0.042802027
+Argentina,theme,oceans,18.91437485,0.011198564
+Bahamas,theme,oceans,0.000319932,0.000319932
+Belize,theme,oceans,0.769733211,0.010544291
+Bolivia,theme,oceans,4.371004558,0.018443057
+Brazil,theme,oceans,53.31388928,0.009484769
+Chile,theme,oceans,19.80094912,0.018574999
+Colombia,theme,oceans,4.781524116,0.012993272
+Costa.Rica,theme,oceans,2.471571414,0.013505855
+Cuba,theme,oceans,0.016893687,0.004223422
+Ecuador,theme,oceans,3.806117752,0.013941823
+El.Salvador,theme,oceans,0.042626946,0.005328368
+Guatemala,theme,oceans,0.298653689,0.019910246
+Honduras,theme,oceans,0.035024802,0.011674934
+Jamaica,theme,oceans,0.016491365,0.016491365
+Mexico,theme,oceans,24.39417522,0.010680462
+Nicaragua,theme,oceans,0.000855432,0.000855432
+Panama,theme,oceans,3.104704702,0.027970313
+Paraguay,theme,oceans,0.322019899,0.009758179
+Peru,theme,oceans,12.90606024,0.036355099
+Uruguay,theme,oceans,2.801031823,0.019054638
+Venezuela,theme,oceans,1.251383901,0.008750936
+Argentina,theme,agriculture,49.05314718,0.029042716
+Bahamas,theme,agriculture,0.002879386,0.002879386
+Belize,theme,agriculture,0.740381639,0.010142214
+Bolivia,theme,agriculture,5.595711902,0.023610599
+Brazil,theme,agriculture,163.9115319,0.029160564
+Chile,theme,agriculture,17.88130981,0.016774212
+Colombia,theme,agriculture,8.871819266,0.024108205
+Costa.Rica,theme,agriculture,4.970434168,0.027160842
+Cuba,theme,agriculture,0.015397858,0.003849465
+Ecuador,theme,agriculture,3.702009998,0.013560476
+El.Salvador,theme,agriculture,0.233240586,0.029155073
+Guatemala,theme,agriculture,0.121727286,0.008115152
+Honduras,theme,agriculture,0.099522876,0.033174292
+Jamaica,theme,agriculture,0.00038956,0.00038956
+Mexico,theme,agriculture,35.01989075,0.015332702
+Nicaragua,theme,agriculture,0.00427716,0.00427716
+Panama,theme,agriculture,0.463553166,0.004176155
+Paraguay,theme,agriculture,0.336649533,0.010201501
+Peru,theme,agriculture,3.662125585,0.010315847
+Uruguay,theme,agriculture,3.492688417,0.023759785
+Venezuela,theme,agriculture,2.359131773,0.016497425
+Argentina,theme,groundwater,59.81161557,0.035412443
+Bahamas,theme,groundwater,0.001706303,0.001706303
+Belize,theme,groundwater,1.175204568,0.016098693
+Bolivia,theme,groundwater,5.213355194,0.021997279
+Brazil,theme,groundwater,122.0637796,0.02171567
+Chile,theme,groundwater,32.78089076,0.030751305
+Colombia,theme,groundwater,5.197200763,0.014122828
+Costa.Rica,theme,groundwater,8.224465437,0.044942434
+Cuba,theme,groundwater,0.012778629,0.003194657
+Ecuador,theme,groundwater,5.180609362,0.018976591
+El.Salvador,theme,groundwater,0.253463076,0.031682885
+Guatemala,theme,groundwater,0.429396234,0.028626416
+Honduras,theme,groundwater,0.007041732,0.002347244
+Jamaica,theme,groundwater,0.000519413,0.000519413
+Mexico,theme,groundwater,112.0199179,0.049045498
+Nicaragua,theme,groundwater,0.003421728,0.003421728
+Panama,theme,groundwater,2.006721658,0.018078573
+Paraguay,theme,groundwater,1.145708507,0.03471844
+Peru,theme,groundwater,8.726595998,0.024581961
+Uruguay,theme,groundwater,3.548215077,0.024137518
+Venezuela,theme,groundwater,1.624779657,0.011362096
+Argentina,theme,water quality,56.69692479,0.033568339
+Bahamas,theme,water quality,0.001386371,0.001386371
+Belize,theme,water quality,1.535179726,0.021029859
+Bolivia,theme,water quality,4.516064014,0.019055122
+Brazil,theme,water quality,164.0220012,0.029180217
+Chile,theme,water quality,23.15537141,0.021721737
+Colombia,theme,water quality,10.2049019,0.027730712
+Costa.Rica,theme,water quality,3.564312513,0.019477118
+Cuba,theme,water quality,0.078637677,0.019659419
+Ecuador,theme,water quality,7.527072035,0.027571692
+El.Salvador,theme,water quality,0.054219024,0.006777378
+Guatemala,theme,water quality,0.337252976,0.022483532
+Honduras,theme,water quality,0.032081657,0.010693886
+Jamaica,theme,water quality,0.000649266,0.000649266
+Mexico,theme,water quality,65.24599563,0.028566548
+Nicaragua,theme,water quality,0.007698888,0.007698888
+Panama,theme,water quality,1.75426561,0.015804195
+Paraguay,theme,water quality,0.438857436,0.01329871
+Peru,theme,water quality,5.428218126,0.015290755
+Uruguay,theme,water quality,3.594554211,0.02445275
+Venezuela,theme,water quality,2.879839063,0.020138735
+Argentina,theme,geomorphology,53.29852258,0.03155626
+Bahamas,theme,geomorphology,0.010557748,0.010557748
+Belize,theme,geomorphology,5.277140076,0.07228959
+Bolivia,theme,geomorphology,8.893685261,0.037526098
+Brazil,theme,geomorphology,130.599238,0.023234164
+Chile,theme,geomorphology,31.73827298,0.029773239
+Colombia,theme,geomorphology,8.89850162,0.024180711
+Costa.Rica,theme,geomorphology,4.493056404,0.024552221
+Cuba,theme,geomorphology,0.076108328,0.019027082
+Ecuador,theme,geomorphology,5.089592064,0.018643194
+El.Salvador,theme,geomorphology,0.283414286,0.035426786
+Guatemala,theme,geomorphology,0.899622034,0.059974802
+Honduras,theme,geomorphology,0.016109934,0.005369978
+Jamaica,theme,geomorphology,0.002986625,0.002986625
+Mexico,theme,geomorphology,60.33215609,0.02641513
+Nicaragua,theme,geomorphology,0.043627032,0.043627032
+Panama,theme,geomorphology,2.955950092,0.026630181
+Paraguay,theme,geomorphology,1.170090834,0.035457298
+Peru,theme,geomorphology,13.98211301,0.039386234
+Uruguay,theme,geomorphology,2.377736662,0.016175079
+Venezuela,theme,geomorphology,4.927804056,0.034460168
+Argentina,theme,mining,4.218709355,0.002497756
+Bahamas,theme,mining,0.000106644,0.000106644
+Belize,theme,mining,0.095293601,0.001305392
+Bolivia,theme,mining,3.393943613,0.014320437
+Brazil,theme,mining,33.29612178,0.005923523
+Chile,theme,mining,7.787732202,0.007305565
+Colombia,theme,mining,1.383557215,0.003759666
+Costa.Rica,theme,mining,0.113896999,0.000622388
+Cuba,theme,mining,0.001675793,0.000418948
+Ecuador,theme,mining,1.885950291,0.006908243
+El.Salvador,theme,mining,0.004364539,0.000545567
+Guatemala,theme,mining,0.019550886,0.001303392
+Honduras,theme,mining,0.008922495,0.002974165
+Jamaica,theme,mining,0.000129853,0.000129853
+Mexico,theme,mining,12.26174305,0.005368539
+Nicaragua,theme,mining,0.000855432,0.000855432
+Panama,theme,mining,0.052217526,0.000470428
+Paraguay,theme,mining,0.035026796,0.001061418
+Peru,theme,mining,3.290486155,0.009268975
+Uruguay,theme,mining,0.288630285,0.001963471
+Venezuela,theme,mining,1.051681462,0.007354416
+Argentina,theme,invasive aquatic species,9.884800802,0.005852458
+Bahamas,theme,invasive aquatic species,0.000106644,0.000106644
+Belize,theme,invasive aquatic species,0.531725572,0.007283912
+Bolivia,theme,invasive aquatic species,0.751847523,0.003172352
+Brazil,theme,invasive aquatic species,30.84200188,0.005486924
+Chile,theme,invasive aquatic species,5.315781486,0.004986662
+Colombia,theme,invasive aquatic species,1.155465702,0.003139852
+Costa.Rica,theme,invasive aquatic species,0.513285833,0.002804841
+Cuba,theme,invasive aquatic species,0.008002294,0.002000573
+Ecuador,theme,invasive aquatic species,1.174136826,0.004300867
+El.Salvador,theme,invasive aquatic species,0.010960837,0.001370105
+Guatemala,theme,invasive aquatic species,0.015311429,0.001020762
+Honduras,theme,invasive aquatic species,0.051317116,0.017105705
+Jamaica,theme,invasive aquatic species,0.008700169,0.008700169
+Mexico,theme,invasive aquatic species,9.50473283,0.004161442
+Nicaragua,theme,invasive aquatic species,0.002566296,0.002566296
+Panama,theme,invasive aquatic species,0.307959762,0.002774412
+Paraguay,theme,invasive aquatic species,0.360569033,0.010926334
+Peru,theme,invasive aquatic species,2.084352299,0.005871415
+Uruguay,theme,invasive aquatic species,1.709876854,0.011631815
+Venezuela,theme,invasive aquatic species,0.620767373,0.004341031
+Argentina,theme,coastal ecology,43.20024792,0.025577411
+Bahamas,theme,coastal ecology,0.001706303,0.001706303
+Belize,theme,coastal ecology,6.473721382,0.088681115
+Bolivia,theme,coastal ecology,0.78980905,0.003332528
+Brazil,theme,coastal ecology,141.3127616,0.025140146
+Chile,theme,coastal ecology,17.06791496,0.016011177
+Colombia,theme,coastal ecology,7.596805631,0.020643494
+Costa.Rica,theme,coastal ecology,2.466862828,0.013480125
+Cuba,theme,coastal ecology,0.050502331,0.012625583
+Ecuador,theme,coastal ecology,2.10465276,0.007709351
+El.Salvador,theme,coastal ecology,0.033995479,0.004249435
+Guatemala,theme,coastal ecology,0.341396115,0.022759741
+Honduras,theme,coastal ecology,0.412029359,0.13734312
+Jamaica,theme,coastal ecology,0.032463316,0.032463316
+Mexico,theme,coastal ecology,72.77746579,0.031864039
+Nicaragua,theme,coastal ecology,0.066723695,0.066723695
+Panama,theme,coastal ecology,1.553755404,0.013997796
+Paraguay,theme,coastal ecology,0.468609935,0.014200301
+Peru,theme,coastal ecology,3.695739327,0.010410533
+Uruguay,theme,coastal ecology,5.016122119,0.03412328
+Venezuela,theme,coastal ecology,3.663048722,0.025615725
+Argentina,theme,toxicology,86.31503468,0.051104224
+Bahamas,theme,toxicology,0.002239522,0.002239522
+Belize,theme,toxicology,1.710234948,0.023427876
+Bolivia,theme,toxicology,5.007135273,0.021127153
+Brazil,theme,toxicology,286.5489888,0.050978294
+Chile,theme,toxicology,35.25175528,0.033069189
+Colombia,theme,toxicology,10.38266625,0.028213767
+Costa.Rica,theme,toxicology,4.959991035,0.027103776
+Cuba,theme,toxicology,0.328227589,0.082056897
+Ecuador,theme,toxicology,3.46400745,0.012688672
+El.Salvador,theme,toxicology,0.031661783,0.003957723
+Guatemala,theme,toxicology,0.214292335,0.014286156
+Honduras,theme,toxicology,0.106276381,0.03542546
+Jamaica,theme,toxicology,0.000649266,0.000649266
+Mexico,theme,toxicology,99.42581247,0.043531442
+Nicaragua,theme,toxicology,0.103507271,0.103507271
+Panama,theme,toxicology,0.297722712,0.002682187
+Paraguay,theme,toxicology,1.124708063,0.034082063
+Peru,theme,toxicology,6.349070434,0.017884705
+Uruguay,theme,toxicology,4.751339182,0.032322035
+Venezuela,theme,toxicology,6.14341781,0.042960964
+Argentina,theme,solar radiation,14.15049529,0.008378032
+Bahamas,theme,solar radiation,0.021435427,0.021435427
+Belize,theme,solar radiation,0.347338719,0.004758065
+Bolivia,theme,solar radiation,1.750820554,0.007387428
+Brazil,theme,solar radiation,44.34052818,0.00788837
+Chile,theme,solar radiation,11.20379324,0.010510125
+Colombia,theme,solar radiation,2.191257138,0.005954503
+Costa.Rica,theme,solar radiation,1.094931037,0.00598323
+Cuba,theme,solar radiation,0.010097626,0.002524406
+Ecuador,theme,solar radiation,1.999738832,0.007325051
+El.Salvador,theme,solar radiation,0.046656246,0.005832031
+Guatemala,theme,solar radiation,0.033814084,0.002254272
+Honduras,theme,solar radiation,0.004912829,0.00163761
+Jamaica,theme,solar radiation,0.000129853,0.000129853
+Mexico,theme,solar radiation,15.60795307,0.006833605
+Nicaragua,theme,solar radiation,0.005988024,0.005988024
+Panama,theme,solar radiation,0.81715102,0.007361721
+Paraguay,theme,solar radiation,0.079656747,0.002413841
+Peru,theme,solar radiation,1.694509605,0.004773266
+Uruguay,theme,solar radiation,0.639685011,0.004351599
+Venezuela,theme,solar radiation,1.09223979,0.00763804
+Argentina,theme,marine science,15.03217177,0.008900042
+Bahamas,theme,marine science,0.007571718,0.007571718
+Belize,theme,marine science,1.223466555,0.016759816
+Bolivia,theme,marine science,0.435763893,0.001838666
+Brazil,theme,marine science,50.06503692,0.008906785
+Chile,theme,marine science,28.36307197,0.026607009
+Colombia,theme,marine science,1.893380481,0.005145056
+Costa.Rica,theme,marine science,1.690368195,0.009236985
+Cuba,theme,marine science,0.053226557,0.013306639
+Ecuador,theme,marine science,0.514583243,0.00188492
+El.Salvador,theme,marine science,0.011913914,0.001489239
+Guatemala,theme,marine science,0.025008984,0.001667266
+Honduras,theme,marine science,0.006641092,0.002213697
+Jamaica,theme,marine science,0.016231658,0.016231658
+Mexico,theme,marine science,37.29013336,0.016326678
+Nicaragua,theme,marine science,0.000855432,0.000855432
+Panama,theme,marine science,0.871713695,0.007853277
+Paraguay,theme,marine science,0.1869761,0.005665942
+Peru,theme,marine science,9.414268982,0.026519068
+Uruguay,theme,marine science,2.769920934,0.018843
+Venezuela,theme,marine science,3.214841472,0.022481409
+Argentina,theme,evolutionary ecology,69.65640249,0.041241209
+Bahamas,theme,evolutionary ecology,0.00298603,0.00298603
+Belize,theme,evolutionary ecology,2.395288293,0.032812168
+Bolivia,theme,evolutionary ecology,4.257141987,0.017962624
+Brazil,theme,evolutionary ecology,243.5507924,0.04332873
+Chile,theme,evolutionary ecology,26.20465635,0.024582229
+Colombia,theme,evolutionary ecology,10.15772798,0.027602522
+Costa.Rica,theme,evolutionary ecology,5.213829796,0.028490873
+Cuba,theme,evolutionary ecology,0.053938112,0.013484528
+Ecuador,theme,evolutionary ecology,8.114289015,0.02972267
+El.Salvador,theme,evolutionary ecology,0.017678554,0.002209819
+Guatemala,theme,evolutionary ecology,0.573829214,0.038255281
+Honduras,theme,evolutionary ecology,0.003250727,0.001083576
+Jamaica,theme,evolutionary ecology,0.000519413,0.000519413
+Mexico,theme,evolutionary ecology,53.68813193,0.023506187
+Nicaragua,theme,evolutionary ecology,0.001710864,0.001710864
+Panama,theme,evolutionary ecology,5.139085203,0.046298065
+Paraguay,theme,evolutionary ecology,1.053017742,0.031909629
+Peru,theme,evolutionary ecology,5.655992953,0.015932375
+Uruguay,theme,evolutionary ecology,8.721963181,0.059333083
+Venezuela,theme,evolutionary ecology,4.007595709,0.028025145
+Argentina,theme,salt water,7.824776087,0.004632786
+Bahamas,theme,salt water,0.019515837,0.019515837
+Belize,theme,salt water,0.48790357,0.006683611
+Bolivia,theme,salt water,0.902721078,0.00380895
+Brazil,theme,salt water,15.74132647,0.002800449
+Chile,theme,salt water,4.270330735,0.004005939
+Colombia,theme,salt water,1.102532316,0.002996012
+Costa.Rica,theme,salt water,0.19505048,0.00106585
+Cuba,theme,salt water,0.001135107,0.000283777
+Ecuador,theme,salt water,0.303749016,0.001112634
+El.Salvador,theme,salt water,0.022013179,0.002751647
+Guatemala,theme,salt water,0.01615288,0.001076859
+Honduras,theme,salt water,0.000513781,0.00017126
+Jamaica,theme,salt water,0.000649266,0.000649266
+Mexico,theme,salt water,12.42894426,0.005441744
+Nicaragua,theme,salt water,0.000855432,0.000855432
+Panama,theme,salt water,0.213097935,0.001919801
+Paraguay,theme,salt water,0.244994171,0.007424066
+Peru,theme,salt water,0.540247643,0.001521824
+Uruguay,theme,salt water,0.483132662,0.003286617
+Venezuela,theme,salt water,0.777400699,0.005436369
+Argentina,theme,soil,45.38298551,0.026869737
+Bahamas,theme,soil,0.001812947,0.001812947
+Belize,theme,soil,1.872596627,0.025652009
+Bolivia,theme,soil,3.912162481,0.016507015
+Brazil,theme,soil,139.6473832,0.024843868
+Chile,theme,soil,26.18501928,0.024563808
+Colombia,theme,soil,6.316402253,0.017164137
+Costa.Rica,theme,soil,4.864581562,0.026582413
+Cuba,theme,soil,0.014272457,0.003568114
+Ecuador,theme,soil,8.832194939,0.032352362
+El.Salvador,theme,soil,0.040871838,0.00510898
+Guatemala,theme,soil,0.135728016,0.009048534
+Honduras,theme,soil,0.017718283,0.005906094
+Jamaica,theme,soil,0.00038956,0.00038956
+Mexico,theme,soil,36.17781862,0.015839675
+Nicaragua,theme,soil,0.002566296,0.002566296
+Panama,theme,soil,3.263306952,0.029399162
+Paraguay,theme,soil,0.157534474,0.004773772
+Peru,theme,soil,3.393345394,0.009558719
+Uruguay,theme,soil,1.662843553,0.011311861
+Venezuela,theme,soil,3.628816371,0.025376338
+Argentina,theme,desalination,5.195372111,0.003076005
+Bahamas,theme,desalination,0.003945825,0.003945825
+Belize,theme,desalination,0.193349443,0.002648623
+Bolivia,theme,desalination,0.951200202,0.004013503
+Brazil,theme,desalination,56.5576421,0.010061847
+Chile,theme,desalination,7.5027508,0.007038228
+Colombia,theme,desalination,2.890433564,0.007854439
+Costa.Rica,theme,desalination,0.89542686,0.004893043
+Cuba,theme,desalination,0.065511556,0.016377889
+Ecuador,theme,desalination,2.719563619,0.009961771
+El.Salvador,theme,desalination,0.024580912,0.003072614
+Guatemala,theme,desalination,0.096242243,0.00641615
+Honduras,theme,desalination,0.004274126,0.001424709
+Jamaica,theme,desalination,0.225555123,0.225555123
+Mexico,theme,desalination,20.68440307,0.009056219
+Nicaragua,theme,desalination,0.009409752,0.009409752
+Panama,theme,desalination,0.935814929,0.008430765
+Paraguay,theme,desalination,0.324420353,0.00983092
+Peru,theme,desalination,2.093267315,0.005896528
+Uruguay,theme,desalination,0.596723678,0.004059345
+Venezuela,theme,desalination,1.24448428,0.008702687
+Argentina,theme,reservoirs,6.301453164,0.003730878
+Bahamas,theme,reservoirs,0.000106644,0.000106644
+Belize,theme,reservoirs,0.24441431,0.003348141
+Bolivia,theme,reservoirs,0.862460333,0.003639073
+Brazil,theme,reservoirs,67.10770229,0.011938748
+Chile,theme,reservoirs,3.103518657,0.002911368
+Colombia,theme,reservoirs,1.287311505,0.003498129
+Costa.Rica,theme,reservoirs,0.792280658,0.004329403
+Cuba,theme,reservoirs,0.135327144,0.033831786
+Ecuador,theme,reservoirs,1.211916448,0.004439254
+El.Salvador,theme,reservoirs,0.085929021,0.010741128
+Guatemala,theme,reservoirs,0.116420968,0.007761398
+Honduras,theme,reservoirs,0.000513781,0.00017126
+Jamaica,theme,reservoirs,0.000129853,0.000129853
+Mexico,theme,reservoirs,12.3783462,0.005419591
+Nicaragua,theme,reservoirs,0.000855432,0.000855432
+Panama,theme,reservoirs,0.237924119,0.002143461
+Paraguay,theme,reservoirs,0.146952317,0.004453101
+Peru,theme,reservoirs,1.513926867,0.004264583
+Uruguay,theme,reservoirs,0.842033932,0.005728122
+Venezuela,theme,reservoirs,0.637058327,0.004454953
+Argentina,theme,fuel,9.930232279,0.005879356
+Bahamas,theme,fuel,0.001173083,0.001173083
+Belize,theme,fuel,0.358437085,0.004910097
+Bolivia,theme,fuel,1.632524536,0.006888289
+Brazil,theme,fuel,73.01222805,0.012989188
+Chile,theme,fuel,10.46298173,0.00981518
+Colombia,theme,fuel,5.744749318,0.015610732
+Costa.Rica,theme,fuel,1.385827826,0.00757283
+Cuba,theme,fuel,0.033279262,0.008319815
+Ecuador,theme,fuel,2.075064425,0.007600969
+El.Salvador,theme,fuel,0.039929468,0.004991183
+Guatemala,theme,fuel,0.058555094,0.003903673
+Honduras,theme,fuel,0.005566951,0.00185565
+Jamaica,theme,fuel,0.101675107,0.101675107
+Mexico,theme,fuel,28.05043367,0.012281276
+Nicaragua,theme,fuel,0.005988024,0.005988024
+Panama,theme,fuel,0.4975042,0.00448202
+Paraguay,theme,fuel,0.706295083,0.021402881
+Peru,theme,fuel,5.844928754,0.016464588
+Uruguay,theme,fuel,2.681123701,0.018238937
+Venezuela,theme,fuel,2.005982143,0.014027847
+Argentina,theme,irrigation,12.62964989,0.00747759
+Bahamas,theme,irrigation,0.000319932,0.000319932
+Belize,theme,irrigation,0.324237579,0.004441611
+Bolivia,theme,irrigation,2.911476111,0.012284709
+Brazil,theme,irrigation,70.33452247,0.012512813
+Chile,theme,irrigation,17.31110808,0.016239313
+Colombia,theme,irrigation,1.473051766,0.004002858
+Costa.Rica,theme,irrigation,0.460098999,0.002514202
+Cuba,theme,irrigation,0.013867396,0.003466849
+Ecuador,theme,irrigation,2.216254606,0.008118149
+El.Salvador,theme,irrigation,0.255258832,0.031907354
+Guatemala,theme,irrigation,0.013116086,0.000874406
+Honduras,theme,irrigation,0.074021572,0.024673857
+Jamaica,theme,irrigation,0.000129853,0.000129853
+Mexico,theme,irrigation,22.0454156,0.009652108
+Nicaragua,theme,irrigation,0.000855432,0.000855432
+Panama,theme,irrigation,0.339279978,0.003056576
+Paraguay,theme,irrigation,0.044622728,0.001352204
+Peru,theme,irrigation,3.183213412,0.008966798
+Uruguay,theme,irrigation,1.919877343,0.01306039
+Venezuela,theme,irrigation,1.094414971,0.007653252
+Argentina,theme,water governance,9.165697033,0.0054267
+Bahamas,theme,water governance,0.001386371,0.001386371
+Belize,theme,water governance,0.924995848,0.012671176
+Bolivia,theme,water governance,17.44451621,0.073605554
+Brazil,theme,water governance,42.18985788,0.007505757
+Chile,theme,water governance,15.38210336,0.01442974
+Colombia,theme,water governance,9.133338427,0.024818854
+Costa.Rica,theme,water governance,3.700053922,0.020218874
+Cuba,theme,water governance,0.002757167,0.000689292
+Ecuador,theme,water governance,13.41988222,0.049157078
+El.Salvador,theme,water governance,0.009602607,0.001200326
+Guatemala,theme,water governance,0.069142813,0.004609521
+Honduras,theme,water governance,0.17662676,0.058875587
+Jamaica,theme,water governance,0.035449942,0.035449942
+Mexico,theme,water governance,34.42902409,0.015074004
+Nicaragua,theme,water governance,0.002566296,0.002566296
+Panama,theme,water governance,0.307518621,0.002770438
+Paraguay,theme,water governance,2.259415633,0.06846714
+Peru,theme,water governance,16.03617144,0.045172314
+Uruguay,theme,water governance,0.643870307,0.00438007
+Venezuela,theme,water governance,1.243270731,0.008694201
+Argentina,theme,island and extreme weather,2.949252915,0.001746153
+Bahamas,theme,island and extreme weather,0.001812947,0.001812947
+Belize,theme,island and extreme weather,0.387985507,0.00531487
+Bolivia,theme,island and extreme weather,0.208880322,0.000881352
+Brazil,theme,island and extreme weather,8.259912135,0.001469474
+Chile,theme,island and extreme weather,1.648848881,0.001546763
+Colombia,theme,island and extreme weather,0.737791136,0.002004867
+Costa.Rica,theme,island and extreme weather,0.309510553,0.001691314
+Cuba,theme,island and extreme weather,0.005195562,0.001298891
+Ecuador,theme,island and extreme weather,0.406977573,0.00149076
+El.Salvador,theme,island and extreme weather,0.028928262,0.003616033
+Guatemala,theme,island and extreme weather,0.016774573,0.001118305
+Honduras,theme,island and extreme weather,0.03659595,0.01219865
+Jamaica,theme,island and extreme weather,0.014673419,0.014673419
+Mexico,theme,island and extreme weather,6.510247752,0.002850371
+Nicaragua,theme,island and extreme weather,0.000855432,0.000855432
+Panama,theme,island and extreme weather,0.334690176,0.003015227
+Paraguay,theme,island and extreme weather,0.032790465,0.00099365
+Peru,theme,island and extreme weather,0.444120877,0.001251045
+Uruguay,theme,island and extreme weather,0.09733125,0.000662117
+Venezuela,theme,island and extreme weather,0.231717283,0.001620401
+Argentina,theme,land use and cover change,23.51227687,0.013920827
+Bahamas,theme,land use and cover change,0.000106644,0.000106644
+Belize,theme,land use and cover change,1.098363126,0.01504607
+Bolivia,theme,land use and cover change,2.205775109,0.009307068
+Brazil,theme,land use and cover change,72.8000052,0.012951433
+Chile,theme,land use and cover change,11.50804336,0.010795538
+Colombia,theme,land use and cover change,4.845179241,0.013166248
+Costa.Rica,theme,land use and cover change,2.744113692,0.014995157
+Cuba,theme,land use and cover change,0.003842077,0.000960519
+Ecuador,theme,land use and cover change,7.863436963,0.028803798
+El.Salvador,theme,land use and cover change,0.179978144,0.022497268
+Guatemala,theme,land use and cover change,0.319126224,0.021275082
+Honduras,theme,land use and cover change,0.009507223,0.003169074
+Jamaica,theme,land use and cover change,0.000649266,0.000649266
+Mexico,theme,land use and cover change,20.19240185,0.008840806
+Nicaragua,theme,land use and cover change,0.000855432,0.000855432
+Panama,theme,land use and cover change,2.224644707,0.020041844
+Paraguay,theme,land use and cover change,0.150468861,0.004559662
+Peru,theme,land use and cover change,3.296268969,0.009285265
+Uruguay,theme,land use and cover change,2.107261012,0.014335109
+Venezuela,theme,land use and cover change,1.751154222,0.012245834
+Argentina,theme,canopy interception,4.336523174,0.002567509
+Bahamas,theme,canopy interception,0.000959795,0.000959795
+Belize,theme,canopy interception,0.207984223,0.002849099
+Bolivia,theme,canopy interception,0.394440686,0.001664307
+Brazil,theme,canopy interception,31.28406112,0.005565569
+Chile,theme,canopy interception,10.42339909,0.009778048
+Colombia,theme,canopy interception,4.375628649,0.011890295
+Costa.Rica,theme,canopy interception,5.271079977,0.028803716
+Cuba,theme,canopy interception,0.002893433,0.000723358
+Ecuador,theme,canopy interception,7.376987563,0.027021932
+El.Salvador,theme,canopy interception,0.04898091,0.006122614
+Guatemala,theme,canopy interception,0.034826705,0.00232178
+Honduras,theme,canopy interception,0.019331775,0.006443925
+Jamaica,theme,canopy interception,0.00038956,0.00038956
+Mexico,theme,canopy interception,18.4539057,0.008079643
+Nicaragua,theme,canopy interception,0.000855432,0.000855432
+Panama,theme,canopy interception,3.214799358,0.028962156
+Paraguay,theme,canopy interception,0.039363731,0.00119284
+Peru,theme,canopy interception,2.104545692,0.005928298
+Uruguay,theme,canopy interception,0.40282446,0.002740302
+Venezuela,theme,canopy interception,3.299445007,0.023073042
+Argentina,theme,lakes,32.12951493,0.019022803
+Bahamas,theme,lakes,0.104830969,0.104830969
+Belize,theme,lakes,0.589064541,0.008069377
+Bolivia,theme,lakes,4.222178793,0.0178151
+Brazil,theme,lakes,49.15548194,0.008744971
+Chile,theme,lakes,5.557719069,0.00521362
+Colombia,theme,lakes,1.947748543,0.005292795
+Costa.Rica,theme,lakes,0.785276975,0.004291131
+Cuba,theme,lakes,0.028093185,0.007023296
+Ecuador,theme,lakes,2.138664503,0.007833936
+El.Salvador,theme,lakes,0.003969059,0.000496132
+Guatemala,theme,lakes,0.350990764,0.023399384
+Honduras,theme,lakes,0.003560338,0.001186779
+Jamaica,theme,lakes,0.000129853,0.000129853
+Mexico,theme,lakes,17.31808414,0.007582349
+Nicaragua,theme,lakes,0.071000855,0.071000855
+Panama,theme,lakes,0.344170541,0.003100636
+Paraguay,theme,lakes,0.188375931,0.005708362
+Peru,theme,lakes,2.971494569,0.008370407
+Uruguay,theme,lakes,3.242306575,0.022056507
+Venezuela,theme,lakes,2.724277241,0.01905089
+Argentina,theme,atmosphere,11.09460993,0.006568745
+Bahamas,theme,atmosphere,0.001279727,0.001279727
+Belize,theme,atmosphere,0.686782568,0.00940798
+Bolivia,theme,atmosphere,2.339639716,0.009871898
+Brazil,theme,atmosphere,54.92196207,0.009770853
+Chile,theme,atmosphere,9.225092874,0.008653933
+Colombia,theme,atmosphere,3.097883739,0.008418162
+Costa.Rica,theme,atmosphere,2.172241384,0.011870171
+Cuba,theme,atmosphere,0.016336824,0.004084206
+Ecuador,theme,atmosphere,2.261448316,0.008283693
+El.Salvador,theme,atmosphere,0.024924597,0.003115575
+Guatemala,theme,atmosphere,0.09105492,0.006070328
+Honduras,theme,atmosphere,0.00674794,0.002249313
+Jamaica,theme,atmosphere,0.000259707,0.000259707
+Mexico,theme,atmosphere,15.66591951,0.006858984
+Nicaragua,theme,atmosphere,0.001710864,0.001710864
+Panama,theme,atmosphere,1.256741915,0.011321999
+Paraguay,theme,atmosphere,0.135829176,0.004116036
+Peru,theme,atmosphere,3.994540474,0.011252227
+Uruguay,theme,atmosphere,1.206691869,0.008208788
+Venezuela,theme,atmosphere,1.926119141,0.013469365
+Argentina,theme,waste water,11.84350036,0.007012138
+Bahamas,theme,waste water,0.000319932,0.000319932
+Belize,theme,waste water,0.238328423,0.003264773
+Bolivia,theme,waste water,3.14034731,0.013250411
+Brazil,theme,waste water,134.5765673,0.023941748
+Chile,theme,waste water,9.01216156,0.008454185
+Colombia,theme,waste water,11.64627731,0.031647493
+Costa.Rica,theme,waste water,1.118321714,0.006111048
+Cuba,theme,waste water,0.340242395,0.085060599
+Ecuador,theme,waste water,2.765272611,0.010129204
+El.Salvador,theme,waste water,0.311508398,0.03893855
+Guatemala,theme,waste water,0.086758949,0.00578393
+Honduras,theme,waste water,0.00400816,0.001336053
+Jamaica,theme,waste water,0.000129853,0.000129853
+Mexico,theme,waste water,43.23974183,0.018931586
+Nicaragua,theme,waste water,0.00427716,0.00427716
+Panama,theme,waste water,0.112531441,0.001013797
+Paraguay,theme,waste water,0.286182013,0.008672182
+Peru,theme,waste water,0.939199667,0.002645633
+Uruguay,theme,waste water,1.155562152,0.007860967
+Venezuela,theme,waste water,1.530115506,0.010700108
+Argentina,theme,agricultural economics,8.31503627,0.004923053
+Bahamas,theme,agricultural economics,0.000959795,0.000959795
+Belize,theme,agricultural economics,0.272858663,0.00373779
+Bolivia,theme,agricultural economics,2.935579994,0.012386413
+Brazil,theme,agricultural economics,34.34721567,0.006110517
+Chile,theme,agricultural economics,20.78399988,0.019497186
+Colombia,theme,agricultural economics,7.416661598,0.020153972
+Costa.Rica,theme,agricultural economics,2.039252174,0.011143455
+Cuba,theme,agricultural economics,0.008568234,0.002142059
+Ecuador,theme,agricultural economics,7.033530517,0.025763848
+El.Salvador,theme,agricultural economics,0.019607016,0.002450877
+Guatemala,theme,agricultural economics,0.017384736,0.001158982
+Honduras,theme,agricultural economics,0.062272544,0.020757515
+Jamaica,theme,agricultural economics,0.020386963,0.020386963
+Mexico,theme,agricultural economics,36.62995898,0.016037635
+Nicaragua,theme,agricultural economics,0.000855432,0.000855432
+Panama,theme,agricultural economics,1.058553326,0.009536516
+Paraguay,theme,agricultural economics,0.294665179,0.008929248
+Peru,theme,agricultural economics,5.779848391,0.016281263
+Uruguay,theme,agricultural economics,0.602336931,0.00409753
+Venezuela,theme,agricultural economics,0.585076462,0.004091444
+Argentina,theme,surface water management,7.516774602,0.004450429
+Bahamas,theme,surface water management,0.000106644,0.000106644
+Belize,theme,surface water management,0.273332096,0.003744275
+Bolivia,theme,surface water management,1.054959642,0.004451307
+Brazil,theme,surface water management,23.79728892,0.00423364
+Chile,theme,surface water management,5.864811971,0.0055017
+Colombia,theme,surface water management,2.122630723,0.005768018
+Costa.Rica,theme,surface water management,1.243189611,0.006793386
+Cuba,theme,surface water management,0.026258965,0.006564741
+Ecuador,theme,surface water management,2.005752788,0.00734708
+El.Salvador,theme,surface water management,0.075331274,0.009416409
+Guatemala,theme,surface water management,0.057052229,0.003803482
+Honduras,theme,surface water management,0.000513781,0.00017126
+Jamaica,theme,surface water management,0.000129853,0.000129853
+Mexico,theme,surface water management,19.92900962,0.008725486
+Nicaragua,theme,surface water management,0.009409752,0.009409752
+Panama,theme,surface water management,1.376746726,0.012403124
+Paraguay,theme,surface water management,0.152778294,0.004629645
+Peru,theme,surface water management,2.628566837,0.007404414
+Uruguay,theme,surface water management,0.71523196,0.004865524
+Venezuela,theme,surface water management,0.387498317,0.002709778
+Argentina,theme,glaciers,7.766467502,0.004598264
+Bahamas,theme,glaciers,0.000106644,0.000106644
+Belize,theme,glaciers,0.041342681,0.000566338
+Bolivia,theme,glaciers,6.008824607,0.02535369
+Brazil,theme,glaciers,5.201195801,0.000925315
+Chile,theme,glaciers,12.19533997,0.011440281
+Colombia,theme,glaciers,0.680606808,0.001849475
+Costa.Rica,theme,glaciers,0.354558686,0.001937479
+Cuba,theme,glaciers,0.004919913,0.001229978
+Ecuador,theme,glaciers,1.594704956,0.00584141
+El.Salvador,theme,glaciers,0.004932278,0.000616535
+Guatemala,theme,glaciers,0.05341819,0.003561213
+Honduras,theme,glaciers,0.002868161,0.000956054
+Jamaica,theme,glaciers,0.000129853,0.000129853
+Mexico,theme,glaciers,2.392958042,0.001047705
+Nicaragua,theme,glaciers,0.000855432,0.000855432
+Panama,theme,glaciers,0.163009957,0.001468558
+Paraguay,theme,glaciers,0.026763879,0.000811027
+Peru,theme,glaciers,8.398456143,0.023657623
+Uruguay,theme,glaciers,0.096011369,0.000653139
+Venezuela,theme,glaciers,0.189372321,0.001324282
+Argentina,theme,basin,6.675774287,0.003952501
+Bahamas,theme,basin,0.002879386,0.002879386
+Belize,theme,basin,0.14180396,0.00194252
+Bolivia,theme,basin,1.999066764,0.008434881
+Brazil,theme,basin,25.06101881,0.004458463
+Chile,theme,basin,5.165725885,0.004845897
+Colombia,theme,basin,1.430520546,0.003887284
+Costa.Rica,theme,basin,0.655368541,0.003581249
+Cuba,theme,basin,0.01444797,0.003611992
+Ecuador,theme,basin,1.046414127,0.003833019
+El.Salvador,theme,basin,0.010878064,0.001359758
+Guatemala,theme,basin,0.027863291,0.001857553
+Honduras,theme,basin,0.001101843,0.000367281
+Jamaica,theme,basin,0.000649266,0.000649266
+Mexico,theme,basin,10.02558087,0.004389484
+Nicaragua,theme,basin,0.00427716,0.00427716
+Panama,theme,basin,0.261235607,0.002353474
+Paraguay,theme,basin,0.466443828,0.014134661
+Peru,theme,basin,1.73495569,0.004887199
+Uruguay,theme,basin,0.84114569,0.00572208
+Venezuela,theme,basin,0.94928912,0.006638385
+Argentina,theme,water policy,15.95600757,0.009447015
+Bahamas,theme,water policy,0.000959795,0.000959795
+Belize,theme,water policy,1.8285209,0.025048232
+Bolivia,theme,water policy,5.746916155,0.024248591
+Brazil,theme,water policy,80.64654579,0.014347366
+Chile,theme,water policy,16.03767746,0.015044726
+Colombia,theme,water policy,9.183473128,0.02495509
+Costa.Rica,theme,water policy,3.472237763,0.018973977
+Cuba,theme,water policy,0.01788781,0.004471952
+Ecuador,theme,water policy,6.936020257,0.025406668
+El.Salvador,theme,water policy,0.026570994,0.003321374
+Guatemala,theme,water policy,0.16288251,0.010858834
+Honduras,theme,water policy,0.15972625,0.053242083
+Jamaica,theme,water policy,0.112063368,0.112063368
+Mexico,theme,water policy,66.95181144,0.029313403
+Nicaragua,theme,water policy,0.000855432,0.000855432
+Panama,theme,water policy,0.943874775,0.008503376
+Paraguay,theme,water policy,1.48751367,0.045076172
+Peru,theme,water policy,8.395038805,0.023647997
+Uruguay,theme,water policy,1.475976748,0.010040658
+Venezuela,theme,water policy,1.704777091,0.011921518
+Argentina,theme,food science,8.571117686,0.00507467
+Bahamas,theme,food science,0.00053322,0.00053322
+Belize,theme,food science,0.371016161,0.005082413
+Bolivia,theme,food science,0.646789844,0.002729071
+Brazil,theme,food science,31.33042842,0.005573818
+Chile,theme,food science,4.49035921,0.004212344
+Colombia,theme,food science,2.06873005,0.005621549
+Costa.Rica,theme,food science,0.249850378,0.001365303
+Cuba,theme,food science,0.00221648,0.00055412
+Ecuador,theme,food science,0.924208598,0.003385379
+El.Salvador,theme,food science,0.003007449,0.000375931
+Guatemala,theme,food science,0.01051572,0.000701048
+Honduras,theme,food science,0.001252538,0.000417513
+Jamaica,theme,food science,0.000649266,0.000649266
+Mexico,theme,food science,8.471359048,0.003709001
+Nicaragua,theme,food science,0.089820359,0.089820359
+Panama,theme,food science,0.117377962,0.001057459
+Paraguay,theme,food science,0.016788764,0.00050875
+Peru,theme,food science,0.934453872,0.002632264
+Uruguay,theme,food science,0.587411603,0.003995997
+Venezuela,theme,food science,0.577116695,0.004035781
+Argentina,theme,rivers,30.27351659,0.017923929
+Bahamas,theme,rivers,0.000106644,0.000106644
+Belize,theme,rivers,0.766214787,0.010496093
+Bolivia,theme,rivers,5.017125464,0.021169306
+Brazil,theme,rivers,85.52600019,0.015215442
+Chile,theme,rivers,12.48106482,0.011708316
+Colombia,theme,rivers,5.754917449,0.015638363
+Costa.Rica,theme,rivers,1.624668795,0.008877972
+Cuba,theme,rivers,0.064851757,0.016212939
+Ecuador,theme,rivers,2.540925834,0.009307421
+El.Salvador,theme,rivers,0.042323692,0.005290461
+Guatemala,theme,rivers,0.069780837,0.004652056
+Honduras,theme,rivers,0.007947706,0.002649235
+Jamaica,theme,rivers,0.000129853,0.000129853
+Mexico,theme,rivers,25.60979031,0.011212693
+Nicaragua,theme,rivers,0.000855432,0.000855432
+Panama,theme,rivers,0.65886665,0.005935736
+Paraguay,theme,rivers,1.640293464,0.049705863
+Peru,theme,rivers,5.659113578,0.015941165
+Uruguay,theme,rivers,2.710655006,0.01843983
+Venezuela,theme,rivers,2.706078595,0.018923627
+Argentina,theme,amazon floods,11.5286296,0.006825713
+Bahamas,theme,amazon floods,0.000319932,0.000319932
+Belize,theme,amazon floods,0.304317046,0.004168727
+Bolivia,theme,amazon floods,4.05993884,0.017130544
+Brazil,theme,amazon floods,53.23445802,0.009470638
+Chile,theme,amazon floods,1.955160531,0.001834109
+Colombia,theme,amazon floods,2.998529953,0.008148179
+Costa.Rica,theme,amazon floods,0.476345706,0.002602982
+Cuba,theme,amazon floods,0.003286995,0.000821749
+Ecuador,theme,amazon floods,0.676381902,0.002477589
+El.Salvador,theme,amazon floods,0.059753686,0.007469211
+Guatemala,theme,amazon floods,0.070899372,0.004726625
+Honduras,theme,amazon floods,0.003042396,0.001014132
+Jamaica,theme,amazon floods,0.000129853,0.000129853
+Mexico,theme,amazon floods,6.379470006,0.002793113
+Nicaragua,theme,amazon floods,0.000855432,0.000855432
+Panama,theme,amazon floods,0.143147272,0.001289615
+Paraguay,theme,amazon floods,0.869234616,0.026340443
+Peru,theme,amazon floods,3.595635473,0.010128551
+Uruguay,theme,amazon floods,0.517329884,0.003519251
+Venezuela,theme,amazon floods,1.901670169,0.013298393
+Argentina,theme,forests,14.57707004,0.008630592
+Bahamas,theme,forests,0.000106644,0.000106644
+Belize,theme,forests,1.016040811,0.013918367
+Bolivia,theme,forests,3.498359571,0.014761011
+Brazil,theme,forests,56.25748143,0.010008447
+Chile,theme,forests,13.85891198,0.013000856
+Colombia,theme,forests,3.145918646,0.008548692
+Costa.Rica,theme,forests,4.196250175,0.022930329
+Cuba,theme,forests,0.007147334,0.001786833
+Ecuador,theme,forests,5.087781525,0.018636562
+El.Salvador,theme,forests,0.029425265,0.003678158
+Guatemala,theme,forests,0.452119223,0.030141282
+Honduras,theme,forests,0.082254445,0.027418148
+Jamaica,theme,forests,0.000129853,0.000129853
+Mexico,theme,forests,18.65105886,0.008165963
+Nicaragua,theme,forests,0.005988024,0.005988024
+Panama,theme,forests,8.917144191,0.080334632
+Paraguay,theme,forests,0.066878674,0.002026626
+Peru,theme,forests,3.239231489,0.009124596
+Uruguay,theme,forests,1.482115225,0.010082416
+Venezuela,theme,forests,2.108761034,0.014746581
+Argentina,theme,ecosystem management,12.13612935,0.007185393
+Bahamas,theme,ecosystem management,0.000746507,0.000746507
+Belize,theme,ecosystem management,1.087830546,0.014901788
+Bolivia,theme,ecosystem management,2.573667837,0.010859358
+Brazil,theme,ecosystem management,50.92843787,0.009060387
+Chile,theme,ecosystem management,10.56178514,0.009907866
+Colombia,theme,ecosystem management,6.295031441,0.017106064
+Costa.Rica,theme,ecosystem management,2.764747202,0.015107908
+Cuba,theme,ecosystem management,0.018750484,0.004687621
+Ecuador,theme,ecosystem management,7.534269305,0.027598056
+El.Salvador,theme,ecosystem management,0.027635868,0.003454483
+Guatemala,theme,ecosystem management,0.155118188,0.010341213
+Honduras,theme,ecosystem management,0.09577806,0.03192602
+Jamaica,theme,ecosystem management,0.001688092,0.001688092
+Mexico,theme,ecosystem management,25.7430068,0.011271019
+Nicaragua,theme,ecosystem management,0.01283148,0.01283148
+Panama,theme,ecosystem management,1.297722668,0.011691195
+Paraguay,theme,ecosystem management,0.252819239,0.007661189
+Peru,theme,ecosystem management,3.282763491,0.009247221
+Uruguay,theme,ecosystem management,2.110042756,0.014354032
+Venezuela,theme,ecosystem management,1.215127079,0.008497392
+Argentina,theme,stream ecology,16.94356328,0.010031713
+Bahamas,theme,stream ecology,0.000106644,0.000106644
+Belize,theme,stream ecology,0.480516192,0.006582414
+Bolivia,theme,stream ecology,0.812553518,0.003428496
+Brazil,theme,stream ecology,58.00957037,0.010320151
+Chile,theme,stream ecology,6.794184639,0.006373532
+Colombia,theme,stream ecology,1.880626625,0.005110398
+Costa.Rica,theme,stream ecology,6.4587218,0.035293562
+Cuba,theme,stream ecology,0.005667809,0.001416952
+Ecuador,theme,stream ecology,3.415671976,0.012511619
+El.Salvador,theme,stream ecology,0.021059536,0.002632442
+Guatemala,theme,stream ecology,0.020950868,0.001396725
+Honduras,theme,stream ecology,0.003431254,0.001143751
+Jamaica,theme,stream ecology,0.000649266,0.000649266
+Mexico,theme,stream ecology,10.4308268,0.004566912
+Nicaragua,theme,stream ecology,0.005988024,0.005988024
+Panama,theme,stream ecology,3.267140612,0.029433699
+Paraguay,theme,stream ecology,0.372765417,0.011295922
+Peru,theme,stream ecology,2.618421359,0.007375835
+Uruguay,theme,stream ecology,1.27173734,0.008651274
+Venezuela,theme,stream ecology,0.764225574,0.005344235
+Argentina,theme,wetlands,11.35564614,0.006723296
+Bahamas,theme,wetlands,0.000106644,0.000106644
+Belize,theme,wetlands,1.487465436,0.020376239
+Bolivia,theme,wetlands,0.630562004,0.002660599
+Brazil,theme,wetlands,14.52169509,0.002583472
+Chile,theme,wetlands,2.519728246,0.002363723
+Colombia,theme,wetlands,3.280712668,0.00891498
+Costa.Rica,theme,wetlands,1.042041338,0.005694215
+Cuba,theme,wetlands,0.041878923,0.010469731
+Ecuador,theme,wetlands,0.511345976,0.001873062
+El.Salvador,theme,wetlands,0.068937793,0.008617224
+Guatemala,theme,wetlands,0.101110909,0.006740727
+Honduras,theme,wetlands,0.001611462,0.000537154
+Jamaica,theme,wetlands,0.00038956,0.00038956
+Mexico,theme,wetlands,16.71165895,0.007316838
+Nicaragua,theme,wetlands,0.00427716,0.00427716
+Panama,theme,wetlands,0.364575914,0.003284468
+Paraguay,theme,wetlands,0.334349903,0.010131815
+Peru,theme,wetlands,1.198287687,0.003375458
+Uruguay,theme,wetlands,0.512418222,0.003485838
+Venezuela,theme,wetlands,0.396982492,0.002776101
+Argentina,theme,climate change impacts,17.02401155,0.010079344
+Bahamas,theme,climate change impacts,0.003092674,0.003092674
+Belize,theme,climate change impacts,0.711567028,0.009747494
+Bolivia,theme,climate change impacts,3.640072467,0.015358956
+Brazil,theme,climate change impacts,54.84542133,0.009757236
+Chile,theme,climate change impacts,16.77507893,0.015736472
+Colombia,theme,climate change impacts,4.210505798,0.011441592
+Costa.Rica,theme,climate change impacts,1.743698156,0.009528405
+Cuba,theme,climate change impacts,0.004328719,0.00108218
+Ecuador,theme,climate change impacts,4.262458084,0.0156134
+El.Salvador,theme,climate change impacts,0.037484806,0.004685601
+Guatemala,theme,climate change impacts,0.123997104,0.008266474
+Honduras,theme,climate change impacts,0.002462657,0.000820886
+Jamaica,theme,climate change impacts,0.008959875,0.008959875
+Mexico,theme,climate change impacts,25.15232021,0.011012399
+Nicaragua,theme,climate change impacts,0.000855432,0.000855432
+Panama,theme,climate change impacts,1.051203213,0.009470299
+Paraguay,theme,climate change impacts,0.2407685,0.007296015
+Peru,theme,climate change impacts,8.020500299,0.022592959
+Uruguay,theme,climate change impacts,1.39299568,0.009476161
+Venezuela,theme,climate change impacts,0.428165144,0.002994162
+Argentina,theme,paleoclimate,22.78161813,0.013488229
+Bahamas,theme,paleoclimate,0.000746507,0.000746507
+Belize,theme,paleoclimate,2.17425167,0.029784269
+Bolivia,theme,paleoclimate,7.15566948,0.030192698
+Brazil,theme,paleoclimate,39.51770498,0.007030369
+Chile,theme,paleoclimate,11.50395204,0.0107917
+Colombia,theme,paleoclimate,4.41343341,0.011993026
+Costa.Rica,theme,paleoclimate,1.159289694,0.006334916
+Cuba,theme,paleoclimate,0.024911492,0.006227873
+Ecuador,theme,paleoclimate,2.831165276,0.010370569
+El.Salvador,theme,paleoclimate,0.016179763,0.00202247
+Guatemala,theme,paleoclimate,0.835259562,0.055683971
+Honduras,theme,paleoclimate,0.060805716,0.020268572
+Jamaica,theme,paleoclimate,0.00038956,0.00038956
+Mexico,theme,paleoclimate,15.73342895,0.006888542
+Nicaragua,theme,paleoclimate,0.002566296,0.002566296
+Panama,theme,paleoclimate,1.040389182,0.009372876
+Paraguay,theme,paleoclimate,0.110253352,0.003341011
+Peru,theme,paleoclimate,6.156408857,0.017341997
+Uruguay,theme,paleoclimate,1.956892463,0.013312194
+Venezuela,theme,paleoclimate,1.321795836,0.009243328
+Argentina,theme,precipitation,25.98406812,0.015384291
+Bahamas,theme,precipitation,0.016956383,0.016956383
+Belize,theme,precipitation,0.456343263,0.006251278
+Bolivia,theme,precipitation,7.26798818,0.030666617
+Brazil,theme,precipitation,75.42069201,0.013417664
+Chile,theme,precipitation,20.87856269,0.019585894
+Colombia,theme,precipitation,5.814475548,0.015800205
+Costa.Rica,theme,precipitation,4.397068764,0.024027698
+Cuba,theme,precipitation,0.013796435,0.003449109
+Ecuador,theme,precipitation,6.944621076,0.025438172
+El.Salvador,theme,precipitation,0.089923516,0.01124044
+Guatemala,theme,precipitation,0.300018676,0.020001245
+Honduras,theme,precipitation,0.02730879,0.00910293
+Jamaica,theme,precipitation,0.00038956,0.00038956
+Mexico,theme,precipitation,25.12382423,0.010999923
+Nicaragua,theme,precipitation,0.000855432,0.000855432
+Panama,theme,precipitation,2.733675138,0.024627704
+Paraguay,theme,precipitation,0.99935447,0.030283469
+Peru,theme,precipitation,8.013202857,0.022572402
+Uruguay,theme,precipitation,3.132978349,0.021312778
+Venezuela,theme,precipitation,1.830601003,0.012801406
+Argentina,specific,atmospheric science/meteorology,45.50676703,0.026943024
+Bahamas,specific,atmospheric science/meteorology,0.034371209,0.034371209
+Belize,specific,atmospheric science/meteorology,2.247743119,0.030791002
+Bolivia,specific,atmospheric science/meteorology,9.146680577,0.038593589
+Brazil,specific,atmospheric science/meteorology,188.4390744,0.033524119
+Chile,specific,atmospheric science/meteorology,33.72444826,0.031636443
+Colombia,specific,atmospheric science/meteorology,10.72509528,0.029144281
+Costa.Rica,specific,atmospheric science/meteorology,7.437779842,0.040643606
+Cuba,specific,atmospheric science/meteorology,0.081878131,0.020469533
+Ecuador,specific,atmospheric science/meteorology,7.563761994,0.027706088
+El.Salvador,specific,atmospheric science/meteorology,0.31228477,0.039035596
+Guatemala,specific,atmospheric science/meteorology,0.323992073,0.021599472
+Honduras,specific,atmospheric science/meteorology,0.079062811,0.02635427
+Jamaica,specific,atmospheric science/meteorology,0.028410425,0.028410425
+Mexico,specific,atmospheric science/meteorology,75.60358385,0.033101394
+Nicaragua,specific,atmospheric science/meteorology,0.02003643,0.02003643
+Panama,specific,atmospheric science/meteorology,5.894801403,0.053106319
+Paraguay,specific,atmospheric science/meteorology,0.652972124,0.019787034
+Peru,specific,atmospheric science/meteorology,8.439565416,0.023773424
+Uruguay,specific,atmospheric science/meteorology,2.838502133,0.019309538
+Venezuela,specific,atmospheric science/meteorology,7.76024618,0.054267456
+Argentina,specific,botany/plant biology,16.63164512,0.009847037
+Bahamas,specific,botany/plant biology,0.003100148,0.003100148
+Belize,specific,botany/plant biology,0.188935864,0.002588163
+Bolivia,specific,botany/plant biology,0.486978126,0.00205476
+Brazil,specific,botany/plant biology,29.45007039,0.005239294
+Chile,specific,botany/plant biology,9.548209511,0.008957045
+Colombia,specific,botany/plant biology,3.260812543,0.008860904
+Costa.Rica,specific,botany/plant biology,1.760405169,0.0096197
+Cuba,specific,botany/plant biology,0.006791526,0.001697882
+Ecuador,specific,botany/plant biology,1.571285974,0.005755626
+El.Salvador,specific,botany/plant biology,0.003170102,0.000396263
+Guatemala,specific,botany/plant biology,0.050626533,0.003375102
+Honduras,specific,botany/plant biology,0.410406173,0.136802058
+Jamaica,specific,botany/plant biology,0.001173985,0.001173985
+Mexico,specific,botany/plant biology,19.41572166,0.008500754
+Nicaragua,specific,botany/plant biology,0.001821494,0.001821494
+Panama,specific,botany/plant biology,3.533007358,0.031828895
+Paraguay,specific,botany/plant biology,0.022211417,0.000673073
+Peru,specific,botany/plant biology,1.610679858,0.004537126
+Uruguay,specific,botany/plant biology,0.610901562,0.004155793
+Venezuela,specific,botany/plant biology,0.849409586,0.005939927
+Argentina,specific,animal science,29.40741187,0.017411138
+Bahamas,specific,animal science,0.002426203,0.002426203
+Belize,specific,animal science,1.436672209,0.019680441
+Bolivia,specific,animal science,1.885157274,0.00795425
+Brazil,specific,animal science,127.7773807,0.022732144
+Chile,specific,animal science,18.17881581,0.017053298
+Colombia,specific,animal science,6.130598855,0.016659236
+Costa.Rica,specific,animal science,1.773608783,0.009691851
+Cuba,specific,animal science,0.038301084,0.009575271
+Ecuador,specific,animal science,2.470652733,0.00905001
+El.Salvador,specific,animal science,0.01581972,0.001977465
+Guatemala,specific,animal science,0.115819624,0.007721308
+Honduras,specific,animal science,0.006799586,0.002266529
+Jamaica,specific,animal science,0.010331064,0.010331064
+Mexico,specific,animal science,36.56902266,0.016010956
+Nicaragua,specific,animal science,0.112932605,0.112932605
+Panama,specific,animal science,0.360489482,0.003247653
+Paraguay,specific,animal science,0.253535016,0.007682879
+Peru,specific,animal science,3.382213852,0.009527363
+Uruguay,specific,animal science,5.432739068,0.036957409
+Venezuela,specific,animal science,2.65883742,0.018593269
+Argentina,specific,organic chemistry,24.13723969,0.014290846
+Bahamas,specific,organic chemistry,0.01280496,0.01280496
+Belize,specific,organic chemistry,0.539272459,0.007387294
+Bolivia,specific,organic chemistry,0.911877769,0.003847586
+Brazil,specific,organic chemistry,91.66784086,0.016308102
+Chile,specific,organic chemistry,10.89200378,0.01021764
+Colombia,specific,organic chemistry,3.209087702,0.008720347
+Costa.Rica,specific,organic chemistry,0.865485874,0.004729431
+Cuba,specific,organic chemistry,0.03697617,0.009244043
+Ecuador,specific,organic chemistry,2.507713052,0.009185762
+El.Salvador,specific,organic chemistry,0.007057894,0.000882237
+Guatemala,specific,organic chemistry,0.098891085,0.006592739
+Honduras,specific,organic chemistry,0.001440385,0.000480128
+Jamaica,specific,organic chemistry,0.004461141,0.004461141
+Mexico,specific,organic chemistry,18.31711424,0.008019752
+Nicaragua,specific,organic chemistry,0.009107468,0.009107468
+Panama,specific,organic chemistry,0.979912312,0.008828039
+Paraguay,specific,organic chemistry,0.509347622,0.015434776
+Peru,specific,organic chemistry,4.542412588,0.012795528
+Uruguay,specific,organic chemistry,2.281400064,0.015519728
+Venezuela,specific,organic chemistry,4.78621647,0.033470045
+Argentina,specific,biology,68.39502858,0.040494392
+Bahamas,specific,biology,0.04138024,0.04138024
+Belize,specific,biology,4.234107849,0.058001477
+Bolivia,specific,biology,4.235844511,0.017872762
+Brazil,specific,biology,149.989694,0.02668381
+Chile,specific,biology,29.87957847,0.028029623
+Colombia,specific,biology,13.8995056,0.037770396
+Costa.Rica,specific,biology,5.465146547,0.029864189
+Cuba,specific,biology,0.033610416,0.008402604
+Ecuador,specific,biology,2.078775452,0.007614562
+El.Salvador,specific,biology,0.062758775,0.007844847
+Guatemala,specific,biology,0.520565537,0.034704369
+Honduras,specific,biology,0.007658283,0.002552761
+Jamaica,specific,biology,0.002582766,0.002582766
+Mexico,specific,biology,48.01639302,0.021022939
+Nicaragua,specific,biology,0.012750455,0.012750455
+Panama,specific,biology,1.789583269,0.016122372
+Paraguay,specific,biology,0.425803658,0.012903141
+Peru,specific,biology,8.558211325,0.024107638
+Uruguay,specific,biology,5.462382047,0.037159062
+Venezuela,specific,biology,2.428403234,0.016981841
+Argentina,specific,environmental health,31.95093009,0.018917069
+Bahamas,specific,environmental health,0.000539156,0.000539156
+Belize,specific,environmental health,0.464792835,0.006367025
+Bolivia,specific,environmental health,4.156425095,0.017537659
+Brazil,specific,environmental health,136.7101574,0.024321323
+Chile,specific,environmental health,14.01127813,0.013143788
+Colombia,specific,environmental health,9.700814939,0.02636091
+Costa.Rica,specific,environmental health,1.609704218,0.008796198
+Cuba,specific,environmental health,0.267527357,0.066881839
+Ecuador,specific,environmental health,5.065013663,0.018553164
+El.Salvador,specific,environmental health,0.020626991,0.002578374
+Guatemala,specific,environmental health,0.466515206,0.031101014
+Honduras,specific,environmental health,0.002781032,0.000927011
+Jamaica,specific,environmental health,0.001408781,0.001408781
+Mexico,specific,environmental health,56.94631383,0.024932712
+Nicaragua,specific,environmental health,0.003642987,0.003642987
+Panama,specific,environmental health,1.270475357,0.011445724
+Paraguay,specific,environmental health,0.077259033,0.002341183
+Peru,specific,environmental health,5.455995039,0.015369
+Uruguay,specific,environmental health,1.860523691,0.012656624
+Venezuela,specific,environmental health,4.413062703,0.030860578
+Argentina,specific,mineralogy/petrology,19.82385548,0.011737037
+Bahamas,specific,mineralogy/petrology,0.174821405,0.174821405
+Belize,specific,mineralogy/petrology,0.735605916,0.010076793
+Bolivia,specific,mineralogy/petrology,1.98190104,0.008362452
+Brazil,specific,mineralogy/petrology,58.79364296,0.010459641
+Chile,specific,mineralogy/petrology,8.761589926,0.008219128
+Colombia,specific,mineralogy/petrology,2.517051677,0.006839814
+Costa.Rica,specific,mineralogy/petrology,0.705842514,0.003857063
+Cuba,specific,mineralogy/petrology,0.043008444,0.010752111
+Ecuador,specific,mineralogy/petrology,2.126911333,0.007790884
+El.Salvador,specific,mineralogy/petrology,0.008590067,0.001073758
+Guatemala,specific,mineralogy/petrology,0.091947497,0.006129833
+Honduras,specific,mineralogy/petrology,0.004858821,0.001619607
+Jamaica,specific,mineralogy/petrology,0.000704391,0.000704391
+Mexico,specific,mineralogy/petrology,22.46256852,0.00983475
+Nicaragua,specific,mineralogy/petrology,0.005464481,0.005464481
+Panama,specific,mineralogy/petrology,0.50954409,0.004590487
+Paraguay,specific,mineralogy/petrology,0.267825676,0.00811593
+Peru,specific,mineralogy/petrology,4.171600535,0.011750987
+Uruguay,specific,mineralogy/petrology,0.87961,0.005983741
+Venezuela,specific,mineralogy/petrology,1.435065956,0.010035426
+Argentina,specific,"mathematics/statistics, general",49.18408022,0.029120237
+Bahamas,specific,"mathematics/statistics, general",0.00148268,0.00148268
+Belize,specific,"mathematics/statistics, general",1.534703103,0.02102333
+Bolivia,specific,"mathematics/statistics, general",7.572981611,0.031953509
+Brazil,specific,"mathematics/statistics, general",176.0047309,0.031311996
+Chile,specific,"mathematics/statistics, general",39.62832167,0.037174786
+Colombia,specific,"mathematics/statistics, general",10.53745839,0.028634398
+Costa.Rica,specific,"mathematics/statistics, general",6.539172912,0.035733185
+Cuba,specific,"mathematics/statistics, general",0.189750225,0.047437556
+Ecuador,specific,"mathematics/statistics, general",8.185351972,0.029982974
+El.Salvador,specific,"mathematics/statistics, general",0.54477923,0.068097404
+Guatemala,specific,"mathematics/statistics, general",0.788240164,0.052549344
+Honduras,specific,"mathematics/statistics, general",0.003578316,0.001192772
+Jamaica,specific,"mathematics/statistics, general",0.000234797,0.000234797
+Mexico,specific,"mathematics/statistics, general",74.20847994,0.032490578
+Nicaragua,specific,"mathematics/statistics, general",0.001821494,0.001821494
+Panama,specific,"mathematics/statistics, general",4.17316315,0.037596064
+Paraguay,specific,"mathematics/statistics, general",1.32548905,0.040166335
+Peru,specific,"mathematics/statistics, general",10.88652726,0.030666274
+Uruguay,specific,"mathematics/statistics, general",5.280594425,0.035922411
+Venezuela,specific,"mathematics/statistics, general",3.878637237,0.027123337
+Argentina,specific,statistics,86.66858627,0.05131355
+Bahamas,specific,statistics,0.001347891,0.001347891
+Belize,specific,statistics,2.513092566,0.034425926
+Bolivia,specific,statistics,7.092461912,0.029926
+Brazil,specific,statistics,265.2088752,0.047181796
+Chile,specific,statistics,51.83338935,0.048624193
+Colombia,specific,statistics,18.02110565,0.048970396
+Costa.Rica,specific,statistics,6.285271964,0.034345748
+Cuba,specific,statistics,0.030223404,0.007555851
+Ecuador,specific,statistics,16.38080287,0.060002941
+El.Salvador,specific,statistics,0.161649556,0.020206195
+Guatemala,specific,statistics,0.584748464,0.038983231
+Honduras,specific,statistics,0.131391286,0.043797095
+Jamaica,specific,statistics,0.012209439,0.012209439
+Mexico,specific,statistics,84.68681285,0.037078289
+Nicaragua,specific,statistics,0.010928962,0.010928962
+Panama,specific,statistics,6.449675551,0.058105185
+Paraguay,specific,statistics,1.350933066,0.040937366
+Peru,specific,statistics,10.95884634,0.03086999
+Uruguay,specific,statistics,8.995632882,0.061194782
+Venezuela,specific,statistics,4.635924286,0.032419051
+Argentina,specific,hydrology & water resources,319.030581,0.188887259
+Bahamas,specific,hydrology & water resources,0.035449521,0.035449521
+Belize,specific,hydrology & water resources,10.68814625,0.146412962
+Bolivia,specific,hydrology & water resources,55.1327899,0.232627806
+Brazil,specific,hydrology & water resources,1002.256054,0.178305649
+Chile,specific,hydrology & water resources,210.2317878,0.197215561
+Colombia,specific,hydrology & water resources,69.86737604,0.189857
+Costa.Rica,specific,hydrology & water resources,45.21757477,0.247090573
+Cuba,specific,hydrology & water resources,0.555616601,0.13890415
+Ecuador,specific,hydrology & water resources,64.88875834,0.237687759
+El.Salvador,specific,hydrology & water resources,1.344492946,0.168061618
+Guatemala,specific,hydrology & water resources,2.498222456,0.166548164
+Honduras,specific,hydrology & water resources,0.193003808,0.064334603
+Jamaica,specific,hydrology & water resources,0.066917117,0.066917117
+Mexico,specific,hydrology & water resources,471.2565209,0.206329475
+Nicaragua,specific,hydrology & water resources,0.081967213,0.081967213
+Panama,specific,hydrology & water resources,22.15274492,0.199574279
+Paraguay,specific,hydrology & water resources,9.697529438,0.293864528
+Peru,specific,hydrology & water resources,78.09854099,0.21999589
+Uruguay,specific,hydrology & water resources,24.32863577,0.165500924
+Venezuela,specific,hydrology & water resources,23.01964111,0.160976511
+Argentina,specific,civil engineering,61.22839088,0.036251268
+Bahamas,specific,civil engineering,0.005930718,0.005930718
+Belize,specific,civil engineering,2.437183896,0.033386081
+Bolivia,specific,civil engineering,14.01925165,0.059152961
+Brazil,specific,civil engineering,467.3892215,0.083150546
+Chile,specific,civil engineering,52.53572324,0.049283042
+Colombia,specific,civil engineering,35.90390194,0.097564951
+Costa.Rica,specific,civil engineering,8.072420321,0.044111586
+Cuba,specific,civil engineering,0.76692925,0.191732313
+Ecuador,specific,civil engineering,16.68636449,0.061122214
+El.Salvador,specific,civil engineering,0.572732679,0.071591585
+Guatemala,specific,civil engineering,0.683549854,0.04556999
+Honduras,specific,civil engineering,0.035824989,0.011941663
+Jamaica,specific,civil engineering,0.416999296,0.416999296
+Mexico,specific,civil engineering,174.5034297,0.076402552
+Nicaragua,specific,civil engineering,0.054644809,0.054644809
+Panama,specific,civil engineering,4.045093622,0.036442285
+Paraguay,specific,civil engineering,2.44715021,0.074156067
+Peru,specific,civil engineering,17.98893183,0.050673047
+Uruguay,specific,civil engineering,6.93161896,0.04715387
+Venezuela,specific,civil engineering,6.421276296,0.04490403
+Argentina,specific,"oceanography, chemical and physical",24.44002486,0.014470115
+Bahamas,specific,"oceanography, chemical and physical",0.000404367,0.000404367
+Belize,specific,"oceanography, chemical and physical",1.111384105,0.01522444
+Bolivia,specific,"oceanography, chemical and physical",5.279387714,0.022275898
+Brazil,specific,"oceanography, chemical and physical",68.11017634,0.012117092
+Chile,specific,"oceanography, chemical and physical",25.32157121,0.023753819
+Colombia,specific,"oceanography, chemical and physical",5.705106383,0.015503006
+Costa.Rica,specific,"oceanography, chemical and physical",2.860514483,0.015631227
+Cuba,specific,"oceanography, chemical and physical",0.030656515,0.007664129
+Ecuador,specific,"oceanography, chemical and physical",4.766541073,0.017459857
+El.Salvador,specific,"oceanography, chemical and physical",0.055742337,0.006967792
+Guatemala,specific,"oceanography, chemical and physical",0.372224481,0.024814965
+Honduras,specific,"oceanography, chemical and physical",0.040887212,0.013629071
+Jamaica,specific,"oceanography, chemical and physical",0.029819206,0.029819206
+Mexico,specific,"oceanography, chemical and physical",33.45354196,0.01464691
+Nicaragua,specific,"oceanography, chemical and physical",0.001821494,0.001821494
+Panama,specific,"oceanography, chemical and physical",3.545594112,0.031942289
+Paraguay,specific,"oceanography, chemical and physical",0.396965468,0.012029257
+Peru,specific,"oceanography, chemical and physical",16.62205692,0.046822696
+Uruguay,specific,"oceanography, chemical and physical",3.581160636,0.024361637
+Venezuela,specific,"oceanography, chemical and physical",1.67731353,0.011729465
+Argentina,specific,agronomy & crop science,59.12928114,0.035008455
+Bahamas,specific,agronomy & crop science,0.003639304,0.003639304
+Belize,specific,agronomy & crop science,0.84418411,0.011564166
+Bolivia,specific,agronomy & crop science,6.477174934,0.027329852
+Brazil,specific,agronomy & crop science,192.8096709,0.034301667
+Chile,specific,agronomy & crop science,21.38842111,0.020064185
+Colombia,specific,agronomy & crop science,10.17558151,0.027651037
+Costa.Rica,specific,agronomy & crop science,5.761013089,0.031480946
+Cuba,specific,agronomy & crop science,0.026803553,0.006700888
+Ecuador,specific,agronomy & crop science,4.374337662,0.016023215
+El.Salvador,specific,agronomy & crop science,0.264890341,0.033111293
+Guatemala,specific,agronomy & crop science,0.155252514,0.010350168
+Honduras,specific,agronomy & crop science,0.132700013,0.044233338
+Jamaica,specific,agronomy & crop science,0.000704391,0.000704391
+Mexico,specific,agronomy & crop science,42.33928133,0.018537339
+Nicaragua,specific,agronomy & crop science,0.009107468,0.009107468
+Panama,specific,agronomy & crop science,0.524401841,0.004724341
+Paraguay,specific,agronomy & crop science,0.389655083,0.01180773
+Peru,specific,agronomy & crop science,4.363816671,0.012292441
+Uruguay,specific,agronomy & crop science,4.353699873,0.029617006
+Venezuela,specific,agronomy & crop science,2.876205212,0.020113323
+Argentina,specific,geomorphology,39.72777337,0.023521476
+Bahamas,specific,geomorphology,0.000808734,0.000808734
+Belize,specific,geomorphology,4.799705096,0.065749385
+Bolivia,specific,geomorphology,7.394904775,0.03120213
+Brazil,specific,geomorphology,70.91166087,0.012615489
+Chile,specific,geomorphology,25.52407811,0.023943788
+Colombia,specific,geomorphology,6.28446491,0.01707735
+Costa.Rica,specific,geomorphology,3.773738664,0.020621523
+Cuba,specific,geomorphology,0.06408206,0.016020515
+Ecuador,specific,geomorphology,4.028868421,0.01475776
+El.Salvador,specific,geomorphology,0.299884231,0.037485529
+Guatemala,specific,geomorphology,0.834511291,0.055634086
+Honduras,specific,geomorphology,0.002287,0.000762333
+Jamaica,specific,geomorphology,0.004695938,0.004695938
+Mexico,specific,geomorphology,47.54308242,0.02081571
+Nicaragua,specific,geomorphology,0.029143898,0.029143898
+Panama,specific,geomorphology,2.613199185,0.023542335
+Paraguay,specific,geomorphology,0.875603189,0.02653343
+Peru,specific,geomorphology,12.01167912,0.033835716
+Uruguay,specific,geomorphology,1.026029286,0.006979791
+Venezuela,specific,geomorphology,2.443773633,0.017089326
+Argentina,specific,plant physiology,26.90108878,0.015927228
+Bahamas,specific,plant physiology,0.002291414,0.002291414
+Belize,specific,plant physiology,0.898679161,0.012310673
+Bolivia,specific,plant physiology,1.532543896,0.00646643
+Brazil,specific,plant physiology,77.85260426,0.013850312
+Chile,specific,plant physiology,15.25704972,0.014312429
+Colombia,specific,plant physiology,3.881372116,0.010547207
+Costa.Rica,specific,plant physiology,3.150790012,0.017217432
+Cuba,specific,plant physiology,0.017362312,0.004340578
+Ecuador,specific,plant physiology,1.928931845,0.007065684
+El.Salvador,specific,plant physiology,0.060056089,0.007507011
+Guatemala,specific,plant physiology,0.031928102,0.00212854
+Honduras,specific,plant physiology,0.003534682,0.001178227
+Jamaica,specific,plant physiology,0.000234797,0.000234797
+Mexico,specific,plant physiology,23.82990723,0.010433409
+Nicaragua,specific,plant physiology,0.001821494,0.001821494
+Panama,specific,plant physiology,4.000265406,0.036038427
+Paraguay,specific,plant physiology,0.06954156,0.00210732
+Peru,specific,plant physiology,1.342523292,0.003781756
+Uruguay,specific,plant physiology,1.190749075,0.008100334
+Venezuela,specific,plant physiology,5.061494757,0.035395068
+Argentina,specific,engineering,29.84745909,0.017671675
+Bahamas,specific,engineering,0.000673945,0.000673945
+Belize,specific,engineering,0.715398928,0.009799985
+Bolivia,specific,engineering,8.494413146,0.035841406
+Brazil,specific,engineering,151.835216,0.027012136
+Chile,specific,engineering,37.72846609,0.035392557
+Colombia,specific,engineering,8.108599735,0.022034238
+Costa.Rica,specific,engineering,1.361933635,0.00744226
+Cuba,specific,engineering,0.0267342,0.00668355
+Ecuador,specific,engineering,6.522229418,0.02389095
+El.Salvador,specific,engineering,0.591307108,0.073913389
+Guatemala,specific,engineering,0.057587404,0.00383916
+Honduras,specific,engineering,0.110150266,0.036716755
+Jamaica,specific,engineering,0.000704391,0.000704391
+Mexico,specific,engineering,57.76635359,0.025291749
+Nicaragua,specific,engineering,0.005464481,0.005464481
+Panama,specific,engineering,0.692464327,0.006238417
+Paraguay,specific,engineering,0.178103317,0.00539707
+Peru,specific,engineering,16.73635168,0.047144653
+Uruguay,specific,engineering,3.085260115,0.020988164
+Venezuela,specific,engineering,3.632605224,0.025402834
+Argentina,specific,fishing & fisheries sciences/management,12.03914743,0.007127974
+Bahamas,specific,fishing & fisheries sciences/management,0.000134789,0.000134789
+Belize,specific,fishing & fisheries sciences/management,0.654319225,0.008963277
+Bolivia,specific,fishing & fisheries sciences/management,0.878862832,0.003708282
+Brazil,specific,fishing & fisheries sciences/management,36.77583447,0.006542579
+Chile,specific,fishing & fisheries sciences/management,6.314506505,0.005923552
+Colombia,specific,fishing & fisheries sciences/management,1.380128765,0.00375035
+Costa.Rica,specific,fishing & fisheries sciences/management,0.600544675,0.003281665
+Cuba,specific,fishing & fisheries sciences/management,0.010403739,0.002600935
+Ecuador,specific,fishing & fisheries sciences/management,1.33499933,0.004890107
+El.Salvador,specific,fishing & fisheries sciences/management,0.011786926,0.001473366
+Guatemala,specific,fishing & fisheries sciences/management,0.019320256,0.001288017
+Honduras,specific,fishing & fisheries sciences/management,0.063247575,0.021082525
+Jamaica,specific,fishing & fisheries sciences/management,0.015731392,0.015731392
+Mexico,specific,fishing & fisheries sciences/management,11.78688672,0.005160633
+Nicaragua,specific,fishing & fisheries sciences/management,0.005464481,0.005464481
+Panama,specific,fishing & fisheries sciences/management,0.354715851,0.003195638
+Paraguay,specific,fishing & fisheries sciences/management,0.442192446,0.013399771
+Peru,specific,fishing & fisheries sciences/management,2.594434669,0.007308267
+Uruguay,specific,fishing & fisheries sciences/management,2.055931223,0.013985927
+Venezuela,specific,fishing & fisheries sciences/management,0.730520574,0.005108535
+Argentina,specific,ecology,101.7568765,0.060246819
+Bahamas,specific,ecology,0.004178461,0.004178461
+Belize,specific,ecology,3.79367073,0.051968092
+Bolivia,specific,ecology,5.182672997,0.021867819
+Brazil,specific,ecology,336.7966521,0.059917568
+Chile,specific,ecology,36.06452133,0.033831634
+Colombia,specific,ecology,12.7593181,0.03467206
+Costa.Rica,specific,ecology,14.35048302,0.07841794
+Cuba,specific,ecology,0.062239314,0.015559829
+Ecuador,specific,ecology,12.59044306,0.046118839
+El.Salvador,specific,ecology,0.04640801,0.005801001
+Guatemala,specific,ecology,0.393707361,0.026247157
+Honduras,specific,ecology,0.006679108,0.002226369
+Jamaica,specific,ecology,0.005869923,0.005869923
+Mexico,specific,ecology,76.46595011,0.033478962
+Nicaragua,specific,ecology,0.016393443,0.016393443
+Panama,specific,ecology,9.626368189,0.086724038
+Paraguay,specific,ecology,1.922892685,0.058269475
+Peru,specific,ecology,8.769905213,0.024703958
+Uruguay,specific,ecology,11.5317043,0.078446968
+Venezuela,specific,ecology,6.144646727,0.042969558
+Argentina,specific,geophysics & seismology,18.46514261,0.010932589
+Bahamas,specific,geophysics & seismology,0.002156625,0.002156625
+Belize,specific,geophysics & seismology,0.506189428,0.006934102
+Bolivia,specific,geophysics & seismology,4.115447261,0.017364756
+Brazil,specific,geophysics & seismology,43.75252062,0.007783761
+Chile,specific,geophysics & seismology,19.83956852,0.018611228
+Colombia,specific,geophysics & seismology,6.473539448,0.01759114
+Costa.Rica,specific,geophysics & seismology,5.802298113,0.031706547
+Cuba,specific,geophysics & seismology,0.015518046,0.003879511
+Ecuador,specific,geophysics & seismology,5.845819472,0.021413258
+El.Salvador,specific,geophysics & seismology,2.117741983,0.264717748
+Guatemala,specific,geophysics & seismology,1.304395668,0.086959711
+Honduras,specific,geophysics & seismology,0.001600265,0.000533422
+Jamaica,specific,geophysics & seismology,0.000469594,0.000469594
+Mexico,specific,geophysics & seismology,71.1018252,0.031130396
+Nicaragua,specific,geophysics & seismology,0.003642987,0.003642987
+Panama,specific,geophysics & seismology,1.609002187,0.014495515
+Paraguay,specific,geophysics & seismology,0.22938954,0.006951198
+Peru,specific,geophysics & seismology,4.956418722,0.013961743
+Uruguay,specific,geophysics & seismology,0.946026047,0.006435551
+Venezuela,specific,geophysics & seismology,1.014310986,0.007093084
+Argentina,specific,toxicology,36.41356434,0.021559245
+Bahamas,specific,toxicology,0.000134789,0.000134789
+Belize,specific,toxicology,0.20383082,0.002792203
+Bolivia,specific,toxicology,0.291202151,0.001228701
+Brazil,specific,toxicology,119.0301008,0.021175965
+Chile,specific,toxicology,12.33560714,0.011571864
+Colombia,specific,toxicology,2.454447898,0.006669695
+Costa.Rica,specific,toxicology,0.641183285,0.003503734
+Cuba,specific,toxicology,0.007348011,0.001837003
+Ecuador,specific,toxicology,0.54029578,0.001979105
+El.Salvador,specific,toxicology,0.00914967,0.001143709
+Guatemala,specific,toxicology,0.011117966,0.000741198
+Honduras,specific,toxicology,0.001823674,0.000607891
+Jamaica,specific,toxicology,0.000704391,0.000704391
+Mexico,specific,toxicology,31.72141877,0.013888537
+Nicaragua,specific,toxicology,0.005464481,0.005464481
+Panama,specific,toxicology,0.079695743,0.00071798
+Paraguay,specific,toxicology,0.111193496,0.0033695
+Peru,specific,toxicology,1.970177723,0.005549796
+Uruguay,specific,toxicology,2.607346475,0.017737051
+Venezuela,specific,toxicology,0.968292646,0.006771277
+Argentina,specific,environmental toxicology,69.83201403,0.041345183
+Bahamas,specific,environmental toxicology,0.002695781,0.002695781
+Belize,specific,environmental toxicology,1.936163712,0.026522791
+Bolivia,specific,environmental toxicology,5.746147739,0.024245349
+Brazil,specific,environmental toxicology,247.0399408,0.043949465
+Chile,specific,environmental toxicology,33.23032437,0.031172912
+Colombia,specific,environmental toxicology,10.69244179,0.029055548
+Costa.Rica,specific,environmental toxicology,5.562952876,0.03039865
+Cuba,specific,environmental toxicology,0.65278251,0.163195627
+Ecuador,specific,environmental toxicology,3.613617911,0.013236696
+El.Salvador,specific,environmental toxicology,0.026568192,0.003321024
+Guatemala,specific,environmental toxicology,0.257496057,0.017166404
+Honduras,specific,environmental toxicology,0.120469137,0.040156379
+Jamaica,specific,environmental toxicology,0.000469594,0.000469594
+Mexico,specific,environmental toxicology,90.28224104,0.039528127
+Nicaragua,specific,environmental toxicology,0.214936248,0.214936248
+Panama,specific,environmental toxicology,0.268734126,0.002421028
+Paraguay,specific,environmental toxicology,1.224196922,0.037096876
+Peru,specific,environmental toxicology,5.719045642,0.016109988
+Uruguay,specific,environmental toxicology,3.608018645,0.024544345
+Venezuela,specific,environmental toxicology,6.775092029,0.047378266
+Argentina,specific,geochemistry,49.56202718,0.029344007
+Bahamas,specific,geochemistry,0.105000674,0.105000674
+Belize,specific,geochemistry,1.37357259,0.018816063
+Bolivia,specific,geochemistry,5.984348983,0.025250418
+Brazil,specific,geochemistry,71.35933301,0.012695131
+Chile,specific,geochemistry,17.21782791,0.016151809
+Colombia,specific,geochemistry,3.867236858,0.010508796
+Costa.Rica,specific,geochemistry,2.828604659,0.015456856
+Cuba,specific,geochemistry,0.049805915,0.012451479
+Ecuador,specific,geochemistry,2.501380387,0.009162566
+El.Salvador,specific,geochemistry,0.328177945,0.041022243
+Guatemala,specific,geochemistry,0.347093869,0.023139591
+Honduras,specific,geochemistry,0.015998877,0.005332959
+Jamaica,specific,geochemistry,0.000234797,0.000234797
+Mexico,specific,geochemistry,46.97405748,0.020566575
+Nicaragua,specific,geochemistry,0.001821494,0.001821494
+Panama,specific,geochemistry,1.453180511,0.013091716
+Paraguay,specific,geochemistry,1.122969662,0.034029384
+Peru,specific,geochemistry,5.244790389,0.014774057
+Uruguay,specific,geochemistry,1.017085017,0.006918946
+Venezuela,specific,geochemistry,4.999512322,0.034961625
+Argentina,specific,sociology,6.000382415,0.003552624
+Bahamas,specific,sociology,0.000134789,0.000134789
+Belize,specific,sociology,0.953721886,0.013064683
+Bolivia,specific,sociology,7.367037065,0.031084545
+Brazil,specific,sociology,38.03255424,0.006766154
+Chile,specific,sociology,7.877139249,0.007389436
+Colombia,specific,sociology,6.614968674,0.017975458
+Costa.Rica,specific,sociology,2.6032678,0.014225507
+Cuba,specific,sociology,0.008787935,0.002196984
+Ecuador,specific,sociology,6.283280974,0.023015681
+El.Salvador,specific,sociology,0.081541005,0.010192626
+Guatemala,specific,sociology,0.294660029,0.019644002
+Honduras,specific,sociology,0.484847517,0.161615839
+Jamaica,specific,sociology,0.039680676,0.039680676
+Mexico,specific,sociology,22.80068723,0.009982788
+Nicaragua,specific,sociology,0.001821494,0.001821494
+Panama,specific,sociology,0.227084651,0.002045808
+Paraguay,specific,sociology,0.53107754,0.016093259
+Peru,specific,sociology,8.420812038,0.023720597
+Uruguay,specific,sociology,0.569010024,0.003870816
+Venezuela,specific,sociology,0.908327059,0.006351937
+Argentina,specific,ocean/marine science,20.48372832,0.012127725
+Bahamas,specific,ocean/marine science,0.009570023,0.009570023
+Belize,specific,ocean/marine science,1.601720165,0.021941372
+Bolivia,specific,ocean/marine science,0.527864231,0.002227275
+Brazil,specific,ocean/marine science,63.7147206,0.011335122
+Chile,specific,ocean/marine science,34.97891275,0.032813239
+Colombia,specific,ocean/marine science,2.358855732,0.006409934
+Costa.Rica,specific,ocean/marine science,2.004466224,0.010953367
+Cuba,specific,ocean/marine science,0.064631604,0.016157901
+Ecuador,specific,ocean/marine science,0.657240756,0.002407475
+El.Salvador,specific,ocean/marine science,0.013314213,0.001664277
+Guatemala,specific,ocean/marine science,0.032750222,0.002183348
+Honduras,specific,ocean/marine science,0.007991164,0.002663721
+Jamaica,specific,ocean/marine science,0.029349613,0.029349613
+Mexico,specific,ocean/marine science,49.85866872,0.02182954
+Nicaragua,specific,ocean/marine science,0.001821494,0.001821494
+Panama,specific,ocean/marine science,0.984835102,0.008872388
+Paraguay,specific,ocean/marine science,0.25731325,0.007797371
+Peru,specific,ocean/marine science,10.96596993,0.030890056
+Uruguay,specific,ocean/marine science,3.423062795,0.023286141
+Venezuela,specific,ocean/marine science,4.291683,0.030011769
+Argentina,specific,"genetics/genomics, human & animal",10.93671286,0.006475259
+Bahamas,specific,"genetics/genomics, human & animal",0.000134789,0.000134789
+Belize,specific,"genetics/genomics, human & animal",0.285993011,0.003917712
+Bolivia,specific,"genetics/genomics, human & animal",0.667731443,0.002817432
+Brazil,specific,"genetics/genomics, human & animal",38.448991,0.00684024
+Chile,specific,"genetics/genomics, human & animal",6.118335749,0.005739527
+Colombia,specific,"genetics/genomics, human & animal",2.733191025,0.00742715
+Costa.Rica,specific,"genetics/genomics, human & animal",0.275643393,0.001506248
+Cuba,specific,"genetics/genomics, human & animal",0.019934557,0.004983639
+Ecuador,specific,"genetics/genomics, human & animal",1.274824669,0.004669687
+El.Salvador,specific,"genetics/genomics, human & animal",0.00804648,0.00100581
+Guatemala,specific,"genetics/genomics, human & animal",0.293868416,0.019591228
+Honduras,specific,"genetics/genomics, human & animal",0.003222347,0.001074116
+Jamaica,specific,"genetics/genomics, human & animal",0.000234797,0.000234797
+Mexico,specific,"genetics/genomics, human & animal",10.17883119,0.004456581
+Nicaragua,specific,"genetics/genomics, human & animal",0.001821494,0.001821494
+Panama,specific,"genetics/genomics, human & animal",0.300289175,0.002705308
+Paraguay,specific,"genetics/genomics, human & animal",0.08944722,0.002710522
+Peru,specific,"genetics/genomics, human & animal",1.525945308,0.004298437
+Uruguay,specific,"genetics/genomics, human & animal",1.428870752,0.009720209
+Venezuela,specific,"genetics/genomics, human & animal",0.71785644,0.005019975
+Argentina,specific,environmental science,24.82639692,0.014698873
+Bahamas,specific,environmental science,0.02560992,0.02560992
+Belize,specific,environmental science,1.972744208,0.027023893
+Bolivia,specific,environmental science,4.127710847,0.017416501
+Brazil,specific,environmental science,82.19836112,0.014623441
+Chile,specific,environmental science,17.74771724,0.01664889
+Colombia,specific,environmental science,8.901111915,0.024187804
+Costa.Rica,specific,environmental science,3.514345787,0.019204075
+Cuba,specific,environmental science,0.025951969,0.006487992
+Ecuador,specific,environmental science,9.239713835,0.033845106
+El.Salvador,specific,environmental science,0.055171544,0.006896443
+Guatemala,specific,environmental science,0.203930721,0.013595381
+Honduras,specific,environmental science,0.12202766,0.040675887
+Jamaica,specific,environmental science,0.004226344,0.004226344
+Mexico,specific,environmental science,48.9137042,0.021415807
+Nicaragua,specific,environmental science,0.029143898,0.029143898
+Panama,specific,environmental science,1.745537405,0.015725562
+Paraguay,specific,environmental science,0.58827791,0.017826603
+Peru,specific,environmental science,4.763141027,0.013417299
+Uruguay,specific,environmental science,3.174833833,0.021597509
+Venezuela,specific,environmental science,2.449333923,0.017128209
+Argentina,specific,"soil sciences, other",53.3693585,0.031598199
+Bahamas,specific,"soil sciences, other",0.002291414,0.002291414
+Belize,specific,"soil sciences, other",2.146853481,0.029408952
+Bolivia,specific,"soil sciences, other",4.513034703,0.019042341
+Brazil,specific,"soil sciences, other",165.6387179,0.029467838
+Chile,specific,"soil sciences, other",30.91413604,0.029000128
+Colombia,specific,"soil sciences, other",7.328763405,0.019915118
+Costa.Rica,specific,"soil sciences, other",5.66918884,0.030979174
+Cuba,specific,"soil sciences, other",0.022377607,0.005594402
+Ecuador,specific,"soil sciences, other",10.18103382,0.037293164
+El.Salvador,specific,"soil sciences, other",0.046249597,0.0057812
+Guatemala,specific,"soil sciences, other",0.152558135,0.010170542
+Honduras,specific,"soil sciences, other",0.023590793,0.007863598
+Jamaica,specific,"soil sciences, other",0.000704391,0.000704391
+Mexico,specific,"soil sciences, other",42.8938894,0.018780162
+Nicaragua,specific,"soil sciences, other",0.005464481,0.005464481
+Panama,specific,"soil sciences, other",3.73547331,0.033652913
+Paraguay,specific,"soil sciences, other",0.187652645,0.005686444
+Peru,specific,"soil sciences, other",4.095664961,0.011537084
+Uruguay,specific,"soil sciences, other",1.991989022,0.013550946
+Venezuela,specific,"soil sciences, other",4.144167923,0.028980195
+Argentina,specific,geology,32.56328617,0.019279625
+Bahamas,specific,geology,0.005526351,0.005526351
+Belize,specific,geology,0.545188945,0.007468342
+Bolivia,specific,geology,5.245979626,0.022134935
+Brazil,specific,geology,54.31946966,0.009663667
+Chile,specific,geology,18.84345412,0.017676786
+Colombia,specific,geology,4.48318374,0.012182565
+Costa.Rica,specific,geology,0.639463314,0.003494335
+Cuba,specific,geology,0.00983584,0.00245896
+Ecuador,specific,geology,2.271750534,0.008321431
+El.Salvador,specific,geology,0.028485099,0.003560637
+Guatemala,specific,geology,0.134894061,0.008992937
+Honduras,specific,geology,0.003854442,0.001284814
+Jamaica,specific,geology,0.004461141,0.004461141
+Mexico,specific,geology,37.56386122,0.016446524
+Nicaragua,specific,geology,0.001821494,0.001821494
+Panama,specific,geology,0.693293189,0.006245885
+Paraguay,specific,geology,0.619968944,0.018786938
+Peru,specific,geology,4.541421055,0.012792735
+Uruguay,specific,geology,2.736897171,0.018618348
+Venezuela,specific,geology,3.119394022,0.021813944
+Argentina,specific,petroleum engineering,6.035562698,0.003573453
+Bahamas,specific,petroleum engineering,0.001078312,0.001078312
+Belize,specific,petroleum engineering,0.191313724,0.002620736
+Bolivia,specific,petroleum engineering,0.447716496,0.001889099
+Brazil,specific,petroleum engineering,38.91365464,0.006922906
+Chile,specific,petroleum engineering,4.802239912,0.004504915
+Colombia,specific,petroleum engineering,2.102033984,0.005712049
+Costa.Rica,specific,petroleum engineering,0.569565872,0.003112382
+Cuba,specific,petroleum engineering,0.008999414,0.002249853
+Ecuador,specific,petroleum engineering,0.719282503,0.002634734
+El.Salvador,specific,petroleum engineering,0.037318211,0.004664776
+Guatemala,specific,petroleum engineering,0.022874482,0.001524965
+Honduras,specific,petroleum engineering,0.004334083,0.001444694
+Jamaica,specific,petroleum engineering,0.030993191,0.030993191
+Mexico,specific,petroleum engineering,16.92361734,0.00740964
+Nicaragua,specific,petroleum engineering,0.003642987,0.003642987
+Panama,specific,petroleum engineering,0.285257847,0.002569891
+Paraguay,specific,petroleum engineering,0.066723534,0.002021925
+Peru,specific,petroleum engineering,1.923975656,0.00541965
+Uruguay,specific,petroleum engineering,1.769431588,0.01203695
+Venezuela,specific,petroleum engineering,1.840269781,0.012869019
+Argentina,specific,political science & governance,11.70641729,0.006930975
+Bahamas,specific,political science & governance,0.001752258,0.001752258
+Belize,specific,political science & governance,1.251873056,0.017148946
+Bolivia,specific,political science & governance,19.22437834,0.08111552
+Brazil,specific,political science & governance,52.62135236,0.009361564
+Chile,specific,political science & governance,18.37787155,0.01724003
+Colombia,specific,political science & governance,11.13364875,0.03025448
+Costa.Rica,specific,political science & governance,4.204080754,0.022973119
+Cuba,specific,political science & governance,0.005014905,0.001253726
+Ecuador,specific,political science & governance,15.27687315,0.055959242
+El.Salvador,specific,political science & governance,0.010938886,0.001367361
+Guatemala,specific,political science & governance,0.07570845,0.00504723
+Honduras,specific,political science & governance,0.218969863,0.072989954
+Jamaica,specific,political science & governance,0.064099554,0.064099554
+Mexico,specific,political science & governance,43.95696848,0.019245608
+Nicaragua,specific,political science & governance,0.005464481,0.005464481
+Panama,specific,political science & governance,0.382396628,0.003445015
+Paraguay,specific,political science & governance,2.73949105,0.08301488
+Peru,specific,political science & governance,18.27247869,0.051471771
+Uruguay,specific,political science & governance,0.862552128,0.005867702
+Venezuela,specific,political science & governance,1.391158595,0.009728382
+Argentina,specific,geomorphology & glacial geology,26.14175616,0.015477653
+Bahamas,specific,geomorphology & glacial geology,0.012535382,0.012535382
+Belize,specific,geomorphology & glacial geology,1.214149535,0.016632185
+Bolivia,specific,geomorphology & glacial geology,3.175998185,0.013400836
+Brazil,specific,geomorphology & glacial geology,95.71468922,0.017028054
+Chile,specific,geomorphology & glacial geology,12.7368813,0.011948294
+Colombia,specific,geomorphology & glacial geology,4.709043447,0.012796314
+Costa.Rica,specific,geomorphology & glacial geology,1.644230428,0.008984866
+Cuba,specific,geomorphology & glacial geology,0.082467569,0.020616892
+Ecuador,specific,geomorphology & glacial geology,2.032037561,0.007443361
+El.Salvador,specific,geomorphology & glacial geology,0.027778708,0.003472338
+Guatemala,specific,geomorphology & glacial geology,0.129318844,0.008621256
+Honduras,specific,geomorphology & glacial geology,0.016445695,0.005481898
+Jamaica,specific,geomorphology & glacial geology,0.000704391,0.000704391
+Mexico,specific,geomorphology & glacial geology,28.52317089,0.012488253
+Nicaragua,specific,geomorphology & glacial geology,0.063752277,0.063752277
+Panama,specific,geomorphology & glacial geology,0.656417245,0.005913669
+Paraguay,specific,geomorphology & glacial geology,0.528223497,0.016006773
+Peru,specific,geomorphology & glacial geology,4.400511549,0.012395807
+Uruguay,specific,geomorphology & glacial geology,2.02874,0.013800952
+Venezuela,specific,geomorphology & glacial geology,3.508137872,0.024532433
+Argentina,specific,microbiology,63.53169907,0.037614979
+Bahamas,specific,microbiology,0.491710473,0.491710473
+Belize,specific,microbiology,2.273164466,0.031139239
+Bolivia,specific,microbiology,2.551940572,0.010767682
+Brazil,specific,microbiology,138.981275,0.024725365
+Chile,specific,microbiology,24.05308733,0.022563872
+Colombia,specific,microbiology,6.654211653,0.018082097
+Costa.Rica,specific,microbiology,2.219298916,0.012127316
+Cuba,specific,microbiology,0.291738545,0.072934636
+Ecuador,specific,microbiology,2.236444848,0.008192106
+El.Salvador,specific,microbiology,0.014229142,0.001778643
+Guatemala,specific,microbiology,0.076666942,0.005111129
+Honduras,specific,microbiology,0.00287188,0.000957293
+Jamaica,specific,microbiology,0.00375675,0.00375675
+Mexico,specific,microbiology,54.42087591,0.023827003
+Nicaragua,specific,microbiology,0.014571949,0.014571949
+Panama,specific,microbiology,1.631341018,0.014696766
+Paraguay,specific,microbiology,0.269613506,0.008170106
+Peru,specific,microbiology,4.422665991,0.012458214
+Uruguay,specific,microbiology,7.74899353,0.052714242
+Venezuela,specific,microbiology,3.154650162,0.022060491
+Argentina,specific,analytical chemistry,22.54461643,0.013347908
+Bahamas,specific,analytical chemistry,0.000673945,0.000673945
+Belize,specific,analytical chemistry,1.516277548,0.020770925
+Bolivia,specific,analytical chemistry,2.566039933,0.010827173
+Brazil,specific,analytical chemistry,54.35552443,0.009670081
+Chile,specific,analytical chemistry,17.20901872,0.016143545
+Colombia,specific,analytical chemistry,2.759350006,0.007498234
+Costa.Rica,specific,analytical chemistry,5.443744959,0.02974724
+Cuba,specific,analytical chemistry,0.021903695,0.005475924
+Ecuador,specific,analytical chemistry,3.399338183,0.012451788
+El.Salvador,specific,analytical chemistry,0.339823453,0.042477932
+Guatemala,specific,analytical chemistry,0.676809949,0.045120663
+Honduras,specific,analytical chemistry,0.064956445,0.021652148
+Jamaica,specific,analytical chemistry,0.000704391,0.000704391
+Mexico,specific,analytical chemistry,37.10254892,0.016244549
+Nicaragua,specific,analytical chemistry,0.001821494,0.001821494
+Panama,specific,analytical chemistry,3.602374815,0.032453827
+Paraguay,specific,analytical chemistry,0.572094326,0.017336192
+Peru,specific,analytical chemistry,7.189119763,0.020251042
+Uruguay,specific,analytical chemistry,1.878420977,0.012778374
+Venezuela,specific,analytical chemistry,1.393400646,0.00974406
+Argentina,specific,industrial & manufacturing engineering,6.264443161,0.003708966
+Bahamas,specific,industrial & manufacturing engineering,0.000404367,0.000404367
+Belize,specific,industrial & manufacturing engineering,0.242487307,0.003321744
+Bolivia,specific,industrial & manufacturing engineering,1.466271846,0.006186801
+Brazil,specific,industrial & manufacturing engineering,52.74949846,0.009384362
+Chile,specific,industrial & manufacturing engineering,7.784381675,0.007302422
+Colombia,specific,industrial & manufacturing engineering,4.63324161,0.01259033
+Costa.Rica,specific,industrial & manufacturing engineering,1.082154773,0.005913414
+Cuba,specific,industrial & manufacturing engineering,0.037487623,0.009371906
+Ecuador,specific,industrial & manufacturing engineering,1.679854286,0.006153312
+El.Salvador,specific,industrial & manufacturing engineering,0.013259453,0.001657432
+Guatemala,specific,industrial & manufacturing engineering,0.054691982,0.003646132
+Honduras,specific,industrial & manufacturing engineering,0.002383351,0.00079445
+Jamaica,specific,industrial & manufacturing engineering,0.152852782,0.152852782
+Mexico,specific,industrial & manufacturing engineering,17.92392596,0.007847603
+Nicaragua,specific,industrial & manufacturing engineering,0.009107468,0.009107468
+Panama,specific,industrial & manufacturing engineering,0.285639947,0.002573333
+Paraguay,specific,industrial & manufacturing engineering,0.772542297,0.023410373
+Peru,specific,industrial & manufacturing engineering,4.792414434,0.013499759
+Uruguay,specific,industrial & manufacturing engineering,1.466825767,0.009978407
+Venezuela,specific,industrial & manufacturing engineering,0.649505521,0.004541997
+Argentina,specific,marine biology & biological oceanography,2.141791544,0.001268083
+Bahamas,specific,marine biology & biological oceanography,0.000134789,0.000134789
+Belize,specific,marine biology & biological oceanography,4.561075988,0.062480493
+Bolivia,specific,marine biology & biological oceanography,0.169439668,0.000714935
+Brazil,specific,marine biology & biological oceanography,15.27699835,0.002717844
+Chile,specific,marine biology & biological oceanography,1.786558637,0.001675946
+Colombia,specific,marine biology & biological oceanography,1.420663009,0.003860497
+Costa.Rica,specific,marine biology & biological oceanography,0.340174335,0.001858876
+Cuba,specific,marine biology & biological oceanography,0.004039558,0.001009889
+Ecuador,specific,marine biology & biological oceanography,0.253207296,0.000927499
+El.Salvador,specific,marine biology & biological oceanography,0.006801415,0.000850177
+Guatemala,specific,marine biology & biological oceanography,0.314472433,0.020964829
+Honduras,specific,marine biology & biological oceanography,0.376521684,0.125507228
+Jamaica,specific,marine biology & biological oceanography,0.001173985,0.001173985
+Mexico,specific,marine biology & biological oceanography,9.09908925,0.003983839
+Nicaragua,specific,marine biology & biological oceanography,0.001821494,0.001821494
+Panama,specific,marine biology & biological oceanography,0.755659516,0.006807743
+Paraguay,specific,marine biology & biological oceanography,0.04745406,0.001438002
+Peru,specific,marine biology & biological oceanography,0.379298728,0.001068447
+Uruguay,specific,marine biology & biological oceanography,0.156213742,0.001062679
+Venezuela,specific,marine biology & biological oceanography,1.012831961,0.007082741
+Argentina,specific,geography,28.42852101,0.01683157
+Bahamas,specific,geography,0.000134789,0.000134789
+Belize,specific,geography,1.258502687,0.017239763
+Bolivia,specific,geography,2.552314817,0.010769261
+Brazil,specific,geography,88.67006536,0.015774785
+Chile,specific,geography,13.81653283,0.0129611
+Colombia,specific,geography,5.678981898,0.015432016
+Costa.Rica,specific,geography,3.284390284,0.017947488
+Cuba,specific,geography,0.005097479,0.00127437
+Ecuador,specific,geography,8.98713197,0.032919897
+El.Salvador,specific,geography,0.201170302,0.025146288
+Guatemala,specific,geography,0.360014684,0.024000979
+Honduras,specific,geography,0.011450041,0.00381668
+Jamaica,specific,geography,0.001173985,0.001173985
+Mexico,specific,geography,25.0964106,0.010987921
+Nicaragua,specific,geography,0.001821494,0.001821494
+Panama,specific,geography,2.437091952,0.021955783
+Paraguay,specific,geography,0.198810505,0.006024561
+Peru,specific,geography,4.101068512,0.011552306
+Uruguay,specific,geography,2.557346707,0.017396916
+Venezuela,specific,geography,2.06034754,0.014408025
+Argentina,specific,agricultural economics,10.17388415,0.006023614
+Bahamas,specific,agricultural economics,0.001213101,0.001213101
+Belize,specific,agricultural economics,0.353501356,0.004842484
+Bolivia,specific,agricultural economics,3.227645901,0.013618759
+Brazil,specific,agricultural economics,41.80729629,0.007437697
+Chile,specific,agricultural economics,24.48779574,0.022971666
+Colombia,specific,agricultural economics,9.034285751,0.02454969
+Costa.Rica,specific,agricultural economics,2.404845113,0.01314123
+Cuba,specific,agricultural economics,0.012756197,0.003189049
+Ecuador,specific,agricultural economics,8.018328796,0.029371168
+El.Salvador,specific,agricultural economics,0.022150759,0.002768845
+Guatemala,specific,agricultural economics,0.025116138,0.001674409
+Honduras,specific,agricultural economics,0.077949134,0.025983045
+Jamaica,specific,agricultural economics,0.036863113,0.036863113
+Mexico,specific,agricultural economics,44.7882016,0.019609545
+Nicaragua,specific,agricultural economics,0.001821494,0.001821494
+Panama,specific,agricultural economics,1.264134534,0.011388599
+Paraguay,specific,agricultural economics,0.453507921,0.013742664
+Peru,specific,agricultural economics,6.762647466,0.019049711
+Uruguay,specific,agricultural economics,0.71501144,0.004864023
+Venezuela,specific,agricultural economics,0.775397271,0.005422359
+Argentina,specific,food science,10.82854219,0.006411215
+Bahamas,specific,food science,0.000673945,0.000673945
+Belize,specific,food science,0.447258138,0.006126824
+Bolivia,specific,food science,0.784566377,0.003310407
+Brazil,specific,food science,40.26725178,0.007163717
+Chile,specific,food science,5.917163059,0.00555081
+Colombia,specific,food science,2.48647843,0.006756735
+Costa.Rica,specific,food science,0.286720671,0.00156678
+Cuba,specific,food science,0.003984509,0.000996127
+Ecuador,specific,food science,1.101463248,0.004034664
+El.Salvador,specific,food science,0.003510309,0.000438789
+Guatemala,specific,food science,0.014776161,0.000985077
+Honduras,specific,food science,0.001569558,0.000523186
+Jamaica,specific,food science,0.001173985,0.001173985
+Mexico,specific,food science,10.69554709,0.004682814
+Nicaragua,specific,food science,0.191256831,0.191256831
+Panama,specific,food science,0.136090441,0.00122604
+Paraguay,specific,food science,0.020678294,0.000626615
+Peru,specific,food science,1.096661011,0.003089186
+Uruguay,specific,food science,0.782344047,0.005322068
+Venezuela,specific,food science,0.722662542,0.005053584
+Argentina,specific,wildlife biology,14.7495349,0.008732703
+Bahamas,specific,wildlife biology,0.001752258,0.001752258
+Belize,specific,wildlife biology,1.198127174,0.016412701
+Bolivia,specific,wildlife biology,0.410324339,0.001731326
+Brazil,specific,wildlife biology,36.60796953,0.006512715
+Chile,specific,wildlife biology,4.509157908,0.004229979
+Colombia,specific,wildlife biology,2.386856196,0.006486022
+Costa.Rica,specific,wildlife biology,0.746751535,0.004080609
+Cuba,specific,wildlife biology,0.00280828,0.00070207
+Ecuador,specific,wildlife biology,1.601586238,0.005866616
+El.Salvador,specific,wildlife biology,0.003023809,0.000377976
+Guatemala,specific,wildlife biology,0.363161951,0.024210797
+Honduras,specific,wildlife biology,0.006898052,0.002299351
+Jamaica,specific,wildlife biology,0.00305236,0.00305236
+Mexico,specific,wildlife biology,16.66168706,0.007294959
+Nicaragua,specific,wildlife biology,0.009107468,0.009107468
+Panama,specific,wildlife biology,0.791276851,0.00712862
+Paraguay,specific,wildlife biology,0.050070907,0.0015173
+Peru,specific,wildlife biology,2.079708961,0.005858335
+Uruguay,specific,wildlife biology,3.701253456,0.025178595
+Venezuela,specific,wildlife biology,1.191630437,0.00833308
+Argentina,specific,forest science & biology,17.14710767,0.010152225
+Bahamas,specific,forest science & biology,0.000134789,0.000134789
+Belize,specific,forest science & biology,1.254138806,0.017179984
+Bolivia,specific,forest science & biology,3.878242037,0.01636389
+Brazil,specific,forest science & biology,65.51866232,0.011656051
+Chile,specific,forest science & biology,16.06770299,0.015072892
+Colombia,specific,forest science & biology,3.550878029,0.009649125
+Costa.Rica,specific,forest science & biology,4.815936356,0.026316592
+Cuba,specific,forest science & biology,0.011050735,0.002762684
+Ecuador,specific,forest science & biology,5.799618182,0.021244023
+El.Salvador,specific,forest science & biology,0.033156013,0.004144502
+Guatemala,specific,forest science & biology,0.474559261,0.031637284
+Honduras,specific,forest science & biology,0.109973613,0.036657871
+Jamaica,specific,forest science & biology,0.000234797,0.000234797
+Mexico,specific,forest science & biology,21.45911772,0.009395411
+Nicaragua,specific,forest science & biology,0.012750455,0.012750455
+Panama,specific,forest science & biology,10.04101876,0.090459629
+Paraguay,specific,forest science & biology,0.083684364,0.00253589
+Peru,specific,forest science & biology,3.725408888,0.01049411
+Uruguay,specific,forest science & biology,1.695327003,0.011532837
+Venezuela,specific,forest science & biology,2.422703974,0.016941986
+Argentina,specific,geological & earth sciences,21.85444423,0.01293928
+Bahamas,specific,geological & earth sciences,0.003908883,0.003908883
+Belize,specific,geological & earth sciences,0.89035921,0.012196702
+Bolivia,specific,geological & earth sciences,4.27006184,0.018017139
+Brazil,specific,geological & earth sciences,68.7287332,0.012227136
+Chile,specific,geological & earth sciences,20.31442996,0.019056689
+Colombia,specific,geological & earth sciences,5.028431015,0.013664215
+Costa.Rica,specific,geological & earth sciences,2.029778558,0.011091686
+Cuba,specific,geological & earth sciences,0.005461973,0.001365493
+Ecuador,specific,geological & earth sciences,5.03988627,0.018461122
+El.Salvador,specific,geological & earth sciences,0.041753013,0.005219127
+Guatemala,specific,geological & earth sciences,0.164055236,0.010937016
+Honduras,specific,geological & earth sciences,0.003242242,0.001080747
+Jamaica,specific,geological & earth sciences,0.016200986,0.016200986
+Mexico,specific,geological & earth sciences,32.53501604,0.014244753
+Nicaragua,specific,geological & earth sciences,0.001821494,0.001821494
+Panama,specific,geological & earth sciences,1.218384955,0.010976441
+Paraguay,specific,geological & earth sciences,0.305709754,0.009263932
+Peru,specific,geological & earth sciences,9.696866906,0.027315118
+Uruguay,specific,geological & earth sciences,1.882589683,0.012806733
+Venezuela,specific,geological & earth sciences,0.528779447,0.003697758
+Argentina,specific,atmospheric chemistry & climatology,35.58072416,0.021066148
+Bahamas,specific,atmospheric chemistry & climatology,0.001078312,0.001078312
+Belize,specific,atmospheric chemistry & climatology,2.989129188,0.040946975
+Bolivia,specific,atmospheric chemistry & climatology,9.675475884,0.040824793
+Brazil,specific,atmospheric chemistry & climatology,95.88470679,0.0170583
+Chile,specific,atmospheric chemistry & climatology,20.8051579,0.019517034
+Colombia,specific,atmospheric chemistry & climatology,7.150112203,0.019429653
+Costa.Rica,specific,atmospheric chemistry & climatology,3.177408936,0.01736289
+Cuba,specific,atmospheric chemistry & climatology,0.064910703,0.016227676
+Ecuador,specific,atmospheric chemistry & climatology,4.603437556,0.016862409
+El.Salvador,specific,atmospheric chemistry & climatology,0.027624527,0.003453066
+Guatemala,specific,atmospheric chemistry & climatology,0.918664579,0.061244305
+Honduras,specific,atmospheric chemistry & climatology,0.075698433,0.025232811
+Jamaica,specific,atmospheric chemistry & climatology,0.000939188,0.000939188
+Mexico,specific,atmospheric chemistry & climatology,33.23905605,0.014553002
+Nicaragua,specific,atmospheric chemistry & climatology,0.007285974,0.007285974
+Panama,specific,atmospheric chemistry & climatology,2.217626148,0.019978614
+Paraguay,specific,atmospheric chemistry & climatology,0.265351652,0.008040959
+Peru,specific,atmospheric chemistry & climatology,10.15698341,0.028611221
+Uruguay,specific,atmospheric chemistry & climatology,3.350234492,0.022790711
+Venezuela,specific,atmospheric chemistry & climatology,3.188173338,0.022294918
+Argentina,specific,chemistry,43.61217453,0.025821299
+Bahamas,specific,chemistry,0.003774094,0.003774094
+Belize,specific,chemistry,1.995066149,0.027329673
+Bolivia,specific,chemistry,2.150769958,0.009074979
+Brazil,specific,chemistry,182.5890556,0.032483376
+Chile,specific,chemistry,27.40523742,0.025708478
+Colombia,specific,chemistry,11.29666339,0.030697455
+Costa.Rica,specific,chemistry,3.618073725,0.019770895
+Cuba,specific,chemistry,0.276410523,0.069102631
+Ecuador,specific,chemistry,4.770809096,0.017475491
+El.Salvador,specific,chemistry,0.118978498,0.014872312
+Guatemala,specific,chemistry,0.208693864,0.013912924
+Honduras,specific,chemistry,0.005018701,0.0016729
+Jamaica,specific,chemistry,0.002347969,0.002347969
+Mexico,specific,chemistry,64.11461811,0.028071199
+Nicaragua,specific,chemistry,0.021857923,0.021857923
+Panama,specific,chemistry,1.682664516,0.01515914
+Paraguay,specific,chemistry,0.359547146,0.010895368
+Peru,specific,chemistry,7.262510631,0.020457776
+Uruguay,specific,chemistry,3.174500553,0.021595242
+Venezuela,specific,chemistry,4.919100431,0.034399304
+Argentina,methods,quantitative methods,192.9769665,0.114255161
+Bahamas,methods,quantitative methods,0.013836478,0.013836478
+Belize,methods,quantitative methods,7.020104193,0.096165811
+Bolivia,methods,quantitative methods,31.07230491,0.131106772
+Brazil,methods,quantitative methods,733.4690889,0.130487296
+Chile,methods,quantitative methods,150.7850781,0.141449417
+Colombia,methods,quantitative methods,44.12621641,0.119908197
+Costa.Rica,methods,quantitative methods,28.58347363,0.156193845
+Cuba,methods,quantitative methods,0.459661446,0.114915361
+Ecuador,methods,quantitative methods,33.9713508,0.124437182
+El.Salvador,methods,quantitative methods,2.15330703,0.269163379
+Guatemala,methods,quantitative methods,1.39705322,0.093136881
+Honduras,methods,quantitative methods,0.014489054,0.004829685
+Jamaica,methods,quantitative methods,0.000389257,0.000389257
+Mexico,methods,quantitative methods,285.373214,0.124944489
+Nicaragua,methods,quantitative methods,0.002207506,0.002207506
+Panama,methods,quantitative methods,18.91161831,0.17037494
+Paraguay,methods,quantitative methods,3.677946283,0.111452918
+Peru,methods,quantitative methods,39.78222054,0.112062593
+Uruguay,methods,quantitative methods,20.16651634,0.137187186
+Venezuela,methods,quantitative methods,17.73138352,0.123995689
+Argentina,methods,statistical modeling,61.63586886,0.036492522
+Bahamas,methods,statistical modeling,0.001257862,0.001257862
+Belize,methods,statistical modeling,1.767222697,0.02420853
+Bolivia,methods,statistical modeling,7.679029629,0.032400969
+Brazil,methods,statistical modeling,246.1574357,0.043792463
+Chile,methods,statistical modeling,52.8260409,0.049555385
+Colombia,methods,statistical modeling,19.56533117,0.053166661
+Costa.Rica,methods,statistical modeling,5.298125349,0.028951505
+Cuba,methods,statistical modeling,0.028102631,0.007025658
+Ecuador,methods,statistical modeling,16.08127057,0.058905753
+El.Salvador,methods,statistical modeling,0.114514237,0.01431428
+Guatemala,methods,statistical modeling,0.386108722,0.025740581
+Honduras,methods,statistical modeling,0.035681797,0.011893932
+Jamaica,methods,statistical modeling,0.004281822,0.004281822
+Mexico,methods,statistical modeling,83.86883438,0.036720155
+Nicaragua,methods,statistical modeling,0.002207506,0.002207506
+Panama,methods,statistical modeling,5.591149806,0.050370719
+Paraguay,methods,statistical modeling,0.605957144,0.018362338
+Peru,methods,statistical modeling,13.04552632,0.036747961
+Uruguay,methods,statistical modeling,6.497622067,0.044201511
+Venezuela,methods,statistical modeling,5.454171398,0.038141059
+Argentina,methods,statistics,265.2807038,0.157063768
+Bahamas,methods,statistics,0.011320755,0.011320755
+Belize,methods,statistics,9.425133223,0.129111414
+Bolivia,methods,statistics,24.29117173,0.102494395
+Brazil,methods,statistics,769.0954017,0.136825369
+Chile,methods,statistics,119.5929668,0.112188524
+Colombia,methods,statistics,49.90628429,0.135614903
+Costa.Rica,methods,statistics,19.44396696,0.106251186
+Cuba,methods,statistics,0.026920351,0.006730088
+Ecuador,methods,statistics,36.87403855,0.135069738
+El.Salvador,methods,statistics,0.540646623,0.067580828
+Guatemala,methods,statistics,1.801358367,0.120090558
+Honduras,methods,statistics,0.449179132,0.149726377
+Jamaica,methods,statistics,0.015959517,0.015959517
+Mexico,methods,statistics,243.0294566,0.106405191
+Nicaragua,methods,statistics,0.011037528,0.011037528
+Panama,methods,statistics,20.71576372,0.186628502
+Paraguay,methods,statistics,4.321789171,0.130963308
+Peru,methods,statistics,28.45993302,0.080168825
+Uruguay,methods,statistics,25.16737816,0.171206654
+Venezuela,methods,statistics,15.04172109,0.105186861
+Argentina,methods,water sampling,266.8023512,0.157964684
+Bahamas,methods,water sampling,0.479245283,0.479245283
+Belize,methods,water sampling,13.96261764,0.191268735
+Bolivia,methods,water sampling,33.39758933,0.140918098
+Brazil,methods,water sampling,907.6674319,0.161477928
+Chile,methods,water sampling,124.0181382,0.116339717
+Colombia,methods,water sampling,45.69946341,0.124183324
+Costa.Rica,methods,water sampling,33.08135215,0.180772416
+Cuba,methods,water sampling,1.501644526,0.375411131
+Ecuador,methods,water sampling,32.44807821,0.118857429
+El.Salvador,methods,water sampling,0.651957439,0.08149468
+Guatemala,methods,water sampling,2.420795844,0.16138639
+Honduras,methods,water sampling,0.152871153,0.050957051
+Jamaica,methods,water sampling,0.004281822,0.004281822
+Mexico,methods,water sampling,381.7951806,0.167160762
+Nicaragua,methods,water sampling,0.607064018,0.607064018
+Panama,methods,water sampling,14.3705237,0.129464178
+Paraguay,methods,water sampling,3.733248182,0.113128733
+Peru,methods,water sampling,39.47251987,0.111190197
+Uruguay,methods,water sampling,15.39487803,0.104727061
+Venezuela,methods,water sampling,34.94343735,0.244359702
+Argentina,methods,community studies,39.20978066,0.02321479
+Bahamas,methods,community studies,0.001257862,0.001257862
+Belize,methods,community studies,7.196784484,0.098586089
+Bolivia,methods,community studies,36.81746228,0.155347942
+Brazil,methods,community studies,228.8001744,0.040704532
+Chile,methods,community studies,41.81222058,0.039223471
+Colombia,methods,community studies,35.52574218,0.096537343
+Costa.Rica,methods,community studies,16.6720016,0.091103834
+Cuba,methods,community studies,0.032788729,0.008197182
+Ecuador,methods,community studies,37.48022398,0.137290198
+El.Salvador,methods,community studies,0.330210425,0.041276303
+Guatemala,methods,community studies,1.355339587,0.090355972
+Honduras,methods,community studies,1.158102195,0.386034065
+Jamaica,methods,community studies,0.065784352,0.065784352
+Mexico,methods,community studies,147.3939782,0.064533265
+Nicaragua,methods,community studies,0.002207506,0.002207506
+Panama,methods,community studies,2.870457892,0.025859981
+Paraguay,methods,community studies,4.708874032,0.142693152
+Peru,methods,community studies,44.31934759,0.124843233
+Uruguay,methods,community studies,3.994746593,0.027175147
+Venezuela,methods,community studies,5.624324676,0.039330942
+Argentina,methods,spatial methods,117.3284564,0.069466226
+Bahamas,methods,spatial methods,0.101886792,0.101886792
+Belize,methods,spatial methods,5.175507432,0.070897362
+Bolivia,methods,spatial methods,22.00551376,0.092850269
+Brazil,methods,spatial methods,431.8700224,0.076831529
+Chile,methods,spatial methods,78.87643873,0.073992907
+Colombia,methods,spatial methods,31.99789882,0.086950812
+Costa.Rica,methods,spatial methods,15.2434329,0.083297448
+Cuba,methods,spatial methods,0.04977749,0.012444372
+Ecuador,methods,spatial methods,24.23351111,0.08876744
+El.Salvador,methods,spatial methods,0.763876479,0.09548456
+Guatemala,methods,spatial methods,1.057273965,0.070484931
+Honduras,methods,spatial methods,0.047652527,0.015884176
+Jamaica,methods,spatial methods,0.029194239,0.029194239
+Mexico,methods,spatial methods,173.4013828,0.075920045
+Nicaragua,methods,spatial methods,0.002207506,0.002207506
+Panama,methods,spatial methods,8.73278188,0.078673711
+Paraguay,methods,spatial methods,1.81255713,0.054925974
+Peru,methods,spatial methods,33.68904577,0.09489872
+Uruguay,methods,spatial methods,12.63137857,0.085927745
+Venezuela,methods,spatial methods,8.157448241,0.057045093
+Argentina,methods,isotopes,93.2690058,0.055221436
+Bahamas,methods,isotopes,0.006289308,0.006289308
+Belize,methods,isotopes,8.106953047,0.111054151
+Bolivia,methods,isotopes,11.915742,0.050277392
+Brazil,methods,isotopes,243.4103371,0.043303743
+Chile,methods,isotopes,72.36617988,0.067885722
+Colombia,methods,isotopes,17.05076495,0.0463336
+Costa.Rica,methods,isotopes,17.72230975,0.096843223
+Cuba,methods,isotopes,0.071891952,0.017972988
+Ecuador,methods,isotopes,11.29387814,0.041369517
+El.Salvador,methods,isotopes,1.255936665,0.156992083
+Guatemala,methods,isotopes,2.996899307,0.199793287
+Honduras,methods,isotopes,0.273015828,0.091005276
+Jamaica,methods,isotopes,0.00116777,0.00116777
+Mexico,methods,isotopes,151.219509,0.066208191
+Nicaragua,methods,isotopes,0.002207506,0.002207506
+Panama,methods,isotopes,13.49643721,0.121589524
+Paraguay,methods,isotopes,2.755879995,0.083511515
+Peru,methods,isotopes,27.56954308,0.077660685
+Uruguay,methods,isotopes,9.235834141,0.062828804
+Venezuela,methods,isotopes,7.043869779,0.049257831
+Argentina,methods,temporal analysis,311.7416077,0.184571704
+Bahamas,methods,temporal analysis,0.260377358,0.260377358
+Belize,methods,temporal analysis,6.304937419,0.086369006
+Bolivia,methods,temporal analysis,25.27012835,0.106625014
+Brazil,methods,temporal analysis,656.2765054,0.116754404
+Chile,methods,temporal analysis,170.3918712,0.159842281
+Colombia,methods,temporal analysis,35.05942959,0.095270189
+Costa.Rica,methods,temporal analysis,17.87805318,0.09769428
+Cuba,methods,temporal analysis,0.332961995,0.083240499
+Ecuador,methods,temporal analysis,22.8428872,0.08367358
+El.Salvador,methods,temporal analysis,0.789004571,0.098625571
+Guatemala,methods,temporal analysis,0.825969852,0.055064657
+Honduras,methods,temporal analysis,0.603450666,0.201150222
+Jamaica,methods,temporal analysis,0.00116777,0.00116777
+Mexico,methods,temporal analysis,284.52148,0.124571576
+Nicaragua,methods,temporal analysis,0.033112583,0.033112583
+Panama,methods,temporal analysis,8.174365912,0.073642936
+Paraguay,methods,temporal analysis,5.935937793,0.179876903
+Peru,methods,temporal analysis,35.99508673,0.101394611
+Uruguay,methods,temporal analysis,25.16967708,0.171222293
+Venezuela,methods,temporal analysis,18.95517016,0.132553637
+Argentina,methods,remote sensing,59.75816033,0.035380794
+Bahamas,methods,remote sensing,0.038993711,0.038993711
+Belize,methods,remote sensing,3.445044434,0.04719239
+Bolivia,methods,remote sensing,11.07593203,0.04673389
+Brazil,methods,remote sensing,194.9379699,0.034680301
+Chile,methods,remote sensing,32.13149081,0.030142111
+Colombia,methods,remote sensing,9.997249264,0.027166438
+Costa.Rica,methods,remote sensing,3.43822152,0.018788096
+Cuba,methods,remote sensing,0.017039548,0.004259887
+Ecuador,methods,remote sensing,6.463212543,0.023674771
+El.Salvador,methods,remote sensing,0.02505324,0.003131655
+Guatemala,methods,remote sensing,1.07380623,0.071587082
+Honduras,methods,remote sensing,0.060453779,0.02015126
+Jamaica,methods,remote sensing,0.00116777,0.00116777
+Mexico,methods,remote sensing,83.65673162,0.036627291
+Nicaragua,methods,remote sensing,0.002207506,0.002207506
+Panama,methods,remote sensing,2.736257048,0.024650964
+Paraguay,methods,remote sensing,1.71604594,0.052001392
+Peru,methods,remote sensing,16.62479751,0.046830416
+Uruguay,methods,remote sensing,2.664002957,0.018122469
+Venezuela,methods,remote sensing,4.325676615,0.030249487
+Argentina,methods,simulation modeling,109.0988134,0.064593732
+Bahamas,methods,simulation modeling,0.066666667,0.066666667
+Belize,methods,simulation modeling,4.364966836,0.059794066
+Bolivia,methods,simulation modeling,15.68365903,0.066175776
+Brazil,methods,simulation modeling,430.4756075,0.076583456
+Chile,methods,simulation modeling,85.14183963,0.079870394
+Colombia,methods,simulation modeling,28.83019956,0.078342934
+Costa.Rica,methods,simulation modeling,14.07704975,0.076923769
+Cuba,methods,simulation modeling,0.016127558,0.00403189
+Ecuador,methods,simulation modeling,31.00855316,0.113584444
+El.Salvador,methods,simulation modeling,0.205065169,0.025633146
+Guatemala,methods,simulation modeling,0.426121702,0.028408113
+Honduras,methods,simulation modeling,0.03800589,0.01266863
+Jamaica,methods,simulation modeling,0.001946283,0.001946283
+Mexico,methods,simulation modeling,183.0205552,0.080131592
+Nicaragua,methods,simulation modeling,0.002207506,0.002207506
+Panama,methods,simulation modeling,9.54731095,0.08601181
+Paraguay,methods,simulation modeling,1.614489196,0.048923915
+Peru,methods,simulation modeling,31.66148606,0.089187285
+Uruguay,methods,simulation modeling,12.56908656,0.08550399
+Venezuela,methods,simulation modeling,6.952169531,0.04861657
+Argentina,methods,risk assessment,37.40022376,0.022143413
+Bahamas,methods,risk assessment,0.001257862,0.001257862
+Belize,methods,risk assessment,1.408707507,0.019297363
+Bolivia,methods,risk assessment,6.045714784,0.025509345
+Brazil,methods,risk assessment,122.6641825,0.021822484
+Chile,methods,risk assessment,26.28129211,0.02465412
+Colombia,methods,risk assessment,12.28987528,0.0333964
+Costa.Rica,methods,risk assessment,3.335946276,0.018229215
+Cuba,methods,risk assessment,0.023987666,0.005996916
+Ecuador,methods,risk assessment,6.893180587,0.025249746
+El.Salvador,methods,risk assessment,0.514881184,0.064360148
+Guatemala,methods,risk assessment,0.07671376,0.005114251
+Honduras,methods,risk assessment,0.004287507,0.001429169
+Jamaica,methods,risk assessment,0.000389257,0.000389257
+Mexico,methods,risk assessment,69.86882178,0.030590552
+Nicaragua,methods,risk assessment,0.002207506,0.002207506
+Panama,methods,risk assessment,1.808932014,0.016296685
+Paraguay,methods,risk assessment,0.776653831,0.023534965
+Peru,methods,risk assessment,22.376057,0.063031146
+Uruguay,methods,risk assessment,1.963988579,0.013360467
+Venezuela,methods,risk assessment,3.756256213,0.026267526
+Argentina,methods,signal processing,35.85564004,0.021228917
+Bahamas,methods,signal processing,0.011320755,0.011320755
+Belize,methods,signal processing,1.466716606,0.020092008
+Bolivia,methods,signal processing,3.481779306,0.014691052
+Brazil,methods,signal processing,110.6060812,0.019677296
+Chile,methods,signal processing,37.84274749,0.035499763
+Colombia,methods,signal processing,9.412579219,0.025577661
+Costa.Rica,methods,signal processing,1.77387694,0.009693317
+Cuba,methods,signal processing,0.031250859,0.007812715
+Ecuador,methods,signal processing,4.389279527,0.016077947
+El.Salvador,methods,signal processing,0.542905619,0.067863202
+Guatemala,methods,signal processing,0.14462195,0.009641463
+Honduras,methods,signal processing,0.011886674,0.003962225
+Jamaica,methods,signal processing,0.873880888,0.873880888
+Mexico,methods,signal processing,66.60181033,0.029160162
+Nicaragua,methods,signal processing,0.002207506,0.002207506
+Panama,methods,signal processing,1.351661058,0.012177127
+Paraguay,methods,signal processing,0.436006806,0.013212327
+Peru,methods,signal processing,7.998064079,0.022529758
+Uruguay,methods,signal processing,3.042226376,0.020695418
+Venezuela,methods,signal processing,2.356872705,0.016481627
+Argentina,methods,analytical chemistry,98.64242164,0.058402855
+Bahamas,methods,analytical chemistry,0.006289308,0.006289308
+Belize,methods,analytical chemistry,3.355304482,0.045963075
+Bolivia,methods,analytical chemistry,8.263972866,0.034869084
+Brazil,methods,analytical chemistry,545.5697615,0.0970592
+Chile,methods,analytical chemistry,73.93369567,0.069356187
+Colombia,methods,analytical chemistry,28.53896584,0.077551538
+Costa.Rica,methods,analytical chemistry,6.452189986,0.035257869
+Cuba,methods,analytical chemistry,1.407845249,0.351961312
+Ecuador,methods,analytical chemistry,9.020535635,0.033042255
+El.Salvador,methods,analytical chemistry,0.112641319,0.014080165
+Guatemala,methods,analytical chemistry,1.037937495,0.069195833
+Honduras,methods,analytical chemistry,0.150923796,0.050307932
+Jamaica,methods,analytical chemistry,0.000389257,0.000389257
+Mexico,methods,analytical chemistry,130.2490456,0.057026727
+Nicaragua,methods,analytical chemistry,0.328918322,0.328918322
+Panama,methods,analytical chemistry,2.692740496,0.024258923
+Paraguay,methods,analytical chemistry,0.904614496,0.02741256
+Peru,methods,analytical chemistry,14.00637244,0.03945457
+Uruguay,methods,analytical chemistry,8.502664541,0.057841255
+Venezuela,methods,analytical chemistry,12.65749872,0.088513977
+Argentina,general,physical sciences,745.6159328,0.441454075
+Bahamas,general,physical sciences,0.403019275,0.403019275
+Belize,general,physical sciences,37.31458569,0.511158708
+Bolivia,general,physical sciences,117.7289673,0.496746698
+Brazil,general,physical sciences,2225.874201,0.395992564
+Chile,general,physical sciences,505.5925263,0.474289424
+Colombia,general,physical sciences,147.8552608,0.4017806
+Costa.Rica,general,physical sciences,88.3891794,0.48300098
+Cuba,general,physical sciences,1.407203346,0.351800836
+Ecuador,general,physical sciences,117.2574613,0.42951451
+El.Salvador,general,physical sciences,5.078531099,0.634816387
+Guatemala,general,physical sciences,8.450937608,0.563395841
+Honduras,general,physical sciences,0.892867986,0.297622662
+Jamaica,general,physical sciences,0.191594271,0.191594271
+Mexico,general,physical sciences,1078.748324,0.472306622
+Nicaragua,general,physical sciences,0.255009107,0.255009107
+Panama,general,physical sciences,50.5692342,0.455578687
+Paraguay,general,physical sciences,16.70826535,0.506311071
+Peru,general,physical sciences,188.6797467,0.531492244
+Uruguay,general,physical sciences,55.52910836,0.377749036
+Venezuela,general,physical sciences,69.0975809,0.483199866
+Argentina,general,life sciences,658.0202242,0.389591607
+Bahamas,general,life sciences,0.584040976,0.584040976
+Belize,general,life sciences,24.58713716,0.336810098
+Bolivia,general,life sciences,51.03420577,0.215334202
+Brazil,general,life sciences,2063.700631,0.36714119
+Chile,general,life sciences,326.0234081,0.305838094
+Colombia,general,life sciences,117.4107985,0.319051083
+Costa.Rica,general,life sciences,60.60856229,0.331194329
+Cuba,general,life sciences,1.513772219,0.378443055
+Ecuador,general,life sciences,75.02136705,0.274803542
+El.Salvador,general,life sciences,0.70677247,0.088346559
+Guatemala,general,life sciences,3.626986881,0.241799125
+Honduras,general,life sciences,1.104202302,0.368067434
+Jamaica,general,life sciences,0.089457619,0.089457619
+Mexico,general,life sciences,687.3849905,0.300956651
+Nicaragua,general,life sciences,0.650273224,0.650273224
+Panama,general,life sciences,41.45289812,0.373449533
+Paraguay,general,life sciences,6.681414083,0.202467093
+Peru,general,life sciences,72.2388469,0.20348971
+Uruguay,general,life sciences,59.95261904,0.407840946
+Venezuela,general,life sciences,48.48436756,0.339051521
+Argentina,general,mathematics & statistics,135.8526665,0.080433787
+Bahamas,general,mathematics & statistics,0.00283057,0.00283057
+Belize,general,mathematics & statistics,4.047795669,0.055449256
+Bolivia,general,mathematics & statistics,14.66544352,0.061879509
+Brazil,general,mathematics & statistics,441.2136061,0.078493792
+Chile,general,mathematics & statistics,91.46171102,0.085798978
+Colombia,general,mathematics & statistics,28.55856404,0.077604794
+Costa.Rica,general,mathematics & statistics,12.82444488,0.070078934
+Cuba,general,mathematics & statistics,0.219973629,0.054993407
+Ecuador,general,mathematics & statistics,24.56615484,0.089985915
+El.Salvador,general,mathematics & statistics,0.706428786,0.088303598
+Guatemala,general,mathematics & statistics,1.372988628,0.091532575
+Honduras,general,mathematics & statistics,0.134969602,0.044989867
+Jamaica,general,mathematics & statistics,0.012444236,0.012444236
+Mexico,general,mathematics & statistics,158.8952928,0.069568867
+Nicaragua,general,mathematics & statistics,0.012750455,0.012750455
+Panama,general,mathematics & statistics,10.6228387,0.09570125
+Paraguay,general,mathematics & statistics,2.676422115,0.0811037
+Peru,general,mathematics & statistics,21.84537359,0.061536264
+Uruguay,general,mathematics & statistics,14.27622731,0.097117193
+Venezuela,general,mathematics & statistics,8.514561523,0.059542388
+Argentina,general,engineering,103.3758558,0.061205362
+Bahamas,general,engineering,0.008087343,0.008087343
+Belize,general,engineering,3.586383856,0.049128546
+Bolivia,general,engineering,24.42765314,0.103070266
+Brazil,general,engineering,710.8875906,0.12646995
+Chile,general,engineering,102.8508109,0.096482937
+Colombia,general,engineering,50.74777727,0.137901569
+Costa.Rica,general,engineering,11.0860746,0.060579643
+Cuba,general,engineering,0.840150487,0.210037622
+Ecuador,general,engineering,25.60773069,0.093801211
+El.Salvador,general,engineering,1.214617452,0.151827181
+Guatemala,general,engineering,0.818703721,0.054580248
+Honduras,general,engineering,0.152692688,0.050897563
+Jamaica,general,engineering,0.60154966,0.60154966
+Mexico,general,engineering,267.1173266,0.116951544
+Nicaragua,general,engineering,0.072859745,0.072859745
+Panama,general,engineering,5.308455743,0.047823926
+Paraguay,general,engineering,3.464519358,0.104985435
+Peru,general,engineering,41.44167361,0.116737109
+Uruguay,general,engineering,13.25313643,0.090157391
+Venezuela,general,engineering,12.54365682,0.08771788
+Argentina,general,social sciences,46.13532072,0.027315169
+Bahamas,general,social sciences,0.002021836,0.002021836
+Belize,general,social sciences,3.46409763,0.047453392
+Bolivia,general,social sciences,29.14373022,0.122969326
+Brazil,general,social sciences,179.323972,0.031902503
+Chile,general,social sciences,40.07154363,0.037590566
+Colombia,general,social sciences,23.42759933,0.063661955
+Costa.Rica,general,social sciences,10.09173884,0.055146114
+Cuba,general,social sciences,0.018900319,0.00472508
+Ecuador,general,social sciences,30.54728609,0.111894821
+El.Salvador,general,social sciences,0.293650193,0.036706274
+Guatemala,general,social sciences,0.730383163,0.048692211
+Honduras,general,social sciences,0.715267422,0.238422474
+Jamaica,general,social sciences,0.104954215,0.104954215
+Mexico,general,social sciences,91.85406631,0.040216316
+Nicaragua,general,social sciences,0.009107468,0.009107468
+Panama,general,social sciences,3.046573231,0.027446606
+Paraguay,general,social sciences,3.469379096,0.1051327
+Peru,general,social sciences,30.79435924,0.086744674
+Uruguay,general,social sciences,3.988908859,0.027135434
+Venezuela,general,social sciences,4.359833194,0.030488344
+Argentina,budget,oceanography,124.1576485,0.073509561
+Bahamas,budget,oceanography,0.001876173,0.001876173
+Belize,budget,oceanography,7.972838102,0.10921696
+Bolivia,budget,oceanography,17.6514875,0.07447885
+Brazil,budget,oceanography,353.4838689,0.062886296
+Chile,budget,oceanography,140.6451087,0.13193725
+Colombia,budget,oceanography,26.03833528,0.070756346
+Costa.Rica,budget,oceanography,15.33285297,0.083786082
+Cuba,budget,oceanography,0.374375462,0.093593866
+Ecuador,budget,oceanography,21.38705217,0.07834085
+El.Salvador,budget,oceanography,0.479073081,0.059884135
+Guatemala,budget,oceanography,1.120554465,0.074703631
+Honduras,budget,oceanography,0.444547517,0.148182506
+Jamaica,budget,oceanography,0.808917197,0.808917197
+Mexico,budget,oceanography,187.207753,0.081964866
+Nicaragua,budget,oceanography,0.008130081,0.008130081
+Panama,budget,oceanography,13.46838857,0.121336834
+Paraguay,budget,oceanography,1.506389003,0.045648152
+Peru,budget,oceanography,64.73774884,0.182359856
+Uruguay,budget,oceanography,18.74011961,0.127483807
+Venezuela,budget,oceanography,9.422483087,0.06589149
+Argentina,budget,groundwater flow,86.67997758,0.051320295
+Bahamas,budget,groundwater flow,0.001876173,0.001876173
+Belize,budget,groundwater flow,3.484594978,0.047734178
+Bolivia,budget,groundwater flow,8.417424804,0.03551656
+Brazil,budget,groundwater flow,319.5314734,0.056846019
+Chile,budget,groundwater flow,66.71557503,0.062584967
+Colombia,budget,groundwater flow,22.72253495,0.061746019
+Costa.Rica,budget,groundwater flow,10.5354677,0.057570862
+Cuba,budget,groundwater flow,0.077507384,0.019376846
+Ecuador,budget,groundwater flow,14.88929754,0.054539551
+El.Salvador,budget,groundwater flow,0.811789298,0.101473662
+Guatemala,budget,groundwater flow,1.031148539,0.068743236
+Honduras,budget,groundwater flow,0.032975054,0.010991685
+Jamaica,budget,groundwater flow,0.006369427,0.006369427
+Mexico,budget,groundwater flow,135.6258396,0.05938084
+Nicaragua,budget,groundwater flow,0.008130081,0.008130081
+Panama,budget,groundwater flow,4.038541245,0.036383254
+Paraguay,budget,groundwater flow,0.874328944,0.026494816
+Peru,budget,groundwater flow,21.91487631,0.061732046
+Uruguay,budget,groundwater flow,5.100413662,0.034696692
+Venezuela,budget,groundwater flow,6.913083366,0.04834324
+Argentina,budget,solar radiation,90.54125005,0.053606424
+Bahamas,budget,solar radiation,0.125703565,0.125703565
+Belize,budget,solar radiation,3.154285643,0.043209392
+Bolivia,budget,solar radiation,8.574160575,0.036177893
+Brazil,budget,solar radiation,286.0255641,0.050885174
+Chile,budget,solar radiation,63.76272868,0.059814942
+Colombia,budget,solar radiation,16.96731564,0.046106836
+Costa.Rica,budget,solar radiation,7.355527102,0.040194137
+Cuba,budget,solar radiation,0.083033267,0.020758317
+Ecuador,budget,solar radiation,11.56641528,0.042367822
+El.Salvador,budget,solar radiation,0.253059213,0.031632402
+Guatemala,budget,solar radiation,0.276990106,0.018466007
+Honduras,budget,solar radiation,0.064113124,0.021371041
+Jamaica,budget,solar radiation,0.006369427,0.006369427
+Mexico,budget,solar radiation,120.8134711,0.052895565
+Nicaragua,budget,solar radiation,0.056910569,0.056910569
+Panama,budget,solar radiation,5.14114769,0.046316646
+Paraguay,budget,solar radiation,0.561137949,0.01700418
+Peru,budget,solar radiation,11.22092708,0.031608245
+Uruguay,budget,solar radiation,7.36016495,0.050069149
+Venezuela,budget,solar radiation,8.236838393,0.057600268
+Argentina,budget,watershed hydrolgical processes,63.56177444,0.037632785
+Bahamas,budget,watershed hydrolgical processes,0.004377736,0.004377736
+Belize,budget,watershed hydrolgical processes,2.675110995,0.036645356
+Bolivia,budget,watershed hydrolgical processes,8.848626418,0.037335976
+Brazil,budget,watershed hydrolgical processes,290.1071305,0.051611302
+Chile,budget,watershed hydrolgical processes,55.01084751,0.051604923
+Colombia,budget,watershed hydrolgical processes,21.60060711,0.058697302
+Costa.Rica,budget,watershed hydrolgical processes,15.68390053,0.085704374
+Cuba,budget,watershed hydrolgical processes,0.246974656,0.061743664
+Ecuador,budget,watershed hydrolgical processes,32.07532155,0.11749202
+El.Salvador,budget,watershed hydrolgical processes,0.983024198,0.122878025
+Guatemala,budget,watershed hydrolgical processes,1.074751829,0.071650122
+Honduras,budget,watershed hydrolgical processes,0.356178977,0.118726326
+Jamaica,budget,watershed hydrolgical processes,0.006369427,0.006369427
+Mexico,budget,watershed hydrolgical processes,91.7451923,0.040168648
+Nicaragua,budget,watershed hydrolgical processes,0.056910569,0.056910569
+Panama,budget,watershed hydrolgical processes,14.9842141,0.13499292
+Paraguay,budget,watershed hydrolgical processes,1.72416433,0.052247404
+Peru,budget,watershed hydrolgical processes,18.10972014,0.051013296
+Uruguay,budget,watershed hydrolgical processes,8.754039421,0.059551289
+Venezuela,budget,watershed hydrolgical processes,5.504015622,0.03848962
+Argentina,budget,salt water,52.11813766,0.030857394
+Bahamas,budget,salt water,0.114446529,0.114446529
+Belize,budget,salt water,3.933104406,0.053878143
+Bolivia,budget,salt water,5.439032157,0.022949503
+Brazil,budget,salt water,146.0464671,0.025982293
+Chile,budget,salt water,33.19262916,0.031137551
+Colombia,budget,salt water,8.948031675,0.024315303
+Costa.Rica,budget,salt water,1.497694958,0.008184125
+Cuba,budget,salt water,0.014070872,0.003517718
+Ecuador,budget,salt water,3.195822603,0.01170631
+El.Salvador,budget,salt water,0.246001074,0.030750134
+Guatemala,budget,salt water,0.153664837,0.010244322
+Honduras,budget,salt water,0.011940001,0.00398
+Jamaica,budget,salt water,0.031847134,0.031847134
+Mexico,budget,salt water,89.21832153,0.039062312
+Nicaragua,budget,salt water,0.008130081,0.008130081
+Panama,budget,salt water,1.885538475,0.016986833
+Paraguay,budget,salt water,0.744335289,0.022555615
+Peru,budget,salt water,5.407132344,0.015231359
+Uruguay,budget,salt water,6.34588356,0.043169276
+Venezuela,budget,salt water,5.527710476,0.038655318
+Argentina,budget,soil,202.3903201,0.11982849
+Bahamas,budget,soil,0.010631645,0.010631645
+Belize,budget,soil,10.2602209,0.140550971
+Bolivia,budget,soil,19.37922656,0.081768888
+Brazil,budget,soil,640.753015,0.113992709
+Chile,budget,soil,103.6281691,0.097212166
+Colombia,budget,soil,35.5823463,0.096691158
+Costa.Rica,budget,soil,19.53941419,0.106772755
+Cuba,budget,soil,0.218404726,0.054601181
+Ecuador,budget,soil,33.94825399,0.124352579
+El.Salvador,budget,soil,0.129372383,0.016171548
+Guatemala,budget,soil,1.37790113,0.091860075
+Honduras,budget,soil,0.197560127,0.065853376
+Jamaica,budget,soil,0.01910828,0.01910828
+Mexico,budget,soil,182.982203,0.0801148
+Nicaragua,budget,soil,0.024390244,0.024390244
+Panama,budget,soil,18.03991086,0.162521719
+Paraguay,budget,soil,0.861137267,0.026095069
+Peru,budget,soil,18.98197978,0.053470366
+Uruguay,budget,soil,9.510289072,0.064695844
+Venezuela,budget,soil,16.87998662,0.118041864
+Argentina,budget,reservoirs,48.01099122,0.02842569
+Bahamas,budget,reservoirs,0.000625391,0.000625391
+Belize,budget,reservoirs,1.942059936,0.026603561
+Bolivia,budget,reservoirs,7.072511575,0.029841821
+Brazil,budget,reservoirs,423.9591152,0.075424144
+Chile,budget,reservoirs,28.44186205,0.026680921
+Colombia,budget,reservoirs,11.54387946,0.031369238
+Costa.Rica,budget,reservoirs,4.427375675,0.02419331
+Cuba,budget,reservoirs,0.73309964,0.18327491
+Ecuador,budget,reservoirs,9.047643665,0.033141552
+El.Salvador,budget,reservoirs,1.033667208,0.129208401
+Guatemala,budget,reservoirs,0.831614337,0.055440956
+Honduras,budget,reservoirs,0.011940001,0.00398
+Jamaica,budget,reservoirs,0.006369427,0.006369427
+Mexico,budget,reservoirs,93.24493169,0.040825277
+Nicaragua,budget,reservoirs,0.008130081,0.008130081
+Panama,budget,reservoirs,2.767879005,0.024935847
+Paraguay,budget,reservoirs,1.085128241,0.032882674
+Peru,budget,reservoirs,9.950562839,0.028029754
+Uruguay,budget,reservoirs,5.576603693,0.03793608
+Venezuela,budget,reservoirs,5.203110582,0.036385389
+Argentina,budget,irrigation,66.45000178,0.039342807
+Bahamas,budget,irrigation,0.001876173,0.001876173
+Belize,budget,irrigation,3.055552892,0.041856889
+Bolivia,budget,irrigation,19.43378086,0.081999075
+Brazil,budget,irrigation,302.6983444,0.053851333
+Chile,budget,irrigation,78.84726243,0.073965537
+Colombia,budget,irrigation,14.2982168,0.03885385
+Costa.Rica,budget,irrigation,5.053607212,0.02761534
+Cuba,budget,irrigation,0.069769858,0.017442465
+Ecuador,budget,irrigation,22.48371635,0.082357935
+El.Salvador,budget,irrigation,0.771777391,0.096472174
+Guatemala,budget,irrigation,0.119677708,0.007978514
+Honduras,budget,irrigation,0.540481228,0.180160409
+Jamaica,budget,irrigation,0.006369427,0.006369427
+Mexico,budget,irrigation,129.5585412,0.056724405
+Nicaragua,budget,irrigation,0.008130081,0.008130081
+Panama,budget,irrigation,2.77615009,0.025010361
+Paraguay,budget,irrigation,0.419571996,0.012714303
+Peru,budget,irrigation,27.75666006,0.078187775
+Uruguay,budget,irrigation,7.670666987,0.052181408
+Venezuela,budget,irrigation,6.353976318,0.044433401
+Argentina,budget,canopy interception,30.42741925,0.01801505
+Bahamas,budget,canopy interception,0.005628518,0.005628518
+Belize,budget,canopy interception,2.040051315,0.027945908
+Bolivia,budget,canopy interception,4.155863151,0.017535288
+Brazil,budget,canopy interception,157.4925941,0.028018608
+Chile,budget,canopy interception,41.20621286,0.038654984
+Colombia,budget,canopy interception,13.41988171,0.03646707
+Costa.Rica,budget,canopy interception,16.19410091,0.088492355
+Cuba,budget,canopy interception,0.036580382,0.009145095
+Ecuador,budget,canopy interception,24.21792167,0.088710336
+El.Salvador,budget,canopy interception,0.135812631,0.016976579
+Guatemala,budget,canopy interception,0.620312296,0.041354153
+Honduras,budget,canopy interception,0.147246555,0.049082185
+Jamaica,budget,canopy interception,0.01910828,0.01910828
+Mexico,budget,canopy interception,70.43112528,0.030836745
+Nicaragua,budget,canopy interception,0.008130081,0.008130081
+Panama,budget,canopy interception,12.20930122,0.109993705
+Paraguay,budget,canopy interception,0.287459927,0.008710907
+Peru,budget,canopy interception,9.479167342,0.02670188
+Uruguay,budget,canopy interception,2.891782197,0.019671988
+Venezuela,budget,canopy interception,10.63258091,0.074353713
+Argentina,budget,lakes,191.5696959,0.113421963
+Bahamas,budget,lakes,0.614759225,0.614759225
+Belize,budget,lakes,3.712922398,0.050861951
+Bolivia,budget,lakes,21.97451726,0.092719482
+Brazil,budget,lakes,362.4265735,0.064477241
+Chile,budget,lakes,39.78749063,0.0373241
+Colombia,budget,lakes,16.23340241,0.044112507
+Costa.Rica,budget,lakes,6.194660967,0.033850606
+Cuba,budget,lakes,0.169518592,0.042379648
+Ecuador,budget,lakes,10.71896332,0.039263602
+El.Salvador,budget,lakes,0.03114413,0.003893016
+Guatemala,budget,lakes,1.915802346,0.127720156
+Honduras,budget,lakes,0.051349944,0.017116648
+Jamaica,budget,lakes,0.006369427,0.006369427
+Mexico,budget,lakes,120.0341227,0.052554344
+Nicaragua,budget,lakes,0.674796748,0.674796748
+Panama,budget,lakes,3.097005372,0.027900949
+Paraguay,budget,lakes,1.291379634,0.039132716
+Peru,budget,lakes,18.26263716,0.051444048
+Uruguay,budget,lakes,18.66068217,0.126943416
+Venezuela,budget,lakes,17.51433073,0.122477837
+Argentina,budget,cloud formation and atmospheric science,25.63186205,0.015175762
+Bahamas,budget,cloud formation and atmospheric science,0.0068793,0.0068793
+Belize,budget,cloud formation and atmospheric science,2.243822468,0.030737294
+Bolivia,budget,cloud formation and atmospheric science,6.992970916,0.029506206
+Brazil,budget,cloud formation and atmospheric science,105.5854177,0.018784098
+Chile,budget,cloud formation and atmospheric science,18.40342738,0.017264003
+Colombia,budget,cloud formation and atmospheric science,7.993779104,0.021722226
+Costa.Rica,budget,cloud formation and atmospheric science,3.756252994,0.020525973
+Cuba,budget,cloud formation and atmospheric science,0.0247756,0.0061939
+Ecuador,budget,cloud formation and atmospheric science,6.346042036,0.023245575
+El.Salvador,budget,cloud formation and atmospheric science,0.140210023,0.017526253
+Guatemala,budget,cloud formation and atmospheric science,0.378192445,0.02521283
+Honduras,budget,cloud formation and atmospheric science,0.056933248,0.018977749
+Jamaica,budget,cloud formation and atmospheric science,0.006369427,0.006369427
+Mexico,budget,cloud formation and atmospheric science,39.47556421,0.017283522
+Nicaragua,budget,cloud formation and atmospheric science,0.008130081,0.008130081
+Panama,budget,cloud formation and atmospheric science,1.703830963,0.015349828
+Paraguay,budget,cloud formation and atmospheric science,0.35641899,0.010800575
+Peru,budget,cloud formation and atmospheric science,6.794518299,0.019139488
+Uruguay,budget,cloud formation and atmospheric science,3.068139405,0.020871697
+Venezuela,budget,cloud formation and atmospheric science,3.735014367,0.026118982
+Argentina,budget,wastewater,80.93885751,0.047921171
+Bahamas,budget,wastewater,0.001876173,0.001876173
+Belize,budget,wastewater,2.762371718,0.037840708
+Bolivia,budget,wastewater,14.52496935,0.061286791
+Brazil,budget,wastewater,587.8778461,0.104585989
+Chile,budget,wastewater,59.49431644,0.055810803
+Colombia,budget,wastewater,53.42644741,0.145180564
+Costa.Rica,budget,wastewater,7.384479012,0.040352344
+Cuba,budget,wastewater,1.007236268,0.251809067
+Ecuador,budget,wastewater,14.336517,0.052514714
+El.Salvador,budget,wastewater,0.747899235,0.093487404
+Guatemala,budget,wastewater,0.817242416,0.054482828
+Honduras,budget,wastewater,0.083501818,0.027833939
+Jamaica,budget,wastewater,0.006369427,0.006369427
+Mexico,budget,wastewater,194.1728393,0.085014378
+Nicaragua,budget,wastewater,0.040650407,0.040650407
+Panama,budget,wastewater,1.537413229,0.01385057
+Paraguay,budget,wastewater,1.471274747,0.044584083
+Peru,budget,wastewater,11.14833787,0.031403769
+Uruguay,budget,wastewater,5.88961472,0.040065406
+Venezuela,budget,wastewater,8.644052997,0.060447923
+Argentina,budget,glaciers,39.88820182,0.023616461
+Bahamas,budget,glaciers,0.000625391,0.000625391
+Belize,budget,glaciers,1.069184054,0.014646357
+Bolivia,budget,glaciers,15.77501812,0.066561258
+Brazil,budget,glaciers,59.34932232,0.010558499
+Chile,budget,glaciers,46.39283175,0.04352048
+Colombia,budget,glaciers,6.932218688,0.018837551
+Costa.Rica,budget,glaciers,3.48401635,0.019038341
+Cuba,budget,glaciers,0.109308967,0.027327242
+Ecuador,budget,glaciers,8.180433867,0.029964959
+El.Salvador,budget,glaciers,0.025092269,0.003136534
+Guatemala,budget,glaciers,0.275847164,0.018389811
+Honduras,budget,glaciers,0.107275225,0.035758408
+Jamaica,budget,glaciers,0.006369427,0.006369427
+Mexico,budget,glaciers,26.40406727,0.01156045
+Nicaragua,budget,glaciers,0.008130081,0.008130081
+Panama,budget,glaciers,1.916619603,0.017266843
+Paraguay,budget,glaciers,0.240943664,0.007301323
+Peru,budget,glaciers,31.02572944,0.087396421
+Uruguay,budget,glaciers,1.403446772,0.009547257
+Venezuela,budget,glaciers,2.090888675,0.014621599
+Argentina,budget,groundwater,166.516084,0.098588564
+Bahamas,budget,groundwater,0.008130081,0.008130081
+Belize,budget,groundwater,3.709906959,0.050820643
+Bolivia,budget,groundwater,17.9568431,0.07576727
+Brazil,budget,groundwater,301.681542,0.05367044
+Chile,budget,groundwater,78.21429536,0.073371759
+Colombia,budget,groundwater,14.3291665,0.038937952
+Costa.Rica,budget,groundwater,24.28904922,0.132727045
+Cuba,budget,groundwater,0.014070872,0.003517718
+Ecuador,budget,groundwater,8.3393155,0.030546943
+El.Salvador,budget,groundwater,1.158926843,0.144865855
+Guatemala,budget,groundwater,2.473738023,0.164915868
+Honduras,budget,groundwater,0.468566464,0.156188821
+Jamaica,budget,groundwater,0.01910828,0.01910828
+Mexico,budget,groundwater,356.7223475,0.156183164
+Nicaragua,budget,groundwater,0.024390244,0.024390244
+Panama,budget,groundwater,5.483879926,0.049404324
+Paraguay,budget,groundwater,4.195065764,0.127123205
+Peru,budget,groundwater,18.62246447,0.052457646
+Uruguay,budget,groundwater,10.66696936,0.072564417
+Venezuela,budget,groundwater,3.938743683,0.027543662
+Argentina,budget,rivers,222.5151356,0.131743716
+Bahamas,budget,rivers,0.000625391,0.000625391
+Belize,budget,rivers,8.358942885,0.114506067
+Bolivia,budget,rivers,31.71229576,0.133807155
+Brazil,budget,rivers,740.3320344,0.131708243
+Chile,budget,rivers,101.7530683,0.09545316
+Colombia,budget,rivers,49.62941004,0.134862527
+Costa.Rica,budget,rivers,14.81878193,0.08097695
+Cuba,budget,rivers,0.590014614,0.147503654
+Ecuador,budget,rivers,23.95035518,0.087730239
+El.Salvador,budget,rivers,0.430473108,0.053809138
+Guatemala,budget,rivers,0.481954533,0.032130302
+Honduras,budget,rivers,0.139173825,0.046391275
+Jamaica,budget,rivers,0.006369427,0.006369427
+Mexico,budget,rivers,200.7656093,0.08790088
+Nicaragua,budget,rivers,0.008130081,0.008130081
+Panama,budget,rivers,5.802749282,0.052277021
+Paraguay,budget,rivers,10.59718876,0.321126932
+Peru,budget,rivers,41.24427483,0.116181056
+Uruguay,budget,rivers,19.13074678,0.130141135
+Venezuela,budget,rivers,19.77729138,0.138302737
+Argentina,budget,wetlands,68.96230394,0.040830257
+Bahamas,budget,wetlands,0.000625391,0.000625391
+Belize,budget,wetlands,8.821113913,0.120837177
+Bolivia,budget,wetlands,5.299988895,0.022362822
+Brazil,budget,wetlands,134.9752205,0.02401267
+Chile,budget,wetlands,19.43191153,0.01822881
+Colombia,budget,wetlands,20.11145065,0.054650681
+Costa.Rica,budget,wetlands,5.708631915,0.03119471
+Cuba,budget,wetlands,0.142309143,0.035577286
+Ecuador,budget,wetlands,4.466207903,0.016359736
+El.Salvador,budget,wetlands,0.170838999,0.021354875
+Guatemala,budget,wetlands,0.863624571,0.057574971
+Honduras,budget,wetlands,0.021858232,0.007286077
+Jamaica,budget,wetlands,0.01910828,0.01910828
+Mexico,budget,wetlands,107.5166148,0.047073824
+Nicaragua,budget,wetlands,0.040650407,0.040650407
+Panama,budget,wetlands,3.187068293,0.028712327
+Paraguay,budget,wetlands,2.218975511,0.067241682
+Peru,budget,wetlands,8.25507239,0.023253725
+Uruguay,budget,wetlands,4.012305099,0.027294593
+Venezuela,budget,wetlands,2.959767704,0.020697676
+Argentina,budget,precipitation,128.6403385,0.076163611
+Bahamas,budget,precipitation,0.099437148,0.099437148
+Belize,budget,precipitation,3.803916436,0.052108444
+Bolivia,budget,precipitation,23.791283,0.10038516
+Brazil,budget,precipitation,408.6744706,0.072704941
+Chile,budget,precipitation,91.07226311,0.085433643
+Colombia,budget,precipitation,28.22297628,0.07669287
+Costa.Rica,budget,precipitation,21.74418636,0.11882069
+Cuba,budget,precipitation,0.088949695,0.022237424
+Ecuador,budget,precipitation,23.85072037,0.087365276
+El.Salvador,budget,precipitation,0.451838917,0.056479865
+Guatemala,budget,precipitation,1.186983256,0.079132217
+Honduras,budget,precipitation,0.26435866,0.088119553
+Jamaica,budget,precipitation,0.01910828,0.01910828
+Mexico,budget,precipitation,138.0814562,0.060455979
+Nicaragua,budget,precipitation,0.008130081,0.008130081
+Panama,budget,precipitation,12.96036208,0.116760019
+Paraguay,budget,precipitation,4.565099981,0.138336363
+Peru,budget,precipitation,32.0881908,0.09038927
+Uruguay,budget,precipitation,12.21813254,0.083116548
+Venezuela,budget,precipitation,9.666125095,0.06759528
+Argentina,no papers,,1689,0.133877616
+Bahamas,no papers,,1,7.92644E-05
+Belize,no papers,,73,0.005786303
+Bolivia,no papers,,237,0.018785669
+Brazil,no papers,,5621,0.445545339
+Chile,no papers,,1066,0.084495878
+Colombia,no papers,,368,0.029169309
+Costa.Rica,no papers,,183,0.01450539
+Cuba,no papers,,4,0.000317058
+Ecuador,no papers,,273,0.021639188
+El.Salvador,no papers,,8,0.000634115
+Guatemala,no papers,,15,0.001188966
+Honduras,no papers,,3,0.000237793
+Jamaica,no papers,,1,7.92644E-05
+Mexico,no papers,,2284,0.181039949
+Nicaragua,no papers,,1,7.92644E-05
+Panama,no papers,,111,0.008798351
+Paraguay,no papers,,33,0.002615726
+Peru,no papers,,355,0.028138871
+Uruguay,no papers,,147,0.011651871
+Venezuela,no papers,,143,0.011334813

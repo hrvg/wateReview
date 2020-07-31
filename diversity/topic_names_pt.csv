@@ -1,0 +1,66 @@
+topic_id,topic_name,NSF_specific,NSF_general,despcription,topic_id_en
+17,Agricultural economics,agricultural economics,life sciences,,
+11,Irrigation,agricultural engineering,engineering,,50
+54,Irrigation,agricultural engineering,engineering,,50
+28,Sugar cane plantations and floods,agronomy & crop science,life sciences,,
+33,Coffee plantations,agronomy & crop science,life sciences,,
+64,Water productivity (in agriculture),agronomy & crop science,life sciences,,
+38,Ichthyofauna,animal science,life sciences,,81
+32,Evapotranspiration,atmospheric science/meteorology,physical sciences,,28
+59,Climatology,atmospheric science/meteorology,physical sciences,,
+13,Aquatic flora and words relating to viruses,biology,life sciences,,
+18,Microscopic freshwater fauna,biology,life sciences,,54
+46,Entomology,biology,life sciences,,76
+44,Ecophysiology ,botany/plant biology,life sciences,,
+37,Chemical pollutants,chemistry,physical sciences,,104
+27,Municipal water and sanitation services,civil engineering,engineering,,
+41,Sewage treatment,civil engineering,engineering,water budget,64
+62,Galvanic mud / water contaminated by metals,civil engineering,engineering,,
+25,Water quality,environmental health,life sciences,,98
+63,Waterborne diseases,environmental health,life sciences,,8
+10,Salinity,environmental science,life sciences,water budget,37
+53,Water quality in reservoirs,environmental science,life sciences,,98
+5,Fisheries,fishing & fisheries sciences/management,life sciences,,
+21,Water chemistry elements,geochemistry,life sciences,,31
+22,Chemical experiments,geochemistry,life sciences,,26
+3,Electric currents,geophysics & seismology,physical sciences,methods,
+31,Hydrothermal,geophysics & seismology,physical sciences,,80
+8,Groundwater,hydrology & water resources,physical sciences,water budget,70
+51,River basin  / erosion,hydrology & water resources,physical sciences,,
+2,Tidal currents,ocean/marine science,physical sciences,,91
+14,Water flow simulation,statistics,life sciences,methods,78
+50,Waste management,NA,NA,industrial & manufacturing engineering,44
+7,Tree growth,plant physiology,physical sciences,,
+20,NA ,political science & government,social sciences,,
+4,Soil type,"soil sciences, other",life sciences,water budget,
+15,,statistics,life sciences,methods,
+58,Geostatistics,statistics,life sciences,methods,
+48,Aquatic macroinvertebrates ,wildlife biology,life sciences,,
+1,,,NA,,
+6,,,NA,,
+9,,,NA,,
+12,Consortia,,NA,,
+16,,,NA,,
+19,Place,,NA,spatial scale,
+23,,,NA,,
+24,Vulnerability mapping,,NA,methods,
+26,Place,,NA,,
+29,,,NA,,
+30,,,NA,,
+34,,,NA,,
+35,Geomatics,,NA,methods,
+36,,,NA,,
+39,,,NA,,
+40,,,NA,,
+42,,,NA,,
+43,,,NA,,
+45,,,NA,,
+47,,,NA,,
+49,,,NA,,
+52,Cerrado / Savannah,,NA,spatial scale,
+55,,,NA,,
+56,,,NA,,
+57,,,NA,,
+60,Brazilian Northeast,,NA,spatial scale,
+61,,,NA,,
+65,places,,NA,spatial scale,

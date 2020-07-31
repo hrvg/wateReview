@@ -7,13 +7,11 @@ src/BERTpy/working/
 
 # Project files
 .Rproj.user
-.Rproj
 
 # History files
-.Rhistory
 .Rdata
 docs
-=======
+
 .Rapp.history
 
 # Session Data files
