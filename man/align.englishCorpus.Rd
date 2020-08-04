@@ -9,7 +9,9 @@ align.englishCorpus(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus, in_corpus)
 \arguments{
 \item{englishCorpus}{corpus of document}
 
-\item{EndNoteIdLDA}{}
+\item{EndNoteIdLDA}{document id in the corpus from the query}
+
+\item{EndNoteIdcorpus}{document id in the topic model}
 }
 \value{
 englishCorpus with matching records in both databases and webscrapped abstracts

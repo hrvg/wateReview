@@ -114,7 +114,7 @@ get_webscrapped_trainingLabels <- function(fname = "webscrapped_trainingLabels.R
 #' @param dtm_file path to saved document-term matrix
 #' @return document-term matrix
 #' @export
-get_DTM <- function(dtm_file= "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"){
+get_DocTermMatrix <- function(dtm_file= "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"){
 	obj_dtm <- readRDS(dtm_file)
 	return(obj_dtm)
 }

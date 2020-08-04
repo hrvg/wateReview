@@ -221,8 +221,8 @@ get.EndNoteIdLDA <- function(englishCorpus){
 }
 
 #' Performs a quick QA on both sources for document ID
-#' @param EndNoteIdcorpus
-#' @param EndNoteIdLDA
+#' @param EndNoteIdcorpus document id in the topic model
+#' @param EndNoteIdLDA document id in the corpus from the query
 #' @return none
 #' @export
 QA.EndNoteIdCorpusLDA <- function(EndNoteIdLDA, EndNoteIdcorpus){
@@ -233,8 +233,8 @@ QA.EndNoteIdCorpusLDA <- function(EndNoteIdLDA, EndNoteIdcorpus){
 }
 
 #' Align databases based on shared ID
-#' @param EndNoteIdLDA 
-#' @param EndNoteIdcorpus
+#' @param EndNoteIdLDA document id in the corpus from the query
+#' @param EndNoteIdcorpus document id in the topic model
 #' @return EndNoteIdLDA with matching records in both databases
 #' @export
 align.dataWithEndNoteIdLDA <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
@@ -247,8 +247,8 @@ align.dataWithEndNoteIdLDA <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
 }
 
 #' Align databases based on shared ID
-#' @param EndNoteIdcorpus
-#' @param EndNoteIdLDA 
+#' @param EndNoteIdcorpus document id in the topic model
+#' @param EndNoteIdLDA document id in the corpus from the query
 #' @return EndNoteIdcorpus with matching records in both databases
 #' @export
 align.dataWithEndNoteIdcorpus <- function(data, EndNoteIdcorpus, EndNoteIdLDA){
@@ -262,8 +262,8 @@ align.dataWithEndNoteIdcorpus <- function(data, EndNoteIdcorpus, EndNoteIdLDA){
 
 #' Align englishCorpus with matching records in both databases and assign webscrapped abstracts
 #' @param englishCorpus corpus of document
-#' @param EndNoteIdcorpus
-#' @param EndNoteIdLDA 
+#' @param EndNoteIdcorpus document id in the topic model
+#' @param EndNoteIdLDA document id in the corpus from the query
 #' @return englishCorpus with matching records in both databases and webscrapped abstracts
 #' @export
 align.englishCorpus <- function(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus, in_corpus){
@@ -274,8 +274,8 @@ align.englishCorpus <- function(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus, in
 
 #' Order data to LDA order
 #' @param data data: corpus of documents, indices of tagged document, ...
-#' @param EndNoteIdcorpus
-#' @param EndNoteIdLDA 
+#' @param EndNoteIdcorpus document id in the topic model
+#' @param EndNoteIdLDA document id in the corpus from the query
 #' @return data with matching records in both databases and webscrapped abstracts
 #' @export
 order.data <- function(data, EndNoteIdLDA, EndNoteIdcorpus){

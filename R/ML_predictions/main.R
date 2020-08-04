@@ -22,7 +22,7 @@ import::here(.from = "./R/utils/lib_shared.R",
 	get_titleDocs,
 	get_webscrapped_validationDTM,
 	get_webscrapped_trainingLabels,
-	get_DTM,
+	get_DocTermMatrix,
 	align.humanReadingTopicModel,
 	QA.alignedData
 )
@@ -58,7 +58,7 @@ AGGREGATE <- FALSE
 topicDocs <- get_topicDocs()
 titleDocs <- get_titleDocs(topicDocs)
 validationHumanReading <-  get_validationHumanReading(scale_type = SCALE_TYPE)
-DTM <- get_DTM()
+DTM <- get_DocTermMatrix()
 webscrapped_validationDTM <- get_webscrapped_validationDTM()
 colnames(webscrapped_validationDTM) <- colnames(DTM)
 webscrapped_validationDTM <- transform.DTM(webscrapped_validationDTM)

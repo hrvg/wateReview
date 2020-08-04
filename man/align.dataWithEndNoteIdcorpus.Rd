@@ -7,7 +7,9 @@
 align.dataWithEndNoteIdcorpus(data, EndNoteIdcorpus, EndNoteIdLDA)
 }
 \arguments{
-\item{EndNoteIdLDA}{}
+\item{EndNoteIdcorpus}{document id in the topic model}
+
+\item{EndNoteIdLDA}{document id in the corpus from the query}
 }
 \value{
 EndNoteIdcorpus with matching records in both databases

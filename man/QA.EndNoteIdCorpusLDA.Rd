@@ -6,6 +6,11 @@
 \usage{
 QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
 }
+\arguments{
+\item{EndNoteIdLDA}{document id in the corpus from the query}
+
+\item{EndNoteIdcorpus}{document id in the topic model}
+}
 \value{
 none
 }

@@ -9,7 +9,9 @@ order.data(data, EndNoteIdLDA, EndNoteIdcorpus)
 \arguments{
 \item{data}{data: corpus of documents, indices of tagged document, ...}
 
-\item{EndNoteIdLDA}{}
+\item{EndNoteIdLDA}{document id in the corpus from the query}
+
+\item{EndNoteIdcorpus}{document id in the topic model}
 }
 \value{
 data with matching records in both databases and webscrapped abstracts

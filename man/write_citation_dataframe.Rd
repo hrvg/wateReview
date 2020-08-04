@@ -6,6 +6,9 @@
 \usage{
 write_citation_dataframe(csv.dir)
 }
+\arguments{
+\item{csv.dir}{character or file.path to the location where to save the citation dataframe}
+}
 \description{
 Save a data.frame.
 }

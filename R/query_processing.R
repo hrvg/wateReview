@@ -20,7 +20,7 @@ check_duplicate_title <- function(citation_dataframe){
 }
 
 #' Save a data.frame.
-#' @param csv.dir character or file.path to the location where to save the citation dataframe\
+#' @param csv.dir character or file.path to the location where to save the citation dataframe
 #' @export
 write_citation_dataframe <- function(csv.dir){
 	write.csv(citation_dataframe, file.path(csv.dir, "citation_dataframe.csv"), row.names = FALSE)
