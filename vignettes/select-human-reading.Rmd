@@ -1,8 +1,8 @@
 ---
-title: "Corpus"
+title: "Selectingdocuments for human-reading"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Corpus}
+  %\VignetteIndexEntry{Selecting documents for human-reading}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,20 +14,22 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette explains how documents are selected for the human-reading. First, let's load the package and define `out_dir` output directory.
+This vignette explains how documents are selected for the human-reading. 
+Unfortunately, this vignette manipulates actual `.pdf` articles which we cannot distribute with this `R` package.
+First, let's load the package and define `out_dir` output directory.
 
-```{r setup}
+```
 library(latinAmerica)
 root_dir <- get_rootdir()
 out_dir <- "exploitation/out/run79"
 out_dir <- file.path(root_dir, out_dir)
 ```
 
-Then, we have to indicate where the functions are expected to find the document pdf files.
+Then, we have to indicate where the functions are expected to find the document `.pdf` files.
 Here, the files are located in a `*.Data` directory corresponding to files automagically retrieved by EndNote.
-The pdf files names are then read and some formatting happens by calling `fix_names`.
+The `.pdf` files names are then read and formatted by `fix_names`.
 
-```{r}
+```
 pdf_dir <- "data/latin_america/corpus_pdf/english/english.Data/"
 pdf_dir <- file.path(root_dir, pdf_dir)
 l <- get_pdf_files(file.path(root_dir, pdf_dir))
@@ -36,7 +38,7 @@ full_names <- unname(l$full_names)
 
 Alternatively, `full_names` can be accessed from an already derived database.
 
-```{r}
+```
 # 1. read csv databases
 l <- fix_names("english", full_names)
 # load(file = file.path(root_dir, out_dir, paste0("language_dfs_updated_2", ".rda")))
@@ -45,14 +47,11 @@ full_names <- l$full_names
 ```
 
 ```
-
-```{r}
 non_duplicate_index <- get_non_duplicate_pdfs(names)
 select_ind <- article_selection(full_names, non_duplicate_index, ratio = 0.2) 
 ```
 
-
-```{r}
+```
 number_of_readers <- 3
 assign_articles_to_readers(select_ind, number_of_readers, paste0(out_dir, "/", lang))
 ```
