@@ -1,0 +1,32 @@
+---
+title: "Query processing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Query processing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette showcases the workflow to process the `.csv` files resulting from the online query.
+For each language, the files are processed and checked for unique hits and titles.
+
+```
+root.dir <- get_rootdir()
+languages <- c("english", "spanish", "portuguese")
+for (language in languages){
+	csv.dir <- "data/latin_america/corpus_csv/"
+	csv.dir <- file.path(root.dir, csv.dir, language)
+	csv.files <- get_csv_files(csv.dir)
+	citation_dataframe <- get_citation_dataframe(csv.files)
+	citation_dataframe <- check_duplicate_row(citation_dataframe)
+	citation_dataframe <- check_duplicate_title(citation_dataframe)
+	write_citation_dataframe(csv.dir)
+}
+```
