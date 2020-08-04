@@ -30,3 +30,16 @@ get_endnote_titles <- function(language){
 	endnote_titles <- readLines(file.path(root.dir, csv.dir, csv.file))
 	return(endnote_titles)
 }
+
+#' This function takes care of some formatting issue that appeared in the process of aligning database coming from the query and from EndNote.
+#' The function removes alpha-numeric characters, some special characters, trim whitespaces and concatenate them.
+#' @param string_list a list of string
+#' @return a cleaned list of string
+#' @export
+make_pretty_str <- function(string_list){
+	nl <- gsub("[^[:alnum:][:space:]]", "",  string_list)
+	nl <- gsub("ltigt", " ",  nl)
+	nl <- gsub("\\s+", " ", nl)
+	nl <- trimws(nl)
+	return(nl)
+}
