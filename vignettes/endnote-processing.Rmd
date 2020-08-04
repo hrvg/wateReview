@@ -1,0 +1,58 @@
+---
+title: "EndNote processing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{EndNote processing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette provides some guidance to retrieve the information from the EndNote database and comparing it with the files created during the query process.
+The main issue is one of formatting and platform inter-operability, with EndNote formatting part of the file names and titles to its own liking.
+Here, retrieve the EndNote database is useful as it holds the location of the `.pdf` files for each of the articles that have been retrieve.
+It also holds the various URLs corresponding to the article.
+Because of text formating issues, EndNote data has to be exported as `.xml` and as `.txt`.
+Both files have the same ordering, but the `.xml` is encoded as `UTF-8` whereas the `.txt` is encoded as `Windows 1252` to allow comparison with the `.csv` coming from the query process.
+In the following, the `.txt` is used to align the EndNote `.xml` database with query `.csv` files.
+
+```
+library(latinAmerica)
+root_dir <- get_rootdir()
+out_dir <- "exploitation/out/run79"
+out_dir <- file.path(root_dir, out_dir)
+```
+
+```
+# 1. read csv databases
+language_dfs <- get_language_dfs(languages)
+meta_df <- get_meta_df(language_dfs)
+```
+
+```
+# 2. align EndNote .xml database with query .csv database
+for (language in languages){
+	print(language)
+	xmldf <- get_endnote_xml(language)
+	endnote_titles <- get_endnote_titles(language)
+
+	endnote_titles <- make_pretty_str(endnote_titles)
+	query_titles <- make_pretty_str(language_dfs[[language]]$Title)
+
+	stopifnot(all(query_titles %in% endnote_titles) & all(endnote_titles %in% query_titles))
+
+	language_dfs[[language]] <- cbind(language_dfs[[language]][match(endnote_titles, query_titles), ], xmldf)
+
+	stopifnot(names(table(language_dfs[[language]]$`electronic-resource-num` == language_dfs[[language]]$DOI)) == "TRUE")
+
+	collected <- ifelse(is.na(language_dfs[[language]]$pdfs), "absent from corpus", "in corpus")
+	language_dfs[[language]]$collected
+}
+save(language_dfs, file = file.path(root.dir, out.dir, paste0("language_dfs", ".rda")))
+```

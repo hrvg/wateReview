@@ -1,5 +1,5 @@
 ---
-title: "Selectingdocuments for human-reading"
+title: "Selecting documents for human-reading"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Selecting documents for human-reading}
