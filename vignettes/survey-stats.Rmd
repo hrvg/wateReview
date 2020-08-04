@@ -1,0 +1,30 @@
+---
+title: "Survey stats"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Survey stats}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```
+df <- read_survey_df()
+df <- filter_columns(df, colname_list = c("Position", "Affiliation", "Years", "Discipline", "Country_current", "Publications", "Journals", "Funding"))
+countries <- get_countries(df)
+
+for (country in countries) {
+    cat('\n')
+    cat(paste0("#", country, "\n"))
+    df_country <- filter_by_country(country = country)
+    df_country <- melt_df_country(df_country)
+    plot_df_country(df_country, title_text = country)
+    cat('\n')
+}
+```

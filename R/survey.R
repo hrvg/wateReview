@@ -1,20 +1,7 @@
----
-title: "WMLAC Survey Stats"
-output:
-  html_document:
-    toc: true
-    toc_float: true
-    code_folding: hide
----
-
-```{r warning = FALSE, include = TRUE, message = FALSE, results = "asis"}
-
-#### library ####
-library(ggplot2)
-library(reshape2)
-library(dplyr)
-
-#### function definitions ####
+#' Read the survey data
+#' @param fname file.path to the survey data, expecting a `.csv` file
+#' @return a data.frame
+#' @export
 read_survey_df <- function(fname = "Water Management in Latin America_edit.csv"){
   df <- read.csv(file.path(fname))
   df <- df[-(1:2),] # remove rows with just text
@@ -28,10 +15,27 @@ read_survey_df <- function(fname = "Water Management in Latin America_edit.csv")
   return(df)
 }
 
+#' Filter columns of a data.frame
+#' @param df a data.frame
+#' @param colname_list character, the names of the column(s) to filter
+#' @return a data.frame with the column(s) present in `colname_list`
+#' @export
 filter_columns <- function(df, colname_list = c("Country_current", "Years")){df[, colnames(df) %in% colname_list]}
 
+
+#' Filter rows of a data.frame by country
+#' @param .df a data.frame
+#' @param country character, country to search for
+#' @param country_type character, name of the column in which to search for `country`
+#' @return a data.frame filtered by rows containing `country`
+#' @export
 filter_by_country <- function(.df = df, country = "Brazil", country_type = "Country_current"){.df[.df[[country_type]]==country, ]}
 
+#' Manually melt a data.frame
+#' @param df_country a country data.frame
+#' @param country_type character, name of the column for the different types of `country`
+#' @return a data.frame
+#' @export
 melt_df_country <- function(df_country, country_type = "Country_current"){
   df_country <- df_country[, colnames(df_country) != country_type]
   column_names <- colnames(df_country)
@@ -40,6 +44,11 @@ melt_df_country <- function(df_country, country_type = "Country_current"){
   return(df_country)
 }
 
+#' Plot each variables in a melted data.frame in a faceted `ggplot`
+#' @param df_country a melted data.frame with a `variable` column
+#' @param title_text character, to be used as title for the graph
+#' @import ggplot2
+#' @export
 plot_df_country <- function(df_country, title_text = "Brazil" ){
   df_country_fact <- df_country[!df_country$variable %in% c("Years", "Publications"), ]
   df_country_num <- df_country[df_country$variable %in% c("Years", "Publications"), ]
@@ -64,19 +73,10 @@ plot_df_country <- function(df_country, title_text = "Brazil" ){
   } 
 }
 
+#' Extract the list of possible `country`
+#' @param df a data.frame
+#' @param country_type character, name of the column for the different types of `country`
+#' @return character, list of unique values for the `country_type`
+#' @export
 get_countries <- function(df, country_type = "Country_current"){as.character(sort(unique(df[[country_type]])))}
 
-#### main ####
-df <- read_survey_df()
-df <- filter_columns(df, colname_list = c("Position", "Affiliation", "Years", "Discipline", "Country_current", "Publications", "Journals", "Funding"))
-countries <- get_countries(df)
-
-for (country in countries) {
-    cat('\n')
-    cat(paste0("#", country, "\n"))
-    df_country <- filter_by_country(country = country)
-    df_country <- melt_df_country(df_country)
-    plot_df_country(df_country, title_text = country)
-    cat('\n')
-}
-```
