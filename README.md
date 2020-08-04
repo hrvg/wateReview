@@ -40,3 +40,8 @@ This project uses:
 Copyright (c) 2018
 
 Licensed under the [MIT license](LICENSE).
+
+Need to add here a path towards the entire datasets except `pdf` files. Review vignettes for paths:
+
+- `F:\hguillon\research\data\latin_america\corpus_pdf`
+- `F:\hguillon\research\data\latin_america\corpus_csv`
