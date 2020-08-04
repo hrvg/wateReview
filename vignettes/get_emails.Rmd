@@ -1,3 +1,13 @@
+---
+title: "Mining email addresses"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Mining email addresses}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```
 #####################
 ##### LIBRARIES #####
 #####################
@@ -85,3 +95,5 @@ mails <- unlist(lapply(lf, get_mail))
 
 
 write.table(mails, file.path(root.dir, pdf.dirs[1], paste0("mails_", lang, ".csv")), row.names = FALSE, col.names = FALSE)
+
+```
