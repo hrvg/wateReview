@@ -24,6 +24,7 @@ get_endnote_xml <- function(language){
 #' Retrieve the titles of the documents in the English corpus
 #' @param language character, one of "english", "portuguese", "spanish"
 #' @return 
+#' @export
 get_endnote_titles <- function(language){
 	csv.dir <- paste0("data/latin_america/corpus_csv/", language, "/")
 	csv.file <- paste0(language, '_title_all.txt')

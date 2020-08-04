@@ -3,6 +3,7 @@
 #' @param corpus_file path to a corpus data.frame with text in text column
 #' @param text_col text column in the corpus data.frame
 #' @return document-feature matrix extracted 
+#' @export
 get_dfm <- function(
 	dfm_file = "F:/hguillon/research/exploitation/R/latin_america/data/obj_dfm.Rds", 
 	corpus_file = "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds",
@@ -33,6 +34,7 @@ get_dfm <- function(
 #' @param obj_dfm a document-feature matrix
 #' @param country_tokens the tokens with which the document-feature matrix is filtered
 #' @return a filtered document-feature matrix
+#' @export
 filter_dfm <- function(obj_dfm, country_tokens = NULL){
 	if (is.null(country_tokens)) country_tokens <- readRDS("./data/country_tokens.Rds")
 	sorted_dfm <- quanteda::dfm_sort(obj_dfm, decreasing = TRUE, margin = c("features"))
@@ -45,6 +47,7 @@ filter_dfm <- function(obj_dfm, country_tokens = NULL){
 #' @param obj_dfm a document-feature matrix
 #' @param filtering_tokens a list of tokens which are match against the features of the document-feature matrix
 #' @return a document-term matrix with nrow == nrow(obj_dfm) and ncol == length(filtering_tokens)
+#' @export
 get_dtm <- function(obj_dfm, filtering_tokens){
 	obj_dtm <- obj_dfm[, na.omit(match(filtering_tokens, quanteda::featnames(obj_dfm)))]
 	return(obj_dtm)
