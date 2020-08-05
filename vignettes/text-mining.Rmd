@@ -1,3 +1,13 @@
+---
+title: "Text mining"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Text mining}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```
 ### libraries ###
 import::from("magrittr", "%>%")
 
@@ -16,3 +26,4 @@ filtering_tokens <- readRDS("./data/country_tokens.Rds")
 obj_dtm <- get_dtm(filtered_dfm, filtering_tokens)
 dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"
 saveRDS(obj_dtm, dtm_file)
+```

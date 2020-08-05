@@ -1,3 +1,14 @@
+---
+title: "Webscrapping"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Webscrapping}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```
 ### libraries ###
 if(!require("rvest")) install.packages("rvest")
 library("rvest")
@@ -70,3 +81,4 @@ saveRDS(boolean_AuthKeywords, "boolean_AuthKeywords.Rds")
 # identify entries with any label
 ind_hasCountryTag <- get.ind_hasCountryTag(boolean_AuthKeywords)
 saveRDS(ind_hasCountryTag, "ind_hasCountryTag.Rds")
+```

@@ -1,3 +1,14 @@
+---
+title: "Timelines"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Timelines}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```
 ################### libraries #########################
 library(dplyr)
 library(vegan)
@@ -126,3 +137,4 @@ for (i in sequence(3)) {
            device="png", units="in", width=6, height=3, dpi = 600)
 }
   
+```

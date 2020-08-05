@@ -1,3 +1,13 @@
+---
+title: "Validation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Validation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```
 data.dir <- "F:/hguillon/research/data/latin_america/validation_data"
 library(openxlsx)
 xlsxFile <- "english_validation.xlsx"

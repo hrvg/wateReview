@@ -1,3 +1,14 @@
+---
+title: "Chord diagrams"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Chord diagrams}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```
 ### libraries ###
 library("circlize")
 library("cowplot")
@@ -28,3 +39,4 @@ for (pct in c(0, 25, 50, 75, 95)){
 	}
 }
 dev.off()
+```

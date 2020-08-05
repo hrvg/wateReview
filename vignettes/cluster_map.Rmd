@@ -1,3 +1,14 @@
+---
+title: "Cluster map"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cluster map}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```
 library(raster)
 library(tmap)
 
@@ -43,3 +54,4 @@ countries_shapefile <- join_database_shapefile(read_countries_database(), read_c
 colors <- c("#F8766D", "#00BFC4", "#7CAE00")
 make_map("Country_clusters", "title", colors)
 
+```

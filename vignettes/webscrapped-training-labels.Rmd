@@ -1,3 +1,13 @@
+---
+title: "Webscrapped training labels"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Webscrapped training labels}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```
 ### libraries ###
 library("mlr")
 library("OpenML")
@@ -63,3 +73,4 @@ webscrapped_trainingLabels <- webscrapped_trainingData$webscrapped_trainingLabel
 saveRDS(country_tokens, "country_tokens.Rds")
 saveRDS(webscrapped_validationDTM, "webscrapped_validationDTM.Rds")
 saveRDS(webscrapped_trainingLabels, "webscrapped_trainingLabels.Rds")
+```
