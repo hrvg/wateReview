@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EndNote processing • latinAmerica</title>
+<title>Validation • latinAmerica</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="EndNote processing">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Validation">
 <meta property="og:description" content="latinAmerica">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -117,43 +117,25 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>EndNote processing</h1>
+      <h1 data-toc-skip>Validation</h1>
             
       
       
-      <div class="hidden name"><code>endnote-processing.Rmd</code></div>
+      <div class="hidden name"><code>validation.Rmd</code></div>
 
     </div>
 
     
     
-<p>This vignette provides some guidance to retrieve the information from the EndNote database and comparing it with the files created during the query process. The main issue is one of formatting and platform inter-operability, with EndNote formatting part of the file names and titles to its own liking. Here, retrieve the EndNote database is useful as it holds the location of the <code>.pdf</code> files for each of the articles that have been retrieve. It also holds the various URLs corresponding to the article. Because of text formating issues, EndNote data has to be exported as <code>.xml</code> and as <code>.txt</code>. Both files have the same ordering, but the <code>.xml</code> is encoded as <code>UTF-8</code> whereas the <code>.txt</code> is encoded as <code>Windows 1252</code> to allow comparison with the <code>.csv</code> coming from the query process. In the following, the <code>.txt</code> is used to align the EndNote <code>.xml</code> database with query <code>.csv</code> files.</p>
-<pre><code><a href="https://rdrr.io/pkg/latinAmerica/man">library(latinAmerica)
-root_dir &lt;- get_rootdir()
-out_dir &lt;- "exploitation/out/run79"
-out_dir &lt;- file.path(root_dir, out_dir)</a></code></pre>
-<pre><code># 1. read csv databases
-language_dfs &lt;- get_language_dfs(languages)
-meta_df &lt;- get_meta_df(language_dfs)</code></pre>
-<pre><code># 2. align EndNote .xml database with query .csv database
-for (language in languages){
-    print(language)
-    xmldf &lt;- get_endnote_xml(language)
-    endnote_titles &lt;- get_endnote_titles(language)
-
-    endnote_titles &lt;- make_pretty_str(endnote_titles)
-    query_titles &lt;- make_pretty_str(language_dfs[[language]]$Title)
-
-    stopifnot(all(query_titles %in% endnote_titles) &amp; all(endnote_titles %in% query_titles))
-
-    language_dfs[[language]] &lt;- cbind(language_dfs[[language]][match(endnote_titles, query_titles), ], xmldf)
-
-    stopifnot(names(table(language_dfs[[language]]$`electronic-resource-num` == language_dfs[[language]]$DOI)) == "TRUE")
-
-    collected &lt;- ifelse(is.na(language_dfs[[language]]$pdfs), "absent from corpus", "in corpus")
-    language_dfs[[language]]$collected
-}
-save(language_dfs, file = file.path(root.dir, out.dir, paste0("language_dfs", ".rda")))</code></pre>
+<p>``` data.dir &lt;- “F:/hguillon/research/data/latin_america/validation_data” library(openxlsx) xlsxFile &lt;- “english_validation.xlsx” l.df &lt;- lapply(seq(12), function(i){ df &lt;- read.xlsx(file.path(data.dir,xlsxFile), sheet = i, skipEmptyCols = TRUE, skipEmptyRows = TRUE, rows = 1:50, colNames = FALSE, rowNames = FALSE) df &lt;- rowr::buffer(df, 50, fill = NA) return(df[, -1]) })</p>
+<p>df &lt;- do.call(cbind, l.df) colnames(df) &lt;- paste0(“X”, seq(ncol(df))) ind &lt;- apply(df, MARGIN = 1, function(row) !all(is.na(row))) df &lt;- df[ind, ] rownames(df) &lt;- c(“title”, “validation”, “country_location”, “state”, “basin_location”, “city”, “study_years”, “event”, “day”, “week”, “year”, “years_10”, “years_100”, “years_1000”, “years_10000”, “years_100000”, “agricultural_field”, “aquifer_groundwater”, “basin_scale”, "catchment _watershed“,”city_urban“,”coastal“,”country_scale“,”dam_reservoir“,”glacier_alpine“,”hydrologic_region“,”irrigation_district“,”lake“,”ocean_sea“,”river_stream“,”rural“,”wetland“,”topic.1“,”topic.2“,”topic.3“,”topic.4“,”topic.5“, paste0(”funding.“, seq(1:(nrow(df)-37)))) df &lt;- data.frame(t(df)) df<span class="math inline">\(country_location[is.na(df\)</span>country_location)] &lt;- 0 df<span class="math inline">\(country_location[df\)</span>country_location ==” 0"] &lt;- 0</p>
+<p>lookup_table &lt;- read.csv(file.path(data.dir, “lookup_lvls.csv”))[, -1] df &lt;- cbind(df, lookup_table[as.numeric(df$country_location), ])</p>
+<p>df<span class="math inline">\(title &lt;- unlist(sapply(df\)</span>title, function(ttl) paste(unlist(strsplit(as.character(ttl), “<em>"))[-1], collapse = "</em>”)))</p>
+<p>keeps &lt;- c(“title”, “validation”, “country_location”, paste0(“Country.”, 1:8)) write.csv(df[, colnames(df) %in% keeps], “validation_df_location.csv”, row.names = FALSE) write.csv(df[, c(1, 2, 3, 17:32)], “validation_df_spatial.csv”, row.names = FALSE) write.csv(df[, c(1, 2, 3, 7:16)], “validation_df_temporal.csv”, row.names = FALSE)</p>
+<p>fundings &lt;- as.matrix(df[, grep(“funding”, colnames(df))]) dim(fundings) &lt;- NULL fundings &lt;- data.frame(funding = unique(fundings)) write.csv(fundings, “funding.csv”, row.names = FALSE)</p>
+<p>countries &lt;- as.matrix(df[, grepl(“Country.”, colnames(df))]) dim(countries) &lt;- NULL countries &lt;- countries[countries != ""] countries &lt;- data.frame(country = countries)</p>
+<p>ggplot(countries, aes(x = country)) + geom_bar() + coord_flip() + theme_minimal() + labs(x = “country”, title = “Number of paper per country in the human-read English corpus”)</p>
+<p>statistics &lt;- sort(signif(table(countries[countries != 0]) / sum(table(countries[countries!= 0])) * 100, 2), decreasing = TRUE) print(statistics)</p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
