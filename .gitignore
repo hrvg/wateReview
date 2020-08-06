@@ -1,9 +1,7 @@
 # Big data files
 olddata/
 src/
-src/BERTpy/data/
-src/BERTpy/input/
-src/BERTpy/working/
+src/BERTpy/
 
 # Project files
 .Rproj.user

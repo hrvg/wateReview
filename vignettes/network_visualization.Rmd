@@ -1,0 +1,212 @@
+---
+title: "Network visualization"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Network visualization}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```
+##loading the necessary packages
+
+library("tidyverse")
+library("raster")
+library("maps")
+library("geosphere")
+library("mapproj")
+library("tmap")
+library("OpenStreetMap")
+
+range01 <- function(x, ...){(x-min(x, ...))/(max(x, ...)-min(x, ...))}
+
+#reading the matrix data
+country_adjacency_matrix <- readRDS("./data/countryNetwork.Rds")
+rSums <- rowSums(country_adjacency_matrix)
+country_adjacency_matrix <- sweep(country_adjacency_matrix, MARGIN = 1, rSums, "/")
+# percentile.threshold <- 0.75
+# country_adjacency_matrix  <- apply(country_adjacency_matrix , 1, function(row){
+#       row[row <= quantile(row, percentile.threshold)] <- 0
+#       return(row)
+#     })
+# country_adjacency_matrix  <- t(country_adjacency_matrix )
+# country_adjacency_matrix <- country_adjacency_matrix[c(1, 6), c(1, 6)]
+head(country_adjacency_matrix)
+
+# reading map of Latin America and Caribbeans
+LAC_map <- shapefile("./data/LAC_index.shp") # without islands
+LAC_map <- LAC_map[order(LAC_map$COUNTRY), ]
+head(LAC_map)
+
+#create a dataframe
+#gather all country destination columns into one column
+country_link_vector <- country_adjacency_matrix %>% 
+  data.frame(country_origin = row.names(country_adjacency_matrix)) %>%
+  gather(key = country_destination, value = value, - country_origin) %>%
+  mutate(country_origin = as.character(country_origin)) %>%
+  mutate(country_destination = as.character(country_destination)) 
+head(country_link_vector)
+country_link_vector$country_destination <- gsub("Costa.Rica", "Costa Rica", country_link_vector$country_destination)
+country_link_vector$country_destination <- gsub("El.Salvador", "El Salvador", country_link_vector$country_destination)
+
+#get the coordinates from the geo data
+coords <- coordinates(LAC_map[LAC_map$COUNTRY %in% row.names(country_adjacency_matrix), ]) %>% data.frame()
+head(coords)
+
+##Creating a dataframe with country names
+coordinates_df <- data.frame(
+  country = row.names(country_adjacency_matrix),
+  long = coords$X1, 
+  lat = coords$X2
+  )
+head(coordinates_df)
+
+# background
+crdref <- CRS("+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs ")
+boundingBox <- tmaptools::bb(LAC_map[LAC_map$COUNTRY %in% row.names(country_adjacency_matrix), ], projection = crdref)
+upperLeft <- c(boundingBox$ymax, boundingBox$xmin)
+lowerRight <- c(boundingBox$ymin, boundingBox$xmax)
+osm <- raster(openmap(upperLeft, lowerRight, type = "http://tile.stamen.com/toner-background/{z}/{x}/{y}.png", zoom = 3))
+background <- tm_shape(osm) + tm_rgb(alpha = 1) 
+# background <- tm_shape(LAC_map[LAC_map$COUNTRY %in% row.names(country_adjacency_matrix), ]) + tm_fill(col = "black", alpha = 0.3) + tm_borders()
+
+
+
+
+##Drawing the arcs
+# links
+country_lines <- lapply(seq(prod(dim(country_adjacency_matrix))), function(i){
+  node1  <-  coordinates_df[country_link_vector[i,]$country_origin == coordinates_df$country,][, -1]
+  node2  <-  coordinates_df[country_link_vector[i,]$country_destination == coordinates_df$country,][, -1]
+  mp <- midPoint(node1, node2)
+  country_line  <-  gcIntermediate(
+    node1, 
+    mp, 
+    n = 10, 
+    addStartEnd = TRUE,
+    sp = TRUE
+    )
+  return(country_line)
+})
+country_lines <- do.call(rbind, country_lines)
+country_lines$value <- country_link_vector$value
+country_lines <- country_lines[order(country_lines$value, decreasing = FALSE), ]
+
+country_centers <- SpatialPoints(cbind(coordinates_df$long, coordinates_df$lat), proj4string = crdref)
+country_centers$pct_self_citation <- diag(country_adjacency_matrix)
+
+ma <-  background + 
+  tm_shape(country_lines) + tm_lines(lwd = "value", scale = 10, col = "value", palette = "-viridis", contrast = c(0.3, 1)) + tm_layout(legend.outside = TRUE) +
+  tm_shape(country_centers) + tm_dots(size = "pct_self_citation", scale = 2, perceptual = TRUE, col = "#101010")
+ma
+
+#extract data
+country_selfcitation<-as.data.frame(country_centers)
+write.csv(country_selfcitation,"C:/Users/rdg/WMLA_rmap/country_selfcitation.csv")
+
+country_norm_dataframe<-as.data.frame(country_adjacency_matrix)
+write.csv(country_norm_dataframe,"C:/Users/rdg/WMLA_rmap/country_norm.csv")
+
+
+country_nor<-gather(country_norm_dataframe, key= country_des, value = value, country_or)
+
+
+## reading the topic matrix data ( maximun prob)
+
+
+
+
+
+
+waterbuget_adjacency_matrix_2<- readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_water budget.Rds")
+
+
+theme_adjancecy_matrix_2<-readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_theme.Rds")
+
+spatialscale_adjacency_matrix_2<-readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_spatial scale.Rds")
+
+methods_adjacency_matrix_2<-readRDS("C:/Users/rdg/WMLA_rmap/data2/rawTopicNetwork_methods.Rds")
+
+
+
+
+
+## open topic matrix and normalize to see what happen from minor topics too.raw topics
+
+theme_adjancecy_matrix_2<-readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_theme.Rds") # raw adjacency 
+
+
+rSums_theme <- rowSums(theme_adjancecy_matrix_2)
+total_theme_adjacency_matrix_normalized <- sweep(theme_adjancecy_matrix_2, MARGIN = 1, rSums_rtopic, "/")
+write.csv(total_topic_adjacency_matrix_normalized,"C:/Users/rdg/WMLA_rmap/data3/total_theme_network_matrix_normalized2.csv")
+
+##calculate node size by the summ of the columns
+
+themes_nodesize <- colSums(total_topic_adjacency_matrix_normalized)
+
+write.csv(themes_nodesize,"C:/Users/rdg/WMLA_rmap/data3/themes_node_size.csv")
+
+
+##open NSF general adjancecy matrix and Normalized 
+
+nsf_general_admatrix<- readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_NSF_general.Rds")
+
+NSF_general_adjacency_matrix<-nsf_general_admatrix
+
+NSF_general_adjacency_matrix <- readRDS("C:/Users/rdg/WMLA_rmap/data/rawTopicNetwork_NSF_general.Rds")
+
+rSums_NSF_general <- rowSums(NSF_general_adjacency_matrix)
+NSF_general_adjacency_matrix_normalized <- sweep(NSF_general_adjacency_matrix, MARGIN = 1, rSums_NSF_general, "/")
+# save 
+write.csv(NSF_general_adjacency_matrix_normalized,"C:/Users/rdg/WMLA_rmap/data3/NSF_general_adjacency_matrix_normalized2.csv")
+
+#calculate node size by the summ of the columns
+
+NSF_general_nodesize <- colSums(NSF_general_adjacency_matrix_normalized)
+write.csv(NSF_general_nodesize,"C:/Users/rdg/WMLA_rmap/data3/NSF_general_node_size.csv")
+
+
+
+
+
+
+##open NSF specific adjancecy matrix and Normalized 
+
+nsf_specific_adjacency_matrix_2<- readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_NSF_specific.Rds")
+
+NSF_specific_adjacency_matrix<-nsf_specific_adjacency_matrix_2
+
+rSums_NSF_specific <- rowSums(NSF_specific_adjacency_matrix)
+NSF_specific_adjacency_matrix_normalized <- sweep(NSF_specific_adjacency_matrix, MARGIN = 1, rSums_NSF_specific, "/")
+
+
+write.csv(NSF_specific_adjacency_matrix_normalized,"C:/Users/rdg/WMLA_rmap/data3/NSF_specific_adjacency_matrix_normalized2.csv")
+
+
+#calculate node size by the summ of the columns
+NSF_specific_nodesize<- colSums(NSF_specific_adjacency_matrix_normalized)
+write.csv(NSF_specific_nodesize,"C:/Users/rdg/WMLA_rmap/data3/NSF_specific_node_size.csv")
+
+
+
+
+##open country adjancecy matrix to explore Research volume ( sum of columns). I couldnt open it before.
+
+raw_country_adjacency_matrix<- readRDS("C:/Users/rdg/WMLA_rmap/data/CountryNetwork.Rds")
+
+
+country_adjacency_matrix_2 <- readRDS("C:/Users/rdg/WMLA_rmap/data3/CountryNetwork.Rds")
+
+raw_country_adjacency_matrix<-country_adjacency_matrix_2
+
+
+rSums <- rowSums(raw_country_adjacency_matrix)
+country_adjacency_matrix_normalized <- sweep(raw_country_adjacency_matrix, MARGIN = 1, rSums, "/")
+
+write.csv(country_adjacency_matrix_normalized,"C:/Users/rdg/WMLA_rmap/data3/country_adjacency_matrix_normalized2.csv")
+
+#calculate node size by the summ of the columns/ research volume
+country_nodesize<- colSums(country_adjacency_matrix_normalized)
+
+write.csv(country_nodesize,"C:/Users/rdg/WMLA_rmap/data3/country_node_size.csv")
+```

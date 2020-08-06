@@ -2,7 +2,7 @@
 
 # Literature Review Finds Opportunities for Water Resources Management Research in Latin America and the Carribean
 
-Alyssa J. DeVincentis (1), Romina Díaz Gómez (1), Hervé Guillon (1), Noelle K. Patterson (1), Laura E. Garza-Díaz (1), Francine van den Brandeler (2), Arthur Koehl (1), J. Pablo Ortiz-Partida (3), Jennifer Gamez-Rodríguez (1), Erfan Goharian (5) and Samuel Sandoval Solis (1)
+Alyssa J. DeVincentis (1), Hervé Guillon (1), Romina Díaz Gómez (1), Noelle K. Patterson (1), Francine van den Brandeler (2), Arthur Koehl (1), J. Pablo Ortiz-Partida (3), Laura E. Garza-Díaz (1), Jennifer Gamez-Rodríguez (1), Erfan Goharian (5) and Samuel Sandoval Solis (1)
 
 (1): University of California, Davis;
 (2): University of Amsterdam;

@@ -1,0 +1,34 @@
+---
+title: "Metadata mining"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Metadata mining}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```
+
+##############
+#### main ####
+##############
+
+citingFile <- "citing_df.Rds"
+
+if (!file.exists(citingFile)){
+	# get wosFullResult
+	wosFullResult <- readRDS("./data/wosFullResult.Rds")
+	# get source id
+	source_ids <- lapply(wosFullResult, get_sourceID)
+	# get citing cited
+	citing_dfs <- lapply(wosFullResult, get_citing)
+	citing_dfs <- na.omit(citing_dfs)
+	citing_df <- do.call(rbind, citing_dfs)
+	citing_df <- citing_df[which(citing_df$cited %in% source_ids), ]
+	saveRDS(citing_df, citingFile)
+	saveRDS(source_ids, "source_ids.Rds")
+} else {
+	citing_df <- readRDS(citingFile)
+}
+
+```
