@@ -7,6 +7,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+Article metadata was extracted from Elsevier API using each article's DOI.
+The metadata contains the citing literature and the author-defined keywords.
+The citing literature is used to build a citation network.
+Keywords are used to augment the labels of country location derived from the human-reading.
+This is done by looking for regular expression of the name of the 23 target countries.
+
 ```
 
 ##############
