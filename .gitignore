@@ -1,4 +1,5 @@
 # Big data files
+data/corpus.dat
 extdata/
 src/
 src/BERTpy/

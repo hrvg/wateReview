@@ -1,0 +1,4 @@
+library("servr")
+library("LDAvis")
+
+serVis("./105k_ldavis.json", out.dir="./view")

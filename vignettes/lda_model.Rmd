@@ -1,0 +1,102 @@
+# Load Required Libraries
+library(parallel)
+library(NLP)
+library(tm)
+library(data.table)
+library(lda)
+
+###################################
+#         configuration           #
+###################################
+lines = readLines("corpus.dat")
+vec = VectorSource(lines)
+obj_corpus = Corpus(vec)
+obj_dtm = DocumentTermMatrix(obj_corpus)
+var_fileNames = readLines("info.dat")
+
+var_num_cores <- 4
+var_parallel_cluster <- makeCluster(var_num_cores)
+
+var_number_of_topics <- 105 
+var_gibbs_sampler_iterations <- 1000 
+var_prior_alpha <- 0.5
+var_prior_eta <- 0.1
+
+var_initial_assignments <- NULL
+var_burnin = 50
+set.seed(357)
+
+###################################
+#      function declarations      #
+###################################
+function_token_count <- function(x){
+  var_return_counts = c()
+  for (i in 1:length(x)) {
+    var_corpus_item = unlist(strsplit(x[i]$content, " "))
+    var_return_counts[i] <- length(var_corpus_item)
+  }
+  return (var_return_counts)
+}
+function_dtm_to_list <- function(var_obj_dtm, var_filelist) {
+  var_document_list <- list()
+  for (i in 1: length(var_filelist)) {
+    var_file <- var_filelist[i]
+    var_tokenlist <- unlist(strsplit(var_obj_dtm[i]$content, split = ' '))
+    var_document_list[[var_file]] <- var_tokenlist
+  }
+  return(var_document_list)
+}
+# convert a document list to the data format required for
+# the lda package to process
+function_make_lda_required_structure <- function(var_document_list, var_match_vocab) {
+  var_index <- match(var_document_list, var_match_vocab)
+  var_index <- var_index[!is.na(var_index)]
+  rbind(as.integer(var_index - 1), as.integer(rep(1, length(var_index))))
+}
+
+###################################
+#        Operational Code         #
+###################################
+
+var_document_token_counts = function_token_count(obj_corpus)
+
+# get a list of unique words in the corpus (the vocabulary)
+var_vocabulary <- obj_dtm$dimnames$Terms
+
+var_documents <- function_dtm_to_list(obj_corpus, var_fileNames) # corpus documents as simple list
+var_lda_document_List <- parLapply(var_parallel_cluster, var_documents, function_make_lda_required_structure, var_vocabulary) 
+
+
+###############
+# run the LDA #
+###############
+
+# get the start system time
+var_sys_time_start_lda <- Sys.time()
+
+# fit the model
+obj_fitted_lda_model <- lda.collapsed.gibbs.sampler(documents = var_lda_document_List,
+                                                    K = var_number_of_topics, 
+                                                    vocab = var_vocabulary, 
+                                                    num.iterations = var_gibbs_sampler_iterations, 
+                                                    alpha = var_prior_alpha, 
+                                                    eta = var_prior_eta, 
+                                                    initial = var_initial_assignments, 
+                                                    burnin = var_burnin,
+                                                    compute.log.likelihood = TRUE)
+
+
+# calculate a matrix from the LDA output (structured as required by ldavis package), 
+# with each row containing the probability distribution over topics for a document, 
+# with as many rows as there are documents in the corpus, and as many columns as 
+# there are topics in the model. In the Blei LDA article this 
+# coincides with the M replicate of the LDA plate model, or the matrix
+# Theta which is the collection of topic vectors.
+var_theta <- t(apply(obj_fitted_lda_model$document_sums + var_prior_alpha, 2, function(x) x/sum(x)))
+var_phi <- t(apply(t(obj_fitted_lda_model$topics) + var_prior_eta, 2, function(x) x/sum(x)))
+saveRDS(file="./topicDocs.Rds", var_theta)
+saveRDS(file="./topicWords.Rds", var_phi)
+
+
+
+
