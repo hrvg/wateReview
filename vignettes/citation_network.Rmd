@@ -1,3 +1,20 @@
+---
+title: "Citation network"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Citation network}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```
 ### libraries ###
 library("mlr")
 library("OpenML")
@@ -62,3 +79,5 @@ countryNetwork <- make.countryNetwork(source_ids, citation_network)
 
 type_list <- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
 for (tt in type_list) make.topicNetwork(source_ids, citation_network, type = tt, percentile.threshold = 0.90)
+
+```
