@@ -69,6 +69,9 @@
       <a href="../articles/cluster_map.html">Cluster map</a>
     </li>
     <li>
+      <a href="../articles/clustering-analysis.html">Research Opportunities in Latin America</a>
+    </li>
+    <li>
       <a href="../articles/country_colors.html">Country colors</a>
     </li>
     <li>
@@ -81,7 +84,25 @@
       <a href="../articles/get_emails.html">Mining email addresses</a>
     </li>
     <li>
+      <a href="../articles/hexagonal_maps.html">Hexagonal maps of country entropies</a>
+    </li>
+    <li>
+      <a href="../articles/making-query.html">Making the query</a>
+    </li>
+    <li>
+      <a href="../articles/manual_download.html">Manual downloading corpus documents</a>
+    </li>
+    <li>
+      <a href="../articles/metadata-mining.html">Metadata mining</a>
+    </li>
+    <li>
+      <a href="../articles/network_visualization.html">Network visualization</a>
+    </li>
+    <li>
       <a href="../articles/query-processing.html">Query processing</a>
+    </li>
+    <li>
+      <a href="../articles/query_QA.html">Query Q&amp;A</a>
     </li>
     <li>
       <a href="../articles/select-human-reading.html">Selecting documents for human-reading</a>
@@ -133,6 +154,41 @@
 
     
     
+<div id="summary" class="section level2">
+<h2 class="hasAnchor">
+<a href="#summary" class="anchor"></a>Summary</h2>
+</div>
+<div id="rationale" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rationale" class="anchor"></a>Rationale</h2>
+<p>The human reading collected metadata about: the document location, the document funding source and the document spatial and temporal scales. I focus here on the identifying scales.</p>
+</div>
+<div id="problem-definition" class="section level2">
+<h2 class="hasAnchor">
+<a href="#problem-definition" class="anchor"></a>Problem Definition</h2>
+<p>The problem at hand is a classification task. This classification is characterized by having multiple labels. In other words, one document can have the spatial scales labels: “Day” and “Week” and “Year” at the same time. This problem of classification is different of the simpler problem of having to predict one label with different values: a multi-class classification problem. For example, the current problem could be conceptualized as one label “Timescale” taking the values “Day”, “Week”, “Year” and so on.</p>
+<p>Two main approaches exist to solve such a multilabel classification problem. The first one is to use algorithm adapted for such a task. The second one is to transform the problem to make it tractable. Such a transformation can be achieved through two schemes: Binary Relevance (BR) and Label Powerset. In the LP approach, the multilabel problem is transformed into a multi-class classification of the labelsets. In the BR approach, the problem is decomposed in a set of binary problems. In addition, we test more refined BR approaches: classifier chains were the binary classifiers are trained in a given order to predict the labels; nested stacking were the labels are approximated successively by learners and dependent binary relevance where every other labels are used as the input for each label-specific binary learners and stacking which combine dependent binary relevance and nested stacking.</p>
+<p>The performance metric used is the multilabel Hamming loss corresponding to the proportion of incorrectly predicted labels. We also profide the subset 0 1 metric corresponding to the proportion of observations for which the complete set of label is correctly predicted.</p>
+</div>
+<div id="temporal-scales" class="section level2">
+<h2 class="hasAnchor">
+<a href="#temporal-scales" class="anchor"></a>Temporal Scales</h2>
+<p>Identifying temporal scales give avenues to</p>
+<div id="technical-consideration" class="section level3">
+<h3 class="hasAnchor">
+<a href="#technical-consideration" class="anchor"></a>Technical consideration</h3>
+</div>
+</div>
+<div id="spatial-scales" class="section level2">
+<h2 class="hasAnchor">
+<a href="#spatial-scales" class="anchor"></a>Spatial Scales</h2>
+</div>
+<div id="location-prediction" class="section level1">
+<h1 class="hasAnchor">
+<a href="#location-prediction" class="anchor"></a>Location Prediction</h1>
+<p>Machine learning predicts the location of the country of study of each paper. The training labels were provided by human-reading randomly chosen articles from the corpus (1,428 human-derived labels) and from text mining the article metadata (2,663 text-mined labels). Interestingly, the human-reading provided 563 observations of irrelevant country locations or irrelevant subjects of study.</p>
+<p>The human-derived labels are first used for constructing a relevance filter based on simple binary classification between “Relevant” and “Irrelevant” documents (<span class="math inline">\(n = 1,386\)</span>). The predictors consist of the text document term matrix derived from the cleaned corpus text using tokens related to country names and of the topic membership output by the topic model (<span class="math inline">\(p = 138\)</span>). A benchmark of the six following models was conducted: featureless (baseline), random forest, support vector machine, naive Bayes, multinomial regression and extreme gradient boosting. The hyper-parameters are initially set at standard default value. The resampling scheme is 10 repeats of 10-fold cross-validation. The random forest, multinomal and support vector machine models are the best-performing model and show no statistical difference in the distribution of their performance measured by area-under-curve (AUC). These models are selected for further tuning using a nested cross-validation with a simple hold-out inner loop and 10 repeats of 10-fold cross-validation as outer loop. The size of the tuning grid is set to 16 between standard values for each hyper-parameters. Random forest and multinomial are the best-performing tuned models and show no statistical difference in the distribution of their performance measured by AUC. The distribution of the hyper-parameter resulting from the nested cross-validation shows a better constraint for the multinomial model and it is selected for predictions. The performance of such multinomial model corresponds to a mean AUC of 0.82, a mean accuracy of 77% and a true positive rate of 86%.</p>
+<p>The prediction of the location of study for each document is performed using both human-derived and text-mined labels (<span class="math inline">\(n = 3,494\)</span>). The predictors consist of the text document term matrix derived from the cleaned corpus text using tokens related to country names (<span class="math inline">\(p = 33\)</span>). Models and resampling scheme are similar than the ones used for the relevance filter. The hyper-parameters are initially set at standard default value. Random forest outperforms every other model with a mean multiclass AUC of 0.99 and a mean accuracy of 96%. No further tuning is performed and the random forest with default hyper-parameters is used for predictions. More complex approaches were investigated: using additional geographical tokens (e.g. rivers and mountain ranges names), multilabel classifications (e.g. binary relevance, label powerset) or deep learning models of natural language processing (e.g. BERT) both on full texts and abstracts with little benefits.</p>
 <pre><code><a href="https://rdrr.io/pkg/mlr/man">### libraries
 library("mlr")
 library("parallelMap")
@@ -362,11 +418,14 @@ consolidate_LDA_results(theme_type = "NSF_specific", save = TRUE)
 consolidate_LDA_results(theme_type = "theme", description = "water budget", save = TRUE)
 consolidate_LDA_results(theme_type = "theme", description = "methods", save = TRUE)
 consolidate_LDA_results(theme_type = "theme", description = "spatial scale", save = TRUE)</a></code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
