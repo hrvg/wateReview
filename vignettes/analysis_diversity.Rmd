@@ -1,115 +1,157 @@
 ---
-title: "Diversity"
+title: "Country entropy"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Diversity}
+  %\VignetteIndexEntry{Country entropy}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
 ---
 
-```
-setwd("~/R_code/LAC")
-source("./diversity/lib_lac.R")
 
-################### libraries #########################
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 6,
+  fig.width = 6, 
+  comment = "#>"
+)
+```
+
+
+# Purpose
+
+In this vignette, we derive the entropy at the country level for different categories of topics.
+Entropy describes how predictable a random variable $X$ with discrete probability mass function $P$ over $n$ outcomes is [@Shannon1948]:
+
+\[ H(X) = - \sum_{i=1}^n P(x_i) log_b P(x_i)\]
+
+In our case, $P(x_i)$ represents the topic probabilities outputted by the topic model.
+In ecology, entropy is related to diversity through the Shannon-Wiener index.
+Diversity is used interchangeably with entropy in this vignette and in the function naming.
+
+# Data loading
+
+We access the consolidated results stored in `extdata` using `system.file()`.
+
+```{r}
+general <- readRDS(system.file(
+    "extdata",
+    "consolidated_results_NSF_general.Rds",
+    package = "latinAmerica")
+)
+specific <- readRDS(system.file(
+    "extdata",
+    "consolidated_results_NSF_specific.Rds",
+    package = "latinAmerica")
+)
+methods <- readRDS(system.file(
+    "extdata",
+    "consolidated_results_methods.Rds",
+    package = "latinAmerica")
+)
+budget <- readRDS(system.file(
+    "extdata",
+    "consolidated_results_water budget.Rds",
+    package = "latinAmerica")
+)
+theme <-readRDS(system.file(
+    "extdata",
+    "consolidated_results_theme.Rds",
+    package = "latinAmerica")
+)
+```
+
+# Calculating diversity
+
+First, we attach the `latinAmerica` and `dplyr` packages.
+
+```{r, warning = FALSE, message = FALSE}
+library(latinAmerica)
 library(dplyr)
-library(vegan)
-library(broom)
-library(reshape2)
-library(ggpubr)
-library(data.table)
-library(wesanderson)
+```
+
+Then, we calculate the diversity by paper and for all of LAC using the `diversity_country()` function, largely dependent on `vegan::diversity()`.
+
+```{r, warning = FALSE, message = FALSE}
+relevant_documents <- remove_year_country(specific) #  specify which (species group)
+diversity_LA <- diversity_LAC(relevant_documents)
+diversity_paper <- vegan::diversity(relevant_documents)
+general <- diversity_country(general)
+specific <- diversity_country(specific)
+budget <- diversity_country(budget)
+diversity_by_country <- full_join(
+    general, 
+    full_join(specific, budget, by = "country"), 
+    by = "country") %>%
+   rename(general = x, specific = x.x, budget = x.y)
+```
+
+Here is the resulting table:
+
+```{r}   
+diversity_by_country %>% knitr::kable(digits = 3, align = "lccc", format = "html", caption = "Country entropy for general, specific and water budget topics") %>%
+kableExtra::kable_styling(bootstrap_options = c("hover", "condensed"))
+```
+
+# Visualizing diversity with dot plots
+
+To visualize the diversity, we attach some visualizations packages and prepare the data for visualization.
+
+```{r}
 library(ggplot2)
-library(philentropy)
-library(scales)
-library(ggplotify)
-library(plotly)
-library(tidyr)
-library(tidyverse)
+library(ggpubr)
 library(ggrepel)
-
-################### raw files #########################
-general <- readRDS("./consolidated_results_NSF_general.Rds")
-specific <- readRDS("./consolidated_results_NSF_specific.Rds") # 45 themes
-methods <- readRDS("./consolidated_results_methods.Rds")
-budget <- readRDS("./consolidated_results_water budget.Rds")
-theme <- readRDS("./consolidated_results_theme.Rds")
-
-
-# final CSV finals that reflect new country predictions are saved as "....2"
-
+library(reshape2)
+diversity_by_country_graph <- melt(diversity_by_country, id.vars = c("country"))
 ```
 
-```
+Now, let's visualize.
 
-# calculate diversity by paper / for all of LAC
-clean <- remove_year_country(specific) #  specify which (species group)
-diversity_LA <- diversity_LAC(clean)
-diversity_paper <- diversity(clean)
+## Specific topics
 
-# check - diveristy function from vegan package works
-# check <- as.data.frame(colSums(clean))
-# sum <- sum(check)
-# check$pi <- check$`colSums(clean)`/sum
-# check$lnpi <- log(check$pi)
-# check$pilnpi <- check$pi * check$lnpi
-# H <- -sum(check$pilnpi)
-
-################### analysis #########################
-
-# calculate diversity by country
-general2 <- diversity_country(general)
-specific2 <- diversity_country(specific)
-budget2 <- diversity_country(budget)
-
-
-
-diversity_by_country<-cbind(general2, specific2, budget2)
-diversity_by_country <- diversity_by_country %>%
-  select(-c("country1","country2")) %>%
-  rename(NSFgeneral = x, NSFspecific = x1, budget = x2)
-
-# SAVE
-# write.csv(diversity_by_country, file = "./diversity/csvs/diversity2.csv")
-
-################### graphs #########################
-
-diversity_by_country_graph <- melt(diversity_by_country, 
-                                   id.vars = c("country"))
-
-# NSF specific  
-specific_graphdf <- subset(diversity_by_country_graph, variable == "NSFspecific")
+```{r}
+specific_graphdf <- subset(diversity_by_country_graph, variable == "specific")
 specific_graph <- ggdotchart(specific_graphdf, x = "country", y = "value", #add color = cluster
                              add = "segments", sorting = "descending", rotate = TRUE, 
                              ylab = "Entropy across specific topics",
                              xlab = "Country")
-
 specific_graph
+```
 
-# NSF general  
-general_graphdf <- subset(diversity_by_country_graph, variable == "NSFgeneral")
+## General topics
+
+```{r}
+general_graphdf <- subset(diversity_by_country_graph, variable == "general")
 general_graph <- ggdotchart(general_graphdf, x = "country", y = "value", #add color = cluster
                             add = "segments", sorting = "descending", rotate = TRUE,
                             ylab = "Entropy across general topics",
                             xlab = "Country")
-# budget
+general_graph
+```
+
+## Water budget topics
+
+```{r}
 budget_graphdf <- subset(diversity_by_country_graph, variable == "budget")
 budget_graph <- ggdotchart(budget_graphdf, x = "country", y = "value", #add color = cluster
                              add = "segments", sorting = "descending", rotate = TRUE,
                            ylab = "Entropy across water budget topics",
                            xlab = "Country")
 
-specific_graph
-general_graph
 budget_graph
+```
 
 
+```{r}
 ggdotchart(diversity_by_country_graph, x = "country", y = "value", color = "variable",
            rotate = TRUE)
 
-ggplot(diversity_by_country,aes(NSFgeneral,NSFspecific, label = country)) +
+ggplot(diversity_by_country,aes(general, specific, label = country)) +
   geom_text_repel() +
   geom_point() +
   theme_pubr() +
   labs(x = "General topics",y = "Specific topics", title = "Country entropy")
 ```
+
+# References

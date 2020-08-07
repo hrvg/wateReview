@@ -75,8 +75,8 @@ diversity_country <- function(df){
   a <- subset(a, a$country %in% keep$country)
   a <- aggregate(a$value, by=list(a$country,a$variable), FUN=sum)
   a <- a %>% dplyr::rename(country = Group.1, species = Group.2, population = x) # species is country*topic
-  a <- group_by(a, country)
-  a <- do(a, tidyr::tidy(vegan::diversity(.$population)))
+  a <- dplyr::group_by(a, country)
+  a <- dplyr::do(a, broom::tidy(vegan::diversity(.$population)))
   return(a)
 }
 
