@@ -40,6 +40,7 @@ Imports:
     philentropy,
     plotly,
     reshape2,
+    kableExtra,
     scales,
     tidyr,
     tidyverse,
