@@ -1,7 +1,7 @@
 # Big data files
-data/corpus.dat
-extdata/
-src/
+inst/extdata/natearth_data
+inst/extdata/corpus.dat
+inst/extdata/wosFullResult.Rds
 src/BERTpy/
 
 # Project files
