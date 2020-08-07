@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Citation network • latinAmerica</title>
+<title>Diversity • latinAmerica</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Citation network">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Diversity">
 <meta property="og:description" content="latinAmerica">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -168,95 +168,122 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Citation network</h1>
+      <h1 data-toc-skip>Diversity</h1>
             
       
       
-      <div class="hidden name"><code>citation_network.Rmd</code></div>
+      <div class="hidden name"><code>analysis_diversity.Rmd</code></div>
 
     </div>
 
     
     
-<div id="citation-network" class="section level1">
-<h1 class="hasAnchor">
-<a href="#citation-network" class="anchor"></a>Citation Network</h1>
-<p>The citation network was extracted from article metadata which stores identifiers for the cited articles and citing article (i.e. the article to which the metadata are attached to). A total of 29,900 citations were found between 4,603 unique articles of the English corpus. The resulting bibliographic network is defined by its <span class="math inline">\(4,603\times4,603\)</span>-adjacency matrix <span class="math inline">\(B\)</span> and is filtered to remove edges between node external to the collected corpus. The citation network between countries, <span class="math inline">\(B_C\)</span> is obtained by:</p>
-<p><span class="math display">\[ B_C = C^T \times B \times C \]</span></p>
-<p>where <span class="math inline">\(C\)</span> is a <span class="math inline">\(4,603\times23\)</span>-matrix containing the output of the machine learning probabilistic predictions of the location of study between <span class="math inline">\(23\)</span> possible country of study. In consequence, <span class="math inline">\(B_C\)</span> is a weighted directed adjacency matrix. Similar reasoning leads to the citation network between specific research topics, method topics and water budget topics by changing the matrix <span class="math inline">\(C\)</span> in the previous equation for the LDA probabilistic predictions of topics.</p>
-<pre><code><a href="https://rdrr.io/pkg/mlr/man">### libraries ###
-library("mlr")
-library("OpenML")
-library("NLP")
-library("tm")
-library("data.table")
-library("mldr")
-library("dplyr")
-library("igraph")
+<pre><code><a href="https://rdrr.io/r/base/getwd.html">setwd("~/R_code/LAC")
+source("./diversity/lib_lac.R")
 
-### utils ###
-import::here(.from = "./R/utils/lib_webscrapping.R",
-  get.EndNoteIdcorpus,
-  get.EndNoteIdLDA,
-  QA.EndNoteIdCorpusLDA,
-  align.dataWithEndNoteIdLDA,
-  align.dataWithEndNoteIdcorpus,
-  order.data
-)
+################### libraries #########################
+library(dplyr)
+library(vegan)
+library(broom)
+library(reshape2)
+library(ggpubr)
+library(data.table)
+library(wesanderson)
+library(ggplot2)
+library(philentropy)
+library(scales)
+library(ggplotify)
+library(plotly)
+library(tidyr)
+library(tidyverse)
+library(ggrepel)
+
+################### raw files #########################
+general &lt;- readRDS("./consolidated_results_NSF_general.Rds")
+specific &lt;- readRDS("./consolidated_results_NSF_specific.Rds") # 45 themes
+methods &lt;- readRDS("./consolidated_results_methods.Rds")
+budget &lt;- readRDS("./consolidated_results_water budget.Rds")
+theme &lt;- readRDS("./consolidated_results_theme.Rds")
 
 
-import::here(.from = "./R/network_analysis/lib_network_analysis.R", 
-  make.countryNetwork,
-  make.topicNetwork
- )
-
-# data loading
-englishCorpus_file &lt;- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
-englishCorpus &lt;- readRDS(englishCorpus_file)
-
-in_corpus_file &lt;- "in_corpus.Rds"
-in_corpus &lt;- readRDS(in_corpus_file)
-source_ids &lt;- readRDS("source_ids.Rds") # aligned with corpus
-
-citation_network &lt;- readRDS("citingDf.Rds")
-
-# get document IDs
-EndNoteIdcorpus &lt;- get.EndNoteIdcorpus(in_corpus)
-EndNoteIdLDA &lt;- get.EndNoteIdLDA(englishCorpus)
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
-
-# align databases 
-in_corpus &lt;- align.dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
-source_ids &lt;- align.dataWithEndNoteIdcorpus(source_ids, EndNoteIdcorpus, EndNoteIdLDA)
-
-englishCorpus &lt;- align.dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
-
-EndNoteIdLDA &lt;- align.dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
-EndNoteIdcorpus &lt;- align.dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
-
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
-
-# order them according to LDA database
-source_ids &lt;- order.data(source_ids, EndNoteIdLDA, EndNoteIdcorpus)
-in_corpus &lt;- order.data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
-
-predCountryMembership &lt;- readRDS("predCountryMembership.Rds")
-colnames(predCountryMembership) &lt;- gsub("prob.", "", colnames(predCountryMembership))
-
-# make the networks
-countryNetwork &lt;- make.countryNetwork(source_ids, citation_network)
-
-type_list &lt;- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
-for (tt in type_list) make.topicNetwork(source_ids, citation_network, type = tt, percentile.threshold = 0.90)
+# final CSV finals that reflect new country predictions are saved as "....2"
 </a></code></pre>
-</div>
+<pre><code>
+# calculate diversity by paper / for all of LAC
+clean &lt;- remove_year_country(specific) #  specify which (species group)
+diversity_LA &lt;- diversity_LAC(clean)
+diversity_paper &lt;- diversity(clean)
+
+# check - diveristy function from vegan package works
+# check &lt;- as.data.frame(colSums(clean))
+# sum &lt;- sum(check)
+# check$pi &lt;- check$`colSums(clean)`/sum
+# check$lnpi &lt;- log(check$pi)
+# check$pilnpi &lt;- check$pi * check$lnpi
+# H &lt;- -sum(check$pilnpi)
+
+################### analysis #########################
+
+# calculate diversity by country
+general2 &lt;- diversity_country_2(general)
+specific2 &lt;- diversity_country_2(specific)
+budget2 &lt;- diversity_country_2(budget)
+
+
+
+diversity_by_country&lt;-cbind(general2, specific2, budget2)
+diversity_by_country &lt;- diversity_by_country %&gt;%
+  select(-c("country1","country2")) %&gt;%
+  rename(NSFgeneral = x, NSFspecific = x1, budget = x2)
+
+# SAVE
+# write.csv(diversity_by_country, file = "./diversity/csvs/diversity2.csv")
+
+################### graphs #########################
+
+diversity_by_country_graph &lt;- melt(diversity_by_country, 
+                                   id.vars = c("country"))
+
+# NSF specific  
+specific_graphdf &lt;- subset(diversity_by_country_graph, variable == "NSFspecific")
+specific_graph &lt;- ggdotchart(specific_graphdf, x = "country", y = "value", #add color = cluster
+                             add = "segments", sorting = "descending", rotate = TRUE, 
+                             ylab = "Entropy across specific topics",
+                             xlab = "Country")
+
+specific_graph
+
+# NSF general  
+general_graphdf &lt;- subset(diversity_by_country_graph, variable == "NSFgeneral")
+general_graph &lt;- ggdotchart(general_graphdf, x = "country", y = "value", #add color = cluster
+                            add = "segments", sorting = "descending", rotate = TRUE,
+                            ylab = "Entropy across general topics",
+                            xlab = "Country")
+# budget
+budget_graphdf &lt;- subset(diversity_by_country_graph, variable == "budget")
+budget_graph &lt;- ggdotchart(budget_graphdf, x = "country", y = "value", #add color = cluster
+                             add = "segments", sorting = "descending", rotate = TRUE,
+                           ylab = "Entropy across water budget topics",
+                           xlab = "Country")
+
+specific_graph
+general_graph
+budget_graph
+
+
+ggdotchart(diversity_by_country_graph, x = "country", y = "value", color = "variable",
+           rotate = TRUE)
+
+ggplot(diversity_by_country,aes(NSFgeneral,NSFspecific, label = country)) +
+  geom_text_repel() +
+  geom_point() +
+  theme_pubr() +
+  labs(x = "General topics",y = "Specific topics", title = "Country entropy")</code></pre>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 

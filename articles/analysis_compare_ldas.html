@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Citation network • latinAmerica</title>
+<title>LDA comparison • latinAmerica</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Citation network">
+<script src="../pkgdown.js"></script><meta property="og:title" content="LDA comparison">
 <meta property="og:description" content="latinAmerica">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -168,95 +168,107 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Citation network</h1>
+      <h1 data-toc-skip>LDA comparison</h1>
             
       
       
-      <div class="hidden name"><code>citation_network.Rmd</code></div>
+      <div class="hidden name"><code>analysis_compare_ldas.Rmd</code></div>
 
     </div>
 
     
     
-<div id="citation-network" class="section level1">
-<h1 class="hasAnchor">
-<a href="#citation-network" class="anchor"></a>Citation Network</h1>
-<p>The citation network was extracted from article metadata which stores identifiers for the cited articles and citing article (i.e. the article to which the metadata are attached to). A total of 29,900 citations were found between 4,603 unique articles of the English corpus. The resulting bibliographic network is defined by its <span class="math inline">\(4,603\times4,603\)</span>-adjacency matrix <span class="math inline">\(B\)</span> and is filtered to remove edges between node external to the collected corpus. The citation network between countries, <span class="math inline">\(B_C\)</span> is obtained by:</p>
-<p><span class="math display">\[ B_C = C^T \times B \times C \]</span></p>
-<p>where <span class="math inline">\(C\)</span> is a <span class="math inline">\(4,603\times23\)</span>-matrix containing the output of the machine learning probabilistic predictions of the location of study between <span class="math inline">\(23\)</span> possible country of study. In consequence, <span class="math inline">\(B_C\)</span> is a weighted directed adjacency matrix. Similar reasoning leads to the citation network between specific research topics, method topics and water budget topics by changing the matrix <span class="math inline">\(C\)</span> in the previous equation for the LDA probabilistic predictions of topics.</p>
-<pre><code><a href="https://rdrr.io/pkg/mlr/man">### libraries ###
-library("mlr")
-library("OpenML")
-library("NLP")
-library("tm")
-library("data.table")
-library("mldr")
-library("dplyr")
-library("igraph")
+<pre><code><a href="https://rdrr.io/pkg/dplyr/man">library(dplyr)
+library(reshape2)
+library(ggpubr)
+library(tidyr)
+library(ggplot2)
+library(forcats)
 
-### utils ###
-import::here(.from = "./R/utils/lib_webscrapping.R",
-  get.EndNoteIdcorpus,
-  get.EndNoteIdLDA,
-  QA.EndNoteIdCorpusLDA,
-  align.dataWithEndNoteIdLDA,
-  align.dataWithEndNoteIdcorpus,
-  order.data
-)
+######## load data #############
+en &lt;- read.csv("./topic_names_en.csv")
+es &lt;- read.csv("./topic_names_es.csv")
+pt &lt;- read.csv("./topic_names_pt.csv", na.strings=c("","NA"))
+
+en$lang &lt;- "en"
+es$lang &lt;- "es"
+pt$lang &lt;- "pt"
+
+en2 &lt;- melt(en,
+           id.vars = c("topic_id","lang"))
+es2 &lt;- melt(es,
+            id.vars = c("topic_id","lang"))
+pt2 &lt;- melt(pt,
+            id.vars = c("topic_id","lang"))
 
 
-import::here(.from = "./R/network_analysis/lib_network_analysis.R", 
-  make.countryNetwork,
-  make.topicNetwork
- )
+x &lt;- rbind(en2,es2,pt2)
+x &lt;- na.omit(x)
 
-# data loading
-englishCorpus_file &lt;- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
-englishCorpus &lt;- readRDS(englishCorpus_file)
+######## filter #############
+x2 &lt;- x %&gt;%
+  filter(variable == "NSF_specific") %&gt;%
+  group_by(value, lang) %&gt;%
+  tally
 
-in_corpus_file &lt;- "in_corpus.Rds"
-in_corpus &lt;- readRDS(in_corpus_file)
-source_ids &lt;- readRDS("source_ids.Rds") # aligned with corpus
 
-citation_network &lt;- readRDS("citingDf.Rds")
+# need to order based on engligh numbers + number of overall topics
+x2$nlang &lt;- x2 %&gt;% 
+  group_by(value) %&gt;% 
+  group_map(~ rep(length(table(.x$lang)), length(table(.x$lang)))) %&gt;% 
+  unlist()
 
-# get document IDs
-EndNoteIdcorpus &lt;- get.EndNoteIdcorpus(in_corpus)
-EndNoteIdLDA &lt;- get.EndNoteIdLDA(englishCorpus)
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+lvls &lt;- as.character(x2$value[x2$lang=="en"])[order(x2$n[x2$lang=="en"])]
 
-# align databases 
-in_corpus &lt;- align.dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
-source_ids &lt;- align.dataWithEndNoteIdcorpus(source_ids, EndNoteIdcorpus, EndNoteIdLDA)
+x2$value &lt;- factor(x2$value, levels = lvls)
 
-englishCorpus &lt;- align.dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
+x2 &lt;- na.omit(x2) # missing 1 spanish?
 
-EndNoteIdLDA &lt;- align.dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
-EndNoteIdcorpus &lt;- align.dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
+x2$lang &lt;- factor(x2$lang, labels = c("English", "Spanish", "Portuguese"))
 
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+######## heat map #############
 
-# order them according to LDA database
-source_ids &lt;- order.data(source_ids, EndNoteIdLDA, EndNoteIdcorpus)
-in_corpus &lt;- order.data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
+a &lt;- ggplot(data = x2, aes(x = lang, y = fct_reorder(value, nlang))) +
+  geom_tile(aes(fill = nlang, width=0.9, height=0.9)) +
+  geom_text(aes(label = n))
+a
 
-predCountryMembership &lt;- readRDS("predCountryMembership.Rds")
-colnames(predCountryMembership) &lt;- gsub("prob.", "", colnames(predCountryMembership))
+a + 
+  scale_fill_gradient(low = "grey89",
+                      high = "grey50") +
+  labs(title= "Topic model coverage",
+       y="NSF specific categories",
+       x = "Topic model for each language") +
+  theme_pubr() +  
+  theme(axis.text.y = element_text(face = c('plain','plain','plain', 'plain', 'plain', 'plain', 'plain',
+                                            'plain', 'bold', 'plain', 'plain', 'plain',
+                                            'plain', 'plain', 'plain', 'bold', 'plain',
+                                            'plain', 'plain', 'plain', 'plain', 'plain',
+                                            'plain', 'bold', 'plain', 'plain', 'bold',
+                                            'bold', 'bold', 'plain', 'plain', 'bold', 
+                                            'bold', 'plain', 'bold','bold', 'bold', # 6-10
+                                            'bold', 'bold', 'bold','bold','bold' # 1-5
+                                            ))) +
+  rremove("legend")
 
-# make the networks
-countryNetwork &lt;- make.countryNetwork(source_ids, citation_network)
 
-type_list &lt;- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
-for (tt in type_list) make.topicNetwork(source_ids, citation_network, type = tt, percentile.threshold = 0.90)
-</a></code></pre>
-</div>
+
+
+
+
+# plotly::ggplotly(a)
+
+######## dot chart #############
+ggbarplot(x2, x = "value", y = "n", 
+          fill = "lang",
+          color = "white",
+          palette = c("#00AFBB", "#FC4E07",  "#E7B800"),
+          rotate = TRUE)</a></code></pre>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
