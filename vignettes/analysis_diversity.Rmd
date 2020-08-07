@@ -1,3 +1,47 @@
+---
+title: "Diversity"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Diversity}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```
+setwd("~/R_code/LAC")
+source("./diversity/lib_lac.R")
+
+################### libraries #########################
+library(dplyr)
+library(vegan)
+library(broom)
+library(reshape2)
+library(ggpubr)
+library(data.table)
+library(wesanderson)
+library(ggplot2)
+library(philentropy)
+library(scales)
+library(ggplotify)
+library(plotly)
+library(tidyr)
+library(tidyverse)
+library(ggrepel)
+
+################### raw files #########################
+general <- readRDS("./consolidated_results_NSF_general.Rds")
+specific <- readRDS("./consolidated_results_NSF_specific.Rds") # 45 themes
+methods <- readRDS("./consolidated_results_methods.Rds")
+budget <- readRDS("./consolidated_results_water budget.Rds")
+theme <- readRDS("./consolidated_results_theme.Rds")
+
+
+# final CSV finals that reflect new country predictions are saved as "....2"
+
+```
+
+```
+
 # calculate diversity by paper / for all of LAC
 clean <- remove_year_country(specific) #  specify which (species group)
 diversity_LA <- diversity_LAC(clean)
@@ -68,3 +112,4 @@ ggplot(diversity_by_country,aes(NSFgeneral,NSFspecific, label = country)) +
   geom_point() +
   theme_pubr() +
   labs(x = "General topics",y = "Specific topics", title = "Country entropy")
+```

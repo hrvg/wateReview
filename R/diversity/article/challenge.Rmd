@@ -1,6 +1,0 @@
-# Challenge
-Given these circumstances, it is critical to assess whether water resources research across Latin America contributes the knowledge necessary to successfully manage water.
-Water resources management is a relatively young scientific discipline [@montanari2015] and review papers up to this point often focus on a small geographic area [@chowdhury2010; @owusu2016; @digna2017; @araujo2015], individual component of the water budget [@dobriyal2012; @berndtsson2010], particular methodology [@dong2013; @plummer2012] or specific water user [@singh2015; @ran2016; @arbues2003].
-
-To assess the state of this research, we performed an unprecedented, multi-lingual review of the state of water resources research literature in the region and across a range of topics and disciplines.
-This literature review reveals bright spots and blind spots of past water research and provides insights for scientists and decision-makers to advance the relevance and impact of future scientific inquiries and to design effective policy solutions to resource management challenges.

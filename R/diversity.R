@@ -1,31 +1,29 @@
-################### functions #########################
-
 remove_year_country <- function(df) {
   df <- df %>%
     filter(country != "Irrelevant") %>%
     select(-c("year","country"))
   return(df)
 }
+
 remove_year <- function(df) {
   df <- df %>%
     select(-c("year"))
   
   return(df)
-  
 }
+
 remove_country <- function(df) {
   df <- df %>%
     select(-c("country"))
   
   return(df)
-  
 }
+
 remove_irrelevant <- function(df) {
   df <- df %>%
     filter(country != "Irrelevant")
   
   return(df)
-  
 }
 
 diversity_country <- function(df) { 

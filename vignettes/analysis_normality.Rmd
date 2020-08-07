@@ -1,0 +1,248 @@
+---
+title: "Normality"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Normality}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+```
+setwd("~/R_code/LAC")
+source("./diversity/lib_lac.R")
+
+################### libraries #########################
+library(dplyr)
+library(vegan)
+library(broom)
+library(reshape2)
+library(ggpubr)
+library(data.table)
+library(wesanderson)
+library(ggplot2)
+library(philentropy)
+library(scales)
+library(ggplotify)
+library(plotly)
+library(tidyr)
+library(tidyverse)
+library(ggrepel)
+
+################### raw files #########################
+general <- readRDS("./consolidated_results_NSF_general.Rds")
+specific <- readRDS("./consolidated_results_NSF_specific.Rds") # 45 themes
+methods <- readRDS("./consolidated_results_methods.Rds")
+budget <- readRDS("./consolidated_results_water budget.Rds")
+theme <- readRDS("./consolidated_results_theme.Rds")
+
+
+# final CSV finals that reflect new country predictions are saved as "....2"
+
+```
+
+```
+################### pseudocode #########################
+
+# start with 1 topic
+# calculate distance from normal distribution for 2 data frames
+## 1 - % of research devoted to each topic within a country
+## 2- probability of a topic in each document 
+
+
+# subset main df to countries with > 30 papers
+# rescale value
+# graph density distribution of corpus data + a normal distribution
+# extract info both graphs - compare "y"s
+# calculate distance - sqrt of JSD
+
+################### code #########################
+
+# define subset
+probs <- reduce_docs_for_JSd(theme) # PARAMETER HERE, CHANGE THIS TO A LOOP
+# probs <- probs %>% mutate(topic = replace(topic, topic == "groundwater flow", "groundwater"))
+
+############### across countries ###########
+
+# calculate distance from normal for % of research done in each country
+
+sums <-aggregate(probs$value, by=list(probs$country,probs$topic), FUN=sum) # re - summarize after removing countries w/ < 30 papers
+names(sums) = c("country","topic","sum")
+df <- sums %>%
+  group_by(country) %>%
+  mutate(prop = sum/sum(sum)) %>% # calculate proportion of research each country spends on each topic
+  group_by(topic) %>%
+  mutate(scaled = scale(prop)) %>% # scale by topic
+  ungroup() %>%
+  select(c("topic","scaled"))
+
+country_distance<- sapply(unique(df$topic), get_JSd_country)
+names(country_distance) <- unique(df$topic)
+
+
+country_distance <- as.data.frame(country_distance)
+country_distance$topic <- rownames(country_distance)
+
+# graphs for guide
+# reservoir <- get_JSd_country('reservoirs', plot = T)
+# rivers <- get_JSd_country('rivers', plot = T)
+# get_JSd_country('irrigation', plot = T) 
+
+############### across documents ###########
+
+# calculate distance from normal for all documents
+# MEDIAN OF JSD for EACH topic by 12 COUNTRIES
+
+df <- probs %>%
+  mutate(countrytopic = paste(country,topic)) %>%
+  group_by(countrytopic) %>%
+  mutate(scaled = scale(value)) %>%
+  select(c("countrytopic","scaled")) # need to scale somehow?
+  
+
+topic_distance <- sapply(unique(df$countrytopic), get_JSd_corpus)
+names(topic_distance) <- unique(df$countrytopic)
+topic_distance <- as.data.frame(topic_distance)
+topic_distance$countrytopic <- rownames(topic_distance)
+
+topic_distance <- topic_distance %>%
+  mutate(topic = word(countrytopic, 2, -1)) %>%
+  group_by(topic) %>%
+  mutate(topic_distance = median(topic_distance)) %>%
+  select(c("topic","topic_distance")) %>%
+  distinct()
+
+
+# combine and save separate csvs
+distance <- merge(country_distance, topic_distance, by = "topic")
+
+#write.csv(distance, file = "./diversity/csvs/themedistance.csv")
+```
+
+```
+budget <- read.csv("./data/waterbudgetdistance.csv") 
+methods <- read.csv("./data/methodsdistance.csv") 
+theme <- read.csv("./data/themedistance.csv")
+general <- read.csv("./data/generaldistance.csv")
+specific <- read.csv("./data/specificdistance.csv")
+
+
+######## methods #########
+methods.base <- ggplot(methods,aes(topic_distance,country_distance, label = topic)) +
+  geom_text_repel() +
+  geom_point() +
+  theme_pubr() +
+  labs(x = "Normality across documents",y = "Normality across countries")
+
+methods.edit <- 
+  methods.base +
+  #grids() +
+  coord_fixed() +
+  ylim(0.5,0.93) +
+  xlim(0.26,0.67) +
+  coord_fixed() +
+  labs(title = "Research methods")
+
+######## budget #########
+budget.base <- ggplot(budget,aes(topic_distance,country_distance, label = topic)) +
+  geom_text_repel() +
+  geom_point() +
+  theme_pubr() +
+  labs(x = "Normality across documents",y = "Normality across countries")
+
+budget.edit <- 
+  budget.base +
+  ylim(0.5,0.93) +
+  xlim(0.26,0.67) +
+  coord_fixed() +
+  labs(title = "Components of water budget")
+
+######## themes ##########
+ggscatter(theme, y = "country_distance", x = "topic_distance",
+                    label = "topic",
+                    label.rectangle = TRUE,
+                    repel = TRUE,
+                    xlab = "Normality across documents",
+                    ylab = "Normality across countries") 
+
+themes.base <- ggplot(theme,aes(topic_distance,country_distance, label = topic)) +
+  geom_text_repel() +
+  geom_point() +
+  theme_pubr() +
+  labs(x = "Normality across documents",y = "Normality across countries")
+
+themes.edit <- 
+  themes.base +
+  #grids() +
+  coord_fixed() +
+  labs(title = "Themes")
+
+
+######## general ##########
+general.base <- ggplot(general,aes(topic_distance,country_distance, label = topic)) +
+  geom_text_repel() +
+  geom_point() +
+  theme_pubr() +
+  labs(x = "Normality across documents",y = "Normality across countries")
+
+general.edit <- 
+  general.base +
+  #grids() +
+  coord_fixed() +
+  labs(title = "General topics")
+
+######## specific ##########
+ggscatter(specific, y = "country_distance", x = "topic_distance",
+         label = "topic",
+         label.rectangle = TRUE,
+         repel = TRUE,
+         xlab = "Normality across documents",
+         ylab = "Normality across countries") 
+
+specific.base <- ggplot(specific,aes(topic_distance,country_distance, label = topic)) +
+  geom_text_repel() +
+  geom_point() +
+  theme_pubr() +
+  labs(x = "Normality across documents",y = "Normality across countries")
+
+specific.edit <- 
+  specific.base +
+  coord_fixed() +
+  labs(title = "Specific  topics")
+
+
+
+
+
+######## interactie graph ######## 
+
+b <- ggplot(theme, aes(y = country_distance, x = topic_distance, group = topic)) + geom_point() + theme_pubr()
+ggplotly(b, tooltip = c('topic'))
+
+
+######## topics for guide to normality ######## 
+reservoir.edit <- 
+  reservoir +
+  rremove("legend") +
+  clean_theme() +
+  labs(title = "Far from normal")
+
+rivers.edit <-
+  rivers +
+  rremove("legend") +
+  ylim(0,0.8) +
+  clean_theme() +
+  labs(title = "Close to normal")
+
+
+######## saving individual pieces ##########
+
+methods.edit
+budget.edit
+# reservoir.edit
+# rivers.edit
+themes.edit
+general.edit
+specific.edit
+```

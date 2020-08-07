@@ -25,8 +25,7 @@ Authors@R: c(
     person(given = "Arthur",
            family = "Koehl",
            role = c("aut"),
-           email = "avkoehl@ucdavis.edu",
-           comment = c(ORCID = "0000-0002-8919-554X")))       
+           email = "avkoehl@ucdavis.edu"))       
 Description: This package performs a computational literature review of water resources research in Latin America.
 License: MIT + file LICENSE
 Encoding: UTF-8
