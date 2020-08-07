@@ -1,8 +1,0 @@
----
-title: "Input data for Google's BERT"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Input data for Google's BERT}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----

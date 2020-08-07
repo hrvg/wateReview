@@ -58,9 +58,9 @@ diversity_paper <- diversity(clean)
 ################### analysis #########################
 
 # calculate diversity by country
-general2 <- diversity_country_2(general)
-specific2 <- diversity_country_2(specific)
-budget2 <- diversity_country_2(budget)
+general2 <- diversity_country(general)
+specific2 <- diversity_country(specific)
+budget2 <- diversity_country(budget)
 
 
 
