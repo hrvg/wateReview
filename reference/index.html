@@ -100,7 +100,7 @@
       <a href="../articles/analysis_compare_ldas.html">LDA comparison</a>
     </li>
     <li>
-      <a href="../articles/analysis_diversity.html">Diversity</a>
+      <a href="../articles/analysis_diversity.html">Country entropy</a>
     </li>
     <li>
       <a href="../articles/analysis_normality.html">Normality</a>
@@ -121,7 +121,7 @@
       <a href="../articles/country_colors.html">Country colors</a>
     </li>
     <li>
-      <a href="../articles/createjson.html">UNKNOWN TITLE</a>
+      <a href="../articles/createjson.html">Creating JSON file</a>
     </li>
     <li>
       <a href="../articles/endnote-processing.html">EndNote processing</a>
@@ -133,16 +133,16 @@
       <a href="../articles/get_emails.html">Mining email addresses</a>
     </li>
     <li>
-      <a href="../articles/get_vocab.html">UNKNOWN TITLE</a>
+      <a href="../articles/get_vocab.html">Getting vocabulary</a>
     </li>
     <li>
       <a href="../articles/hexagonal_maps.html">Hexagonal maps of country entropies</a>
     </li>
     <li>
-      <a href="../articles/lda_model.html">UNKNOWN TITLE</a>
+      <a href="../articles/lda_model.html">Running LDA</a>
     </li>
     <li>
-      <a href="../articles/lda_vis.html">UNKNOWN TITLE</a>
+      <a href="../articles/lda_vis.html">Running LDAvis</a>
     </li>
     <li>
       <a href="../articles/making-query.html">Making the query</a>
@@ -269,6 +269,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="VizSpots.html">VizSpots()</a></code> </p>
+        </td>
+        <td><p>Produces a chord diagram visualization with country cluster colors and topics categories</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="add.abstractsToCorpus.html">add.abstractsToCorpus()</a></code> </p>
         </td>
         <td><p>Add retrieved abstract to corpus</p></td>
@@ -326,6 +332,18 @@
           <p><code><a href="consolidate_LDA_results.html">consolidate_LDA_results()</a></code> </p>
         </td>
         <td><p>Consolidates lda results by adding year and country prediction to the topicDocs</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="diversity_LAC.html">diversity_LAC()</a></code> </p>
+        </td>
+        <td><p>Calculates a diversity over the entire LAC region</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="diversity_country.html">diversity_country()</a></code> </p>
+        </td>
+        <td><p>Calculates the diversity</p></td>
       </tr><tr>
         
         <td>
@@ -454,6 +472,18 @@ Ties are broken by taking the mininum</p></td>
           <p><code><a href="get_DocTermMatrix.html">get_DocTermMatrix()</a></code> </p>
         </td>
         <td><p>read document-term matrix created by the text mining code</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_JSd_corpus.html">get_JSd_corpus()</a></code> </p>
+        </td>
+        <td><p>Calculates the Jensen-Shannon distance for countries</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_JSd_country.html">get_JSd_country()</a></code> </p>
+        </td>
+        <td><p>Calculates the Jensen-Shannon distance for countries</p></td>
       </tr><tr>
         
         <td>
@@ -596,6 +626,12 @@ You probably want to execute this code on a linux server to avoid the issues wit
       </tr><tr>
         
         <td>
+          <p><code><a href="make.countryNetwork.html">make.countryNetwork()</a></code> </p>
+        </td>
+        <td><p>Creates a weighted adjacency matrix of probability of citation between countries</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="make.country_tokens.html">make.country_tokens()</a></code> </p>
         </td>
         <td><p>Tokenize labels, here a list of relevant countries</p></td>
@@ -623,6 +659,12 @@ You probably want to execute this code on a linux server to avoid the issues wit
           <p><code><a href="make.task.html">make.task()</a></code> </p>
         </td>
         <td><p>Make an MLR task</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="make.topicNetwork.html">make.topicNetwork()</a></code> </p>
+        </td>
+        <td><p>Creates a weighted adjacency matrix of probability of citation between topics</p></td>
       </tr><tr>
         
         <td>
@@ -690,6 +732,36 @@ The function removes alpha-numeric characters, some special characters, trim whi
           <p><code><a href="read_survey_df.html">read_survey_df()</a></code> </p>
         </td>
         <td><p>Read the survey data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="reduce_docs_for_JSd.html">reduce_docs_for_JSd()</a></code> </p>
+        </td>
+        <td><p>Reduce the documents before calculating the Jensen-Shannon distance</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="remove_country.html">remove_country()</a></code> </p>
+        </td>
+        <td><p>Remove <code>country</code> column</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="remove_irrelevant.html">remove_irrelevant()</a></code> </p>
+        </td>
+        <td><p>Removes <code>Irrelevant</code> entries from the <code>country</code> column of a data.frame</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="remove_year.html">remove_year()</a></code> </p>
+        </td>
+        <td><p>Remove <code>year</code> column</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="remove_year_country.html">remove_year_country()</a></code> </p>
+        </td>
+        <td><p>Remove <code>year</code> and <code>country</code> columns</p></td>
       </tr><tr>
         
         <td>
