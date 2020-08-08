@@ -1,4 +1,27 @@
+---
+title: "Running LDAvis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Running LDAvis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 6,
+  fig.width = 6, 
+  comment = "#>"
+)
+```
+
+
+```
 library("servr")
 library("LDAvis")
 
 serVis("./105k_ldavis.json", out.dir="./view")
+```

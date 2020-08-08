@@ -1,3 +1,24 @@
+---
+title: "Running LDA"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Running LDA}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 6,
+  fig.width = 6, 
+  comment = "#>"
+)
+```
+
+```
 # Load Required Libraries
 library(parallel)
 library(NLP)
@@ -100,3 +121,4 @@ saveRDS(file="./topicWords.Rds", var_phi)
 
 
 
+```

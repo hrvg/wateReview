@@ -1,3 +1,25 @@
+---
+title: "Creating JSON file"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Creating JSON file}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 6,
+  fig.width = 6, 
+  comment = "#>"
+)
+```
+
+
+```
 library(parallel)
 library(LDAvis)
 
@@ -43,3 +65,4 @@ write(file ="./ldavis.json", obj_json)
 
 
 
+```

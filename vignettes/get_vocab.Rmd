@@ -1,3 +1,25 @@
+---
+title: "Getting vocabulary"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting vocabulary}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 6,
+  fig.width = 6, 
+  comment = "#>"
+)
+```
+
+
+```
 # Load Required Libraries
 
 ###################################
@@ -45,3 +67,4 @@ saveRDS(var_document_token_counts, file="doc_lens.Rds")
 print ("    vocab...")
 writeLines(var_vocabulary, vocabfile)
 
+```
