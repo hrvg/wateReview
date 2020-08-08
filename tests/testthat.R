@@ -1,4 +1,4 @@
 library(testthat)
-library(latinAmerica)
+library(wateReview)
 
-test_check("latinAmerica")
+test_check("wateReview")

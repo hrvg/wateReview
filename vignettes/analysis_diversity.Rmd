@@ -38,27 +38,27 @@ We access the consolidated results stored in `extdata` using `system.file()`.
 general <- readRDS(system.file(
     "extdata",
     "consolidated_results_NSF_general.Rds",
-    package = "latinAmerica")
+    package = "wateReview")
 )
 specific <- readRDS(system.file(
     "extdata",
     "consolidated_results_NSF_specific.Rds",
-    package = "latinAmerica")
+    package = "wateReview")
 )
 methods <- readRDS(system.file(
     "extdata",
     "consolidated_results_methods.Rds",
-    package = "latinAmerica")
+    package = "wateReview")
 )
 budget <- readRDS(system.file(
     "extdata",
     "consolidated_results_water budget.Rds",
-    package = "latinAmerica")
+    package = "wateReview")
 )
 theme <-readRDS(system.file(
     "extdata",
     "consolidated_results_theme.Rds",
-    package = "latinAmerica")
+    package = "wateReview")
 )
 ```
 
@@ -67,7 +67,7 @@ theme <-readRDS(system.file(
 First, we attach the `latinAmerica` and `dplyr` packages.
 
 ```{r, warning = FALSE, message = FALSE}
-library(latinAmerica)
+library(wateReview)
 library(dplyr)
 ```
 

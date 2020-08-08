@@ -23,7 +23,7 @@ Both files have the same ordering, but the `.xml` is encoded as `UTF-8` whereas 
 In the following, the `.txt` is used to align the EndNote `.xml` database with query `.csv` files.
 
 ```
-library(latinAmerica)
+library(wateReview)
 root_dir <- get_rootdir()
 out_dir <- "exploitation/out/run79"
 out_dir <- file.path(root_dir, out_dir)

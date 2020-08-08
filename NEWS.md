@@ -1,3 +1,3 @@
-# latinAmerica 0.1
+# wateReview 0.1
 
 * Initial release

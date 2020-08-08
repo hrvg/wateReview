@@ -19,7 +19,7 @@ Unfortunately, this vignette manipulates actual `.pdf` articles which we cannot 
 First, let's load the package and define `out_dir` output directory.
 
 ```
-library(latinAmerica)
+library(wateReview)
 root_dir <- get_rootdir()
 out_dir <- "exploitation/out/run79"
 out_dir <- file.path(root_dir, out_dir)
