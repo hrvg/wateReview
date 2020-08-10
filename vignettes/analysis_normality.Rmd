@@ -5,38 +5,94 @@ vignette: >
   %\VignetteIndexEntry{Normality}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 6,
+  fig.width = 6, 
+  comment = "#>"
+)
 ```
-setwd("~/R_code/LAC")
-source("./diversity/lib_lac.R")
 
-system.file("extdata", package = "latinAmerica")
+# Purpose
 
-################### libraries #########################
+In this vignette, we derive the _normality_ of four categories of topics.
+Normality from the Jensen-Shannon distance, $d_{JS}$, [@Endres2003], defined as the square-root of the Jensen-Shannon divergence, $D_{JS}$, [@Lin1991]:
 
+\[D_{JS}(N,Q) = \frac{1}{2} \lbrack D_{KL}(N,R) + D_{KL}(P,R) \rbrack \] 
 
-################### raw files #########################
-general <- readRDS("./consolidated_results_NSF_general.Rds")
-specific <- readRDS("./consolidated_results_NSF_specific.Rds") # 45 themes
-methods <- readRDS("./consolidated_results_methods.Rds")
-budget <- readRDS("./consolidated_results_water budget.Rds")
-theme <- readRDS("./consolidated_results_theme.Rds")
+with $N,P$, probability distributions, $R = \frac{1}{2} (N+P)$ the midpoint probability and $D_{KL}$, the Kullback-Leibler divergence [@Kullback1951].
+Here, we take $N = \mathcal{N}(0,1)$, the standard normal distribution with mean $\mu = 0$ and standard deviation $\sigma = 1$.
+As $d_{JS} = 0$ when $P = \mathcal{N}(0,1)$, to better meet the intuition of normality, we define normality as:
 
+\[ \textrm{Normality} = 1 - d_{JS} \]
 
-# final CSV finals that reflect new country predictions are saved as "....2"
+so that normality is closer to 1 when the $P$ is closer to the standard normal distribution.
 
+For a given topic, normality is defined for two types of distributions $P$, forming the two axis of subsequent graphs:
+
+1. the probability distribution of the percentage of research devoted to the topic across countries;
+1. the probability distribution of topic probabilities across documents.
+
+# Data loading
+
+We access the consolidated results stored in `extdata` using `system.file()`.
+
+```{r}
+general <- readRDS(system.file(
+    "extdata",
+    "consolidated_results_NSF_general.Rds",
+    package = "wateReview")
+)
+specific <- readRDS(system.file(
+    "extdata",
+    "consolidated_results_NSF_specific.Rds",
+    package = "wateReview")
+)
+methods <- readRDS(system.file(
+    "extdata",
+    "consolidated_results_methods.Rds",
+    package = "wateReview")
+)
+budget <- readRDS(system.file(
+    "extdata",
+    "consolidated_results_water budget.Rds",
+    package = "wateReview")
+)
+theme <- readRDS(system.file(
+    "extdata",
+    "consolidated_results_theme.Rds",
+    package = "wateReview")
+)
 ```
+
+# Deriving normality
+
+First, we select the countries with at least 30 documents to keep the stastitics tidy.
+
+```{r libraries}
+library(wateReview)
+library(magrittr)
+```
+
+First, we calculate the normality across countries with:
+
+```{r}
+probs <- reduce_docs_for_JSd(general) # PARAMETER HERE, CHANGE THIS TO A LOOP
+head(probs)
+country_distance <- get_country_distance(probs)
+head(country_distance)
+topic_distance <- get_topic_distance(probs)
+head(topic_distance)
+distance <- merge(country_distance, topic_distance, by = "topic")
+```
+
 
 ```
 ################### pseudocode #########################
-
-# start with 1 topic
-# calculate distance from normal distribution for 2 data frames
-## 1 - % of research devoted to each topic within a country
-## 2- probability of a topic in each document 
-
-
 # subset main df to countries with > 30 papers
 # rescale value
 # graph density distribution of corpus data + a normal distribution
@@ -46,29 +102,13 @@ theme <- readRDS("./consolidated_results_theme.Rds")
 ################### code #########################
 
 # define subset
-probs <- reduce_docs_for_JSd(theme) # PARAMETER HERE, CHANGE THIS TO A LOOP
 # probs <- probs %>% mutate(topic = replace(topic, topic == "groundwater flow", "groundwater"))
 
 ############### across countries ###########
 
 # calculate distance from normal for % of research done in each country
 
-sums <-aggregate(probs$value, by=list(probs$country,probs$topic), FUN=sum) # re - summarize after removing countries w/ < 30 papers
-names(sums) = c("country","topic","sum")
-df <- sums %>%
-  group_by(country) %>%
-  mutate(prop = sum/sum(sum)) %>% # calculate proportion of research each country spends on each topic
-  group_by(topic) %>%
-  mutate(scaled = scale(prop)) %>% # scale by topic
-  ungroup() %>%
-  select(c("topic","scaled"))
 
-country_distance<- sapply(unique(df$topic), get_JSd_country)
-names(country_distance) <- unique(df$topic)
-
-
-country_distance <- as.data.frame(country_distance)
-country_distance$topic <- rownames(country_distance)
 
 # graphs for guide
 # reservoir <- get_JSd_country('reservoirs', plot = T)
@@ -80,24 +120,7 @@ country_distance$topic <- rownames(country_distance)
 # calculate distance from normal for all documents
 # MEDIAN OF JSD for EACH topic by 12 COUNTRIES
 
-df <- probs %>%
-  mutate(countrytopic = paste(country,topic)) %>%
-  group_by(countrytopic) %>%
-  mutate(scaled = scale(value)) %>%
-  select(c("countrytopic","scaled")) # need to scale somehow?
-  
 
-topic_distance <- sapply(unique(df$countrytopic), get_JSd_corpus)
-names(topic_distance) <- unique(df$countrytopic)
-topic_distance <- as.data.frame(topic_distance)
-topic_distance$countrytopic <- rownames(topic_distance)
-
-topic_distance <- topic_distance %>%
-  mutate(topic = word(countrytopic, 2, -1)) %>%
-  group_by(topic) %>%
-  mutate(topic_distance = median(topic_distance)) %>%
-  select(c("topic","topic_distance")) %>%
-  distinct()
 
 
 # combine and save separate csvs
@@ -232,3 +255,5 @@ themes.edit
 general.edit
 specific.edit
 ```
+
+# References

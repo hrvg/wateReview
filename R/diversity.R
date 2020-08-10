@@ -106,21 +106,22 @@ reduce_docs_for_JSd <- function(df){
 }
 
 #' Calculates the Jensen-Shannon distance for countries
-#' @param df a data.frame
+#' @param top one possible value for the `topic` column of the data.frame
+#' @param .df a data.frame
 #' @param .plot logical, if `TRUE` returns a plot, if not returns the Jensen-Shannon distance 
 #' @return the Jensen-Shannon distance or a `ggplot` object depending on `.plot`
 #' @import ggplot2
 #' @export
-get_JSd_country <- function(top, .plot = FALSE){
-  p <- ggplot(subset(df, topic == top)) +
+get_JSd_country <- function(top, .df = df, .plot = FALSE){
+  p <- ggplot(subset(.df, topic == top)) +
     geom_density(aes(x = scaled, y = ..density.., fill= top)) +
     xlim(c(-5, 5)) +
     stat_function(fun = dnorm, n = 512, args = list(mean = 0, sd = 1)) +
     labs(x = "scaled density", 
          y = "probability of research (rescaled)") +
-    theme_pubr()
+    ggpubr::theme_pubr()
   p 
-  if (plot) return(p)
+  if (.plot) return(p)
   g <- ggplot_build(p)
   gdata <- g$data[[1]]$y / sum(g$data[[1]]$y) # topic - normalized 
   normdata <- g$data[[2]]$y / sum(g$data[[2]]$y) # standard, normal - normalized
@@ -128,13 +129,14 @@ get_JSd_country <- function(top, .plot = FALSE){
 }
 
 #' Calculates the Jensen-Shannon distance for countries
-#' @param df a data.frame
+#' @param top one possible value for the `topic` column of the data.frame
+#' @param .df a data.frame
 #' @param .plot logical, if `TRUE` returns a plot, if not returns the Jensen-Shannon distance 
 #' @return the Jensen-Shannon distance or a `ggplot` object depending on `.plot`
 #' @import ggplot2
 #' @export
-get_JSd_corpus <- function(top, .plot = FALSE){
-  p <- ggplot(subset(df, countrytopic == top)) +
+get_JSd_corpus <- function(top, .df =df, .plot = FALSE){
+  p <- ggplot(subset(.df, countrytopic == top)) +
     geom_density(aes(x = scaled, y = ..density.., fill= top)) +
     xlim(c(-5, 5)) +
     stat_function(fun = dnorm, n = 512, args = list(mean = 0, sd = 1)) +
@@ -142,9 +144,58 @@ get_JSd_corpus <- function(top, .plot = FALSE){
          y = "probability of research (rescaled)") +
     ggpubr::theme_pubr()
   p 
-  if (plot) return(p)
+  if (.plot) return(p)
   g <- ggplot_build(p)
   gdata <- g$data[[1]]$y / sum(g$data[[1]]$y)
   normdata <- g$data[[2]]$y / sum(g$data[[2]]$y)
-  return(1 - sqrt(as.numeric(JSD(rbind(gdata, normdata)))))
+  return(1 - sqrt(as.numeric(philentropy::JSD(rbind(gdata, normdata)))))
+}
+
+
+#' Get the Jensen-Shannon distance across countries
+#' @param probs probabilities
+#' @return data.frame
+#' @importFrom magrittr %>%
+#' @export
+get_country_distance <- function(probs){
+  sums <- aggregate(probs$value, by = list(probs$country, probs$topic), FUN = sum)
+  names(sums) <- c("country","topic","sum")
+  df <- sums %>%
+    dplyr::group_by(country) %>%
+    dplyr::mutate(prop = sum / sum(sum)) %>% # calculate proportion of research each country spends on each topic
+    dplyr::group_by(topic) %>%
+    dplyr::mutate(scaled = scale(prop)) %>% # scale by topic
+    dplyr::ungroup() %>%
+    dplyr::select(c("topic","scaled"))
+  country_distance <- sapply(unique(df$topic), get_JSd_country)
+  names(country_distance) <- unique(df$topic)
+  country_distance <- as.data.frame(country_distance)
+  country_distance$topic <- rownames(country_distance)
+  return(country_distance)
+}
+
+#' Get the Jensen-Shannon distance across topics
+#' @param probs probabilities
+#' @return data.frame
+#' @importFrom magrittr %>%
+#' @export
+get_topic_distance <- function(probs){
+  df <- probs %>%
+    dplyr::mutate(countrytopic = paste(country,topic)) %>%
+    dplyr::group_by(countrytopic) %>%
+    dplyr::mutate(scaled = scale(value)) %>%
+    dplyr::select(c("countrytopic","scaled"))   
+
+  topic_distance <- sapply(unique(df$countrytopic), get_JSd_corpus)
+  names(topic_distance) <- unique(df$countrytopic)
+  topic_distance <- as.data.frame(topic_distance)
+  topic_distance$countrytopic <- rownames(topic_distance)
+
+  topic_distance <- topic_distance %>%
+    dplyr::mutate(topic = word(countrytopic, 2, -1)) %>%
+    dplyr::group_by(topic) %>%
+    dplyr::mutate(topic_distance = median(topic_distance)) %>%
+    dplyr::select(c("topic","topic_distance")) %>%
+    dplyr::distinct()
+  return(topic_distance)
 }
