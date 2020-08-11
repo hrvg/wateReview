@@ -175,32 +175,53 @@
 
     
     
-<pre><code><a href="https://dplyr.tidyverse.org/reference">library(dplyr)
-library(reshape2)
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>In this vignette, we compare the topics outputted by topic modelling on three different corpora in English, Spanish and Porturguese.</p>
+</div>
+<div id="data-loading" class="section level1">
+<h1 class="hasAnchor">
+<a href="#data-loading" class="anchor"></a>Data loading</h1>
+<p>We access the topic lists stored in <code>extdata</code> using <code><a href="https://rdrr.io/r/base/system.file.html">system.file()</a></code>.</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)</pre></body></html></div>
+<pre><code>## 
+## Attaching package: 'dplyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">reshape2</span>)
+<span class="no">en</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(
+    <span class="st">"extdata"</span>,
+    <span class="st">"topic_names_en.csv"</span>,
+    <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>)
+) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">lang</span> <span class="kw">=</span> <span class="st">"en"</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(<span class="kw">id.vars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"topic_id"</span>,<span class="st">"lang"</span>))</pre></body></html></div>
+<pre><code>## Warning: attributes are not identical across measure variables; they will be
+## dropped</code></pre>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">es</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(
+    <span class="st">"extdata"</span>,
+    <span class="st">"topic_names_es.csv"</span>,
+    <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>)
+) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">lang</span> <span class="kw">=</span> <span class="st">"es"</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(<span class="kw">id.vars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"topic_id"</span>,<span class="st">"lang"</span>))</pre></body></html></div>
+<pre><code>## Warning: attributes are not identical across measure variables; they will be
+## dropped</code></pre>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">pt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(
+    <span class="st">"extdata"</span>,
+    <span class="st">"topic_names_pt.csv"</span>,
+    <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>),
+    <span class="kw">na.strings</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">""</span>,<span class="st">"NA"</span>)
+) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">lang</span> <span class="kw">=</span> <span class="st">"pt"</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(<span class="kw">id.vars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"topic_id"</span>,<span class="st">"lang"</span>))</pre></body></html></div>
+<pre><code>## Warning: attributes are not identical across measure variables; they will be
+## dropped</code></pre>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">en</span>, <span class="no">es</span>, <span class="no">pt</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span>()</pre></body></html></div>
+<pre><code><a href="https://rdrr.io/pkg/reshape2/man">library(reshape2)
 library(ggpubr)
 library(tidyr)
 library(ggplot2)
 library(forcats)
-
-######## load data #############
-en &lt;- read.csv("./topic_names_en.csv")
-es &lt;- read.csv("./topic_names_es.csv")
-pt &lt;- read.csv("./topic_names_pt.csv", na.strings=c("","NA"))
-
-en$lang &lt;- "en"
-es$lang &lt;- "es"
-pt$lang &lt;- "pt"
-
-en2 &lt;- melt(en,
-           id.vars = c("topic_id","lang"))
-es2 &lt;- melt(es,
-            id.vars = c("topic_id","lang"))
-pt2 &lt;- melt(pt,
-            id.vars = c("topic_id","lang"))
-
-
-x &lt;- rbind(en2,es2,pt2)
-x &lt;- na.omit(x)
 
 ######## filter #############
 x2 &lt;- x %&gt;%
@@ -261,11 +282,14 @@ ggbarplot(x2, x = "value", y = "n",
           color = "white",
           palette = c("#00AFBB", "#FC4E07",  "#E7B800"),
           rotate = TRUE)</a></code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
