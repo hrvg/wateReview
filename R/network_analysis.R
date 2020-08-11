@@ -1,3 +1,16 @@
+#' Creates the adjencency matrix of a bi-partite network: country to topics
+#' @param type one of "methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget"
+#' @param prob logical, define if the country labels are to be treated as probabilities
+#' @param filter_method logical, controls if methods topics are removed
+#' @param blindspot logical, controls if the network shows blindspots, if so the network is inverted
+#' @param country.threshold numeric, minimum number of documents per country
+#' @param percentile.threshold numeric, controls at which percentile the adjacency matrix is filtered for visualization
+#' @param country_filter logical, controls if countries should be filtered, see `countries`
+#' @param countries character, filter for the provided countries
+#' @param theme_filter logical, controls if themes should be filtered, see `themes`
+#' @param themes character, filter for the provided themes
+#' @return a matrix
+#' @export
 get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blindspot = FALSE, country.threshold = 30, percentile.threshold = 0.90, country_filter = FALSE, countries = NULL, theme_filter = FALSE, themes = NULL){
 
 	ensure_mat <- function(network_results){
@@ -18,10 +31,10 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 
 	type_list <- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
 	stopifnot(type %in% type_list)
-	consolidated_results <- readRDS(paste0("consolidated_results_", type, ".Rds"))
-	docTopics <- consolidated_results %>% filter(country != "Irrelevant") %>% select(-c("year","country"))
+	consolidated_results <- readRDS(system.file("extdata", paste0("consolidated_results_", type, ".Rds"), package = "wateReview"))
+	docTopics <- consolidated_results %>% dplyr::filter(country != "Irrelevant") %>% dplyr::select(-c("year","country"))
 
-	predCountryMembership <- readRDS("predCountryMembership.Rds")
+	predCountryMembership <- readRDS(system.file("extdata", "predCountryMembership.Rds", package = "wateReview"))
 	colnames(predCountryMembership) <- gsub("prob.", "", colnames(predCountryMembership))
 	predCountryMembership <- predCountryMembership[which(consolidated_results$country != "Irrelevant"), ]
 	
@@ -31,7 +44,7 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 	if (prob){
 		network_results <- t(predCountryMembership) %*% as.matrix(docTopics)
 	} else {
-		df_country <- createDummyFeatures(country)
+		df_country <- mlr::createDummyFeatures(country)
 		network_results <- t(as.matrix(df_country)) %*% as.matrix(docTopics)
 	}
 
@@ -40,7 +53,7 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 
 	if (!theme_filter){
 		if (filter_method & type == "theme"){
-			topic_names <- read.csv("./data/topic_names.csv")
+			topic_names <- read.csv(system.file("extdata", "./data/topic_names.csv", package = "wateReview"))
 			method_topics <- as.character(topic_names$theme[grepl("methods", topic_names$description)])
 			network_results <- network_results[, which(!colnames(network_results) %in% method_topics)]
 		}
@@ -96,15 +109,18 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 #' @param topic_threshold numeric, a percentile to cut the display of topic names
 #' @param reorder_cluster logical, default to FALSE, controls if the origin is re-ordered by cluster
 #' @returm a chord diagram figure
+#' @export
+#' @import circlize
+#' @importFrom magrittr %>%
 VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color = TRUE, type = "theme", sort_topic = TRUE, topic_threshold = 0.75, reorder_cluster = FALSE){
-	countryColors <- readRDS("countryColors.Rds")
+	countryColors <- readRDS(system.file("extdata", "countryColors.Rds", package = "wateReview"))
 	N <- nrow(countryColors)
 	ind <- match(rownames(m), countryColors$country_name)
 	countryColors <- as.matrix(countryColors[ind, 1:3])
 
 	if (cluster_color){
-		l_phcs <- readRDS("./data/l_phcs.Rds")
-		cluster_descriptors <- ggplot_build(l_phcs[[1]][[3]])$data[[2]][, c("label", "group", "colour")]
+		l_phcs <- readRDS(system.file("extdata", "l_phcs.Rds", package = "wateReview"))
+		cluster_descriptors <- ggplot2::ggplot_build(l_phcs[[1]][[3]])$data[[2]][, c("label", "group", "colour")]
 		cluster_descriptors <- cluster_descriptors[which(cluster_descriptors$label %in% rownames(m)), ]
 		cluster_descriptors <- cluster_descriptors[order(as.character(cluster_descriptors$label), decreasing = TRUE), ]
 		if (reorder_cluster){
@@ -117,7 +133,7 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color 
 	}
 
 	if (NSF_general_color & type == "NSF_specific"){
-		topic_names <- read.csv("./data/topic_names.csv")
+		topic_names <- read.csv(system.file("extdata", "topic_names.csv", package = "wateReview"))
 		lvls <- as.numeric(topic_names$NSF_general[match(colnames(m), topic_names$NSF_specific)])
 		if (sort_topic){
 			m <- m[, order(lvls)]
@@ -180,7 +196,7 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color 
 		)
 	top_topics <- top_topics %>% 
 		# group_by(NSF_general) %>%
-		filter(volume >= quantile(volume, topic_threshold))
+		dplyr::filter(volume >= quantile(volume, topic_threshold))
 	for (NSF_spe in top_topics$NSF_specific){
 		highlight.sector(NSF_spe,
 			track.index = 2,

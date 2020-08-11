@@ -7,36 +7,57 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 12,
+  fig.width = 12, 
+  comment = "#>"
+)
 ```
-### libraries ###
-library("circlize")
-library("cowplot")
-library("factoextra")
-library("forcats")
-library("ggplot2")
-library("reshape2")
-library("oce")
-library("RColorBrewer")
-library("dplyr")
-library("ggpubr")
-library("plotly")
 
-### functions ###
-import::here(.from = "./R/network_analysis/lib_network_analysis.R", 
-  get_network,
-  VizSpots)
 
-out.dir <- "/media/hguillon/hrvg/research/production/figure/latin_america/chord_diagrams"
+# Purpose
 
-pdf(file.path(out.dir, "all.pdf"), width = 9, height = 9)
-for (pct in c(0, 25, 50, 75, 95)){
-	m <- get_network(type = "NSF_specific", prob = TRUE, filter_method = FALSE, blindspot = FALSE, country.threshold = 30, percentile.threshold = pct / 100)
-	for (tpt in c(0.5, 0.75)){
-		# pdf(file.path(out.dir, paste0(pct, "-", tpt, ".pdf")), width = 9, height = 9)
-		VizSpots(m, FALSE, cluster_color = TRUE, NSF_general_color = TRUE, type = "NSF_specific", topic_threshold = tpt)
 
-	}
-}
-dev.off()
+In this vignette, we produce a chord diagram representing the links of a weighted bi-partite network between countries and a category of topics.
+
+
+
+
+# Getting the bi-partite network weighted adjacency matrix
+
+We use the built-in function of the package, `get_network()`, to extract the weighted adjacency matrix.
+We also load `magrittr` explicitely to access the `%>%` operator.
+
+```{r libraries}
+library(wateReview)
+library(magrittr)
+```
+
+We select the specific topics with `type = "NSF_specific"`, indicate that the country membership are to be understood as probabilities with `prob = TRUE`.
+The specific topics do not include methods, so we leave the default `filter_method = FALSE` which is useful for `type = "theme"`.
+We display the default network with `blindspot = FALSE`, filter for countries with at least 30 documents with `country.threshold = 30` and filter the resulting matrix to retain only the weights above the 75th percentile with `percentile.threshold = .75`.
+
+
+```{r get network}
+weighted_adj_matrix <- get_network(type = "NSF_specific", prob = TRUE, filter_method = FALSE, blindspot = FALSE, country.threshold = 30, percentile.threshold = .75)
+weighted_adj_matrix %>% 
+	knitr::kable(digits = 3, format = "html", caption = "Bi-partite network weighted adjacency matrix") %>% 
+	kableExtra::kable_styling(bootstrap_options = c("hover", "condensed")) %>% 
+	kableExtra::scroll_box(width = "7in")
+```
+
+# Chord diagram visualization
+
+We can now use `VizSpots()` to display the chord diagram.
+This function is largely using the `circlize` library which documentation can be found [here](https://jokergoo.github.io/circlize_book/book/).
+`weighted_adj_matrix` is the matrix.
+We ask for the non-scaled results with `scaled = FALSE`, add the socio-hydrologic clusters colors with `cluster_color = TRUE`, and re-order the countries so that they are grouped by clusters with `reorder_cluster = TRUE`.
+We also add an outer ring identifying the general categories with `NSF_general_color = TRUE`.
+We have to specify here again the topic category with `type = "NSF_specific"`.
+Finally, `topic_threshold = .50` displays the topic which research volume in the corpus are above the 50th percentile.
+
+```{r visualization}
+VizSpots(weighted_adj_matrix, scaled = FALSE, cluster_color = TRUE, NSF_general_color = TRUE, type = "NSF_specific", topic_threshold = .50, reorder_cluster = TRUE)
 ```

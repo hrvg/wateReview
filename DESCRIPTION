@@ -43,6 +43,8 @@ Imports:
     plotly,
     reshape2,
     scales,
+    inlmisc,
+    circlize,
     tidyr,
     tidyverse,
     vegan,
