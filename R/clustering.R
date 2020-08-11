@@ -5,6 +5,7 @@
 read_countries_database <- function(file = 'countries_database_final.csv'){
 	countries_database <- read.csv(system.file("extdata", file, package = "wateReview"), header = TRUE)
 	countries_database$COUNTRY <- as.character(countries_database$COUNTRY)
+  
 	return(countries_database)
 }
 

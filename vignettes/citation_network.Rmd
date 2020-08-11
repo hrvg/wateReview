@@ -7,6 +7,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 12,
+  fig.width = 12, 
+  comment = "#>"
+)
+```
+
 # Purpose
 
 This vignette clarifies the calculation of the citation network.
@@ -34,7 +43,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r libraries}
-devtools::load_all()
+library(wateReview)
 ```
 
 # Data loading

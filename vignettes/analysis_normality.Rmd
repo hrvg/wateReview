@@ -1,9 +1,6 @@
 ---
 title: "Normality"
-output: 
-  rmarkdown::html_vignette:
-    mathjax: local
-    self_contained: false
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Normality}
   %\VignetteEngine{knitr::rmarkdown}
