@@ -42,6 +42,7 @@ Imports:
     ggpubr,
     gridExtra,
     Hmisc,
+    png,
     inlmisc,
     kableExtra,
     magrittr,

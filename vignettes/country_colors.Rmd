@@ -14,14 +14,23 @@ knitr::opts_chunk$set(
 )
 ```
 
-```
-library("png")
+# Purpose
 
+This short vignette is used to extract the country colors from the dominant colors of their respective flags.
+
+# Country ISO codes
+
+First, we report the country [ISO Alpha-2 codes](https://www.iso.org/obp/ui/#search) and their names.
+
+```{r iso_codes}
 iso_codes <- c("ar", "bs", "bb", "bz", "bo", "br", "cl", "co", "cr", "cu", "ec", "sv", "gt", "ht", "hn", "jm", "mx", "ni", "pa", "py", "pe", "uy", "ve")
 country_names <- c("Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Cuba", "Ecuador", "El Salvador", "Guatemala", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", "Uruguay", "Venezuela")
+```
 
+We then sequentially apply the `get_topColors()` function.
 
-countryColors <- lapply(iso_codes, get.topColors)
+```{r}
+countryColors <- lapply(iso_codes, get_topColors)
 countryColors <- do.call(rbind, countryColors)
 countryColors <- gsub("#000", "#000000", countryColors)
 countryColors <- as.data.frame(countryColors)
