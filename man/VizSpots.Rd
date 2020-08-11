@@ -32,6 +32,9 @@ VizSpots(
 
 \item{reorder_cluster}{logical, default to FALSE, controls if the origin is re-ordered by cluster}
 }
+\value{
+a chord diagram figure
+}
 \description{
 Produces a chord diagram visualization with country cluster colors and topics categories
 }

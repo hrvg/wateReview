@@ -5,17 +5,131 @@ vignette: >
   %\VignetteIndexEntry{Clustering analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  fig.height = 7,
+  fig.width = 7, 
   comment = "#>"
 )
 ```
 
+# Purpose
 
-# Clustering Analysis
+In this vignette, we perform some quality control on the database of country socio-hydrologic descriptors.
+After filtering, the data are examined with a correlation analysis and a clustering analysis.
+
+```{r libraries}
+library("wateReview")
+library("ggplot2")
+library("factoextra")
+library("clValid")
+```
+
+# Loading data
+
+```{r data_loading}
+countries_shapefile <- join_database_shapefile(read_countries_database(), read_countries_shapefile())
+att_names <- names(countries_shapefile)[-1]
+```
+
+# Visualizing attributes
+
+```{r make_maps}
+l.att_map <- lapply(names(countries_shapefile)[-1], make_map)
+sample(l.att_map, 1)
+```
+
+```{r make_hists}
+l.att_hist <- lapply(names(countries_shapefile)[-1], make_hist)
+sample(l.att_hist, 1)
+```
+
+# QA/QC on country database
+
+Let's rescale the data using the `make_corrmatrix` function with `rescale = TRUE`.
+The `missmap()` function the `Amelia` package then displays the missing values in the resulting rescaled `data.frame`.
+
+```{r data rescaling}
+rescaled_data <- make_corrmatrix(corr_type = "spearman", rescale = TRUE, .plot = FALSE)  
+rownames(rescaled_data) <- countries_shapefile$COUNTRY
+Amelia::missmap(rescaled_data)
+```
+
+Some predictors are missing only in some countries.
+We now try to identify the best set of predictors and countries by counting the number of `NA` with `count_nas()` and varying the threshold of number of `NA` per countries.
+
+```{r optimum set of descriptors}
+count_nas_col <- apply(rescaled_data, MARGIN = 2, FUN = count_nas) 
+count_nas_row <- apply(rescaled_data, MARGIN = 1, FUN = count_nas) 
+names(count_nas_row) <- countries_shapefile$COUNTRY
+na_thresholds <- sort(unique(count_nas_row), decreasing = TRUE)
+list_count_nas_col <- lapply(na_thresholds, function(na_threshold){
+    filtered_data <- rescaled_data[count_nas_row <= na_threshold, ]
+    current_count_nas_col <- apply(filtered_data, MARGIN = 2, FUN = count_nas) # columns
+    return(current_count_nas_col)
+})
+count_nas_col_df <- do.call(cbind, list_count_nas_col)
+list_country_left <- sapply(na_thresholds, function(na_threshold){
+    filtered_data <- rescaled_data[count_nas_row <= na_threshold, ]
+    return(nrow(filtered_data))
+})
+par(mfrow = c(2, 1))
+oce::imagep(t(count_nas_col_df), col = oce::oce.colorsViridis(), decimate = FALSE, xlab = "NA threshold", ylab = "Country descriptors", main = "", cex = 1)
+plot(list_country_left, xlab = "NA threshold", ylab = "Number of countries left")
+```
+
+Based on this visualization, we filter the country descriptors and drop the countries with missing values.
+Notice that these removed countries correspond to Carribean nations.
+
+```{r filtering data}
+drops <- c("variability", "surface_withdrawl", "ground_withdrawl", "SPI..2017.", "SPI_basic_human", "SPI_found", "SPI_opp")
+rescaled_data <- rescaled_data[, !colnames(rescaled_data) %in% drops]
+count_nas_row <- apply(rescaled_data, MARGIN = 1, FUN = count_nas) # lines
+rownames(rescaled_data) <- countries_shapefile$COUNTRY
+# countries left
+rownames(rescaled_data[count_nas_row <= 0, ])
+# countries removed
+setdiff(countries_shapefile$COUNTRY, rownames(rescaled_data[count_nas_row <= 0, ]))
+filtered_data <- rescaled_data[count_nas_row <= 0, ]
+Amelia::missmap(filtered_data)
+```
+
+# Correlation analysis
+
+We can now calculate the correlations and distance matrices for all types of data.
+
+## Pearson's correlations
+
+```{r pearsons}
+mat <- as.matrix(filtered_data)       
+correlations <- Hmisc::rcorr(mat, type = "pearson")
+correlations$r[which(correlations$P > 0.05)] <- 0
+corrplot::corrplot(correlations$r, type = "upper")
+```
+
+## Spearman's correlations
+
+```{r spearmans}
+mat <- as.matrix(filtered_data)       
+correlations <- Hmisc::rcorr(mat, type = "spearman")
+correlations$r[which(correlations$P > 0.05)] <- 0
+corrplot::corrplot(correlations$r, type = "upper")
+```
+
+## Distance matrices
+
+
+```{r distance_matrix}
+distance <- get_dist(filtered_data )
+p_dist <- fviz_dist(distance, gradient = list(low = "steelblue",  high = "white"), order = TRUE)
+p_dist
+```
+
+# Clustering analysis
 
 Countries in the study area are clustered in relation with socio-hydrologic variables.
 Two methods of clustering are used: $k$-means clustering [@Hartigan1979] and hierarchical clustering [@Murtagh1983].
@@ -37,549 +151,48 @@ In addition, AD and FOM are lower for three clusters than for two.
 Based on this results, we chose three clusters to describe the grouping of countries based on their socio-hydrologic variables.
 
 
-```{r libraries, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE, results = "hide"}
-library("raster")
-library("tmap")
-library("ggplot2")
-library("Hmisc")
-library("corrplot")
-library("Amelia")
-library("oce")
-library("clValid")
-library("factoextra")
-library("cowplot")
-library("caret")
-library("forcats")
-library("dplyr")
-library("reshape2")
-# library("h2o")
-# invisible(h2o.init(nthreads = 6, min_mem_size='10G', max_mem_size = "20G"))
-# h2o.no_progress()
+## Optimum clustering
+
+We now derive the optimum clustering for $k$-means and hierarchical clustering.
+
+```{r optimk_kmeans}
+get_optimk(filtered_data, method = "kmeans")
 ```
 
-```{r user_functions, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-read_countries_database <- function(file = './data/countries_database_final.csv'){
-	countries_database <- read.csv(file, header = TRUE)
-	countries_database$COUNTRY <- as.character(countries_database$COUNTRY)
-	return(countries_database)
-}
-
-read_countries_shapefile <- function(file = './data/LAC.shp'){
-	countries_shapefile <- shapefile(file)
-	return(countries_shapefile)
-}
-
-join_database_shapefile <- function(countries_database, countries_shapefile){
-	countries_shapefile <- countries_shapefile[which(countries_shapefile$COUNTRY %in% countries_database$COUNTRY), ]
-	countries_shapefile <- countries_shapefile[match(countries_database$COUNTRY, countries_shapefile$COUNTRY), ]
-	countries_shapefile@data <- countries_database
-	return(countries_shapefile)	
-}
-
-make_map <- function(attribute, title = NULL){
-  if (is.null(title)){
-    title <- attribute
-  }
-  c_map <- tm_shape(countries_shapefile) +
-    tm_fill(col = attribute, title = title) +
-    tm_borders(lwd = 1)+
-    tm_compass(type = "4star", position = c("right", "top")) + #add compass and scale bar
-    # tm_scale_bar(breaks = c(0, 100, 200), size = 3, position = c("right", "bottom"))+
-    tm_layout(bg.color = "lightblue")
-  # print(c_map)
-  return(c_map)
-}
-
-make_hist <- function(attribute_name){
-  df <- data.frame(attribute = countries_shapefile@data[[attribute_name]])
-  p <- ggplot(df, aes(x = attribute)) +
-    theme_minimal() +
-    geom_density() +
-    labs(title = attribute_name)
-  return(p)
-}
-
-select_data <- function(data_type = "country_descriptors"){
-    if (data_type == "country_descriptors"){
-      ind <- 2:46
-    } else if(data_type == "survey_results"){
-      ind <- 47:78
-    } else if(data_type == "survey_results_pct"){
-      ind <- 79:110  
-    } else if(data_type == "all"){
-      ind <- -1
-    }
-    mat <- as.matrix(countries_shapefile@data[, ind])
-    mat <- scale(mat)
-    mat <- data.frame(mat)
-    colnames(mat) <- colnames(countries_shapefile@data[, ind])
-    rownames(mat) <- countries_shapefile$COUNTRY
-    if (data_type != "country_descriptors"){
-      mat <- na.omit(mat)
-    }
-    return(mat)
-}
-
-make_corrmatrix <-function(data_type = "country_descriptors",corr_type = "spearman", rescale = FALSE){
-  if (data_type == "country_descriptors"){
-    ind <- 2:46
-  } else if(data_type == "all"){
-    ind <- -1
-  }
-  mat <- as.matrix(countries_shapefile@data[, ind])
-  if (rescale){
-    mat <- scale(mat)
-    colnames(mat) <- colnames(countries_shapefile@data[, ind])
-    rownames(mat) <- rownames(countries_shapefile@data[, ind])
-  }
-  correlations <- Hmisc::rcorr(mat, type = corr_type)
-  # print(correlations)
-  corrplot(correlations$r, type = "upper", title = paste(corr_type, ifelse(rescale, "rescaled", "")))
-  #corrplot.mixed(correlations$r, lower="number", upper="ellipse")
-  rescaled_data <- data.frame(mat)
-  rownames(rescaled_data) <- countries_shapefile$COUNTRY
-  return(rescaled_data)
-}
-
-transform_data <- function(data, methods = c("center", "scale", "BoxCox")){
-    preProc <- preProcess(data, method = methods)
-    print(preProc)
-    preprocessed.data <- predict(preProc, data)
-    return(preprocessed.data)
-}
-
-make_dendrogram <- function(rescaled_data, num_clusters = 3, check_na = FALSE){
-    if(check_na){
-      ind <- apply(rescaled_data, MARGIN = 2, FUN = function(col) !any(is.na(col)))
-      dist_mat <-dist(rescaled_data[, ind])
-    } else {
-      dist_mat <-dist(rescaled_data)
-    }
-    data_cluster <- hclust(dist_mat, method = "ward.D2")
-    plot(data_cluster)
-    rect.hclust(data_cluster, k=num_clusters, border = "green")
-    # clust_num <- NbClust(rescaled_data[, ind], distance="euclidean", min.nc=3, max.nc=10, method="ward.D2")
-    # print(table(clust_num$Best.n[1,]))
-}
-
-count_nas <- function(x) sum(is.na(x))
-
-get_optimk <- function(df, method = "kmeans", kmax = 10, gap = FALSE){
-    par_list <- switch(method,
-      "kmeans" = list(FUN = kmeans, clMethod = "kmeans"),
-      "hierarchical" = list(FUN = hcut, clMethod = "hierarchical")
-    )
-    p_wss <- fviz_nbclust(df, par_list$FUN, method = "wss", k.max = kmax)
-    p_sil <- fviz_nbclust(df, par_list$FUN, method = "silhouette", k.max = kmax)
-    if (gap){
-      gap_stat <- clusGap(df, FUN = par_list$FUN, nstart = 25, K.max = kmax, B = 50)
-      p_gap <- fviz_gap_stat(gap_stat) 
-      return(gridExtra::grid.arrange(grobs = list(p_wss, p_sil, p_gap)))
-    } else {
-      return(gridExtra::grid.arrange(grobs = list(p_wss, p_sil)))
-    }
-}
-
-clStab <- function(df, method = "kmeans", kmax = 10){
-    par_list <- switch(method,
-        "kmeans" = list(FUN = kmeans, clMethod = "kmeans"),
-        "hierarchical" = list(FUN = hcut, clMethod = "hierarchical")
-      )
-    stab <- clValid(df, nClust = 2:kmax, clMethods = par_list$clMethod, 
-                    validation = "stability")
-    sd_measures <- apply(stab@measures, 1, sd)
-    min_measures <- apply(stab@measures, 1, min)
-    one_sd <- t(sapply(seq_along(sd_measures), function(i) min_measures[i] + sd_measures[i] > stab@measures[i, ,]))
-    optim_df <- data.frame(measure = stab@measNames, cluster = colnames(stab@measures)[apply(one_sd, 1, which.max)])
-    return(list(stab = stab, optim_df = optim_df))
-}
-```
-
-```{r data_loading, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-countries_shapefile <- join_database_shapefile(read_countries_database(), read_countries_shapefile())
-att_names <- names(countries_shapefile)[-1]
-saveRDS(att_names, "./data/att_names.Rds")
-topicWords <- readRDS("./data/topicWords.Rds")
-topic_names <- read.csv("./data/topic_names.csv")
-topic_names <- topic_names[match(seq(nrow(topic_names)), topic_names$topic_id), ]
-topicWords <- t(topicWords)
-topicWords <- as.data.frame(topicWords)
-colnames(topicWords) <- topic_names$topic_name
-theme_type <- "theme"
-themes <- unique(topic_names[[theme_type]][!is.na(topic_names[[theme_type]])])
-theme_df <- lapply(themes, function(th){
-    ind <- which(topic_names[[theme_type]] == th)
-    if (length(ind) == 1){
-      return(topicWords[, ind])
-    } else {
-      return(rowSums(topicWords[, ind]))
-    }
-})
-theme_df <- do.call(cbind, theme_df)
-rownames(theme_df) <- rownames(topicWords)
-colnames(theme_df) <- themes
-rm(topicWords)
-cSums <- colSums(theme_df)
-theme_df <- sweep(theme_df, 2, cSums, "/")
-theme_df <- t(theme_df)
-saveRDS(object = theme_df, "./data/theme_df.Rds")
-# # Removing infrequent terms
-# rSums <- rowSums(theme_df)
-# theme_df <- theme_df[which(log10(rSums) > -2), ]
-# cSums <- colSums(theme_df)
-# theme_df <- sweep(theme_df, 2, cSums, "/")
-# top30topicWords <- apply(theme_df, 1, function(row){
-#     colnames(theme_df)[head(order(-row), 30)]
-# })
-# top30topicWords <- data.frame(top30topicWords)
-dist_theme_KL <- philentropy::distance(theme_df, method = "kullback-leibler")
-rownames(dist_theme_KL) <- rownames(theme_df)
-colnames(dist_theme_KL) <- rownames(theme_df)
-saveRDS(object = dist_theme_KL, "./data/dist_theme_KL.Rds")
-# dist_theme_cos <- philentropy::distance(theme_df, method = "cosine")
-# rownames(dist_theme_cos) <- rownames(theme_df)
-# colnames(dist_theme_cos) <- rownames(theme_df)
-# saveRDS(object = dist_theme_cos, "./data/dist_theme_cos.Rds")
-# dist_theme_JSD <- philentropy::distance(theme_df, method = "jensen-shannon")
-# rownames(dist_theme_JSD) <- rownames(theme_df)
-# colnames(dist_theme_JSD) <- rownames(theme_df)
-# saveRDS(object = dist_theme_JSD, "./data/dist_theme_JSD.Rds")
-
-## Wards plot
-# dist_topicWords_KL <- philentropy::distance(topicWords, method = "kullback-leibler")
-# rownames(dist_topicWords_KL) <- topic_names$topic_name
-# colnames(dist_topicWords_KL) <- topic_names$topic_name
-# saveRDS(object = dist_topicWords_KL, "./data/dist_topicWords_KL.Rds")
-
-
-
-
+```{r optimk_hierarchical}
+get_optimk(filtered_data, method = "hierarchical")
 ```
 
 
-```{r make_maps, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l.att_map <- lapply(names(countries_shapefile)[-1], make_map)
-saveRDS(object = l.att_map, "./data/att_maps.Rds")
+## Clustering stability
+
+```{r clStab_kmeans}
+cl_stability <- clStab(filtered_data, method = "kmeans")
+stab <- cl_stability$stab
+optim_df <- cl_stability$optim_df
+summary(stab)
+print("Optimal Number of Cluster under One Std Rule")
+print(optim_df)
 ```
 
-```{r make_hists, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l.att_hist <- lapply(names(countries_shapefile)[-1], make_hist)
-saveRDS(object = l.att_hist, "./data/att_hists.Rds")
-```
-
-```{r NA_filtering, warning = FALSE, message = FALSE, include = TRUE, echo = TRUE}
-## RESCALING DATA
-
-dev.new()
-rescaled_data <- make_corrmatrix(corr_type = "spearman", rescale = TRUE)  
-rownames(rescaled_data) <- countries_shapefile$COUNTRY
-
-## HIERARCHICAL CLUSTERING
-
-# check if some data are missing
-missmap(rescaled_data)
-
-
-### COUNTING MISSING VALUES TO SELECT THE BEST SET OF COUNTRY DESCRIPTORS / COUNTRIES
-
-# columns
-count_nas_col <- apply(rescaled_data, MARGIN = 2, FUN = count_nas) 
-# keeping the lapply / apply examples
-# lapply(seq(ncol(rescaled_data)), function(j) count_nas(rescaled_data[, j]))
-
-# lines
-count_nas_row <- apply(rescaled_data, MARGIN = 1, FUN = count_nas) 
-# keeping the lapply / apply examples
-# lapply(seq(nrow(rescaled_data)), function(i) count_nas(rescaled_data[i, ]))
-names(count_nas_row) <- countries_shapefile$COUNTRY
-
-# building the for loop from the pseudo-code
-# for (na_threshold in sort(unique(count_nas_row), decreasing = TRUE)){
-#     filtered_data <- rescaled_data[count_nas_row <= na_threshold, ]
-#     count_nas_col <- apply(filtered_data, MARGIN = 2, FUN = count_nas) # columns
-# }
-
-# from the for loop to lapply
-na_thresholds <- sort(unique(count_nas_row), decreasing = TRUE)
-
-list_count_nas_col <- lapply(na_thresholds, function(na_threshold){
-    filtered_data <- rescaled_data[count_nas_row <= na_threshold, ]
-    current_count_nas_col <- apply(filtered_data, MARGIN = 2, FUN = count_nas) # columns
-    return(current_count_nas_col)
-})
-count_nas_col_df <- do.call(cbind, list_count_nas_col)
-
-list_country_left <- sapply(na_thresholds, function(na_threshold){
-    filtered_data <- rescaled_data[count_nas_row <= na_threshold, ]
-    return(nrow(filtered_data))
-})²
-
-dev.new()
-par(mfrow = c(2, 1))
-oce::imagep(t(count_nas_col_df), col = oce.colorsViridis(), decimate = FALSE, xlab = "NA threshold", ylab = "Country descriptors", main = "", cex = 1)
-# oce::imagep(as.matrix(list_country_left), col = oce.colorsViridis(), decimate = FALSE, xlab = "NA threshold", ylab = "Country descriptors", main = "", cex = 1)
-plot(list_country_left)
-
-### FILTERING DATA
-# based on the visualization and short discussion we filter the country descriptors
-drops <- c("variability", "surface_withdrawl", "ground_withdrawl", "SPI..2017.", "SPI_basic_human", "SPI_found", "SPI_opp")
-rescaled_data <- rescaled_data[, !colnames(rescaled_data) %in% drops]
-count_nas_row <- apply(rescaled_data, MARGIN = 1, FUN = count_nas) # lines
-rownames(rescaled_data) <- countries_shapefile$COUNTRY
-# countries left
-rownames(rescaled_data[count_nas_row <= 0, ])
-# countries removed
-setdiff(countries_shapefile$COUNTRY, rownames(rescaled_data[count_nas_row <= 0, ]))
-filtered_data <- rescaled_data[count_nas_row <= 0, ]
-dev.new()
-missmap(filtered_data)
-```
-
-```{r pearsons, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l_pearson_corr <- lapply(c("country_descriptors", "survey_results", "survey_results_pct", "lda"), function(data_type){
-    if (data_type == "country_descriptors"){
-        mat <- as.matrix(filtered_data)       
-    } else if (data_type == "lda"){
-        mat <- as.matrix(t(theme_df))
-    } else {
-        mat <- select_data(data_type = data_type)
-        mat <- as.matrix(mat)
-    }
-    correlations <- Hmisc::rcorr(mat, type = "pearson")
-    correlations$r[which(correlations$P > 0.05)] <- 0
-    return(correlations$r)
-})
-saveRDS(l_pearson_corr, "./data/pearson_corr.Rds")
-```
-
-```{r spearmans, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l_spearman_corr <- lapply(c("country_descriptors", "survey_results", "survey_results_pct", "lda"), function(data_type){
-    if (data_type == "country_descriptors"){
-        mat <- as.matrix(filtered_data)       
-    } else if (data_type == "lda"){
-        mat <- as.matrix(t(theme_df))
-    } else {
-        mat <- select_data(data_type = data_type)
-        mat <- as.matrix(mat)
-    }
-    correlations <- Hmisc::rcorr(mat, type = "spearman")
-    correlations$r[which(correlations$P > 0.05)] <- 0
-    return(correlations$r)
-})
-saveRDS(l_spearman_corr, "./data/spearman_corr.Rds")
+```{r clStab_hierarchical}
+cl_stability <- clStab(filtered_data, method = "hierarchical")
+stab <- cl_stability$stab
+optim_df <- cl_stability$optim_df
+summary(stab)
+print("Optimal Number of Cluster under One Std Rule")
+print(optim_df)
 ```
 
 
-```{r distance_matrix, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l_dist <- lapply(c("country_descriptors", "survey_results", "survey_results_pct", "lda"), function(data_type){
-   if (data_type == "country_descriptors"){
-        df <- filtered_data       
-        distance <- get_dist(df)
-    } else if (data_type == "lda"){
-        distance <- as.dist(dist_theme_KL)
-     } else {
-        df <- select_data(data_type = data_type)
-        distance <- get_dist(df)
-    }
-    p_dist <- fviz_dist(distance, gradient = list(low = "steelblue",  high = "white"), order = TRUE)
-    return(p_dist) 
-})
-saveRDS(l_dist, "./data/l_dist.Rds")
+```{r pkms}
+k2 <- kmeans(filtered_data, centers = 3, nstart = 25) 
+fviz_cluster(k2, geom = "text",  data = filtered_data) + cowplot::theme_cowplot()
 ```
 
-```{r optimk_kmeans, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l_optimk_kmeans <- lapply(c("country_descriptors", "survey_results", "survey_results_pct"), function(data_type){
-    if (data_type == "country_descriptors"){
-            df <- filtered_data       
-        } else if (data_type == "lda"){
-            df <- theme_df
-         } else {
-            df <- select_data(data_type = data_type)
-        }
-    return(get_optimk(df, method = "kmeans"))
-})
-saveRDS(l_optimk_kmeans, "./data/l_optimk_kmeans.Rds")
+```{r phcs}
+res.hc <- eclust(filtered_data, "hclust", k = 3, graph = FALSE) 
+fviz_dend(res.hc, rect = TRUE, show_labels = TRUE)
 ```
 
-```{r optimk_hierarchical, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l_optimk_hierarchical <- lapply(c("country_descriptors", "survey_results", "survey_results_pct"), function(data_type){
-    if (data_type == "country_descriptors"){
-            df <- filtered_data       
-        } else if (data_type == "lda"){
-            df <- theme_df
-         } else {
-            df <- select_data(data_type = data_type)
-        }
-    return(get_optimk(df, method = "hierarchical"))
-})
-saveRDS(l_optimk_hierarchical, "./data/l_optimk_hierarchical.Rds")
-```
-
-
-```{r clStab_kmeans, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l_clStab_kmeans <- lapply(c("country_descriptors", "survey_results", "survey_results_pct"), function(data_type){
-    if (data_type == "country_descriptors"){
-            df <- filtered_data       
-        } else if (data_type == "lda"){
-            df <- theme_df
-         } else {
-            df <- select_data(data_type = data_type)
-        }
-    clStab(df, method = "kmeans")
-})
-saveRDS(l_clStab_kmeans, "./data/l_clStab_kmeans.Rds")
-```
-
-```{r clStab_hierarchical, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l_clStab_hierarchical <- lapply(c("country_descriptors", "survey_results", "survey_results_pct"), function(data_type){
-    if (data_type == "country_descriptors"){
-            df <- filtered_data       
-        } else if (data_type == "lda"){
-            df <- theme_df
-         } else {
-            df <- select_data(data_type = data_type)
-        }
-    clStab(df, method = "hierarchical")
-})
-saveRDS(l_clStab_hierarchical, "./data/l_clStab_hierarchical.Rds")
-```
-
-
-```{r pkms, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l_pkms <- lapply(c("country_descriptors", "survey_results", "survey_results_pct"), function(data_type){
-  if (data_type == "country_descriptors"){
-      df <- filtered_data       
-  } else if (data_type == "lda"){
-      df <- theme_df
-   } else {
-      df <- select_data(data_type = data_type)
-  }
-  l_pkm <- lapply(seq(1:10), function(optik){
-      k2 <- kmeans(df, centers = optik, nstart = 25) 
-      pkm <- fviz_cluster(k2, geom = "text",  data = df) + theme_cowplot()
-      return(pkm)
-  })
-  return(l_pkm)
-})
-saveRDS(l_pkms, "./data/l_pkms.Rds")
-
-```
-
-```{r phcs, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l_phcs <- lapply(c("country_descriptors", "survey_results", "survey_results_pct"), function(data_type){
-  if (data_type == "country_descriptors"){
-      df <- filtered_data       
-  } else if (data_type == "lda"){
-      df <- theme_df
-   } else {
-      df <- select_data(data_type = data_type)
-  }
-  l_phc <- lapply(seq(2,10), function(optik){
-        res.hc <- eclust(df, "hclust", k = optik, graph = FALSE) 
-        phc <- fviz_dend(res.hc, rect = TRUE, show_labels = TRUE)
-      return(phc)
-  })
-  return(l_phc)
-})
-saveRDS(l_phcs, "./data/l_phcs.Rds")
-```
-
-```{r phc_theme, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-hc_fit <- hclust(as.dist(dist_theme_KL), method = "ward.D2")
-theme_phc <- fviz_dend(hc_fit, rect = TRUE, show_labels = TRUE, cex = 0.7)
-#rect.hclust(ward_fit, k=7, border="red") # box clusters at various cut levels
-saveRDS(theme_phc, "./data/theme_phc.Rds")
-```
-
-
-```{r tukey, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-l_tukeys <- lapply(c("country_descriptors", "survey_results", "survey_results_pct"), function(data_type){
-  if (data_type == "country_descriptors"){
-      df <- filtered_data       
-  } else if (data_type == "lda"){
-      df <- theme_df
-   } else {
-      df <- select_data(data_type = data_type)
-  }
-  l_tukey <- lapply(seq(2,10), function(optik){
-        res.hc <- eclust(df, "hclust", k = optik, graph = FALSE) 
-        df <- data.frame(df)
-        df$cluster <- as.factor(res.hc$cluster)
-        melted <- melt(df, id.vars = "cluster")
-        # Tukey HSD
-        library(rstatix)  # https://github.com/kassambara/rstatix
-        stat.test <- melted %>%
-          group_by(variable) %>%
-          tukey_hsd(value ~ cluster) %>%
-          mutate(y.position = 4)
-        library("ggpubr")
-        p.tukey <- ggboxplot(melted, x = "cluster", y = "value", color = "cluster", facet.by = "variable") +
-          stat_pvalue_manual(stat.test, label = "p.adj.signif", step.increase = .1, step.group.by = "variable", hide.ns = TRUE)
-      return(p.tukey)
-  })
-  return(l_tukey)
-})
-saveRDS(l_tukeys, "./data/l_tukeys.Rds")
-```
-
-```{r make_theme_df_docs, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-topicDocs <- readRDS("./data/topicDocs.Rds")
-topic_names <- read.csv("./data/topic_names.csv")
-topic_names <- topic_names[match(seq(nrow(topic_names)), topic_names$topic_id), ]
-topicDocs <- as.data.frame(topicDocs)
-colnames(topicDocs) <- topic_names$topic_name
-theme_type <- "theme"
-themes <- unique(topic_names[[theme_type]][!is.na(topic_names[[theme_type]])])
-theme_df_docs <- lapply(themes, function(th){
-    ind <- which(topic_names[[theme_type]] == th)
-    if (length(ind) == 1){
-      return(topicDocs[, ind])
-    } else {
-      return(rowSums(topicDocs[, ind]))
-    }
-})
-theme_df_docs <- do.call(cbind, theme_df_docs)
-rownames(theme_df_docs) <- rownames(topicDocs)
-colnames(theme_df_docs) <- themes
-rm(topicDocs)
-rSums <- rowSums(theme_df_docs)
-theme_df_docs <- sweep(theme_df_docs, 1, rSums, "/")
-saveRDS(object = theme_df_docs, "./data/theme_df_docs.Rds")
-```
-
-```{r research_volume, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-theme_df_docs <- readRDS("../latin_america/consolidated_results.Rds")
-theme_df_docs <- theme_df_docs[which(theme_df_docs$country != "Irrelevant"), ]
-theme_df_docs <- theme_df_docs[, seq(nrow(theme_df))]
-
-mainThemeDocs <- apply(theme_df_docs, 1, function(row) colnames(theme_df_docs)[which.max(row)])
-
-get.topXthemeDocs <- function(X){
-  topXthemeDocs <- t(apply(theme_df_docs, 1, function(row){
-      colnames(theme_df_docs) %in% head(colnames(theme_df_docs)[order(-row)], X)
-  }))
-  topXthemeDocs <- colSums(topXthemeDocs)
-  return(topXthemeDocs)
-}
-
-get.p_research_volume <- function(X, print_bool = TRUE, lim = Inf){
-    topXthemeDocs <- get.topXthemeDocs(X)
-    df <- data.frame(topics = as.factor(colnames(theme_df_docs)), count = topXthemeDocs)
-    df <- df[order(-df$count), ]
-    p_research_volume <- ggplot(head(df, lim)) +
-        geom_point(aes(x=count, y=fct_reorder(topics,count))) +
-        geom_segment(aes(x = 0, xend = count, y = fct_reorder(topics,count), yend = fct_reorder(topics,count))) +
-        labs(x = "Article count", y = "Themes", title = paste0("Number of articles with theme present in the top ", X, " themes")) +
-        theme_cowplot()
-    if (print_bool) print(p_research_volume)
-    return(p_research_volume)
-}
-
-get.p_research_volume(10, print_bool = FALSE, lim = 10)
-
-l.p_research_volume <- lapply(seq(4), function(X) get.p_research_volume(X, print_bool = FALSE, lim = 10))
-
-dev.new()
-gridExtra::grid.arrange(grobs = l.p_research_volume)
-saveRDS(l.p_research_volume, "./data/p_research_volume.Rds")
-```
+# References

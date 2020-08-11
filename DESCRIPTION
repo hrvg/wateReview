@@ -33,27 +33,36 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
+    circlize,
+    clValid,
     dplyr,
+    factoextra,
     ggplot2,
     ggplotify,
     ggpubr,
+    gridExtra,
+    Hmisc,
+    inlmisc,
     kableExtra,
     magrittr,
     philentropy,
     plotly,
+    raster,
     reshape2,
     scales,
-    inlmisc,
-    circlize,
     tidyr,
+    corrplot,
     tidyverse,
+    oce,
+    tmap,
     vegan,
+    Amelia,
     wesanderson,
     XML
 Suggests: 
     knitr,
-    rmarkdown,
     pkgdown,
+    rmarkdown,
     testthat
 Remotes:
     url::http://www.omegahat.net/R/src/contrib/XML_3.99-0.tar.gz

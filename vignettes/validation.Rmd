@@ -7,6 +7,43 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
+```{data_loading}
+topicWords <- readRDS(system.file("extdata", "topicWords.Rds", package = "wateReview"))
+topic_names <- read.csv(system.file("extdata", "topic_names.csv", package = "wateReview"))
+topic_names <- topic_names[match(seq(nrow(topic_names)), topic_names$topic_id), ]
+topicWords <- t(topicWords)
+topicWords <- as.data.frame(topicWords)
+colnames(topicWords) <- topic_names$topic_name
+theme_type <- "theme"
+themes <- unique(topic_names[[theme_type]][!is.na(topic_names[[theme_type]])])
+theme_df <- lapply(themes, function(th){
+    ind <- which(topic_names[[theme_type]] == th)
+    if (length(ind) == 1){
+      return(topicWords[, ind])
+    } else {
+      return(rowSums(topicWords[, ind]))
+    }
+})
+theme_df <- do.call(cbind, theme_df)
+rownames(theme_df) <- rownames(topicWords)
+colnames(theme_df) <- themes
+rm(topicWords)
+cSums <- colSums(theme_df)
+theme_df <- sweep(theme_df, 2, cSums, "/")
+theme_df <- t(theme_df)
+dist_theme_KL <- philentropy::distance(theme_df, method = "kullback-leibler")
+rownames(dist_theme_KL) <- rownames(theme_df)
+colnames(dist_theme_KL) <- rownames(theme_df)
+```
+
+
+```{phc_theme}
+hc_fit <- hclust(as.dist(dist_theme_KL), method = "ward.D2")
+theme_phc <- fviz_dend(hc_fit, rect = TRUE, show_labels = TRUE, cex = 0.7)
+theme_phc
+```
+
 ```
 data.dir <- "F:/hguillon/research/data/latin_america/validation_data"
 library(openxlsx)

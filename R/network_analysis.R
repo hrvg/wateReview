@@ -108,7 +108,7 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 #' @param sort_topic logical, default to TRUE
 #' @param topic_threshold numeric, a percentile to cut the display of topic names
 #' @param reorder_cluster logical, default to FALSE, controls if the origin is re-ordered by cluster
-#' @returm a chord diagram figure
+#' @return a chord diagram figure
 #' @export
 #' @import circlize
 #' @importFrom magrittr %>%
