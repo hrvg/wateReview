@@ -4,7 +4,7 @@
 #' @param webscrapped_trainingLabels webscrapped training labels used for comparison purpose only
 #' @return training labels
 #' @export
-make.humanReadingTrainingLabels <- function(validationHumanReading, scale_type = "location", webscrapped_trainingLabels){
+make_humanReadingTrainingLabels <- function(validationHumanReading, scale_type = "location", webscrapped_trainingLabels){
 	if (scale_type == "location"){
 		l.df <- lapply(levels(validationHumanReading$Country.1), function(country){
 			apply(validationHumanReading, MARGIN = 1, function(row) any(row == country))
@@ -40,7 +40,7 @@ make.humanReadingTrainingLabels <- function(validationHumanReading, scale_type =
 #' @param aggregate_labels logical, for temporal scale, option to aggregate into three larger classes
 #' @return a data.frame with nrow == nrow(validationHumanReading) + nrow(webscrapped_validationDTM) and ncol == ncol(validationHumanReadingDTM) + ncol(humanReadingTrainingLabels)
 #' @export
-make.trainingData <- function(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = "location", aggregate_labels = FALSE){
+make_trainingData <- function(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = "location", aggregate_labels = FALSE){
 	humanReadingTrainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
 	if (scale_type == "location"){
 		humanReadingTrainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
@@ -68,7 +68,7 @@ make.trainingData <- function(validationHumanReadingDTM, humanReadingTrainingLab
 #' @param validationHumanReadingDTM document-term matrix from human reading
 #' @return MLDR a multilabel data.frame from mldr package
 #' @export
-get.MLDR <- function(trainingData, validationHumanReadingDTM){
+get_MLDR <- function(trainingData, validationHumanReadingDTM){
 	MLDR <- mldr_from_dataframe(trainingData, 
 		labelIndices = which(!colnames(trainingData) %in% colnames(validationHumanReadingDTM)), 
 		name = "MLDR")
@@ -80,8 +80,8 @@ get.MLDR <- function(trainingData, validationHumanReadingDTM){
 #' @param validationHumanReadingDTM document-term matrix from human reading
 #' @param humanReadingTrainingLabels labels from human-reading
 #' @export
-EDA.trainingData <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels){
-	MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
+EDA_trainingData <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels){
+	MLDR <- get_MLDR(trainingData, validationHumanReadingDTM)
 	layout(matrix(c(1, 2, 2, 2, 1, 2, 2, 2, 3, 4, 4, 4, 3, 4, 4, 4), 4, 4, byrow = TRUE))
 	plot(MLDR, type = c("AT", "LB", "CH", "LC"), ask = FALSE, labelIndices = MLDR$labels$index)
 	humanReadingTrainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
@@ -109,9 +109,9 @@ EDA.trainingData <- function(trainingData, validationHumanReadingDTM, humanReadi
 #' @param aggregated_labels logical
 #' @return a list of learners
 #' @export
-get.binaryRelevanceLearners <- function(lrn = "classif.svm", trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE){
+get_binaryRelevanceLearners <- function(lrn = "classif.svm", trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE){
 	binary.learner <- makeLearner(lrn)
-	chainingOrder <- get.chainingOrder(trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE)
+	chainingOrder <- get_chainingOrder(trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE)
 	lrn.cc <- makeMultilabelClassifierChainsWrapper(binary.learner, order = chainingOrder)
 	lrn.br <- makeMultilabelBinaryRelevanceWrapper(binary.learner)
 	lrn.ns <- makeMultilabelNestedStackingWrapper(binary.learner, order = chainingOrder)
@@ -127,7 +127,7 @@ get.binaryRelevanceLearners <- function(lrn = "classif.svm", trainingData, valid
 #' @param scale_type One of "location", "spatial", "temporal", default to "location"
 #' @param aggregated_labels logical
 #' @export
-get.chainingOrder <- function(trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE){
+get_chainingOrder <- function(trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE){
 	if (scale_type == "temporal"){
 		if (aggregated_labels){
 			chainingOrder <- c("very_long_term", "short_term", "long_term")
@@ -135,7 +135,7 @@ get.chainingOrder <- function(trainingData, validationHumanReadingDTM, scale_typ
 			chainingOrder <- c("years_100000", "years_10000", "years_1000", "years_100", "day", "week", "event", "years_10", "year")
 		}
 	} else {
-		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
+		MLDR <- get_MLDR(trainingData, validationHumanReadingDTM)
 		chainingOrder <- row.names(MLDR$labels)[order(MLDR$labels$count, decreasing = TRUE)]
 	}
 	return(chainingOrder)
@@ -152,11 +152,11 @@ get.chainingOrder <- function(trainingData, validationHumanReadingDTM, scale_typ
 #' @export
 multilabelBenchmark <- function(trainingData, validationHumanReadingDTM, model_type, scale_type = "location", aggregated_labels = FALSE, obs_threshold = 10){
 	trainingData <- trainingData[, colSums(trainingData) >= obs_threshold]
-	lrns <- get.binaryRelevanceLearners(lrn = "classif.svm", trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE)
+	lrns <- get_binaryRelevanceLearners(lrn = "classif.svm", trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE)
 	lrns[[length(lrns) + 1]] <- makeLearner("multilabel.randomForestSRC", predict.type="prob")
 	# lrns[[length(lrns) + 1]] <- makeLearner("multilabel.rFerns")
 	set.seed(753)
-	learning.task <- make.task(trainingData, validationHumanReadingDTM, model_type)
+	learning.task <- make_task(trainingData, validationHumanReadingDTM, model_type)
 	print(learning.task)
 	rdesc <- makeResampleDesc("Subsample", iters = 10, split = 3 / 4)
 	bmr <- benchmark(lrns, learning.task, rdesc, 
@@ -172,12 +172,12 @@ multilabelBenchmark <- function(trainingData, validationHumanReadingDTM, model_t
 #' @param filter logical, if true create task for a binary classification Irrelevant/Relevant
 #' @return a MLR task
 #' @export
-make.task <- function(trainingData, validationHumanReadingDTM, model_type, filter = FALSE){
+make_task <- function(trainingData, validationHumanReadingDTM, model_type, filter = FALSE){
 	if (model_type == "binary_relevance"){
 		target <- colnames(trainingData[, which(!colnames(trainingData) %in% colnames(validationHumanReadingDTM))])
 		learning.task <- makeMultilabelTask(data = trainingData, target = target)
 	} else if (model_type == "label_powerset"){ # this is kept as legacy of the code to make a LP task, there's little value with our data
-		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
+		MLDR <- get_MLDR(trainingData, validationHumanReadingDTM)
 		MLDR.lp <- mldr_transform(MLDR, type = "LP", MLDR$labels$index)
 		learning.task <- makeClassifTask(data = MLDR.lp, target = "classLabel")
 	} else if (model_type == "multiclass"){
@@ -236,10 +236,10 @@ PerfVisMultilabel <- function(AggrPerformances){
 #' @param filter logical, if true create training data for a binary classification Irrelevant/Relevant
 #' @return a data.frame containing the training data with a target column "countryLabelFilter" or "countryLabel"
 #' @export
-make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = FALSE, obs_threshold = 10, filterIrrelevant = TRUE, addTopicDocs = FALSE, validationTopicDocs = NULL){
+make_trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = FALSE, obs_threshold = 10, filterIrrelevant = TRUE, addTopicDocs = FALSE, validationTopicDocs = NULL){
 	if (filter){
 		trainingData <- cbind(validationHumanReadingDTM, humanReadingTrainingLabels)
-		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
+		MLDR <- get_MLDR(trainingData, validationHumanReadingDTM)
 		validationDTM <- validationHumanReadingDTM
 		trainingLabels <- humanReadingTrainingLabels
 		trainingLabels <- trainingLabels[, order(MLDR$labels$count, decreasing = FALSE)]
@@ -255,7 +255,7 @@ make.trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM,
 		trainingData <- cbind(validationDTM, countryLabel)
 		if (addTopicDocs) trainingData <- cbind(validationTopicDocs, trainingData)
 	} else {
-		MLDR <- get.MLDR(trainingData, validationHumanReadingDTM)
+		MLDR <- get_MLDR(trainingData, validationHumanReadingDTM)
 		if (addWebscrapped){
 			validationDTM <- rbind(validationHumanReadingDTM, webscrapped_validationDTM)
 			trainingLabels <- rbind(humanReadingTrainingLabels, webscrapped_trainingLabels)
@@ -377,7 +377,7 @@ get_wrappedLearnersList <- function(learnerList, data, mes, grid_resolution){
 #' @return benchmark object
 #' @export
 multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune = NULL){
-	learning.task <- make.task(trainingData, NULL, model_type, filter = filter)
+	learning.task <- make_task(trainingData, NULL, model_type, filter = filter)
 	print(learning.task)
 	set.seed(1789)
 	rdesc <- makeResampleDesc("RepCV", reps = 10, folds = 10, stratify = TRUE)
@@ -432,7 +432,7 @@ multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune =
 #' @param bmr a MLR benchmark
 #' @param tuning_par a tuning parameter name
 #' @export
-get.tuningPar <- function(bmr, tuning_par){
+get_tuningPar <- function(bmr, tuning_par){
 	getBMRTuneResults(bmr, as.df = TRUE) %>% 
 	pull(tuning_par) %>% 
 	na.omit() %>% 
@@ -451,8 +451,8 @@ get.tuningPar <- function(bmr, tuning_par){
 #' @param filter logical, if true will train and predict for the relevance filter
 #' @return prediction or membership
 #' @export
-make.predictions <- function(lrn, parvals, trainingData, targetData, model_type, filter = TRUE){
-	learning.task <- make.task(trainingData, NULL, model_type, filter = filter)
+make_predictions <- function(lrn, parvals, trainingData, targetData, model_type, filter = TRUE){
+	learning.task <- make_task(trainingData, NULL, model_type, filter = filter)
 	lrn.rf <- makeLearner(lrn, predict.type="prob")
 	lrn.rf$par.vals <- parvals
 	model <-  train(lrn.rf, learning.task)
@@ -469,7 +469,7 @@ make.predictions <- function(lrn, parvals, trainingData, targetData, model_type,
 #' @param DTM the complete document-term matrix
 #' @return a data.frame
 #' @export
-make.targetData <- function(DTM, addTopicDocs = FALSE, topicDocs = NULL){
+make_targetData <- function(DTM, addTopicDocs = FALSE, topicDocs = NULL){
 	targetData <- as.matrix(DTM)
 	colnames(targetData) <- paste0("Term", seq(ncol(DTM)))
 	targetData <- data.frame(targetData)
@@ -485,7 +485,7 @@ make.targetData <- function(DTM, addTopicDocs = FALSE, topicDocs = NULL){
 #' @param binary logical, if TRUE it's a binary classification and the measure name has to be changed
 #' @return named list: p_auc: the plot; medians: a table with median value of auc
 #' @export
-make.AUCPlot <- function(bmr, binary = FALSE){
+make_AUCPlot <- function(bmr, binary = FALSE){
 	perf <- getBMRPerformances(bmr, as.df = TRUE) %>% 
 		mutate(learner.id = gsub("classif.", "", learner.id)) %>% 
 		filter(learner.id != "featureless")
@@ -561,8 +561,8 @@ transform.DTM <- function(DTM, change.col = TRUE){
 #' this function performs a quick quality analysis and difference with historical predictions
 #' @param predCountry the predicted country locations
 #' @export
-QA.oldXnewPredictions <- function(predCountry){
-	missing <- get.missing()
+QA_oldXnewPredictions <- function(predCountry){
+	missing <- get_missing()
 	predCountry_new <- as.character(predCountry$response)
 	predCountry_new[which(as.character(predRelevance) == "Irrelevant")] <- "Irrelevant"
 	predCountry_old <- as.character(readRDS("./predCountry_bak.Rds"))

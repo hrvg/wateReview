@@ -2,7 +2,7 @@
 #' @param urlScopus URL of a document
 #' @return Text of the abstract of the document
 #' @export
-get.scopusAbstract <- function(urlScopus){
+get_scopusAbstract <- function(urlScopus){
 	webpageScopus <- read_html(as.character(urlScopus))
 	scopusAbstract <- html_text(html_nodes(webpageScopus, "p")[8])
 	return(scopusAbstract)
@@ -12,7 +12,7 @@ get.scopusAbstract <- function(urlScopus){
 #' @param DOI DOI (e.g. from Web of Science database)
 #' @return Text of the abstract of the document
 #' @export
-get.wosAbstract <- function(DOI){
+get_wosAbstract <- function(DOI){
 	res <- abstract_retrieval(DOI, identifier = "doi", verbose = FALSE)
 	wosAbstract <- res$content$`abstracts-retrieval-response`$coredata$`dc:description`
 	return(wosAbstract)
@@ -23,7 +23,7 @@ get.wosAbstract <- function(DOI){
 #' @param from_Fullresult logical, if TRUE extracts the abstract from the result of a previous request
 #' @return List of author keywords of the corresponding document
 #' @export
-get.wosAuthKeywords <- function(DOI, from_FullResult = FALSE){
+get_wosAuthKeywords <- function(DOI, from_FullResult = FALSE){
   if (from_FullResult == FALSE){
     res <- abstract_retrieval(DOI, identifier = "doi", verbose = FALSE)
     wosAuthKeywords <- unlist(res$content$`abstracts-retrieval-response`$authkeywords)
@@ -50,20 +50,20 @@ get.wosAuthKeywords <- function(DOI, from_FullResult = FALSE){
 #' @param DOI a DOI
 #' @return result
 #' @export
-get.wosFullResult <- function(DOI){
+get_wosFullResult <- function(DOI){
   res <- abstract_retrieval(DOI, identifier = "doi", verbose = FALSE)
   return(res)
 }
 
 #' Extract metadata from Scopus or Web of Science identifiers
 #' @param documentID list of URLs for Scopus database or DOIs for Web of Science database
-#' @param fun function, either get.scopusAbstract, get.wosAbstract or get.wosFullResult
+#' @param fun function, either get_scopusAbstract, get_wosAbstract or get_wosFullResult
 #' @param newpass boolean, default to FALSE, if TRUE, ind_null and metadata are expected to be set
 #' @param ind_null list, flags for failure to retrieve
 #' @param metadata list, list of already retrieved metadata
 #' @return a list of metadata: only abstracts or complete metadata
 #' @export
-get.allMetadata <- function(documentID, fun = get.scopusAbstract, newpass = FALSE, metadata = NULL, ind_null = NULL){
+get_allMetadata <- function(documentID, fun = get_scopusAbstract, newpass = FALSE, metadata = NULL, ind_null = NULL){
     if (newpass){
       indices <- unname(which(ind_null == TRUE))
       metadata <- unname(metadata)
@@ -96,7 +96,7 @@ get.allMetadata <- function(documentID, fun = get.scopusAbstract, newpass = FALS
           }
         }
         cat("\n")
-       metadata[[i]] <- ifelse(identical(fun, get.scopusAbstract), 
+       metadata[[i]] <- ifelse(identical(fun, get_scopusAbstract), 
             out, 
             ifelse(is.null(out), NA, out)
             )
@@ -112,7 +112,7 @@ get.allMetadata <- function(documentID, fun = get.scopusAbstract, newpass = FALS
 #' @param wosAbstracts abstracts extracted from Web of Science database
 #' @return corpus corpus database with a new column abstract
 #' @export
-add.abstractsToCorpus <- function(in_corpus, scopusAbstracts, wosAbstracts){
+add_abstractsToCorpus <- function(in_corpus, scopusAbstracts, wosAbstracts){
   corpus <- in_corpus
   ind_scopus <- which(grepl("scopus", corpus$ArticleURL) == TRUE)
   ind_wos <- which(grepl("scopus", corpus$ArticleURL) == FALSE)
@@ -125,7 +125,7 @@ add.abstractsToCorpus <- function(in_corpus, scopusAbstracts, wosAbstracts){
 #' Extract countries names to be searched for in the author keywords
 #' @return List of country names
 #' @export
-get.relevantCountries <- function(){
+get_relevantCountries <- function(){
   file <- '../latin_america_SQ_internship/data/countries_database.csv'
   countries_database <- read.csv(file, header = TRUE)
   relevant_countries <- as.character(countries_database$COUNTRY)
@@ -137,8 +137,8 @@ get.relevantCountries <- function(){
 #' @param wosFullResult list, list of metadata
 #' @return list of keywords
 #' @export
-get.allAuthKeywords <- function(wosFullResult){
-  lapply(wosFullResult, function(res) get.wosAuthKeywords(res, from_FullResult = TRUE))
+get_allAuthKeywords <- function(wosFullResult){
+  lapply(wosFullResult, function(res) get_wosAuthKeywords(res, from_FullResult = TRUE))
 }
 
 #' Quality analysis on the author keywords retrieved
@@ -163,7 +163,7 @@ QA.AuthKeywords <- function(wosAuthKeywords, relevant_countries){
 #' @param relevant_countries labels to search for
 #' @return a data.frame
 #' @export
-get.boolean_AuthKeywords <- function(wosAuthKeywords, relevant_countries){
+get_boolean_AuthKeywords <- function(wosAuthKeywords, relevant_countries){
   boolean_AuthKeywords <- lapply(relevant_countries, function(country) grepl(country, wosAuthKeywords))
   boolean_AuthKeywords <- do.call(cbind, boolean_AuthKeywords)
   boolean_AuthKeywords <- data.frame(boolean_AuthKeywords)
@@ -178,7 +178,7 @@ get.boolean_AuthKeywords <- function(wosAuthKeywords, relevant_countries){
 #' @param boolean_AuthKeywords data.frame of logical values indicating if a country has been found in the author keywords
 #' @return list of logical
 #' @export
-get.ind_hasCountryTag <- function(boolean_AuthKeywords){
+get_ind_hasCountryTag <- function(boolean_AuthKeywords){
   ind_hasCountryTag <- apply(boolean_AuthKeywords, 1, function(row) any(row == TRUE))
   return(ind_hasCountryTag)
 }
@@ -187,7 +187,7 @@ get.ind_hasCountryTag <- function(boolean_AuthKeywords){
 #' @param webscrapped_trainingLabels data.frame of multiple labels
 #' @return Tokenized labels
 #' @export
-make.country_tokens <- function(webscrapped_trainingLabels){
+make_country_tokens <- function(webscrapped_trainingLabels){
   dic <- tokens(colnames(webscrapped_trainingLabels)[-1], 
     remove_punct = TRUE,
     remove_symbols = TRUE,
@@ -206,7 +206,7 @@ make.country_tokens <- function(webscrapped_trainingLabels){
 #' @param in_corpus corpus database
 #' @return list of document IDs
 #' @export
-get.EndNoteIdcorpus <- function(in_corpus){
+get_EndNoteIdcorpus <- function(in_corpus){
   EndNoteIdcorpus <- unname(sapply(in_corpus$pdfs, substr, start = 1, stop = 10))
   return(EndNoteIdcorpus)
 }
@@ -215,7 +215,7 @@ get.EndNoteIdcorpus <- function(in_corpus){
 #' @param englishCorpus LDA corpus database
 #' @return list of document IDs
 #' @export
-get.EndNoteIdLDA <- function(englishCorpus){
+get_EndNoteIdLDA <- function(englishCorpus){
   EndNoteIdLDA <- unname(sapply(englishCorpus$fnames, substr, start = 1, stop = 10))
   return(EndNoteIdLDA)
 }
@@ -225,7 +225,7 @@ get.EndNoteIdLDA <- function(englishCorpus){
 #' @param EndNoteIdLDA document id in the corpus from the query
 #' @return none
 #' @export
-QA.EndNoteIdCorpusLDA <- function(EndNoteIdLDA, EndNoteIdcorpus){
+QA_EndNoteIdCorpusLDA <- function(EndNoteIdLDA, EndNoteIdcorpus){
   print("LDA in Corpus")
   print(table(EndNoteIdLDA %in% EndNoteIdcorpus))
   print("Corpus in LDA")
@@ -237,7 +237,7 @@ QA.EndNoteIdCorpusLDA <- function(EndNoteIdLDA, EndNoteIdcorpus){
 #' @param EndNoteIdcorpus document id in the topic model
 #' @return EndNoteIdLDA with matching records in both databases
 #' @export
-align.dataWithEndNoteIdLDA <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
+align_dataWithEndNoteIdLDA <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
      if(is.null(dim(data))){
     data <- data[which(EndNoteIdLDA %in% EndNoteIdcorpus)]
   } else {
@@ -251,7 +251,7 @@ align.dataWithEndNoteIdLDA <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
 #' @param EndNoteIdLDA document id in the corpus from the query
 #' @return EndNoteIdcorpus with matching records in both databases
 #' @export
-align.dataWithEndNoteIdcorpus <- function(data, EndNoteIdcorpus, EndNoteIdLDA){
+align_dataWithEndNoteIdcorpus <- function(data, EndNoteIdcorpus, EndNoteIdLDA){
     if(is.null(dim(data))){
     data <- data[which(EndNoteIdcorpus %in% EndNoteIdLDA)]
   } else {
@@ -266,7 +266,7 @@ align.dataWithEndNoteIdcorpus <- function(data, EndNoteIdcorpus, EndNoteIdLDA){
 #' @param EndNoteIdLDA document id in the corpus from the query
 #' @return englishCorpus with matching records in both databases and webscrapped abstracts
 #' @export
-align.englishCorpus <- function(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus, in_corpus){
+align_englishCorpus <- function(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus, in_corpus){
   englishCorpus <- englishCorpus[which(EndNoteIdLDA %in% EndNoteIdcorpus), ]
   englishCorpus$abstract <- as.character(in_corpus$abstract[which(EndNoteIdcorpus %in% EndNoteIdLDA)][match(EndNoteIdLDA, EndNoteIdcorpus)])
   return(englishCorpus)
@@ -278,7 +278,7 @@ align.englishCorpus <- function(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus, in
 #' @param EndNoteIdLDA document id in the corpus from the query
 #' @return data with matching records in both databases and webscrapped abstracts
 #' @export
-order.data <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
+order_data <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
   if(is.null(dim(data))){
     data <- data[match(EndNoteIdLDA, EndNoteIdcorpus)]
   } else {
@@ -294,7 +294,7 @@ order.data <- function(data, EndNoteIdLDA, EndNoteIdcorpus){
 #' @param englishCorpus_file file path to the complete corpus
 #' @return list with 3 elements: country_tokens: tokenized country labels, webscrapped_validationDTM: a document term matrix derived from the tokenized country labels, webscrapped_trainingLabels: webscrapped multilabels
 #' @export
-make.webscrapped_trainingData <- function(boolean_AuthKeywords, ind_hasCountryTag, englishCorpus, englishCorpus_file){
+make_webscrapped_trainingData <- function(boolean_AuthKeywords, ind_hasCountryTag, englishCorpus, englishCorpus_file){
   # subset database for which entries have a label
   englishCorpus_hasTag <- englishCorpus[ind_hasCountryTag, ]
   boolean_AuthKeywords_hasTag <- boolean_AuthKeywords[ind_hasCountryTag, ]
@@ -322,7 +322,7 @@ make.webscrapped_trainingData <- function(boolean_AuthKeywords, ind_hasCountryTa
   webscrapped_validationDTM <- as.matrix(webscrapped_validationDTM)
 
   # get country tokens
-  country_tokens <- make.country_tokens(webscrapped_trainingLabels)
+  country_tokens <- make_country_tokens(webscrapped_trainingLabels)
   
   # adjust colnames
   colnames(webscrapped_validationDTM) <- paste0("Term", seq(ncol(webscrapped_validationDTM)))

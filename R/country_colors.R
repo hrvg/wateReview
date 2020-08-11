@@ -1,6 +1,6 @@
 rgb2hex <- function(r,g,b) sprintf('#%s',paste(as.hexmode(c(r,g,b)),collapse = ''))
 
-get.topColors <- function(iso, n = 3){
+get_topColors <- function(iso, n = 3){
 	source <- paste0("../country-flags/png100px/", iso, ".png")
 	img <- readPNG(source, native = FALSE, info = FALSE)
 	red <- c(img[,, 1] * 255)

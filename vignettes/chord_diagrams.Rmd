@@ -16,14 +16,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-
 # Purpose
 
-
 In this vignette, we produce a chord diagram representing the links of a weighted bi-partite network between countries and a category of topics.
-
-
-
 
 # Getting the bi-partite network weighted adjacency matrix
 

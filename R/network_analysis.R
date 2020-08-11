@@ -237,7 +237,7 @@ VizSpots <- function(m, scaled = FALSE, cluster_color = TRUE, NSF_general_color 
 #' @param source_ids source_ids
 #' @param citation_network an edge data.frame
 #' @return a weighted adjacency matrix of probability of citation between countries
-make.countryNetwork <- function(source_ids, citation_network){
+make_countryNetwork <- function(source_ids, citation_network){
 	consolidated_results <- readRDS("consolidated_results_topic_name.Rds")
 	consolidated_results$source_ids <- source_ids
 
@@ -278,7 +278,7 @@ make.countryNetwork <- function(source_ids, citation_network){
 #' @param source_ids source_ids
 #' @param citation_network an edge data.frame
 #' @return a weighted adjacency matrix of probability of citation between topics
-make.topicNetwork <- function(source_ids, citation_network, type = "NSF_specific", percentile.threshold = 0.90){
+make_topicNetwork <- function(source_ids, citation_network, type = "NSF_specific", percentile.threshold = 0.90){
 	type_list <- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
 	stopifnot(type %in% type_list)
 	consolidated_results <- readRDS(paste0("consolidated_results_", type, ".Rds"))

@@ -7,6 +7,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+# Purpose
+
+This vignette clarifies the calculation of the citation network.
+Unfortunately, this vignette requires a large file containing the entire data of the corpus which cannot be distributed with the package.
+For that reason, the code of this vignette is not executed.
 
 # Citation Network
 
@@ -28,70 +33,60 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r libraries}
+devtools::load_all()
 ```
-### libraries ###
-library("mlr")
-library("OpenML")
-library("NLP")
-library("tm")
-library("data.table")
-library("mldr")
-library("dplyr")
-library("igraph")
 
-### utils ###
-import::here(.from = "./R/utils/lib_webscrapping.R",
-  get.EndNoteIdcorpus,
-  get.EndNoteIdLDA,
-  QA.EndNoteIdCorpusLDA,
-  align.dataWithEndNoteIdLDA,
-  align.dataWithEndNoteIdcorpus,
-  order.data
-)
+# Data loading
 
-
-import::here(.from = "./R/network_analysis/lib_network_analysis.R", 
-  make.countryNetwork,
-  make.topicNetwork
- )
-
-# data loading
+```
 englishCorpus_file <- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
 englishCorpus <- readRDS(englishCorpus_file)
+in_corpus <- readRDS(system.file("extdata", "in_corpus.Rds", package = "wateReview"))
+source_ids <- readRDS(system.file("extdata", "source_ids.Rds", package = "wateReview")) # aligned with corpus
+citation_network <- readRDS(system.file("extdata", "citingDf.Rds", package = "wateReview"))
+```
 
-in_corpus_file <- "in_corpus.Rds"
-in_corpus <- readRDS(in_corpus_file)
-source_ids <- readRDS("source_ids.Rds") # aligned with corpus
+# Cross-walk between topic model and EndNote databases
 
-citation_network <- readRDS("citingDf.Rds")
+The following code chunks perform a cross-walk between the topic model and EndNote databases using document id: `EndNoteIdcorpus` and `EndNoteIdLDA`.
+This ensures that the two databases can communicate and are aligned.
 
-# get document IDs
-EndNoteIdcorpus <- get.EndNoteIdcorpus(in_corpus)
-EndNoteIdLDA <- get.EndNoteIdLDA(englishCorpus)
+## Get document IDs
+
+```
+EndNoteIdcorpus <- get_EndNoteIdcorpus(in_corpus)
+EndNoteIdLDA <- get_EndNoteIdLDA(englishCorpus)
 QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+```
 
-# align databases 
-in_corpus <- align.dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
-source_ids <- align.dataWithEndNoteIdcorpus(source_ids, EndNoteIdcorpus, EndNoteIdLDA)
+## Align databases 
 
-englishCorpus <- align.dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
+```
+in_corpus <- align_dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
+source_ids <- align_dataWithEndNoteIdcorpus(source_ids, EndNoteIdcorpus, EndNoteIdLDA)
+englishCorpus <- align_dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
+EndNoteIdLDA <- align_dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
+EndNoteIdcorpus <- align_dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
+QA_EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+```
 
-EndNoteIdLDA <- align.dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
-EndNoteIdcorpus <- align.dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
+## Order databases according to topic model database
 
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
-
-# order them according to LDA database
-source_ids <- order.data(source_ids, EndNoteIdLDA, EndNoteIdcorpus)
-in_corpus <- order.data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
-
-predCountryMembership <- readRDS("predCountryMembership.Rds")
+```
+source_ids <- order_data(source_ids, EndNoteIdLDA, EndNoteIdcorpus)
+in_corpus <- order_data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
+predCountryMembership <- readRDS(system.file("extdata", "predCountryMembership.Rds", package = "wateReview"))
 colnames(predCountryMembership) <- gsub("prob.", "", colnames(predCountryMembership))
+```
 
-# make the networks
-countryNetwork <- make.countryNetwork(source_ids, citation_network)
+# Make and save the citation networks
 
+For countries, the citation network is obtained using `make_countryNetwork()` 
+For topics, citation network are performed with `make_topicNetwork()` for six categories of topics: `methods`, `NSF_general`, `NSF_specific`, `spatial scale`, `theme`, and `water budget`.
+
+```
+countryNetwork <- make_countryNetwork(source_ids, citation_network)
 type_list <- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
-for (tt in type_list) make.topicNetwork(source_ids, citation_network, type = tt, percentile.threshold = 0.90)
-
+for (tt in type_list) `make_topicNetwork`(source_ids, citation_network, type = tt, percentile.threshold = 0.90)
 ```
