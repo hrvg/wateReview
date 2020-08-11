@@ -75,7 +75,7 @@
       <a href="../articles/cluster_map.html">Cluster map</a>
     </li>
     <li>
-      <a href="../articles/clustering-analysis.html">Research Opportunities in Latin America</a>
+      <a href="../articles/clustering-analysis.html">Clustering analysis</a>
     </li>
     <li>
       <a href="../articles/country_colors.html">Country colors</a>
@@ -175,56 +175,35 @@
 
     
     
-<pre><code><a href="https://rdrr.io/pkg/raster/man">library(raster)
-library(tmap)
-
-#################
-### FUNCTIONS ###
-#################
-
-read_countries_database &lt;- function(db_path = "/Users/noellepatterson/apps/Other/sturdy-umbrella/R/data_vis/data/countries_database.csv"){
-  countries_database &lt;- read.csv(db_path, header = TRUE)
-  countries_database$COUNTRY &lt;- as.character(countries_database$COUNTRY)
-  countries_database$Country_clusters &lt;- as.factor(countries_database$Country_clusters)
-  return(countries_database)
-}
-
-read_countries_shapefile &lt;- function(map_file = "/Users/noellepatterson/apps/Other/sturdy-umbrella/R/data_vis/data/LAC"){
-  countries_shapefile &lt;- shapefile(map_file)
-  return(countries_shapefile)
-}
-
-join_database_shapefile &lt;- function(countries_database, countries_shapefile){
-  countries_shapefile &lt;- countries_shapefile[which(countries_shapefile$COUNTRY %in% countries_database$COUNTRY), ]
-  countries_shapefile &lt;- countries_shapefile[match(countries_database$COUNTRY, countries_shapefile$COUNTRY), ]
-  countries_shapefile@data &lt;- countries_database
-  return(countries_shapefile)   
-}
-
-make_map &lt;- function(attribute, title = NULL, colors){
-  if (is.null(title)){
-    title &lt;- attribute
-  }
-  c_map &lt;- tm_shape(countries_shapefile) +
-    tm_fill(col = attribute, title = title, palette = colors) +
-    tm_borders(lwd = 1, col = "black")
-    # tm_compass(type = "4star", position = c("right", "top")) + #add compass and scale bar
-    # tm_scale_bar(breaks = c(0, 100, 200), size = 3, position = c("right", "bottom"))+
-    # tm_layout(bg.color = "lightblue")
-  print(c_map)
-}
-#################
-###    MAIN   ###
-#################
-countries_shapefile &lt;- join_database_shapefile(read_countries_database(), read_countries_shapefile())
-colors &lt;- c("#F8766D", "#00BFC4", "#7CAE00")
-make_map("Country_clusters", "title", colors)
-</a></code></pre>
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>This short vignette shows how to obtain a map of the study area with the cluster coloring.</p>
+</div>
+<div id="making-the-map" class="section level1">
+<h1 class="hasAnchor">
+<a href="#making-the-map" class="anchor"></a>Making the map</h1>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">wateReview</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tmap</span>)</pre></body></html></div>
+<p>The country clusters are loaded from <code>country_clusters.csv</code>.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">countries_shapefile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/join_database_shapefile.html">join_database_shapefile</a></span>(
+  <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/read_countries_database.html">read_countries_database</a></span>(<span class="st">"countries_clusters.csv"</span>),
+  <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/read_countries_shapefile.html">read_countries_shapefile</a></span>()
+)</pre></body></html></div>
+<p>The map is then produced using <code>tmap</code> package.</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">colors</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"#F8766D"</span>, <span class="st">"#00BFC4"</span>, <span class="st">"#7CAE00"</span>)
+<span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html">tm_shape</a></span>(<span class="no">countries_shapefile</span>) +
+  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_polygons.html">tm_fill</a></span>(<span class="kw">col</span> <span class="kw">=</span> <span class="st">"clusters"</span>, <span class="kw">palette</span> <span class="kw">=</span> <span class="no">colors</span>) +
+  <span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_polygons.html">tm_borders</a></span>(<span class="kw">lwd</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">"black"</span>)</pre></body></html></div>
+<p><img src="cluster_map_files/figure-html/visualization-1.png" width="768"></p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

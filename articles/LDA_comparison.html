@@ -75,7 +75,7 @@
       <a href="../articles/cluster_map.html">Cluster map</a>
     </li>
     <li>
-      <a href="../articles/clustering-analysis.html">Research Opportunities in Latin America</a>
+      <a href="../articles/clustering-analysis.html">Clustering analysis</a>
     </li>
     <li>
       <a href="../articles/country_colors.html">Country colors</a>
@@ -211,7 +211,7 @@
 <span class="co">#&gt; 4       46   en NSF_specific agronomy &amp; crop science</span>
 <span class="co">#&gt; 5       55   en NSF_specific    analytical chemistry</span>
 <span class="co">#&gt; 6        4   en NSF_specific          animal science</span></pre></body></html></div>
-<p>We know bind the three language data.frames, filter for the specific topics and count their occurence across themes per topic and language.</p>
+<p>We now bind the three language data.frames, filter for the specific topics and count their occurence across themes per topic and language.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">lda_comparison</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">en</span>, <span class="no">es</span>, <span class="no">pt</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">variable</span> <span class="kw">==</span> <span class="st">"NSF_specific"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="no">value</span>, <span class="no">lang</span>) <span class="kw">%&gt;%</span>
@@ -240,7 +240,7 @@
 <div id="visualization" class="section level1">
 <h1 class="hasAnchor">
 <a href="#visualization" class="anchor"></a>Visualization</h1>
-<p>We now load some visualization libraries and presents the comparison as a heatmap where the number corresponds to the number of raw LDA topics and the color to the coverage between the three languages.</p>
+<p>We now load some visualization libraries and presents the comparison as a heatmap where the number corresponds to the number of raw LDA topics and the color to the coverage between the three languages. Bold labels represent the top 12.5% specific research topics in terms of research volume across the corpus.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">forcats</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggpubr</span>)

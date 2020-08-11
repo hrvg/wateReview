@@ -75,7 +75,7 @@
       <a href="articles/cluster_map.html">Cluster map</a>
     </li>
     <li>
-      <a href="articles/clustering-analysis.html">Research Opportunities in Latin America</a>
+      <a href="articles/clustering-analysis.html">Clustering analysis</a>
     </li>
     <li>
       <a href="articles/country_colors.html">Country colors</a>
@@ -213,6 +213,16 @@
 <li>
 <code>./requirements.txt</code> : dependencies</li>
 </ul>
+</div>
+<div id="how-to-install" class="section level2">
+<h2 class="hasAnchor">
+<a href="#how-to-install" class="anchor"></a>How to install</h2>
+<pre><code># Install development version from GitHub
+devtools::install_github("hrvg/wateReview")</code></pre>
+<p>You will have to install some GIS libraries to make <code>rgdal</code> and <code>rspatial</code> packages work. On Linux do:</p>
+<pre><code>sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+sudo apt-get -q update
+sudo apt-get -y install libgdal-dev libgeos-dev libproj-dev </code></pre>
 </div>
 <div id="about" class="section level2">
 <h2 class="hasAnchor">

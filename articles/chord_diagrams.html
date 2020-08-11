@@ -75,7 +75,7 @@
       <a href="../articles/cluster_map.html">Cluster map</a>
     </li>
     <li>
-      <a href="../articles/clustering-analysis.html">Research Opportunities in Latin America</a>
+      <a href="../articles/clustering-analysis.html">Clustering analysis</a>
     </li>
     <li>
       <a href="../articles/country_colors.html">Country colors</a>
@@ -162,7 +162,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="chord_diagrams_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Chord diagrams</h1>
@@ -175,41 +175,1561 @@
 
     
     
-<pre><code><a href="https://rdrr.io/pkg/circlize/man">### libraries ###
-library("circlize")
-library("cowplot")
-library("factoextra")
-library("forcats")
-library("ggplot2")
-library("reshape2")
-library("oce")
-library("RColorBrewer")
-library("dplyr")
-library("ggpubr")
-library("plotly")
-
-### functions ###
-import::here(.from = "./R/network_analysis/lib_network_analysis.R", 
-  get_network,
-  VizSpots)
-
-out.dir &lt;- "/media/hguillon/hrvg/research/production/figure/latin_america/chord_diagrams"
-
-pdf(file.path(out.dir, "all.pdf"), width = 9, height = 9)
-for (pct in c(0, 25, 50, 75, 95)){
-    m &lt;- get_network(type = "NSF_specific", prob = TRUE, filter_method = FALSE, blindspot = FALSE, country.threshold = 30, percentile.threshold = pct / 100)
-    for (tpt in c(0.5, 0.75)){
-        # pdf(file.path(out.dir, paste0(pct, "-", tpt, ".pdf")), width = 9, height = 9)
-        VizSpots(m, FALSE, cluster_color = TRUE, NSF_general_color = TRUE, type = "NSF_specific", topic_threshold = tpt)
-
-    }
-}
-dev.off()</a></code></pre>
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>In this vignette, we produce a chord diagram representing the links of a weighted bi-partite network between countries and a category of topics.</p>
+</div>
+<div id="getting-the-bi-partite-network-weighted-adjacency-matrix" class="section level1">
+<h1 class="hasAnchor">
+<a href="#getting-the-bi-partite-network-weighted-adjacency-matrix" class="anchor"></a>Getting the bi-partite network weighted adjacency matrix</h1>
+<p>We use the built-in function of the package, <code><a href="https://rdrr.io/pkg/wateReview/man/get_network.html">get_network()</a></code>, to extract the weighted adjacency matrix. We also load <code>magrittr</code> explicitely to access the <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> operator.</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">wateReview</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">magrittr</span>)</pre></body></html></div>
+<p>We select the specific topics with <code>type = "NSF_specific"</code>, indicate that the country membership are to be understood as probabilities with <code>prob = TRUE</code>. The specific topics do not include methods, so we leave the default <code>filter_method = FALSE</code> which is useful for <code>type = "theme"</code>. We display the default network with <code>blindspot = FALSE</code>, filter for countries with at least 30 documents with <code>country.threshold = 30</code> and filter the resulting matrix to retain only the weights above the 75th percentile with <code>percentile.threshold = .75</code>.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">weighted_adj_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/get_network.html">get_network</a></span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"NSF_specific"</span>, <span class="kw">prob</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">filter_method</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">blindspot</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">country.threshold</span> <span class="kw">=</span> <span class="fl">30</span>, <span class="kw">percentile.threshold</span> <span class="kw">=</span> <span class="fl">.75</span>)
+<span class="no">weighted_adj_matrix</span> <span class="kw">%&gt;%</span>
+    <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">format</span> <span class="kw">=</span> <span class="st">"html"</span>, <span class="kw">caption</span> <span class="kw">=</span> <span class="st">"Bi-partite network weighted adjacency matrix"</span>) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">kableExtra</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hover"</span>, <span class="st">"condensed"</span>)) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">kableExtra</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/scroll_box.html">scroll_box</a></span>(<span class="kw">width</span> <span class="kw">=</span> <span class="st">"7in"</span>)</pre></body></html></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:7in; ">
+<table class="table table table-hover table-condensed">
+<caption>
+Bi-partite network weighted adjacency matrix
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+atmospheric science/meteorology
+</th>
+<th style="text-align:right;">
+botany/plant biology
+</th>
+<th style="text-align:right;">
+animal science
+</th>
+<th style="text-align:right;">
+organic chemistry
+</th>
+<th style="text-align:right;">
+biology
+</th>
+<th style="text-align:right;">
+environmental health
+</th>
+<th style="text-align:right;">
+mathematics/statistics, general
+</th>
+<th style="text-align:right;">
+statistics
+</th>
+<th style="text-align:right;">
+hydrology &amp; water resources
+</th>
+<th style="text-align:right;">
+civil engineering
+</th>
+<th style="text-align:right;">
+oceanography, chemical and physical
+</th>
+<th style="text-align:right;">
+agronomy &amp; crop science
+</th>
+<th style="text-align:right;">
+geomorphology
+</th>
+<th style="text-align:right;">
+plant physiology
+</th>
+<th style="text-align:right;">
+engineering
+</th>
+<th style="text-align:right;">
+ecology
+</th>
+<th style="text-align:right;">
+geophysics &amp; seismology
+</th>
+<th style="text-align:right;">
+environmental toxicology
+</th>
+<th style="text-align:right;">
+geochemistry
+</th>
+<th style="text-align:right;">
+sociology
+</th>
+<th style="text-align:right;">
+ocean/marine science
+</th>
+<th style="text-align:right;">
+environmental science
+</th>
+<th style="text-align:right;">
+soil sciences, other
+</th>
+<th style="text-align:right;">
+political science &amp; governance
+</th>
+<th style="text-align:right;">
+microbiology
+</th>
+<th style="text-align:right;">
+analytical chemistry
+</th>
+<th style="text-align:right;">
+marine biology &amp; biological oceanography
+</th>
+<th style="text-align:right;">
+geography
+</th>
+<th style="text-align:right;">
+agricultural economics
+</th>
+<th style="text-align:right;">
+forest science &amp; biology
+</th>
+<th style="text-align:right;">
+atmospheric chemistry &amp; climatology
+</th>
+<th style="text-align:right;">
+chemistry
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Venezuela
+</td>
+<td style="text-align:right;">
+8.250
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+4.969
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+4.767
+</td>
+<td style="text-align:right;">
+5.640
+</td>
+<td style="text-align:right;">
+27.797
+</td>
+<td style="text-align:right;">
+7.771
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+4.943
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+7.422
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+7.138
+</td>
+<td style="text-align:right;">
+5.084
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+5.443
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Uruguay
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+5.262
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+6.638
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+5.816
+</td>
+<td style="text-align:right;">
+9.549
+</td>
+<td style="text-align:right;">
+28.692
+</td>
+<td style="text-align:right;">
+7.958
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+4.867
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+11.874
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+4.392
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+4.166
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+7.578
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Peru
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+11.272
+</td>
+<td style="text-align:right;">
+11.868
+</td>
+<td style="text-align:right;">
+78.623
+</td>
+<td style="text-align:right;">
+18.395
+</td>
+<td style="text-align:right;">
+16.120
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+11.564
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+15.894
+</td>
+<td style="text-align:right;">
+9.523
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+11.421
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+18.824
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+10.807
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Paraguay
+</td>
+<td style="text-align:right;">
+1.648
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+1.444
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+2.052
+</td>
+<td style="text-align:right;">
+3.158
+</td>
+<td style="text-align:right;">
+15.016
+</td>
+<td style="text-align:right;">
+3.196
+</td>
+<td style="text-align:right;">
+1.423
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+1.610
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+3.926
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+1.610
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+2.549
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Panama
+</td>
+<td style="text-align:right;">
+6.634
+</td>
+<td style="text-align:right;">
+3.756
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+4.676
+</td>
+<td style="text-align:right;">
+6.943
+</td>
+<td style="text-align:right;">
+25.342
+</td>
+<td style="text-align:right;">
+5.393
+</td>
+<td style="text-align:right;">
+4.019
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+3.996
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+9.493
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+4.144
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+9.82
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mexico
+</td>
+<td style="text-align:right;">
+73.031
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+55.913
+</td>
+<td style="text-align:right;">
+71.328
+</td>
+<td style="text-align:right;">
+81.237
+</td>
+<td style="text-align:right;">
+451.818
+</td>
+<td style="text-align:right;">
+168.003
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+56.166
+</td>
+<td style="text-align:right;">
+71.949
+</td>
+<td style="text-align:right;">
+69.572
+</td>
+<td style="text-align:right;">
+87.708
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+61.523
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ecuador
+</td>
+<td style="text-align:right;">
+8.052
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+8.802
+</td>
+<td style="text-align:right;">
+16.515
+</td>
+<td style="text-align:right;">
+67.539
+</td>
+<td style="text-align:right;">
+17.080
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+13.417
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+8.95
+</td>
+<td style="text-align:right;">
+10.137
+</td>
+<td style="text-align:right;">
+14.959
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+8.764
+</td>
+<td style="text-align:right;">
+7.363
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Costa Rica
+</td>
+<td style="text-align:right;">
+7.648
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+7.114
+</td>
+<td style="text-align:right;">
+7.066
+</td>
+<td style="text-align:right;">
+49.035
+</td>
+<td style="text-align:right;">
+9.390
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+6.250
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+14.747
+</td>
+<td style="text-align:right;">
+5.605
+</td>
+<td style="text-align:right;">
+6.311
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+5.950
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+5.683
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Colombia
+</td>
+<td style="text-align:right;">
+11.389
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+13.380
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+11.164
+</td>
+<td style="text-align:right;">
+17.559
+</td>
+<td style="text-align:right;">
+73.330
+</td>
+<td style="text-align:right;">
+36.262
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+10.517
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+13.372
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+11.232
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+11.753
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+10.944
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chile
+</td>
+<td style="text-align:right;">
+33.619
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+31.617
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+39.603
+</td>
+<td style="text-align:right;">
+51.359
+</td>
+<td style="text-align:right;">
+210.750
+</td>
+<td style="text-align:right;">
+53.276
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+37.140
+</td>
+<td style="text-align:right;">
+37.489
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+33.432
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+34.466
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+30.399
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Brazil
+</td>
+<td style="text-align:right;">
+181.605
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+145.425
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+168.396
+</td>
+<td style="text-align:right;">
+257.991
+</td>
+<td style="text-align:right;">
+963.390
+</td>
+<td style="text-align:right;">
+452.171
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+186.354
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+327.887
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+241.606
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+161.130
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+178.712
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bolivia
+</td>
+<td style="text-align:right;">
+9.610
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+8.304
+</td>
+<td style="text-align:right;">
+8.430
+</td>
+<td style="text-align:right;">
+59.439
+</td>
+<td style="text-align:right;">
+16.431
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+7.006
+</td>
+<td style="text-align:right;">
+8.176
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+9.130
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+7.953
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+18.223
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+9.493
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Belize
+</td>
+<td style="text-align:right;">
+2.194
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+3.511
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+2.699
+</td>
+<td style="text-align:right;">
+11.701
+</td>
+<td style="text-align:right;">
+3.083
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+3.857
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+3.823
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+2.005
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+1.993
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+3.752
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+2.691
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Argentina
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+64.189
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+48.327
+</td>
+<td style="text-align:right;">
+83.860
+</td>
+<td style="text-align:right;">
+310.364
+</td>
+<td style="text-align:right;">
+61.649
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+58.607
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+98.675
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+67.673
+</td>
+<td style="text-align:right;">
+48.139
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+52.550
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+61.384
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="chord-diagram-visualization" class="section level1">
+<h1 class="hasAnchor">
+<a href="#chord-diagram-visualization" class="anchor"></a>Chord diagram visualization</h1>
+<p>We can now use <code><a href="https://rdrr.io/pkg/wateReview/man/VizSpots.html">VizSpots()</a></code> to display the chord diagram. This function is largely using the <code>circlize</code> library which documentation can be found <a href="https://jokergoo.github.io/circlize_book/book/">here</a>. <code>weighted_adj_matrix</code> is the matrix. We ask for the non-scaled results with <code>scaled = FALSE</code>, add the socio-hydrologic clusters colors with <code>cluster_color = TRUE</code>, and re-order the countries so that they are grouped by clusters with <code>reorder_cluster = TRUE</code>. We also add an outer ring identifying the general categories with <code>NSF_general_color = TRUE</code>. We have to specify here again the topic category with <code>type = "NSF_specific"</code>. Finally, <code>topic_threshold = .50</code> displays the topic which research volume in the corpus are above the 50th percentile.</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/VizSpots.html">VizSpots</a></span>(<span class="no">weighted_adj_matrix</span>, <span class="kw">scaled</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cluster_color</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">NSF_general_color</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"NSF_specific"</span>, <span class="kw">topic_threshold</span> <span class="kw">=</span> <span class="fl">.50</span>, <span class="kw">reorder_cluster</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<p><img src="chord_diagrams_files/figure-html/visualization-1.png" width="1152"></p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
