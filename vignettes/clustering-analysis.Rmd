@@ -1,28 +1,18 @@
 ---
-title: "Research Opportunities in Latin America"
-output:
-  html_document:
-    toc: true
-    toc_float: true
-    code_folding: hide
-resource_files:
-- data/Americas.dbf
-- data/Americas.prj
-- data/Americas_README.txt
-- data/Americas.sbx
-- data/Americas.shp
-- data/Americas.shp.xml
-- data/Americas.shx
-- data/countries_database_final.csv
-- data/LAC.dbf
-- data/LAC.prj
-- data/LAC.sbn
-- data/LAC.sbx
-- data/LAC.shp
-- data/LAC.shp.xml
-- data/LAC.shx
-- data/survey_results.csv
+title: "Clustering analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Clustering analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
 
 # Clustering Analysis
