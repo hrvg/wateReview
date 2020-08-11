@@ -217,18 +217,22 @@
     <p>Calculates the Jensen-Shannon distance for countries</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_JSd_corpus</span>(<span class='no'>top</span>, <span class='kw'>.plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_JSd_corpus</span>(<span class='no'>top</span>, <span class='kw'>.df</span> <span class='kw'>=</span> <span class='no'>df</span>, <span class='kw'>.plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>.plot</th>
-      <td><p>logical, if <code>TRUE</code> returns a plot, if not returns the Jensen-Shannon distance</p></td>
+      <th>top</th>
+      <td><p>one possible value for the <code>topic</code> column of the data.frame</p></td>
     </tr>
     <tr>
-      <th>df</th>
+      <th>.df</th>
       <td><p>a data.frame</p></td>
+    </tr>
+    <tr>
+      <th>.plot</th>
+      <td><p>logical, if <code>TRUE</code> returns a plot, if not returns the Jensen-Shannon distance</p></td>
     </tr>
     </table>
 

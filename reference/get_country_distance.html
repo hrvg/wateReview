@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculates the Jensen-Shannon distance for countries — get_JSd_country • wateReview</title>
+<title>Get the Jensen-Shannon distance across countries — get_country_distance • wateReview</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Calculates the Jensen-Shannon distance for countries — get_JSd_country" />
-<meta property="og:description" content="Calculates the Jensen-Shannon distance for countries" />
+<meta property="og:title" content="Get the Jensen-Shannon distance across countries — get_country_distance" />
+<meta property="og:description" content="Get the Jensen-Shannon distance across countries" />
 
 
 
@@ -208,37 +208,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculates the Jensen-Shannon distance for countries</h1>
+    <h1>Get the Jensen-Shannon distance across countries</h1>
     
-    <div class="hidden name"><code>get_JSd_country.Rd</code></div>
+    <div class="hidden name"><code>get_country_distance.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculates the Jensen-Shannon distance for countries</p>
+    <p>Get the Jensen-Shannon distance across countries</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_JSd_country</span>(<span class='no'>top</span>, <span class='kw'>.df</span> <span class='kw'>=</span> <span class='no'>df</span>, <span class='kw'>.plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_country_distance</span>(<span class='no'>probs</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>top</th>
-      <td><p>one possible value for the <code>topic</code> column of the data.frame</p></td>
-    </tr>
-    <tr>
-      <th>.df</th>
-      <td><p>a data.frame</p></td>
-    </tr>
-    <tr>
-      <th>.plot</th>
-      <td><p>logical, if <code>TRUE</code> returns a plot, if not returns the Jensen-Shannon distance</p></td>
+      <th>probs</th>
+      <td><p>probabilities</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the Jensen-Shannon distance or a <code>ggplot</code> object depending on <code>.plot</code></p>
+    <p>data.frame</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
