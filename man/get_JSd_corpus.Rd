@@ -4,12 +4,14 @@
 \alias{get_JSd_corpus}
 \title{Calculates the Jensen-Shannon distance for countries}
 \usage{
-get_JSd_corpus(top, .plot = FALSE)
+get_JSd_corpus(top, .df = df, .plot = FALSE)
 }
 \arguments{
-\item{.plot}{logical, if \code{TRUE} returns a plot, if not returns the Jensen-Shannon distance}
+\item{top}{one possible value for the \code{topic} column of the data.frame}
 
-\item{df}{a data.frame}
+\item{.df}{a data.frame}
+
+\item{.plot}{logical, if \code{TRUE} returns a plot, if not returns the Jensen-Shannon distance}
 }
 \value{
 the Jensen-Shannon distance or a \code{ggplot} object depending on \code{.plot}

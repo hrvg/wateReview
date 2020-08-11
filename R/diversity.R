@@ -135,7 +135,7 @@ get_JSd_country <- function(top, .df = df, .plot = FALSE){
 #' @return the Jensen-Shannon distance or a `ggplot` object depending on `.plot`
 #' @import ggplot2
 #' @export
-get_JSd_corpus <- function(top, .df =df, .plot = FALSE){
+get_JSd_corpus <- function(top, .df = df, .plot = FALSE){
   p <- ggplot(subset(.df, countrytopic == top)) +
     geom_density(aes(x = scaled, y = ..density.., fill= top)) +
     xlim(c(-5, 5)) +
@@ -167,7 +167,7 @@ get_country_distance <- function(probs){
     dplyr::mutate(scaled = scale(prop)) %>% # scale by topic
     dplyr::ungroup() %>%
     dplyr::select(c("topic","scaled"))
-  country_distance <- sapply(unique(df$topic), get_JSd_country)
+  country_distance <- sapply(unique(df$topic), get_JSd_country, .df = df)
   names(country_distance) <- unique(df$topic)
   country_distance <- as.data.frame(country_distance)
   country_distance$topic <- rownames(country_distance)
@@ -186,13 +186,13 @@ get_topic_distance <- function(probs){
     dplyr::mutate(scaled = scale(value)) %>%
     dplyr::select(c("countrytopic","scaled"))   
 
-  topic_distance <- sapply(unique(df$countrytopic), get_JSd_corpus)
+  topic_distance <- sapply(unique(df$countrytopic), get_JSd_corpus, .df = df)
   names(topic_distance) <- unique(df$countrytopic)
   topic_distance <- as.data.frame(topic_distance)
   topic_distance$countrytopic <- rownames(topic_distance)
 
   topic_distance <- topic_distance %>%
-    dplyr::mutate(topic = word(countrytopic, 2, -1)) %>%
+    dplyr::mutate(topic = stringr::word(countrytopic, 2, -1)) %>%
     dplyr::group_by(topic) %>%
     dplyr::mutate(topic_distance = median(topic_distance)) %>%
     dplyr::select(c("topic","topic_distance")) %>%
