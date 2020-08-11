@@ -52,7 +52,7 @@ Each of these language data.frame holds the `topic_id` outputted by the topic mo
 head(en %>% filter(variable == "NSF_specific"))
 ```
 
-We know bind the three language data.frames, filter for the specific topics and count their occurence across themes per topic and language.
+We now bind the three language data.frames, filter for the specific topics and count their occurence across themes per topic and language.
 
 ```{r}
 lda_comparison <- rbind(en, es, pt) %>% na.omit() %>%
@@ -79,6 +79,8 @@ lda_comparison$lang <- factor(lda_comparison$lang, labels = c("English", "Spanis
 # Visualization
 
 We now load some visualization libraries and presents the comparison as a heatmap where the number corresponds to the number of raw LDA topics and the color to the coverage between the three languages.
+Bold labels represent the top 12.5% specific research topics in terms of research volume across the corpus.
+
 
 ```{r, warning = FALSE, message = FALSE}
 library(ggplot2)

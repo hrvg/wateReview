@@ -2,7 +2,8 @@
 title: "Country entropy"
 output: 
   rmarkdown::html_vignette:
-    self_contained: true
+    mathjax: local
+    self_contained: false
 vignette: >
   %\VignetteIndexEntry{Country entropy}
   %\VignetteEngine{knitr::rmarkdown}
@@ -66,7 +67,7 @@ theme <-readRDS(system.file(
 
 # Calculating diversity
 
-First, we attach the `latinAmerica` and `dplyr` packages.
+First, we attach the `wateReview` and `dplyr` packages.
 
 ```{r, warning = FALSE, message = FALSE}
 library(wateReview)
