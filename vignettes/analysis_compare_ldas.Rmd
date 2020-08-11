@@ -8,34 +8,42 @@ vignette: >
 ---
 
 
+# Purpose
+
+In this vignette, we compare the topics outputted by topic modelling on three different corpora in English, Spanish and Porturguese.
+
+# Data loading
+
+We access the topic lists stored in `extdata` using `system.file()`.
+
+```{r}
+library(dplyr)
+library(reshape2)
+en <- read.csv(system.file(
+    "extdata",
+    "topic_names_en.csv",
+    package = "wateReview")
+) %>% mutate(lang = "en") %>% melt(id.vars = c("topic_id","lang"))
+es <- read.csv(system.file(
+    "extdata",
+    "topic_names_es.csv",
+    package = "wateReview")
+) %>% mutate(lang = "es") %>% melt(id.vars = c("topic_id","lang"))
+pt <- read.csv(system.file(
+    "extdata",
+    "topic_names_pt.csv",
+    package = "wateReview"),
+    na.strings=c("","NA")
+) %>% mutate(lang = "pt") %>% melt(id.vars = c("topic_id","lang"))
+x <- rbind(en, es, pt) %>% na.omit()
+```
 
 ```
-library(dplyr)
 library(reshape2)
 library(ggpubr)
 library(tidyr)
 library(ggplot2)
 library(forcats)
-
-######## load data #############
-en <- read.csv("./topic_names_en.csv")
-es <- read.csv("./topic_names_es.csv")
-pt <- read.csv("./topic_names_pt.csv", na.strings=c("","NA"))
-
-en$lang <- "en"
-es$lang <- "es"
-pt$lang <- "pt"
-
-en2 <- melt(en,
-           id.vars = c("topic_id","lang"))
-es2 <- melt(es,
-            id.vars = c("topic_id","lang"))
-pt2 <- melt(pt,
-            id.vars = c("topic_id","lang"))
-
-
-x <- rbind(en2,es2,pt2)
-x <- na.omit(x)
 
 ######## filter #############
 x2 <- x %>%

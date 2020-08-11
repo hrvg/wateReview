@@ -1,6 +1,8 @@
 ---
 title: "Normality"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    self_contained: true
 vignette: >
   %\VignetteIndexEntry{Normality}
   %\VignetteEngine{knitr::rmarkdown}
@@ -22,7 +24,7 @@ knitr::opts_chunk$set(
 In this vignette, we derive the _normality_ of five categories of topics.
 Normality from the Jensen-Shannon distance, $d_{JS}$, [@Endres2003], defined as the square-root of the Jensen-Shannon divergence, $D_{JS}$, [@Lin1991]:
 
-\[D_{JS}(N,Q) = \frac{1}{2} \lbrack D_{KL}(N,R) + D_{KL}(P,R) \rbrack \] 
+\[ D_{JS}(N,Q) = \frac{1}{2} \lbrack D_{KL}(N,R) + D_{KL}(P,R) \rbrack \] 
 
 with $N,P$, probability distributions, $R = \frac{1}{2} (N+P)$ the midpoint probability and $D_{KL}$, the Kullback-Leibler divergence [@Kullback1951].
 Here, we take $N = \mathcal{N}(0,1)$, the standard normal distribution with mean $\mu = 0$ and standard deviation $\sigma = 1$.
@@ -75,7 +77,6 @@ First, we select the countries with at least 30 documents to keep the stastitics
 
 ```{r libraries}
 library(wateReview)
-library(magrittr)
 ```
 
 First, we calculate the normality across countries and topics for the five categories with:
@@ -83,18 +84,18 @@ First, we calculate the normality across countries and topics for the five categ
 ```{r, message = FALSE, warning = FALSE}
 topic_categories <- list(general, specific, methods, budget, theme)
 distances <- lapply(topic_categories, function(category){
-  probs <- reduce_docs_for_JSd(category) # PARAMETER HERE, CHANGE THIS TO A LOOP
+  probs <- reduce_docs_for_JSd(category)
   country_distance <- get_country_distance(probs)
   topic_distance <- get_topic_distance(probs)
   return(merge(country_distance, topic_distance, by = "topic"))
 })
 ```
 
-# Visualizations {.tabset}
+# Visualizations
 
 Let's load some plotting libraries and create the base plots.
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(ggplot2)
 library(ggpubr)
 library(plotly)
@@ -141,7 +142,7 @@ ggplotly(
 
 ```{r}
 ggplotly(
-  normality_plots[[4]] + ylim(0.5,0.93) + xlim(0.26,0.67) + coord_fixed() + labs(title = "Components of water budget"),
+  normality_plots[[4]] + ylim(0.5,0.93) + xlim(0.26,0.67) + labs(title = "Components of water budget"),
   tooltip = c('topic')
   )
 ```

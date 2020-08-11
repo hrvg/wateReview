@@ -1,6 +1,8 @@
 ---
 title: "Country entropy"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    self_contained: true
 vignette: >
   %\VignetteIndexEntry{Country entropy}
   %\VignetteEngine{knitr::rmarkdown}
