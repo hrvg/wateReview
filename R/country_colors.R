@@ -7,12 +7,13 @@
 rgb2hex <- function(r,g,b) sprintf('#%s',paste(as.hexmode(c(r,g,b)),collapse = ''))
 
 #' Get the dominant colors from country flags
+#' The country flag are extracted from http://hjnilsson.github.io/country-flags/
 #' @param iso ISO Alpha-2 code
 #' @param n number of colors
 #' @return top `n` colors
 #' @export
 get_topColors <- function(iso, n = 3){
-	source <- paste0("../country-flags/png100px/", iso, ".png")
+	source <- system.file("extdata", paste0("country-flags/png100px/", iso, ".png"), package = "wateReview")
 	img <- png::readPNG(source, native = FALSE, info = FALSE)
 	red <- c(img[,, 1] * 255)
 	green <- c(img[,, 2] * 255)

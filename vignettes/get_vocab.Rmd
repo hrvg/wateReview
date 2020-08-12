@@ -8,7 +8,6 @@ vignette: >
 bibliography: bibliography.bib
 ---
 
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -18,6 +17,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+# Purpose
+
+This vignette exposes the code used to retrieve the vocabulary from the corpus
 
 ```
 # Load Required Libraries
@@ -61,10 +64,8 @@ var_vocabulary <- colnames(var_phi)
 print ("saving to file")
 vocabfile = file("vocab.txt")
 
-
 print ("    doclens...")
 saveRDS(var_document_token_counts, file="doc_lens.Rds")
 print ("    vocab...")
 writeLines(var_vocabulary, vocabfile)
-
 ```

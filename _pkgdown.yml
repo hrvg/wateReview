@@ -1,0 +1,91 @@
+navbar:
+  structure:
+    left:  [home, reference, articles]
+
+  components:
+    home: ~
+    reference: ~
+    articles:
+      text: Articles
+      menu:
+      - text: Material and methods
+      - text: Corpus collection
+        menu:
+        - text: making_query
+          href: articles/making_query.html
+        - text: query_processing
+          href: articles/query_processing.html
+        - text: query_QA
+          href: articles/query_QA.html
+        - text: manual_download
+          href: articles/manual_download.html
+        - text: select_human_reading
+          href: articles/select_human_reading.html
+      - text: Topic Model  
+        menu:
+        - text: topic_model
+          href: articles/topic_model.html
+        - text: lda_model
+          href: articles/lda_model.html
+        - text: get_vocab
+          href: articles/get_vocab.html
+        - text: createjson
+          href: articles/createjson.html
+        - text: lda_vis
+          href: articles/lda_vis.html
+        - text: validation
+          href: articles/validation.html
+        - text: LDA_comparison
+          href: articles/LDA_comparison.html
+        - text: endnote_processing  
+          href: articles/endnote_processing.html  
+      - text: Metadata mining
+        menu:
+        - text: web_scrapping
+          href: articles/web_scrapping.html
+        - text: metadata_mining
+          href: articles/metadata_mining.html
+      - text: Location predictions
+        menu:
+        - text: text_mining  
+          href: articles/text_mining.html  
+        - text: webscrapped_training_labels
+          href: articles/webscrapped_training_labels.html
+        - text: ML_predictions
+          href: articles/ML_predictions.html
+      - text: Socio-hydrologic clusters
+        menu:
+        - text: clustering_analysis
+          href: articles/clustering_analysis.html
+        - text: cluster_map
+          href: articles/cluster_map.html
+      - text: Electronic survey
+        menu:
+        - text: get_emails
+          href: articles/get_emails.html
+        - text: survey_stats
+          href: articles/survey_stats.html
+      - text: ---    
+      - text: Analysis    
+      - text: Research spread
+        menu:
+        - text: analysis_diversity
+          href: articles/analysis_diversity.html
+        - text: analysis_normality
+          href: articles/analysis_normality.html
+        - text: hexagonal_maps
+          href: articles/hexagonal_maps.html
+      - text: Research volume 
+        menu:
+        - text: timelines
+          href: articles/timelines.html
+        - text: chord_diagrams
+          href: articles/chord_diagrams.html
+        - text: country_colors
+          href: articles/country_colors.html
+      - text: Connectivity  
+        menu:
+        - text: citation_network
+          href: articles/citation_network.html
+        - text: network_visualization
+          href: articles/network_visualization.html

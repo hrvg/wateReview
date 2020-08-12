@@ -18,11 +18,18 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Purpose
+
+This vignette creates `.json` file used by `LDAvis`.
+
+# Creating `.json`
 
 ```
 library(parallel)
 library(LDAvis)
+```
 
+```
 ###################################
 # need:
 #    var_phi
@@ -31,7 +38,9 @@ library(LDAvis)
 #    vocab (colnames(var_phi)), 
 #    var_corpus_word_frequencies
 ###################################
+```
 
+```
 var_num_cores = 4
 var_parallel_cluster = makeCluster(var_num_cores)
 
@@ -62,7 +71,4 @@ obj_json <- createJSON(
 
 print ("writing to file")
 write(file ="./ldavis.json", obj_json)
-
-
-
 ```

@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Purpose
+
 This vignette provides some guidance to retrieve the information from the EndNote database and comparing it with the files created during the query process.
 The main issue is one of formatting and platform inter-operability, with EndNote formatting part of the file names and titles to its own liking.
 Here, retrieve the EndNote database is useful as it holds the location of the `.pdf` files for each of the articles that have been retrieve.
@@ -29,14 +31,16 @@ out_dir <- "exploitation/out/run79"
 out_dir <- file.path(root_dir, out_dir)
 ```
 
+# Data loading
+
 ```
-# 1. read csv databases
 language_dfs <- get_language_dfs(languages)
 meta_df <- get_meta_df(language_dfs)
 ```
 
+# Aligning EndNote .xml database with query .csv database
+
 ```
-# 2. align EndNote .xml database with query .csv database
 for (language in languages){
 	print(language)
 	xmldf <- get_endnote_xml(language)
