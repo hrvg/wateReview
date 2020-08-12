@@ -176,7 +176,7 @@
           <a href="../articles/normality.html">Normality</a>
         </li>
         <li>
-          <a href="../articles/hexagonal_maps.html">hexagonal_maps</a>
+          <a href="../articles/hexagonal_maps.html">Hexagonal maps</a>
         </li>
       </ul>
 </li>
@@ -223,212 +223,81 @@
 
     
     
-<pre><code><a href="https://tidyverse.tidyverse.org/reference">##loading the necessary packages
-
-library("tidyverse")
-library("raster")
-library("maps")
-library("geosphere")
-library("mapproj")
-library("tmap")
-library("OpenStreetMap")
-
-range01 &lt;- function(x, ...){(x-min(x, ...))/(max(x, ...)-min(x, ...))}
-
-#reading the matrix data
-country_adjacency_matrix &lt;- readRDS("./data/countryNetwork.Rds")
-rSums &lt;- rowSums(country_adjacency_matrix)
-country_adjacency_matrix &lt;- sweep(country_adjacency_matrix, MARGIN = 1, rSums, "/")
-# percentile.threshold &lt;- 0.75
-# country_adjacency_matrix  &lt;- apply(country_adjacency_matrix , 1, function(row){
-#       row[row &lt;= quantile(row, percentile.threshold)] &lt;- 0
-#       return(row)
-#     })
-# country_adjacency_matrix  &lt;- t(country_adjacency_matrix )
-# country_adjacency_matrix &lt;- country_adjacency_matrix[c(1, 6), c(1, 6)]
-head(country_adjacency_matrix)
-
-# reading map of Latin America and Caribbeans
-LAC_map &lt;- shapefile("./data/LAC_index.shp") # without islands
-LAC_map &lt;- LAC_map[order(LAC_map$COUNTRY), ]
-head(LAC_map)
-
-#create a dataframe
-#gather all country destination columns into one column
-country_link_vector &lt;- country_adjacency_matrix %&gt;% 
-  data.frame(country_origin = row.names(country_adjacency_matrix)) %&gt;%
-  gather(key = country_destination, value = value, - country_origin) %&gt;%
-  mutate(country_origin = as.character(country_origin)) %&gt;%
-  mutate(country_destination = as.character(country_destination)) 
-head(country_link_vector)
-country_link_vector$country_destination &lt;- gsub("Costa.Rica", "Costa Rica", country_link_vector$country_destination)
-country_link_vector$country_destination &lt;- gsub("El.Salvador", "El Salvador", country_link_vector$country_destination)
-
-#get the coordinates from the geo data
-coords &lt;- coordinates(LAC_map[LAC_map$COUNTRY %in% row.names(country_adjacency_matrix), ]) %&gt;% data.frame()
-head(coords)
-
-##Creating a dataframe with country names
-coordinates_df &lt;- data.frame(
-  country = row.names(country_adjacency_matrix),
-  long = coords$X1, 
-  lat = coords$X2
-  )
-head(coordinates_df)
-
-# background
-crdref &lt;- CRS("+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs ")
-boundingBox &lt;- tmaptools::bb(LAC_map[LAC_map$COUNTRY %in% row.names(country_adjacency_matrix), ], projection = crdref)
-upperLeft &lt;- c(boundingBox$ymax, boundingBox$xmin)
-lowerRight &lt;- c(boundingBox$ymin, boundingBox$xmax)
-osm &lt;- raster(openmap(upperLeft, lowerRight, type = "http://tile.stamen.com/toner-background/{z}/{x}/{y}.png", zoom = 3))
-background &lt;- tm_shape(osm) + tm_rgb(alpha = 1) 
-# background &lt;- tm_shape(LAC_map[LAC_map$COUNTRY %in% row.names(country_adjacency_matrix), ]) + tm_fill(col = "black", alpha = 0.3) + tm_borders()
-
-
-
-
-##Drawing the arcs
-# links
-country_lines &lt;- lapply(seq(prod(dim(country_adjacency_matrix))), function(i){
-  node1  &lt;-  coordinates_df[country_link_vector[i,]$country_origin == coordinates_df$country,][, -1]
-  node2  &lt;-  coordinates_df[country_link_vector[i,]$country_destination == coordinates_df$country,][, -1]
-  mp &lt;- midPoint(node1, node2)
-  country_line  &lt;-  gcIntermediate(
-    node1, 
-    mp, 
-    n = 10, 
-    addStartEnd = TRUE,
-    sp = TRUE
-    )
-  return(country_line)
-})
-country_lines &lt;- do.call(rbind, country_lines)
-country_lines$value &lt;- country_link_vector$value
-country_lines &lt;- country_lines[order(country_lines$value, decreasing = FALSE), ]
-
-country_centers &lt;- SpatialPoints(cbind(coordinates_df$long, coordinates_df$lat), proj4string = crdref)
-country_centers$pct_self_citation &lt;- diag(country_adjacency_matrix)
-
-ma &lt;-  background + 
-  tm_shape(country_lines) + tm_lines(lwd = "value", scale = 10, col = "value", palette = "-viridis", contrast = c(0.3, 1)) + tm_layout(legend.outside = TRUE) +
-  tm_shape(country_centers) + tm_dots(size = "pct_self_citation", scale = 2, perceptual = TRUE, col = "#101010")
-ma
-
-#extract data
-country_selfcitation&lt;-as.data.frame(country_centers)
-write.csv(country_selfcitation,"C:/Users/rdg/WMLA_rmap/country_selfcitation.csv")
-
-country_norm_dataframe&lt;-as.data.frame(country_adjacency_matrix)
-write.csv(country_norm_dataframe,"C:/Users/rdg/WMLA_rmap/country_norm.csv")
-
-
-country_nor&lt;-gather(country_norm_dataframe, key= country_des, value = value, country_or)
-
-
-## reading the topic matrix data ( maximun prob)
-
-
-
-
-
-
-waterbuget_adjacency_matrix_2&lt;- readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_water budget.Rds")
-
-
-theme_adjancecy_matrix_2&lt;-readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_theme.Rds")
-
-spatialscale_adjacency_matrix_2&lt;-readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_spatial scale.Rds")
-
-methods_adjacency_matrix_2&lt;-readRDS("C:/Users/rdg/WMLA_rmap/data2/rawTopicNetwork_methods.Rds")
-
-
-
-
-
-## open topic matrix and normalize to see what happen from minor topics too.raw topics
-
-theme_adjancecy_matrix_2&lt;-readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_theme.Rds") # raw adjacency 
-
-
-rSums_theme &lt;- rowSums(theme_adjancecy_matrix_2)
-total_theme_adjacency_matrix_normalized &lt;- sweep(theme_adjancecy_matrix_2, MARGIN = 1, rSums_rtopic, "/")
-write.csv(total_topic_adjacency_matrix_normalized,"C:/Users/rdg/WMLA_rmap/data3/total_theme_network_matrix_normalized2.csv")
-
-##calculate node size by the summ of the columns
-
-themes_nodesize &lt;- colSums(total_topic_adjacency_matrix_normalized)
-
-write.csv(themes_nodesize,"C:/Users/rdg/WMLA_rmap/data3/themes_node_size.csv")
-
-
-##open NSF general adjancecy matrix and Normalized 
-
-nsf_general_admatrix&lt;- readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_NSF_general.Rds")
-
-NSF_general_adjacency_matrix&lt;-nsf_general_admatrix
-
-NSF_general_adjacency_matrix &lt;- readRDS("C:/Users/rdg/WMLA_rmap/data/rawTopicNetwork_NSF_general.Rds")
-
-rSums_NSF_general &lt;- rowSums(NSF_general_adjacency_matrix)
-NSF_general_adjacency_matrix_normalized &lt;- sweep(NSF_general_adjacency_matrix, MARGIN = 1, rSums_NSF_general, "/")
-# save 
-write.csv(NSF_general_adjacency_matrix_normalized,"C:/Users/rdg/WMLA_rmap/data3/NSF_general_adjacency_matrix_normalized2.csv")
-
-#calculate node size by the summ of the columns
-
-NSF_general_nodesize &lt;- colSums(NSF_general_adjacency_matrix_normalized)
-write.csv(NSF_general_nodesize,"C:/Users/rdg/WMLA_rmap/data3/NSF_general_node_size.csv")
-
-
-
-
-
-
-##open NSF specific adjancecy matrix and Normalized 
-
-nsf_specific_adjacency_matrix_2&lt;- readRDS("C:/Users/rdg/WMLA_rmap/data3/rawTopicNetwork_NSF_specific.Rds")
-
-NSF_specific_adjacency_matrix&lt;-nsf_specific_adjacency_matrix_2
-
-rSums_NSF_specific &lt;- rowSums(NSF_specific_adjacency_matrix)
-NSF_specific_adjacency_matrix_normalized &lt;- sweep(NSF_specific_adjacency_matrix, MARGIN = 1, rSums_NSF_specific, "/")
-
-
-write.csv(NSF_specific_adjacency_matrix_normalized,"C:/Users/rdg/WMLA_rmap/data3/NSF_specific_adjacency_matrix_normalized2.csv")
-
-
-#calculate node size by the summ of the columns
-NSF_specific_nodesize&lt;- colSums(NSF_specific_adjacency_matrix_normalized)
-write.csv(NSF_specific_nodesize,"C:/Users/rdg/WMLA_rmap/data3/NSF_specific_node_size.csv")
-
-
-
-
-##open country adjancecy matrix to explore Research volume ( sum of columns). I couldnt open it before.
-
-raw_country_adjacency_matrix&lt;- readRDS("C:/Users/rdg/WMLA_rmap/data/CountryNetwork.Rds")
-
-
-country_adjacency_matrix_2 &lt;- readRDS("C:/Users/rdg/WMLA_rmap/data3/CountryNetwork.Rds")
-
-raw_country_adjacency_matrix&lt;-country_adjacency_matrix_2
-
-
-rSums &lt;- rowSums(raw_country_adjacency_matrix)
-country_adjacency_matrix_normalized &lt;- sweep(raw_country_adjacency_matrix, MARGIN = 1, rSums, "/")
-
-write.csv(country_adjacency_matrix_normalized,"C:/Users/rdg/WMLA_rmap/data3/country_adjacency_matrix_normalized2.csv")
-
-#calculate node size by the summ of the columns/ research volume
-country_nodesize&lt;- colSums(country_adjacency_matrix_normalized)
-
-write.csv(country_nodesize,"C:/Users/rdg/WMLA_rmap/data3/country_node_size.csv")</a></code></pre>
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>This vignette derives the node sizes and matrices required for re-creating network visualization using Gephi.</p>
+</div>
+<div id="libraries" class="section level1">
+<h1 class="hasAnchor">
+<a href="#libraries" class="anchor"></a>Libraries</h1>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">wateReview</span>)</pre></body></html></div>
+</div>
+<div id="data-loading" class="section level1">
+<h1 class="hasAnchor">
+<a href="#data-loading" class="anchor"></a>Data loading</h1>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">theme_adjacency_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"rawTopicNetwork_theme.Rds"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>))
+<span class="no">NSF_general_adjacency_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"rawTopicNetwork_NSF_general.Rds"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>))
+<span class="no">NSF_specific_adjacency_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"rawTopicNetwork_NSF_specific.Rds"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>))
+<span class="no">country_adjacency_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"countryNetwork.Rds"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>))</pre></body></html></div>
+</div>
+<div id="normalizing" class="section level1">
+<h1 class="hasAnchor">
+<a href="#normalizing" class="anchor"></a>Normalizing</h1>
+<p>We normalize all the adjacency matrices with <code><a href="https://rdrr.io/pkg/wateReview/man/normalize_adj_matrix.html">normalize_adj_matrix()</a></code>.</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">normalized_theme_adjacency_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/normalize_adj_matrix.html">normalize_adj_matrix</a></span>(<span class="no">theme_adjacency_matrix</span>)
+<span class="no">normalized_NSF_general_adjacency_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/normalize_adj_matrix.html">normalize_adj_matrix</a></span>(<span class="no">NSF_general_adjacency_matrix</span>)
+<span class="no">normalized_NSF_specific_adjacency_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/normalize_adj_matrix.html">normalize_adj_matrix</a></span>(<span class="no">NSF_specific_adjacency_matrix</span>)
+<span class="no">normalized_country_adjacency_matrix</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/normalize_adj_matrix.html">normalize_adj_matrix</a></span>(<span class="no">country_adjacency_matrix</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">normalized_country_adjacency_matrix</span>)</pre></body></html></div>
+<pre><code>##           Argentina     Bahamas     Barbados      Belize    Bolivia    Brazil
+## Argentina 0.1302732 0.001445026 0.0008592782 0.002102218 0.02658057 0.4342906
+## Bahamas   0.1483207 0.001199109 0.0007767881 0.001822636 0.02084228 0.4516641
+## Barbados  0.1034021 0.002430017 0.0009606103 0.007551300 0.02550304 0.4381585
+## Belize    0.0524299 0.001050149 0.0027182269 0.002197684 0.02100569 0.4934910
+## Bolivia   0.1350169 0.001338514 0.0015166272 0.003966360 0.03289035 0.3989596
+## Brazil    0.1312267 0.001310612 0.0012287026 0.003614844 0.02420086 0.4281945
+##                Chile   Colombia Costa Rica        Cuba    Ecuador  El Salvador
+## Argentina 0.09344801 0.02858868 0.01191675 0.001253139 0.02663868 0.0011519057
+## Bahamas   0.09575766 0.02419937 0.01480849 0.001020435 0.01739036 0.0007458737
+## Barbados  0.09309762 0.01849105 0.03064020 0.001531683 0.01412455 0.0011153667
+## Belize    0.08472015 0.04825538 0.01552663 0.001141184 0.03104777 0.0011492557
+## Bolivia   0.08514271 0.03440256 0.01784179 0.001612320 0.03173827 0.0015849378
+## Brazil    0.09444330 0.02436211 0.01678459 0.001884901 0.02552250 0.0012165491
+##             Guatemala       Haiti     Honduras      Jamaica    Mexico
+## Argentina 0.001319755 0.001398669 0.0008305550 0.0008290198 0.1603060
+## Bahamas   0.001317527 0.001148808 0.0008999214 0.0007812418 0.1468509
+## Barbados  0.001791686 0.002052935 0.0013663397 0.0010325393 0.1847940
+## Belize    0.001681508 0.001153688 0.0027114125 0.0009749917 0.1749403
+## Bolivia   0.001563140 0.001948138 0.0024029734 0.0011678678 0.1754862
+## Brazil    0.001710510 0.001484688 0.0011730553 0.0009265040 0.1721379
+##             Nicaragua      Panama    Paraguay       Peru     Uruguay  Venezuela
+## Argentina 0.001333872 0.009560359 0.004308403 0.02935763 0.012775164 0.01943242
+## Bahamas   0.001160073 0.008772072 0.004394813 0.02715614 0.012854336 0.01611632
+## Barbados  0.001611708 0.015949556 0.004473610 0.02439545 0.012397634 0.01312844
+## Belize    0.001651274 0.016858022 0.006548925 0.02197102 0.006426464 0.01034945
+## Bolivia   0.001653510 0.012952841 0.002871837 0.02386629 0.011178114 0.01889824
+## Brazil    0.001417642 0.007954627 0.003910582 0.02608461 0.015558975 0.01365083</code></pre>
+</div>
+<div id="node-sizes" class="section level1">
+<h1 class="hasAnchor">
+<a href="#node-sizes" class="anchor"></a>Node sizes</h1>
+<p>We now derive the node size with <code>colSums</code>.</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">theme_node_size</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(<span class="no">normalized_theme_adjacency_matrix</span>)
+<span class="no">NSF_general_node_size</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(<span class="no">normalized_NSF_general_adjacency_matrix</span>)
+<span class="no">NSF_specific_node_size</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(<span class="no">normalized_NSF_specific_adjacency_matrix</span>)
+<span class="no">country_node_size</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(<span class="no">normalized_country_adjacency_matrix</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">country_node_size</span>)</pre></body></html></div>
+<pre><code>##   Argentina     Bahamas    Barbados      Belize     Bolivia      Brazil 
+##  2.87959494  0.03873448  0.02864630  0.08192841  0.52242468 10.03557501</code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
