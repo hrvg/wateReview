@@ -37,6 +37,15 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="../index.html">
+    <span class="fas fa fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="../articles/wateReview.html">Get started</a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
@@ -123,10 +132,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Socio-hydrologic clusters</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/clustering_analysis.html">clustering_analysis</a>
+          <a href="../articles/clustering_analysis.html">Clustering analysis</a>
         </li>
         <li>
-          <a href="../articles/cluster_map.html">cluster_map</a>
+          <a href="../articles/cluster_map.html">Cluster map</a>
         </li>
       </ul>
 </li>
@@ -144,13 +153,27 @@
     <li class="divider">
     <li class="dropdown-header">Analysis</li>
     <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Research volume</a>
+      <ul class="dropdown-menu" role="menu">
+<li>
+          <a href="../articles/timelines.html">Growth through time</a>
+        </li>
+        <li>
+          <a href="../articles/chord_diagrams.html">Chord diagrams</a>
+        </li>
+        <li>
+          <a href="../articles/country_colors.html">Colors of country flags</a>
+        </li>
+      </ul>
+</li>
+    <li class="dropdown-submenu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Research spread</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/analysis_diversity.html">analysis_diversity</a>
+          <a href="../articles/country_entropy.html">Country entropy</a>
         </li>
         <li>
-          <a href="../articles/analysis_normality.html">analysis_normality</a>
+          <a href="../articles/normality.html">Normality</a>
         </li>
         <li>
           <a href="../articles/hexagonal_maps.html">hexagonal_maps</a>
@@ -158,24 +181,10 @@
       </ul>
 </li>
     <li class="dropdown-submenu">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Research volume</a>
-      <ul class="dropdown-menu" role="menu">
-<li>
-          <a href="../articles/timelines.html">timelines</a>
-        </li>
-        <li>
-          <a href="../articles/chord_diagrams.html">chord_diagrams</a>
-        </li>
-        <li>
-          <a href="../articles/country_colors.html">country_colors</a>
-        </li>
-      </ul>
-</li>
-    <li class="dropdown-submenu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Connectivity</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/citation_network.html">citation_network</a>
+          <a href="../articles/citation_network.html">Citation network</a>
         </li>
         <li>
           <a href="../articles/network_visualization.html">network_visualization</a>
@@ -183,6 +192,9 @@
       </ul>
 </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -198,14 +210,14 @@
 
       
 
-      </header><script src="analysis_diversity_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
+      </header><script src="country_entropy_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Country entropy</h1>
             
       
       
-      <div class="hidden name"><code>analysis_diversity.Rmd</code></div>
+      <div class="hidden name"><code>country_entropy.Rmd</code></div>
 
     </div>
 
@@ -506,7 +518,7 @@ Venezuela
                              <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"Entropy across specific topics"</span>,
                              <span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"Country"</span>)
 <span class="no">specific_graph</span></pre></body></html></div>
-<p><img src="analysis_diversity_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
+<p><img src="country_entropy_files/figure-html/unnamed-chunk-7-1.png" width="576"></p>
 </div>
 <div id="general-topics" class="section level2">
 <h2 class="hasAnchor">
@@ -517,7 +529,7 @@ Venezuela
                             <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"Entropy across general topics"</span>,
                             <span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"Country"</span>)
 <span class="no">general_graph</span></pre></body></html></div>
-<p><img src="analysis_diversity_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
+<p><img src="country_entropy_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
 </div>
 <div id="water-budget-topics" class="section level2">
 <h2 class="hasAnchor">
@@ -529,17 +541,17 @@ Venezuela
                            <span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"Country"</span>)
 
 <span class="no">budget_graph</span></pre></body></html></div>
-<p><img src="analysis_diversity_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
+<p><img src="country_entropy_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/ggpubr/man/ggdotchart.html">ggdotchart</a></span>(<span class="no">diversity_by_country_graph</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="st">"country"</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="st">"value"</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">"variable"</span>,
            <span class="kw">rotate</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
-<p><img src="analysis_diversity_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
+<p><img src="country_entropy_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r">
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">diversity_by_country</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">general</span>, <span class="no">specific</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">country</span>)) +
   <span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_text_repel</a></span>() +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() +
   <span class="fu"><a href="https://rdrr.io/pkg/ggpubr/man/theme_pubr.html">theme_pubr</a></span>() +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="st">"General topics"</span>,<span class="kw">y</span> <span class="kw">=</span> <span class="st">"Specific topics"</span>, <span class="kw">title</span> <span class="kw">=</span> <span class="st">"Country entropy"</span>)</pre></body></html></div>
-<p><img src="analysis_diversity_files/figure-html/unnamed-chunk-10-2.png" width="576"></p>
+<p><img src="country_entropy_files/figure-html/unnamed-chunk-10-2.png" width="576"></p>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">

@@ -37,6 +37,15 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<li>
+  <a href="../index.html">
+    <span class="fas fa fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="../articles/wateReview.html">Get started</a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
@@ -123,10 +132,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Socio-hydrologic clusters</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/clustering_analysis.html">clustering_analysis</a>
+          <a href="../articles/clustering_analysis.html">Clustering analysis</a>
         </li>
         <li>
-          <a href="../articles/cluster_map.html">cluster_map</a>
+          <a href="../articles/cluster_map.html">Cluster map</a>
         </li>
       </ul>
 </li>
@@ -144,13 +153,27 @@
     <li class="divider">
     <li class="dropdown-header">Analysis</li>
     <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Research volume</a>
+      <ul class="dropdown-menu" role="menu">
+<li>
+          <a href="../articles/timelines.html">Growth through time</a>
+        </li>
+        <li>
+          <a href="../articles/chord_diagrams.html">Chord diagrams</a>
+        </li>
+        <li>
+          <a href="../articles/country_colors.html">Colors of country flags</a>
+        </li>
+      </ul>
+</li>
+    <li class="dropdown-submenu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Research spread</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/analysis_diversity.html">analysis_diversity</a>
+          <a href="../articles/country_entropy.html">Country entropy</a>
         </li>
         <li>
-          <a href="../articles/analysis_normality.html">analysis_normality</a>
+          <a href="../articles/normality.html">Normality</a>
         </li>
         <li>
           <a href="../articles/hexagonal_maps.html">hexagonal_maps</a>
@@ -158,24 +181,10 @@
       </ul>
 </li>
     <li class="dropdown-submenu">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Research volume</a>
-      <ul class="dropdown-menu" role="menu">
-<li>
-          <a href="../articles/timelines.html">timelines</a>
-        </li>
-        <li>
-          <a href="../articles/chord_diagrams.html">chord_diagrams</a>
-        </li>
-        <li>
-          <a href="../articles/country_colors.html">country_colors</a>
-        </li>
-      </ul>
-</li>
-    <li class="dropdown-submenu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Connectivity</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/citation_network.html">citation_network</a>
+          <a href="../articles/citation_network.html">Citation network</a>
         </li>
         <li>
           <a href="../articles/network_visualization.html">network_visualization</a>
@@ -183,6 +192,9 @@
       </ul>
 </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -214,7 +226,7 @@
 <div id="purpose" class="section level1">
 <h1 class="hasAnchor">
 <a href="#purpose" class="anchor"></a>Purpose</h1>
-<p>This short vignette is used to extract the country colors from the dominant colors of their respective flags.</p>
+<p>This short vignette is used to extract the country colors from the dominant colors of their respective flags. This colors are used in the <a href="chord_diagrams.html">chord diagrams</a>.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">wateReview</span>)</pre></body></html></div>
 </div>
 <div id="country-iso-codes" class="section level1">
