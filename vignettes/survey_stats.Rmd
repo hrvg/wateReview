@@ -10,18 +10,30 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  fig.height = 7,
+  fig.width = 7, 
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
 )
 ```
 
+# Libraries
+
+```{r}
+# library(wateReview)
+devtools::load_all()
 ```
-df <- read_survey_df()
+
+# Survey statistics
+
+```{r, results = 'asis'}
+df <- read_survey_df(system.file("extdata", "Water Management in Latin America_edit.csv", package = "wateReview"))
 df <- filter_columns(df, colname_list = c("Position", "Affiliation", "Years", "Discipline", "Country_current", "Publications", "Journals", "Funding"))
 countries <- get_countries(df)
 
 for (country in countries) {
-    cat('\n')
-    cat(paste0("#", country, "\n"))
+    cat('\n##', country, '\n')
     df_country <- filter_by_country(country = country)
     df_country <- melt_df_country(df_country)
     plot_df_country(df_country, title_text = country)

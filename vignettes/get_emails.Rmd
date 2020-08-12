@@ -7,93 +7,99 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+# Purpose
+
+This vignette documents the extraction of email addresses from a large corpus.
+This vignette cannot be executed as the corpus is not publicly available.
+It is likely that the code chunks on this vignette will benefit from being run on a linux server to avoid special character handling on Windows.
+
+# Libraries
+
 ```
-#####################
-##### LIBRARIES #####
-#####################
-
 library(pdftools)
+```
 
-#################
-##### UTILS #####
-#################
+# Function definition
 
-import::here(.from = "./R/utils/envpath.R", 
-	get_rootdir)
-
-########################
-##### INITIALIZING #####
-########################
-
-# root.dir <- get_rootdir()
-root.dir <- "/media/hguillon/Seagate Expansion Drive" # dirty fix, see disclaimer
-
-
-################
-##### MAIN #####
-################
-
-
-#####################################
-########### DISCLAIMER ##############
-#####################################
-
-# 
-# You want to execute this code on a linux server to avoid the shitshow that is special character handling on Windows
-#
-
+```
 get_mail <- function(pdf){
-	# print(pdf)
 	if (file.size(pdf) > 0){
-
-	# if (lang == "spanish"){
-	# 	pdf <- gsub("i´", "í", pdf)
-	# 	pdf <- gsub("e´", "é", pdf)
-	# }
-	text <- pdf_text(pdf)
-	text2 <- strsplit(text, "\n")
-	i1 <- grep("@", text2)
-	if (length(i1) >= 1) {
-		mails <- lapply(i1, function(ii){
-			i2 <- grep("@", text2[[ii]])
-			text3 <- lapply(i2, function(i) unlist(strsplit(text2[[ii]][[i]], " ")))
-			mail <- lapply(text3, function(txt) txt[grep("@", txt)])
-			mail <- gsub("\r", "", mail)
-			mail <- gsub("\n", "", mail)
-			return(mail)
-		})
-		return(unlist(mails))
-	} else {
-		warning("More than one email address! (or less than one email address)")
-		return(length(i1))
+		text <- pdf_text(pdf)
+		text2 <- strsplit(text, "\n")
+		i1 <- grep("@", text2)
+		if (length(i1) >= 1) {
+			mails <- lapply(i1, function(ii){
+				i2 <- grep("@", text2[[ii]])
+				text3 <- lapply(i2, function(i) unlist(strsplit(text2[[ii]][[i]], " ")))
+				mail <- lapply(text3, function(txt) txt[grep("@", txt)])
+				mail <- gsub("\r", "", mail)
+				mail <- gsub("\n", "", mail)
+				return(mail)
+			})
+			return(unlist(mails))
+		} else {
+			warning("More than one email address! (or less than one email address)")
+			return(length(i1))
+		}
 	}
 }
-}
+```
 
-lang <- "portuguese"
+# Target directories
 
-# pdf.dirs <- c(
-# 	paste0("data/latin_america/corpus_pdf/", lang, "/", lang, ".Data"),
-# 	paste0("data/latin_america/corpus_pdf/", lang, "/manual_download_", lang)
-# 	)
+Here we define a list of target directories for the `.pdf` document for the language `lang`.
 
-# more dirty fixes, see disclaimer
+```
+lang <- "portuguese" # one of "english", "spanish", "portuguese"
 pdf.dirs <- c(
 	paste0("latin_america/corpus_pdf/", lang, "/", lang, ".Data"),
 	paste0("latin_america/corpus_pdf/", lang, "/manual_download_", lang)
 	)
-
 lf <- lapply(pdf.dirs, function(pdf.dir){
 	list.files(file.path(root.dir, pdf.dir), recursive = TRUE, pattern = ".pdf", full.names = TRUE)
 })
 lf <- c(lf[[1]], lf[[2]])
+```
 
+# Getting emails
 
-
-
+```
 mails <- unlist(lapply(lf, get_mail))
+write.table(mails, file.path(pdf.dirs[1], paste0("mails_", lang, ".csv")), row.names = FALSE, col.names = FALSE)
+```
 
+# `python` post-processing
 
-write.table(mails, file.path(root.dir, pdf.dirs[1], paste0("mails_", lang, ".csv")), row.names = FALSE, col.names = FALSE)
+We then filtered and formatted the resulting files with the following `python` code.
 
+```
+from validate_email import validate_email
+
+def flatten(var,vartype='list'):
+	if vartype == 'list':
+		var=[item for sublist in var for item in sublist]
+	elif vartype == 'array':
+		var=np.asarray([item for sublist in var for item in sublist])
+	return var
+
+lang = "portuguese"
+file = "./data/mails_" + lang +".csv"
+f = open(file,'r') # open file
+data_raw = f.readlines() # read lines, return a list, each element is a str
+f.close()
+data = [row.split('\r\n') for row in data_raw]
+data = [row.split('"') for row in flatten(data)]
+data = [row.split('(') for row in flatten(data)]
+data = [row.split(')') for row in flatten(data)]
+data = [row.split('\\') for row in flatten(data)]
+data = [row.split(',') for row in flatten(data)]
+data = [row.split(';') for row in flatten(data)]
+data = [row.split('*') for row in flatten(data)]
+data = flatten(data)
+
+mails = [elmt+'\n' for elmt in data if validate_email(elmt)]
+mails = [elmt for elmt in mails if len(elmt) > 10]
+filename = open("./data/mails_" + lang +"_fmt.d",'w')
+filename.writelines(mails)
+filename.close()
 ```

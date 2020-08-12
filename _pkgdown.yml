@@ -59,9 +59,9 @@ navbar:
           href: articles/cluster_map.html
       - text: Electronic survey
         menu:
-        - text: get_emails
+        - text: Mining email addresses
           href: articles/get_emails.html
-        - text: survey_stats
+        - text: Survey statistics
           href: articles/survey_stats.html
       - text: -------   
       - text: Analysis    
@@ -85,5 +85,5 @@ navbar:
         menu:
         - text: Citation network
           href: articles/citation_network.html
-        - text: network_visualization
+        - text: Network visualization
           href: articles/network_visualization.html

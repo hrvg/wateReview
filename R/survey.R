@@ -1,12 +1,13 @@
 #' Read the survey data
 #' @param fname file.path to the survey data, expecting a `.csv` file
 #' @return a data.frame
+#' @importFrom magrittr %>%
 #' @export
 read_survey_df <- function(fname = "Water Management in Latin America_edit.csv"){
   df <- read.csv(file.path(fname))
   df <- df[-(1:2),] # remove rows with just text
   # edit column names
-  df <- df %>% rename(Lat = LocationLatitude, Lon = LocationLongitude, Position = Q1, Affiliation = Q2, Years = Q4, Discipline = Q14, Country_current = Q5, Country_current_other = Q5_46_TEXT, Country_born = Q6, Country_born_other = Q6_47_TEXT, Country_research = Q8, Country_research_other = Q8_46_TEXT, Publications = Q11, Journals = Q12, Journal_motivation = Q15, Funding = Q13, Interdisc_interest = Q16_1, Interdisc_level = Q16_2, Equal_resource_distribution = Q17_1, Sufficient_climate_funds = Q17_2, Future_contact = Q18, Comments = Q16, Comments_translation = Comments.translation)
+  df <- df %>% dplyr::rename(Lat = LocationLatitude, Lon = LocationLongitude, Position = Q1, Affiliation = Q2, Years = Q4, Discipline = Q14, Country_current = Q5, Country_current_other = Q5_46_TEXT, Country_born = Q6, Country_born_other = Q6_47_TEXT, Country_research = Q8, Country_research_other = Q8_46_TEXT, Publications = Q11, Journals = Q12, Journal_motivation = Q15, Funding = Q13, Interdisc_interest = Q16_1, Interdisc_level = Q16_2, Equal_resource_distribution = Q17_1, Sufficient_climate_funds = Q17_2, Future_contact = Q18, Comments = Q16, Comments_translation = Comments.translation)
   # change variable types
   df$Lat <- as.numeric(levels(df$Lat))[df$Lat]
   df$Lon <- as.numeric(levels(df$Lon))[df$Lon]
