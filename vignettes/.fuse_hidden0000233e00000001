@@ -1,0 +1,71 @@
+---
+title: "Getting vocabulary"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting vocabulary}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 6,
+  fig.width = 6, 
+  comment = "#>"
+)
+```
+
+
+# Purpose
+
+This vignette exposes the code used to retrieve the vocabulary from the corpus
+
+```
+# Load Required Libraries
+
+###################################
+#         configuration           #
+###################################
+print ("reading in documents")
+lines = readLines("corpus.dat")
+
+###################################
+#      function declarations      #
+###################################
+token_counts = function(x){
+    return (length(strsplit(x, " ")))
+}
+split = function(x) {
+    return (strsplit(x, " "))
+}
+
+###################################
+#        Operational Code         #
+###################################
+# need to output:
+#   document token counts.Rds  
+#   vocab.txt
+
+print ("load from file")
+var_theta = readRDS(file="./topicDocs.Rds")
+var_phi = readRDS(file="./topicWords.Rds")
+
+# get word counts for each document
+print("token counts for each document")
+var_document_token_counts = lapply(lines,token_counts)
+
+# get a list of unique words in the corpus (the vocabulary)
+print ("getting vocab")
+var_vocabulary <- colnames(var_phi)
+
+## save to files:
+print ("saving to file")
+vocabfile = file("vocab.txt")
+
+print ("    doclens...")
+saveRDS(var_document_token_counts, file="doc_lens.Rds")
+print ("    vocab...")
+writeLines(var_vocabulary, vocabfile)
+```
