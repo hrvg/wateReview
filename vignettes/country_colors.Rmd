@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 # Purpose
 
 This short vignette is used to extract the country colors from the dominant colors of their respective flags.
+This colors are used in the [chord diagrams](chord_diagrams.html).
 
 ```{r}
 library(wateReview)

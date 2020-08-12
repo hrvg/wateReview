@@ -155,9 +155,13 @@ Based on this results, we chose three clusters to describe the grouping of count
 
 We now derive the optimum clustering for $k$-means and hierarchical clustering.
 
+###  $k$-means
+
 ```{r optimk_kmeans}
 get_optimk(filtered_data, method = "kmeans")
 ```
+
+### Hierarchical clustering
 
 ```{r optimk_hierarchical}
 get_optimk(filtered_data, method = "hierarchical")
@@ -165,6 +169,8 @@ get_optimk(filtered_data, method = "hierarchical")
 
 
 ## Clustering stability
+
+###  $k$-means
 
 ```{r clStab_kmeans}
 cl_stability <- clStab(filtered_data, method = "kmeans")
@@ -175,6 +181,8 @@ print("Optimal Number of Cluster under One Std Rule")
 print(optim_df)
 ```
 
+### Hierarchical clustering
+
 ```{r clStab_hierarchical}
 cl_stability <- clStab(filtered_data, method = "hierarchical")
 stab <- cl_stability$stab
@@ -184,11 +192,16 @@ print("Optimal Number of Cluster under One Std Rule")
 print(optim_df)
 ```
 
+## Cluster visualization
+
+###  $k$-means
 
 ```{r pkms}
 k2 <- kmeans(filtered_data, centers = 3, nstart = 25) 
 fviz_cluster(k2, geom = "text",  data = filtered_data) + cowplot::theme_cowplot()
 ```
+
+### Hierarchical clustering
 
 ```{r phcs}
 res.hc <- eclust(filtered_data, "hclust", k = 3, graph = FALSE) 

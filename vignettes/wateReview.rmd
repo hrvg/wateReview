@@ -1,0 +1,20 @@
+---
+title: "wateReview"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{wateReview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 7,
+  fig.width = 7, 
+  comment = "#>"
+)
+```
+
+You can start by doing this and that.

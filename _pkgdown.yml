@@ -1,10 +1,8 @@
 navbar:
   structure:
-    left:  [home, reference, articles]
+    left:  [home, intro, articles, reference, news]
 
   components:
-    home: ~
-    reference: ~
     articles:
       text: Articles
       menu:
@@ -55,9 +53,9 @@ navbar:
           href: articles/ML_predictions.html
       - text: Socio-hydrologic clusters
         menu:
-        - text: clustering_analysis
+        - text: Clustering analysis
           href: articles/clustering_analysis.html
-        - text: cluster_map
+        - text: Cluster map
           href: articles/cluster_map.html
       - text: Electronic survey
         menu:
@@ -65,27 +63,27 @@ navbar:
           href: articles/get_emails.html
         - text: survey_stats
           href: articles/survey_stats.html
-      - text: ---    
+      - text: -------   
       - text: Analysis    
-      - text: Research spread
-        menu:
-        - text: analysis_diversity
-          href: articles/analysis_diversity.html
-        - text: analysis_normality
-          href: articles/analysis_normality.html
-        - text: hexagonal_maps
-          href: articles/hexagonal_maps.html
       - text: Research volume 
         menu:
-        - text: timelines
+        - text: Growth through time
           href: articles/timelines.html
-        - text: chord_diagrams
+        - text: Chord diagrams
           href: articles/chord_diagrams.html
-        - text: country_colors
+        - text: Colors of country flags
           href: articles/country_colors.html
+      - text: Research spread
+        menu:
+        - text: Country entropy
+          href: articles/country_entropy.html
+        - text: Normality
+          href: articles/normality.html
+        - text: hexagonal_maps
+          href: articles/hexagonal_maps.html
       - text: Connectivity  
         menu:
-        - text: citation_network
+        - text: Citation network
           href: articles/citation_network.html
         - text: network_visualization
           href: articles/network_visualization.html
