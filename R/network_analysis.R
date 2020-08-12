@@ -333,3 +333,13 @@ get.topColors <- function(iso, n = 3){
 	topColors <- rev(names(tail(sort(table(colors)), n)))
 	return(topColors)
 }
+
+#' Normalize an adjacency matrix by its rows (i.e., "from")
+#' @param adj a matrix
+#' @return a normalized matrix
+#' @export
+normalize_adj_matrix <- function(adj){
+	rSums <- rowSums(adj)
+	normalized_adj_matrix <- sweep(adj, MARGIN = 1, rSums, "/")
+	return(normalized_adj_matrix)
+}

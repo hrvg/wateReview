@@ -79,7 +79,7 @@ navbar:
           href: articles/country_entropy.html
         - text: Normality
           href: articles/normality.html
-        - text: hexagonal_maps
+        - text: Hexagonal maps
           href: articles/hexagonal_maps.html
       - text: Connectivity  
         menu:
