@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read the survey data — read_survey_df • wateReview</title>
+<title>Get the dominant colors from country flags
+The country flag are extracted from http://hjnilsson.github.io/country-flags/ — get_topColors • wateReview</title>
 
 
 <!-- jquery -->
@@ -39,8 +40,10 @@
 
 
 
-<meta property="og:title" content="Read the survey data — read_survey_df" />
-<meta property="og:description" content="Read the survey data" />
+<meta property="og:title" content="Get the dominant colors from country flags
+The country flag are extracted from http://hjnilsson.github.io/country-flags/ — get_topColors" />
+<meta property="og:description" content="Get the dominant colors from country flags
+The country flag are extracted from http://hjnilsson.github.io/country-flags/" />
 
 
 
@@ -244,29 +247,35 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Read the survey data</h1>
+    <h1>Get the dominant colors from country flags
+The country flag are extracted from http://hjnilsson.github.io/country-flags/</h1>
     
-    <div class="hidden name"><code>read_survey_df.Rd</code></div>
+    <div class="hidden name"><code>get_topColors.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Read the survey data</p>
+    <p>Get the dominant colors from country flags
+The country flag are extracted from http://hjnilsson.github.io/country-flags/</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_survey_df</span>(<span class='kw'>fname</span> <span class='kw'>=</span> <span class='st'>"Water Management in Latin America_edit.csv"</span>)</pre>
+    <pre class="usage"><span class='fu'>get_topColors</span>(<span class='no'>iso</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fname</th>
-      <td><p>file.path to the survey data, expecting a <code>.csv</code> file</p></td>
+      <th>iso</th>
+      <td><p>ISO Alpha-2 code</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>number of colors</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data.frame</p>
+    <p>top <code>n</code> colors</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
