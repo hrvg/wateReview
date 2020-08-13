@@ -21,21 +21,19 @@ navbar:
           href: articles/select_human_reading.html
       - text: Topic Model  
         menu:
-        - text: topic_model
+        - text: Topic model
           href: articles/topic_model.html
-        - text: lda_model
+        - text: Running LDA
           href: articles/lda_model.html
-        - text: get_vocab
+        - text: Getting vocabulary
           href: articles/get_vocab.html
-        - text: createjson
-          href: articles/createjson.html
-        - text: lda_vis
+        - text: Visualizing LDA results
           href: articles/lda_vis.html
         - text: validation
           href: articles/validation.html
-        - text: LDA_comparison
+        - text: Comparing LDA models
           href: articles/LDA_comparison.html
-        - text: endnote_processing  
+        - text: Cross-walk between LDA and EndNote databases 
           href: articles/endnote_processing.html  
       - text: Metadata mining
         menu:

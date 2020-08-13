@@ -7,8 +7,36 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 8,
+  fig.width = 8,
+  comment = "#>"
+)
+```
 
-```{data_loading}
+
+# Purpose
+
+In this vignette, we perform validation on the LDA models, using two approaches: post-hoc data analysis and human-reading.
+
+# Post-hoc data analysis
+
+## Libraries
+
+```{r}
+library(wateReview)
+library(corrplot)
+library(factoextra)
+```
+
+## Data loading
+
+First, we retrieve the data: the distribution of words in topic, `topicWords` and the human-derived topics names.
+From these, we derive a distance matrix based on the Jensen-Shannon divergence.
+
+```{r data_loading}
 topicWords <- readRDS(system.file("extdata", "topicWords.Rds", package = "wateReview"))
 topic_names <- read.csv(system.file("extdata", "topic_names.csv", package = "wateReview"))
 topic_names <- topic_names[match(seq(nrow(topic_names)), topic_names$topic_id), ]
@@ -32,25 +60,127 @@ rm(topicWords)
 cSums <- colSums(theme_df)
 theme_df <- sweep(theme_df, 2, cSums, "/")
 theme_df <- t(theme_df)
-dist_theme_KL <- philentropy::distance(theme_df, method = "kullback-leibler")
-rownames(dist_theme_KL) <- rownames(theme_df)
-colnames(dist_theme_KL) <- rownames(theme_df)
+dist_theme_JS <- philentropy::distance(theme_df, method = "jensen-shannon")
+dist_theme_JS <- sqrt(dist_theme_JS)
+rownames(dist_theme_JS) <- rownames(theme_df)
+colnames(dist_theme_JS) <- rownames(theme_df)
 ```
 
+## Correlation
 
-```{phc_theme}
-hc_fit <- hclust(as.dist(dist_theme_KL), method = "ward.D2")
-theme_phc <- fviz_dend(hc_fit, rect = TRUE, show_labels = TRUE, cex = 0.7)
-theme_phc
+The following corrrelation matrix displays a very low level of Pearson's correlation across the distribution of topics over words.
+This means that topics likely capture distinct components of the corpus content.
+
+```{r}
+mat <- as.matrix(t(theme_df))
+correlations <- Hmisc::rcorr(mat, type = "pearson")
+correlations$r[which(correlations$P > 0.05)] <- 0
+corrplot(correlations$r, type = "upper")
 ```
 
+## Hierarchical clustering
+
+A dendrogram visualization of a hierarchical clustering with Ward's criterion underlines that topics expected to have similar distributions over words are closer to one another.
+See for example the topics `agricultural economics`, `water resources management`, `water policy` and `water governance` in the middle of the dendrogram.
+
+```{r phc_theme}
+hc_fit <- hclust(as.dist(dist_theme_JS), method = "ward.D2")
+fviz_dend(hc_fit, k = NULL, h = 0.75, show_labels = TRUE, cex = 0.8, horiz = TRUE, labels_track_height = 0.5)
 ```
-data.dir <- "F:/hguillon/research/data/latin_america/validation_data"
+
+# Validation with human-reading
+
+## Libraries
+
+```{r}
 library(openxlsx)
-xlsxFile <- "english_validation.xlsx"
+```
+
+## Data loading 
+
+We retrieve the validation data from all the 12 human readers from `english_validation.xlsx`, a table transferred from Google Calc to Excell format.
+We also load a number of look-up levels to make the cross-walk between the human-identified country labels and unified country labels.
+
+```{r buffer, echo = FALSE}
+# From https://github.com/cvarrichio/rowr/blob/master/R/rowr.R
+#'Pads an object to a desired length, either with replicates of itself or another repeated object.
+#'
+#'@param x an R object
+#'@param length.out the desired length of the final output
+#'@param fill R object to fill empty rows in columns below the max size.  If unspecified, repeats input rows in the same way as \code{cbind}.
+#'@param preserveClass determines whether to return an object of the same class as the original argument.  Otherwise, returns a matrix.
+#'@export
+#'@examples
+#'buffer(c(1,2,3),20)
+#'buffer(matrix(c(1,2,3,4),nrow=2),20)
+#'buffer(list(1,2,3),20)
+#'df<-data.frame(as.factor(c('Hello','Goodbye')),c(1,2))
+#'buffer(df,5)
+#'buffer((factor(x=c('Hello'))),5)
+buffer<-function(x,length.out=len(x),fill=NULL,preserveClass=TRUE)
+{
+  xclass<-class(x)
+  input<-lapply(vert(x),unlist)
+  results<-as.data.frame(lapply(input,rep,length.out=length.out))
+  if(length.out>len(x) && !is.null(fill))
+  {
+    results<-t(results)
+    results[(length(unlist(x))+1):length(unlist(results))]<-fill
+    results<-t(results)
+  }
+  if(preserveClass)
+    results<-as2(results,xclass)
+  return(results)   
+}
+
+#'A more robust form of the R \code{\link{as}} function.
+#'
+#' Alternative to \code{as} that allows any data object to be converted to any other.  
+#'
+#'@param object any \code{R} object
+#'@param class the name of the class to which \code{object} should be coerced
+as2<-function(object,class)
+{
+  object<-as.matrix(object)
+  if(class=='factor')
+    return(as.factor(as.character(object)))
+  if(class=='data.frame')
+    return(as.data.frame(object))
+  else
+    return(as(object,class))
+}
+
+vert<-function(object)
+{
+  #result<-as.data.frame(cbind(as.matrix(object)))
+  if(is.list(object))
+    object<-cbind(object)
+  object<-data.frame(object)
+  
+  return(object)
+}
+
+#'Allows finding the 'length' without knowledge of dimensionality.
+#'
+#'@param data any \code{R} object
+#'@export
+#'@examples
+#'len(list(1,2,3))
+#'len(c(1,2,3,4))
+#'df<-data.frame(a=c(1,2,3),b=c(1,2,3))
+#'len(df)
+len <- function(data)
+{
+  result<-ifelse(is.null(nrow(data)),length(data),nrow(data))
+  return(result)
+}
+```
+
+```{r}
+xlsxFile <- system.file("extdata", "english_validation.xlsx", package = "wateReview")
 l.df <- lapply(seq(12), function(i){
-	df <- read.xlsx(file.path(data.dir,xlsxFile), sheet = i, skipEmptyCols = TRUE, skipEmptyRows = TRUE, rows = 1:50, colNames = FALSE, rowNames = FALSE)
-	df <- rowr::buffer(df, 50, fill = NA)
+	df <- read.xlsx(xlsxFile, sheet = i, skipEmptyCols = TRUE, skipEmptyRows = TRUE, rows = 1:50, colNames = FALSE, rowNames = FALSE)
+	df <- buffer(df, 50, fill = NA)
 	return(df[, -1])
 })
 
@@ -63,22 +193,33 @@ df <- data.frame(t(df))
 df$country_location[is.na(df$country_location)] <- 0
 df$country_location[df$country_location == " 0"] <- 0
 
-lookup_table <- read.csv(file.path(data.dir, "lookup_lvls.csv"))[, -1]
+lookup_table <- read.csv(system.file("extdata", "lookup_lvls.csv", package = "wateReview"))[, -1]
 df <- cbind(df, lookup_table[as.numeric(df$country_location), ])
 
 df$title <- unlist(sapply(df$title, function(ttl) paste(unlist(strsplit(as.character(ttl), "_"))[-1], collapse = "_")))
-
 keeps <- c("title", "validation", "country_location", paste0("Country.", 1:8))
+head(df)
+```
+
+## Separating validation information
+
+For convenience in other scripts, the following chunk split the validation information between location, spatial scale, temporal scale and funding.
+
+```
 write.csv(df[, colnames(df) %in% keeps], "validation_df_location.csv", row.names = FALSE)
 write.csv(df[, c(1, 2, 3, 17:32)], "validation_df_spatial.csv", row.names = FALSE)
 write.csv(df[, c(1, 2, 3, 7:16)], "validation_df_temporal.csv", row.names = FALSE)
-
 fundings <- as.matrix(df[, grep("funding", colnames(df))])
 dim(fundings) <- NULL
 fundings <- data.frame(funding = unique(fundings))
 write.csv(fundings, "funding.csv", row.names = FALSE)
+```
 
+## Country distribution
 
+The country distribution identified from human-reading matches the expectation from the electronic survey and corpus collection. 
+
+```{r}
 countries <- as.matrix(df[, grepl("Country.", colnames(df))])
 dim(countries) <- NULL
 countries <- countries[countries != ""]
@@ -88,3 +229,16 @@ ggplot(countries, aes(x = country)) + geom_bar() + coord_flip() + theme_minimal(
 
 statistics <- sort(signif(table(countries[countries != 0]) / sum(table(countries[countries!= 0])) * 100, 2), decreasing = TRUE)
 print(statistics)
+```
+
+## Agreement between human topics and LDA topics
+
+```{r}
+library(dplyr)
+validation_table <- df %>% pull(validation) %>% table()
+validation_table$notfound <- sum(tail(validation_table, -2))
+```
+
+The agreement between human topics and LDA topics was performed using [LDA visualization](lda_viz.html) and flagged for articles relevant to the study.
+`r validation_table$notfound` documents were not found, pointing at issues of [cross-walk](endnote_processing.html) between the titles in LDA and EndNote databases.
+`r validation_table[["1"]]` documents were in aggreement between the topic model and the human-reading; `r validation_table[["0"]]` documents were in disaggreement (`r signif(100 * validation_table[["1"]] / (validation_table[["1"]] + validation_table[["0"]]), 3)`% aggreement).
