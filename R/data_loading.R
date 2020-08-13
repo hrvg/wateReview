@@ -51,7 +51,7 @@ get_titleInd <- function(
 	humanReadingDatabase = NULL,
 	topicModelTitles = NULL
 	){
-	if(!file.exists(titleInd_file)){
+	if(titleInd_file == ""){
 		# modify the format of titles so that match between topicModelTitles and humanReadingDatabase
 		titleHumanReading <- as.character(humanReadingDatabase$title)
 		titleHumanReading <- gsub(".pdf", "", titleHumanReading)
@@ -63,7 +63,7 @@ get_titleInd <- function(
 		titleHumanReading <- gsub(",", "", titleHumanReading)
 		# look for matches
 		titleInd <- sapply(titleHumanReading, function(t) grep(t, topicModelTitles)[1])
-		saveRDS(titleInd, titleInd_file)
+		saveRDS(titleInd, file.path(system.file("extdata", package = "wateReview"), "titleInd.Rds"))
 	} else {
 		titleInd <- readRDS(titleInd_file)
 	}

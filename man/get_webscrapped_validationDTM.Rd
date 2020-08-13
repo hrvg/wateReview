@@ -4,7 +4,10 @@
 \alias{get_webscrapped_validationDTM}
 \title{read training data (document-term matrix corresponding to webscrapped labels)}
 \usage{
-get_webscrapped_validationDTM(fname = "webscrapped_validationDTM.Rds")
+get_webscrapped_validationDTM(
+  fname = system.file("extdata", "webscrapped_validationDTM.Rds", package =
+    "wateReview")
+)
 }
 \arguments{
 \item{fname}{path to training data (document-term matrix corresponding to webscrapped labels)}

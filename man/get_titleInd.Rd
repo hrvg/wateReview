@@ -5,7 +5,7 @@
 \title{This function performs the cross-walk between human reading databases and topic model databases using document titles}
 \usage{
 get_titleInd(
-  titleInd_file = "F:/hguillon/research/exploitation/R/latin_america/data/titleInd.Rds",
+  titleInd_file = system.file("extdata", "titleInd.Rds", package = "wateReview"),
   humanReadingDatabase = NULL,
   topicModelTitles = NULL
 )

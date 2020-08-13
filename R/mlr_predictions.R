@@ -80,6 +80,7 @@ get_MLDR <- function(trainingData, validationHumanReadingDTM){
 #' @param trainingData data.frame of training data
 #' @param validationHumanReadingDTM document-term matrix from human reading
 #' @param humanReadingTrainingLabels labels from human-reading
+#' @return a data.frame of comparison between the human reading and the webscrapped labels
 #' @export
 EDA_trainingData <- function(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels){
 	MLDR <- get_MLDR(trainingData, validationHumanReadingDTM)
@@ -99,7 +100,7 @@ EDA_trainingData <- function(trainingData, validationHumanReadingDTM, humanReadi
 	human_reading_webscrapping = as.numeric(as.character(human_reading_webscrapping)) 
 		) %>%
 	dplyr::mutate(webscrapping = human_reading_webscrapping - human_reading)
-	print(comparisonDF)
+	return(comparisonDF)
 }
 
 #' Convience legacy function to create binary relance wrappers from MLR

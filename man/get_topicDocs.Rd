@@ -5,7 +5,7 @@
 \title{Read topic model data}
 \usage{
 get_topicDocs(
-  fname = "F:/hguillon/research/exploitation/R/latin_america/data/topicDocs.Rds"
+  fname = system.file("extdata", "topicDocs.Rds", package = "wateReview")
 )
 }
 \arguments{

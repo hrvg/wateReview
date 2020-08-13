@@ -6,7 +6,7 @@
 \usage{
 get_titleDocs(
   topicDocs,
-  fname = "F:/hguillon/research/exploitation/R/latin_america/data/info.dat"
+  fname = system.file("extdata", "info.dat", package = "wateReview")
 )
 }
 \arguments{

@@ -5,8 +5,8 @@
 \title{read document-term matrix created by the text mining code}
 \usage{
 get_DocTermMatrix(
- 
-    dtm_file = "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"
+  dtm_file = system.file("extdata", "obj_dtm_from_dfm_country.Rds", package =
+    "wateReview")
 )
 }
 \arguments{

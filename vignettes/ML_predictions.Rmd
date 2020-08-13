@@ -10,8 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  fig.height = 7,
-  fig.width = 7, 
+  fig.height = 9,
+  fig.width = 9, 
   comment = "#>"
 )
 ```
@@ -47,6 +47,7 @@ More complex approaches were investigated: using additional geographical tokens 
 
 ```{r}
 library(wateReview)
+devtools::load_all()
 ```
 
 
@@ -74,42 +75,63 @@ webscrapped_trainingLabels <- get_webscrapped_trainingLabels()
 titleInd <- get_titleInd(humanReadingDatabase = validationHumanReading, topicModelTitles = titleDocs)
 ```
 
+# Sanity check
 
-# sanity check
-# check if all the papers are found, address issues, align databases
+We now check if all the papers are found, address issues and align databases.
+
+```{r}
 table(is.na(titleInd))
 alignedData <- align_humanReadingTopicModel(titleInd, validationHumanReading, topicDocs, DTM)
 alignedData <- QA_alignedData(alignedData, scale_type = SCALE_TYPE)
 validationTopicDocs <- alignedData$validationTopicDocs
 validationHumanReading <- alignedData$validationHumanReading
 validationHumanReadingDTM <- alignedData$validationDTM
+```
 
-# get humanReadingTrainingLabels
+# Get the training data from `humanReadingTrainingLabels`
+
+```{r}
 humanReadingTrainingLabels <- make_humanReadingTrainingLabels(validationHumanReading, scale_type = SCALE_TYPE, webscrapped_trainingLabels)
 trainingData <- make_trainingData(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = SCALE_TYPE, aggregate_labels = AGGREGATE)
+head(trainingData, 5) %>%
+	knitr::kable(digits = 3, format = "html", caption = "") %>% 
+	kableExtra::kable_styling(bootstrap_options = c("hover", "condensed")) %>% 
+	kableExtra::scroll_box(width = "7in")
+```
 
-# exploratory data analysis
-EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
+# Exploratory data analysis
 
+```{r}
+EDA_trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels) %>%
+	knitr::kable(digits = 3, format = "html", caption = "") %>% 
+	kableExtra::kable_styling(bootstrap_options = c("hover", "condensed")) %>% 
+	kableExtra::scroll_box(width = "7in", height = "7in")
+```
 
-cwd_bak <- getwd()
-setwd("F:/hguillon/research")
+# Multilabel: binary relevance and algorithm adaptation
 
-# multilabel: binary relevance and algorithm adaptation
+The following code executes a multilabl benchmark.
 
-# bmr <- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
-# AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
-# PerfVisMultilabel(AggrPerformances)
+```
+bmr <- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
+AggrPerformances <- getBMRAggrPerformances(bmr, as.df = TRUE)
+PerfVisMultilabel(AggrPerformances)
+```
 
-# multiclass
+# Multiclass
 
-# ## relevance filter
+## Relevance filter
+
+```
 trainingDataMulticlassFilter <- make_trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, 
 	filter = TRUE, 
 	addTopicDocs = TRUE, 
 	validationTopicDocs = validationTopicDocs)
+```
 
-# ### selecting a model to tune
+### Selecting a model to tune
+
+```
 if (!file.exists("bmr_filter.Rds")){
 	bmr_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
 	saveRDS(bmr_filter, "bmr_filter.Rds")
@@ -117,10 +139,13 @@ if (!file.exists("bmr_filter.Rds")){
 	bmr_filter <- readRDS("bmr_filter.Rds")
 }
 make_AUCPlot(bmr_filter, binary = TRUE)
-# based on the result of the AUC plot comparison, svm, multinom and RF are selected for tuning benchmark
+```
 
-# ### tuning model
+Based on the result of the AUC plot comparison, svm, multinom and RF are selected for tuning benchmark
 
+### Tuning model
+
+```
 if(!file.exists("bmr_tune_filter.Rds")){
 	bmr_tune_filter <- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = list("classif.svm", "classif.randomForest", "classif.multinom"))
 	saveRDS(bmr_tune_filter, "bmr_tune_filter.Rds")
@@ -128,19 +153,29 @@ if(!file.exists("bmr_tune_filter.Rds")){
 	bmr_tune_filter <- readRDS("bmr_tune_filter.Rds")
 }
 make_AUCPlot(bmr_tune_filter, binary = TRUE)
-# RF and multninomal have similar performance, we pick multinom (better hyper-parameter constrains)
+```
 
-# ### predict
+RF and multninomal have similar performance, we pick multinom (better hyper-parameter constrains).
+
+### Predict
+
+```
 targetData <- make_targetData(DTM, addTopicDocs = TRUE, topicDocs = topicDocs)
 predRelevance <- make_predictions("classif.multinom", 
 	list(mtry = get_tuningPar(bmr_tune_filter, "decay")),
 	trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = TRUE)
 table(predRelevance)
+```
 
-## country
+## Country
+
+```
 trainingDataMulticlass <- make_trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE)
+```
 
-### selecting a model to tune
+### Selecting a model to tune
+
+```
 if (!file.exists("bmr_country.Rds")){
 	bmr_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE)
 	saveRDS(bmr_country, "bmr_country.Rds")
@@ -148,12 +183,19 @@ if (!file.exists("bmr_country.Rds")){
 	bmr_country <- readRDS("bmr_country.Rds")
 }
 make_AUCPlot(bmr_country)
+```
 
+### Tuning
+
+```
 # bmr_tune_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = list("classif.randomForest"))
 # make_AUCPlot(bmr_tune_country)
 # saveRDS(bmr_tune_country, "bmr_tune_country.Rds")
+```
 
-# ### predict
+### Predicting
+
+```
 targetData <- make_targetData(DTM)
 predCountry <- make_predictions("classif.randomForest", 
 	list(mtry = floor(sqrt(ncol(trainingDataMulticlass) - 1))),
@@ -163,16 +205,14 @@ predCountry$response <- as.character(predCountry$response)
 predCountry$response[as.character(predRelevance) == "Irrelevant"] <- "Irrelevant"
 predCountry$response <- as.factor(predCountry$response)
 
-setwd(cwd_bak)
-
 saveRDS(predRelevance, "predRelevance.Rds")
 saveRDS(predCountry, "predCountry.Rds")
-
 ```
 
 # Consolidating results
 
 We now consolidate all results to be used for analysis.
+Because this uses the complete corpus, the following code is not executed.
 
 ## Cross-walk between databases
 

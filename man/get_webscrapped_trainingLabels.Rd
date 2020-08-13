@@ -4,7 +4,10 @@
 \alias{get_webscrapped_trainingLabels}
 \title{read webscrapped training labels}
 \usage{
-get_webscrapped_trainingLabels(fname = "webscrapped_trainingLabels.Rds")
+get_webscrapped_trainingLabels(
+  fname = system.file("extdata", "webscrapped_trainingLabels.Rds", package =
+    "wateReview")
+)
 }
 \arguments{
 \item{fname}{path to webscrapped training labels data}
