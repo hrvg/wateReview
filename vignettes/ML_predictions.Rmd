@@ -47,7 +47,6 @@ More complex approaches were investigated: using additional geographical tokens 
 
 ```{r}
 library(wateReview)
-devtools::load_all()
 ```
 
 
