@@ -143,10 +143,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Electronic survey</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/get_emails.html">get_emails</a>
+          <a href="../articles/get_emails.html">Mining email addresses</a>
         </li>
         <li>
-          <a href="../articles/survey_stats.html">survey_stats</a>
+          <a href="../articles/survey_stats.html">Survey statistics</a>
         </li>
       </ul>
 </li>
@@ -187,7 +187,7 @@
           <a href="../articles/citation_network.html">Citation network</a>
         </li>
         <li>
-          <a href="../articles/network_visualization.html">network_visualization</a>
+          <a href="../articles/network_visualization.html">Network visualization</a>
         </li>
       </ul>
 </li>
@@ -227,51 +227,55 @@
 <h1 class="hasAnchor">
 <a href="#purpose" class="anchor"></a>Purpose</h1>
 <p>This vignette exposes the code used to retrieve the vocabulary from the corpus</p>
-<pre><code><a href="https://rdrr.io/r/base/print.html"># Load Required Libraries
-
-###################################
-#         configuration           #
-###################################
-print ("reading in documents")
-lines = readLines("corpus.dat")
-
-###################################
-#      function declarations      #
-###################################
-token_counts = function(x){
-    return (length(strsplit(x, " ")))
+</div>
+<div id="functions" class="section level1">
+<h1 class="hasAnchor">
+<a href="#functions" class="anchor"></a>Functions</h1>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">token_counts</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>){
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span> (<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(<span class="no">x</span>, <span class="st">" "</span>)))
 }
-split = function(x) {
-    return (strsplit(x, " "))
-}
-
-###################################
-#        Operational Code         #
-###################################
-# need to output:
-#   document token counts.Rds  
-#   vocab.txt
-
-print ("load from file")
+<span class="no">split</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">x</span>) {
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span> (<span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(<span class="no">x</span>, <span class="st">" "</span>))
+}</pre></body></html></div>
+</div>
+<div id="getting-vocabulary" class="section level1">
+<h1 class="hasAnchor">
+<a href="#getting-vocabulary" class="anchor"></a>Getting vocabulary</h1>
+<div id="reading-corpus" class="section level2">
+<h2 class="hasAnchor">
+<a href="#reading-corpus" class="anchor"></a>Reading corpus</h2>
+<pre><code><a href="https://rdrr.io/r/base/print.html">print ("reading in documents")
+lines = readLines("corpus.dat")</a></code></pre>
+</div>
+<div id="reading-lda-output" class="section level2">
+<h2 class="hasAnchor">
+<a href="#reading-lda-output" class="anchor"></a>Reading LDA output</h2>
+<pre><code><a href="https://rdrr.io/r/base/print.html">print ("load from file")
 var_theta = readRDS(file="./topicDocs.Rds")
-var_phi = readRDS(file="./topicWords.Rds")
-
-# get word counts for each document
-print("token counts for each document")
-var_document_token_counts = lapply(lines,token_counts)
-
-# get a list of unique words in the corpus (the vocabulary)
-print ("getting vocab")
-var_vocabulary &lt;- colnames(var_phi)
-
-## save to files:
-print ("saving to file")
+var_phi = readRDS(file="./topicWords.Rds")</a></code></pre>
+</div>
+<div id="getting-word-counts-for-each-document" class="section level2">
+<h2 class="hasAnchor">
+<a href="#getting-word-counts-for-each-document" class="anchor"></a>Getting word counts for each document</h2>
+<pre><code><a href="https://rdrr.io/r/base/print.html">print("token counts for each document")
+var_document_token_counts = lapply(lines, token_counts)</a></code></pre>
+</div>
+<div id="getting-a-list-of-unique-words-in-the-corpus-the-vocabulary" class="section level2">
+<h2 class="hasAnchor">
+<a href="#getting-a-list-of-unique-words-in-the-corpus-the-vocabulary" class="anchor"></a>Getting a list of unique words in the corpus (the vocabulary)</h2>
+<pre><code><a href="https://rdrr.io/r/base/print.html">print ("getting vocab")
+var_vocabulary &lt;- colnames(var_phi)</a></code></pre>
+</div>
+<div id="saving" class="section level2">
+<h2 class="hasAnchor">
+<a href="#saving" class="anchor"></a>Saving</h2>
+<pre><code><a href="https://rdrr.io/r/base/print.html">print ("saving to file")
 vocabfile = file("vocab.txt")
-
 print ("    doclens...")
 saveRDS(var_document_token_counts, file="doc_lens.Rds")
 print ("    vocab...")
 writeLines(var_vocabulary, vocabfile)</a></code></pre>
+</div>
 </div>
   </div>
 

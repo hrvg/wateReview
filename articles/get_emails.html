@@ -143,10 +143,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Electronic survey</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/get_emails.html">get_emails</a>
+          <a href="../articles/get_emails.html">Mining email addresses</a>
         </li>
         <li>
-          <a href="../articles/survey_stats.html">survey_stats</a>
+          <a href="../articles/survey_stats.html">Survey statistics</a>
         </li>
       </ul>
 </li>
@@ -187,7 +187,7 @@
           <a href="../articles/citation_network.html">Citation network</a>
         </li>
         <li>
-          <a href="../articles/network_visualization.html">network_visualization</a>
+          <a href="../articles/network_visualization.html">Network visualization</a>
         </li>
       </ul>
 </li>
@@ -223,99 +223,102 @@
 
     
     
-<pre><code><a href="https://rdrr.io/pkg/pdftools/man">#####################
-##### LIBRARIES #####
-#####################
-
-library(pdftools)
-
-#################
-##### UTILS #####
-#################
-
-import::here(.from = "./R/utils/envpath.R", 
-    get_rootdir)
-
-########################
-##### INITIALIZING #####
-########################
-
-# root.dir &lt;- get_rootdir()
-root.dir &lt;- "/media/hguillon/Seagate Expansion Drive" # dirty fix, see disclaimer
-
-
-################
-##### MAIN #####
-################
-
-
-#####################################
-########### DISCLAIMER ##############
-#####################################
-
-# 
-# You want to execute this code on a linux server to avoid the shitshow that is special character handling on Windows
-#
-
-get_mail &lt;- function(pdf){
-    # print(pdf)
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>This vignette documents the extraction of email addresses from a large corpus. This vignette cannot be executed as the corpus is not publicly available. It is likely that the code chunks on this vignette will benefit from being run on a linux server to avoid special character handling on Windows.</p>
+</div>
+<div id="libraries" class="section level1">
+<h1 class="hasAnchor">
+<a href="#libraries" class="anchor"></a>Libraries</h1>
+<pre><code><a href="https://rdrr.io/pkg/pdftools/man">library(pdftools)</a></code></pre>
+</div>
+<div id="function-definition" class="section level1">
+<h1 class="hasAnchor">
+<a href="#function-definition" class="anchor"></a>Function definition</h1>
+<pre><code>get_mail &lt;- function(pdf){
     if (file.size(pdf) &gt; 0){
-
-    # if (lang == "spanish"){
-    #   pdf &lt;- gsub("i´", "í", pdf)
-    #   pdf &lt;- gsub("e´", "é", pdf)
-    # }
-    text &lt;- pdf_text(pdf)
-    text2 &lt;- strsplit(text, "\n")
-    i1 &lt;- grep("@", text2)
-    if (length(i1) &gt;= 1) {
-        mails &lt;- lapply(i1, function(ii){
-            i2 &lt;- grep("@", text2[[ii]])
-            text3 &lt;- lapply(i2, function(i) unlist(strsplit(text2[[ii]][[i]], " ")))
-            mail &lt;- lapply(text3, function(txt) txt[grep("@", txt)])
-            mail &lt;- gsub("\r", "", mail)
-            mail &lt;- gsub("\n", "", mail)
-            return(mail)
-        })
-        return(unlist(mails))
-    } else {
-        warning("More than one email address! (or less than one email address)")
-        return(length(i1))
+        text &lt;- pdf_text(pdf)
+        text2 &lt;- strsplit(text, "\n")
+        i1 &lt;- grep("@", text2)
+        if (length(i1) &gt;= 1) {
+            mails &lt;- lapply(i1, function(ii){
+                i2 &lt;- grep("@", text2[[ii]])
+                text3 &lt;- lapply(i2, function(i) unlist(strsplit(text2[[ii]][[i]], " ")))
+                mail &lt;- lapply(text3, function(txt) txt[grep("@", txt)])
+                mail &lt;- gsub("\r", "", mail)
+                mail &lt;- gsub("\n", "", mail)
+                return(mail)
+            })
+            return(unlist(mails))
+        } else {
+            warning("More than one email address! (or less than one email address)")
+            return(length(i1))
+        }
     }
-}
-}
-
-lang &lt;- "portuguese"
-
-# pdf.dirs &lt;- c(
-#   paste0("data/latin_america/corpus_pdf/", lang, "/", lang, ".Data"),
-#   paste0("data/latin_america/corpus_pdf/", lang, "/manual_download_", lang)
-#   )
-
-# more dirty fixes, see disclaimer
+}</code></pre>
+</div>
+<div id="target-directories" class="section level1">
+<h1 class="hasAnchor">
+<a href="#target-directories" class="anchor"></a>Target directories</h1>
+<p>Here we define a list of target directories for the <code>.pdf</code> document for the language <code>lang</code>.</p>
+<pre><code>lang &lt;- "portuguese" # one of "english", "spanish", "portuguese"
 pdf.dirs &lt;- c(
     paste0("latin_america/corpus_pdf/", lang, "/", lang, ".Data"),
     paste0("latin_america/corpus_pdf/", lang, "/manual_download_", lang)
     )
-
 lf &lt;- lapply(pdf.dirs, function(pdf.dir){
     list.files(file.path(root.dir, pdf.dir), recursive = TRUE, pattern = ".pdf", full.names = TRUE)
 })
-lf &lt;- c(lf[[1]], lf[[2]])
+lf &lt;- c(lf[[1]], lf[[2]])</code></pre>
+</div>
+<div id="getting-emails" class="section level1">
+<h1 class="hasAnchor">
+<a href="#getting-emails" class="anchor"></a>Getting emails</h1>
+<pre><code>mails &lt;- unlist(lapply(lf, get_mail))
+write.table(mails, file.path(pdf.dirs[1], paste0("mails_", lang, ".csv")), row.names = FALSE, col.names = FALSE)</code></pre>
+</div>
+<div id="python-post-processing" class="section level1">
+<h1 class="hasAnchor">
+<a href="#python-post-processing" class="anchor"></a><code>python</code> post-processing</h1>
+<p>We then filtered and formatted the resulting files with the following <code>python</code> code.</p>
+<pre><code>from validate_email import validate_email
 
+def flatten(var,vartype='list'):
+    if vartype == 'list':
+        var=[item for sublist in var for item in sublist]
+    elif vartype == 'array':
+        var=np.asarray([item for sublist in var for item in sublist])
+    return var
 
+lang = "portuguese"
+file = "./data/mails_" + lang +".csv"
+f = open(file,'r') # open file
+data_raw = f.readlines() # read lines, return a list, each element is a str
+f.close()
+data = [row.split('\r\n') for row in data_raw]
+data = [row.split('"') for row in flatten(data)]
+data = [row.split('(') for row in flatten(data)]
+data = [row.split(')') for row in flatten(data)]
+data = [row.split('\\') for row in flatten(data)]
+data = [row.split(',') for row in flatten(data)]
+data = [row.split(';') for row in flatten(data)]
+data = [row.split('*') for row in flatten(data)]
+data = flatten(data)
 
-
-mails &lt;- unlist(lapply(lf, get_mail))
-
-
-write.table(mails, file.path(root.dir, pdf.dirs[1], paste0("mails_", lang, ".csv")), row.names = FALSE, col.names = FALSE)
-</a></code></pre>
+mails = [elmt+'\n' for elmt in data if validate_email(elmt)]
+mails = [elmt for elmt in mails if len(elmt) &gt; 10]
+filename = open("./data/mails_" + lang +"_fmt.d",'w')
+filename.writelines(mails)
+filename.close()</code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

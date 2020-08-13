@@ -143,10 +143,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Electronic survey</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/get_emails.html">get_emails</a>
+          <a href="../articles/get_emails.html">Mining email addresses</a>
         </li>
         <li>
-          <a href="../articles/survey_stats.html">survey_stats</a>
+          <a href="../articles/survey_stats.html">Survey statistics</a>
         </li>
       </ul>
 </li>
@@ -187,7 +187,7 @@
           <a href="../articles/citation_network.html">Citation network</a>
         </li>
         <li>
-          <a href="../articles/network_visualization.html">network_visualization</a>
+          <a href="../articles/network_visualization.html">Network visualization</a>
         </li>
       </ul>
 </li>
@@ -223,17 +223,24 @@
 
     
     
-<pre><code><a href="https://rdrr.io/r/parallel"># Load Required Libraries
-library(parallel)
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>This vignette documents the code used to run the topic model (LDA, <span class="citation">Blei, Ng, and Jordan (2003)</span>]).</p>
+</div>
+<div id="libraries" class="section level1">
+<h1 class="hasAnchor">
+<a href="#libraries" class="anchor"></a>Libraries</h1>
+<pre><code><a href="https://rdrr.io/r/parallel">library(parallel)
 library(NLP)
 library(tm)
 library(data.table)
-library(lda)
-
-###################################
-#         configuration           #
-###################################
-lines = readLines("corpus.dat")
+library(lda)</a></code></pre>
+</div>
+<div id="configuration" class="section level1">
+<h1 class="hasAnchor">
+<a href="#configuration" class="anchor"></a>Configuration</h1>
+<pre><code>lines = readLines("corpus.dat")
 vec = VectorSource(lines)
 obj_corpus = Corpus(vec)
 obj_dtm = DocumentTermMatrix(obj_corpus)
@@ -245,91 +252,85 @@ var_parallel_cluster &lt;- makeCluster(var_num_cores)
 var_number_of_topics &lt;- 105 
 var_gibbs_sampler_iterations &lt;- 1000 
 var_prior_alpha &lt;- 0.5
-var_prior_eta &lt;- 0.1
+var_prior_beta &lt;- 0.1
 
 var_initial_assignments &lt;- NULL
 var_burnin = 50
-set.seed(357)
-
-###################################
-#      function declarations      #
-###################################
-function_token_count &lt;- function(x){
-  var_return_counts = c()
-  for (i in 1:length(x)) {
-    var_corpus_item = unlist(strsplit(x[i]$content, " "))
-    var_return_counts[i] &lt;- length(var_corpus_item)
+set.seed(357)</code></pre>
+</div>
+<div id="function-declarations" class="section level1">
+<h1 class="hasAnchor">
+<a href="#function-declarations" class="anchor"></a>Function declarations</h1>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">function_token_count</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>){
+  <span class="no">var_return_counts</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>()
+  <span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">x</span>)) {
+    <span class="no">var_corpus_item</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(<span class="no">x</span>[<span class="no">i</span>]$<span class="no">content</span>, <span class="st">" "</span>))
+    <span class="no">var_return_counts</span>[<span class="no">i</span>] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">var_corpus_item</span>)
   }
-  return (var_return_counts)
+  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span> (<span class="no">var_return_counts</span>)
 }
-function_dtm_to_list &lt;- function(var_obj_dtm, var_filelist) {
-  var_document_list &lt;- list()
-  for (i in 1: length(var_filelist)) {
-    var_file &lt;- var_filelist[i]
-    var_tokenlist &lt;- unlist(strsplit(var_obj_dtm[i]$content, split = ' '))
-    var_document_list[[var_file]] &lt;- var_tokenlist
+<span class="no">function_dtm_to_list</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">var_obj_dtm</span>, <span class="no">var_filelist</span>) {
+  <span class="no">var_document_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
+  <span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>: <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">var_filelist</span>)) {
+    <span class="no">var_file</span> <span class="kw">&lt;-</span> <span class="no">var_filelist</span>[<span class="no">i</span>]
+    <span class="no">var_tokenlist</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(<span class="no">var_obj_dtm</span>[<span class="no">i</span>]$<span class="no">content</span>, <span class="kw">split</span> <span class="kw">=</span> <span class="st">' '</span>))
+    <span class="no">var_document_list</span><span class="kw">[[</span><span class="no">var_file</span>]] <span class="kw">&lt;-</span> <span class="no">var_tokenlist</span>
   }
-  return(var_document_list)
-}
-# convert a document list to the data format required for
-# the lda package to process
-function_make_lda_required_structure &lt;- function(var_document_list, var_match_vocab) {
-  var_index &lt;- match(var_document_list, var_match_vocab)
-  var_index &lt;- var_index[!is.na(var_index)]
-  rbind(as.integer(var_index - 1), as.integer(rep(1, length(var_index))))
+  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">var_document_list</span>)
 }
 
-###################################
-#        Operational Code         #
-###################################
-
-var_document_token_counts = function_token_count(obj_corpus)
-
-# get a list of unique words in the corpus (the vocabulary)
+<span class="co"># convert a document list to the data format required for</span>
+<span class="co"># the lda package to process</span>
+<span class="no">function_make_lda_required_structure</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">var_document_list</span>, <span class="no">var_match_vocab</span>) {
+  <span class="no">var_index</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(<span class="no">var_document_list</span>, <span class="no">var_match_vocab</span>)
+  <span class="no">var_index</span> <span class="kw">&lt;-</span> <span class="no">var_index</span>[!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">var_index</span>)]
+  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="no">var_index</span> - <span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">var_index</span>))))
+}</pre></body></html></div>
+</div>
+<div id="fitting-the-model" class="section level1">
+<h1 class="hasAnchor">
+<a href="#fitting-the-model" class="anchor"></a>Fitting the model</h1>
+<pre><code>var_document_token_counts = function_token_count(obj_corpus)
 var_vocabulary &lt;- obj_dtm$dimnames$Terms
-
 var_documents &lt;- function_dtm_to_list(obj_corpus, var_fileNames) # corpus documents as simple list
 var_lda_document_List &lt;- parLapply(var_parallel_cluster, var_documents, function_make_lda_required_structure, var_vocabulary) 
-
-
-###############
-# run the LDA #
-###############
-
 # get the start system time
 var_sys_time_start_lda &lt;- Sys.time()
-
-# fit the model
 obj_fitted_lda_model &lt;- lda.collapsed.gibbs.sampler(documents = var_lda_document_List,
                                                     K = var_number_of_topics, 
                                                     vocab = var_vocabulary, 
                                                     num.iterations = var_gibbs_sampler_iterations, 
                                                     alpha = var_prior_alpha, 
-                                                    eta = var_prior_eta, 
+                                                    eta = var_prior_beta, 
                                                     initial = var_initial_assignments, 
                                                     burnin = var_burnin,
-                                                    compute.log.likelihood = TRUE)
-
-
-# calculate a matrix from the LDA output (structured as required by ldavis package), 
-# with each row containing the probability distribution over topics for a document, 
-# with as many rows as there are documents in the corpus, and as many columns as 
-# there are topics in the model. In the Blei LDA article this 
-# coincides with the M replicate of the LDA plate model, or the matrix
-# Theta which is the collection of topic vectors.
-var_theta &lt;- t(apply(obj_fitted_lda_model$document_sums + var_prior_alpha, 2, function(x) x/sum(x)))
-var_phi &lt;- t(apply(t(obj_fitted_lda_model$topics) + var_prior_eta, 2, function(x) x/sum(x)))
+                                                    compute.log.likelihood = TRUE)</code></pre>
+</div>
+<div id="structuring-model-output" class="section level1">
+<h1 class="hasAnchor">
+<a href="#structuring-model-output" class="anchor"></a>Structuring model output</h1>
+<p>We now calculate a matrix from the LDA output (structured as required by <code>ldavis</code> package), with each row containing the probability distribution over topics for a document, with as many rows as there are documents in the corpus, and as many columns as there are topics in the model. In <span class="citation">Blei, Ng, and Jordan (2003)</span>’s LDA article, this coincides with the M replicate of the LDA plate model, or the matrix <span class="math inline">\(\Theta\)</span> which is the collection of topic vectors.</p>
+<pre><code>var_theta &lt;- t(apply(obj_fitted_lda_model$document_sums + var_prior_alpha, 2, function(x) x/sum(x)))
+var_phi &lt;- t(apply(t(obj_fitted_lda_model$topics) + var_prior_beta, 2, function(x) x/sum(x)))
 saveRDS(file="./topicDocs.Rds", var_theta)
-saveRDS(file="./topicWords.Rds", var_phi)
-
-
-
-</a></code></pre>
+saveRDS(file="./topicWords.Rds", var_phi)</code></pre>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<div id="refs" class="references">
+<div id="ref-Blei2003">
+<p>Blei, David M, Andrew Y Ng, and Michael I Jordan. 2003. “Latent Dirichlet Allocation.” <em>Journal of Machine Learning Research</em> 3 (Jan): 993–1022.</p>
+</div>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

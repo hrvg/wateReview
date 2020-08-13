@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Creating JSON file • wateReview</title>
+<title>Topic model • wateReview</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Creating JSON file">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Topic model">
 <meta property="og:description" content="wateReview">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -143,10 +143,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Electronic survey</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/get_emails.html">get_emails</a>
+          <a href="../articles/get_emails.html">Mining email addresses</a>
         </li>
         <li>
-          <a href="../articles/survey_stats.html">survey_stats</a>
+          <a href="../articles/survey_stats.html">Survey statistics</a>
         </li>
       </ul>
 </li>
@@ -187,7 +187,7 @@
           <a href="../articles/citation_network.html">Citation network</a>
         </li>
         <li>
-          <a href="../articles/network_visualization.html">network_visualization</a>
+          <a href="../articles/network_visualization.html">Network visualization</a>
         </li>
       </ul>
 </li>
@@ -213,65 +213,31 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Creating JSON file</h1>
+      <h1 data-toc-skip>Topic model</h1>
             
       
       
-      <div class="hidden name"><code>createjson.Rmd</code></div>
+      <div class="hidden name"><code>topic_model.Rmd</code></div>
 
     </div>
 
     
     
-<div id="purpose" class="section level1">
+<div id="corpus-preparation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#purpose" class="anchor"></a>Purpose</h1>
-<p>This vignette creates <code>.json</code> file used by <code>LDAvis</code>.</p>
+<a href="#corpus-preparation" class="anchor"></a>Corpus preparation</h1>
+<p>We used hunspell american english dictionary (en_US). The number of topic was fixed to <span class="math inline">\(k = 105\)</span> for the English corpus. We used 1000 iterations with parameters <span class="math inline">\(\alpha = 0.5\)</span> and <span class="math inline">\(\beta = 0.1\)</span>.</p>
 </div>
-<div id="creating--json" class="section level1">
+<div id="workflow" class="section level1">
 <h1 class="hasAnchor">
-<a href="#creating--json" class="anchor"></a>Creating <code>.json</code>
-</h1>
-<pre><code><a href="https://rdrr.io/r/parallel">library(parallel)
-library(LDAvis)</a></code></pre>
-<pre><code>###################################
-# need:
-#    var_phi
-#    var_theta
-#    document token counts,   
-#    vocab (colnames(var_phi)), 
-#    var_corpus_word_frequencies
-###################################</code></pre>
-<pre><code>var_num_cores = 4
-var_parallel_cluster = makeCluster(var_num_cores)
-
-print ("load from file")
-vtheta = readRDS(file="./data/topicDocs.Rds")
-vphi = readRDS(file="./data//topicWords.Rds")
-
-print ("theta: ")
-print (dim(vtheta))
-print ("phi: ")
-print (dim(vphi))
-
-
-doc_lens = unlist(readRDS(file="./data/doc_lens.Rds"))
-vocabulary = colnames(vphi)
-wf = readLines("./data/freqs.txt")
-
-
-print ("creating json object")
-obj_json &lt;- createJSON(
-  phi = (vphi), 
-  theta = (vtheta), 
-  doc.length = doc_lens,
-  vocab = vocabulary,
-  term.frequency = wf,
-  cluster = var_parallel_cluster
-)
-
-print ("writing to file")
-write(file ="./ldavis.json", obj_json)</code></pre>
+<a href="#workflow" class="anchor"></a>Workflow</h1>
+<ol style="list-style-type: decimal">
+<li><a href="lda_modal.html">Run the topic model</a></li>
+<li><a href="get_vocab.html">Get the corpus’ vocabulary</a></li>
+<li>Run <code>./src/wordfreqs.py</code>
+</li>
+<li><a href="lda_vis.html">Visualize results with <code>LDAvis</code></a></li>
+</ol>
 </div>
   </div>
 
