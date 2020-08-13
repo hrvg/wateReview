@@ -29,7 +29,7 @@ navbar:
           href: articles/get_vocab.html
         - text: Visualizing LDA results
           href: articles/lda_vis.html
-        - text: validation
+        - text: Validation
           href: articles/validation.html
         - text: Comparing LDA models
           href: articles/LDA_comparison.html

@@ -37,7 +37,6 @@ Imports:
     circlize,
     clValid,
     corrplot,
-    rowr,
     dplyr,
     factoextra,
     geogrid,
