@@ -78,28 +78,25 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Topic Model</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/topic_model.html">topic_model</a>
+          <a href="../articles/topic_model.html">Topic model</a>
         </li>
         <li>
-          <a href="../articles/lda_model.html">lda_model</a>
+          <a href="../articles/lda_model.html">Running LDA</a>
         </li>
         <li>
-          <a href="../articles/get_vocab.html">get_vocab</a>
+          <a href="../articles/get_vocab.html">Getting vocabulary</a>
         </li>
         <li>
-          <a href="../articles/createjson.html">createjson</a>
+          <a href="../articles/lda_vis.html">Visualizing LDA results</a>
         </li>
         <li>
-          <a href="../articles/lda_vis.html">lda_vis</a>
+          <a href="../articles/validation.html">Validation</a>
         </li>
         <li>
-          <a href="../articles/validation.html">validation</a>
+          <a href="../articles/LDA_comparison.html">Comparing LDA models</a>
         </li>
         <li>
-          <a href="../articles/LDA_comparison.html">LDA_comparison</a>
-        </li>
-        <li>
-          <a href="../articles/endnote_processing.html">endnote_processing</a>
+          <a href="../articles/endnote_processing.html">Cross-walk between LDA and EndNote databases</a>
         </li>
       </ul>
 </li>
@@ -223,49 +220,270 @@
 
     
     
-<pre class="data_loading"><code>topicWords &lt;- readRDS(system.file("extdata", "topicWords.Rds", package = "wateReview"))
-topic_names &lt;- read.csv(system.file("extdata", "topic_names.csv", package = "wateReview"))
-topic_names &lt;- topic_names[match(seq(nrow(topic_names)), topic_names$topic_id), ]
-topicWords &lt;- t(topicWords)
-topicWords &lt;- as.data.frame(topicWords)
-colnames(topicWords) &lt;- topic_names$topic_name
-theme_type &lt;- "theme"
-themes &lt;- unique(topic_names[[theme_type]][!is.na(topic_names[[theme_type]])])
-theme_df &lt;- lapply(themes, function(th){
-    ind &lt;- which(topic_names[[theme_type]] == th)
-    if (length(ind) == 1){
-      return(topicWords[, ind])
-    } else {
-      return(rowSums(topicWords[, ind]))
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>In this vignette, we perform validation on the LDA models, using two approaches: post-hoc data analysis and human-reading.</p>
+</div>
+<div id="post-hoc-data-analysis" class="section level1">
+<h1 class="hasAnchor">
+<a href="#post-hoc-data-analysis" class="anchor"></a>Post-hoc data analysis</h1>
+<div id="libraries" class="section level2">
+<h2 class="hasAnchor">
+<a href="#libraries" class="anchor"></a>Libraries</h2>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">wateReview</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">corrplot</span>)
+<span class="co">#&gt; corrplot 0.84 loaded</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">factoextra</span>)
+<span class="co">#&gt; Loading required package: ggplot2</span>
+<span class="co">#&gt; Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</span></pre></body></html></div>
+</div>
+<div id="data-loading" class="section level2">
+<h2 class="hasAnchor">
+<a href="#data-loading" class="anchor"></a>Data loading</h2>
+<p>First, we retrieve the data: the distribution of words in topic, <code>topicWords</code> and the human-derived topics names. From these, we derive a distance matrix based on the Jensen-Shannon divergence.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">topicWords</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"topicWords.Rds"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>))
+<span class="no">topic_names</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"topic_names.csv"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>))
+<span class="no">topic_names</span> <span class="kw">&lt;-</span> <span class="no">topic_names</span>[<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">topic_names</span>)), <span class="no">topic_names</span>$<span class="no">topic_id</span>), ]
+<span class="no">topicWords</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">topicWords</span>)
+<span class="no">topicWords</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">topicWords</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">topicWords</span>) <span class="kw">&lt;-</span> <span class="no">topic_names</span>$<span class="no">topic_name</span>
+<span class="no">theme_type</span> <span class="kw">&lt;-</span> <span class="st">"theme"</span>
+<span class="no">themes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">topic_names</span><span class="kw">[[</span><span class="no">theme_type</span>]][!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">topic_names</span><span class="kw">[[</span><span class="no">theme_type</span>]])])
+<span class="no">theme_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">themes</span>, <span class="kw">function</span>(<span class="no">th</span>){
+    <span class="no">ind</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="no">topic_names</span><span class="kw">[[</span><span class="no">theme_type</span>]] <span class="kw">==</span> <span class="no">th</span>)
+    <span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">ind</span>) <span class="kw">==</span> <span class="fl">1</span>){
+      <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">topicWords</span>[, <span class="no">ind</span>])
+    } <span class="kw">else</span> {
+      <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span>(<span class="no">topicWords</span>[, <span class="no">ind</span>]))
     }
 })
-theme_df &lt;- do.call(cbind, theme_df)
-rownames(theme_df) &lt;- rownames(topicWords)
-colnames(theme_df) &lt;- themes
-rm(topicWords)
-cSums &lt;- colSums(theme_df)
-theme_df &lt;- sweep(theme_df, 2, cSums, "/")
-theme_df &lt;- t(theme_df)
-dist_theme_KL &lt;- philentropy::distance(theme_df, method = "kullback-leibler")
-rownames(dist_theme_KL) &lt;- rownames(theme_df)
-colnames(dist_theme_KL) &lt;- rownames(theme_df)</code></pre>
-<pre class="phc_theme"><code>hc_fit &lt;- hclust(as.dist(dist_theme_KL), method = "ward.D2")
-theme_phc &lt;- fviz_dend(hc_fit, rect = TRUE, show_labels = TRUE, cex = 0.7)
-theme_phc</code></pre>
-<p>``` data.dir &lt;- “F:/hguillon/research/data/latin_america/validation_data” library(openxlsx) xlsxFile &lt;- “english_validation.xlsx” l.df &lt;- lapply(seq(12), function(i){ df &lt;- read.xlsx(file.path(data.dir,xlsxFile), sheet = i, skipEmptyCols = TRUE, skipEmptyRows = TRUE, rows = 1:50, colNames = FALSE, rowNames = FALSE) df &lt;- rowr::buffer(df, 50, fill = NA) return(df[, -1]) })</p>
-<p>df &lt;- do.call(cbind, l.df) colnames(df) &lt;- paste0(“X”, seq(ncol(df))) ind &lt;- apply(df, MARGIN = 1, function(row) !all(is.na(row))) df &lt;- df[ind, ] rownames(df) &lt;- c(“title”, “validation”, “country_location”, “state”, “basin_location”, “city”, “study_years”, “event”, “day”, “week”, “year”, “years_10”, “years_100”, “years_1000”, “years_10000”, “years_100000”, “agricultural_field”, “aquifer_groundwater”, “basin_scale”, "catchment _watershed“,”city_urban“,”coastal“,”country_scale“,”dam_reservoir“,”glacier_alpine“,”hydrologic_region“,”irrigation_district“,”lake“,”ocean_sea“,”river_stream“,”rural“,”wetland“,”topic.1“,”topic.2“,”topic.3“,”topic.4“,”topic.5“, paste0(”funding.“, seq(1:(nrow(df)-37)))) df &lt;- data.frame(t(df)) df<span class="math inline">\(country_location[is.na(df\)</span>country_location)] &lt;- 0 df<span class="math inline">\(country_location[df\)</span>country_location ==” 0"] &lt;- 0</p>
-<p>lookup_table &lt;- read.csv(file.path(data.dir, “lookup_lvls.csv”))[, -1] df &lt;- cbind(df, lookup_table[as.numeric(df$country_location), ])</p>
-<p>df<span class="math inline">\(title &lt;- unlist(sapply(df\)</span>title, function(ttl) paste(unlist(strsplit(as.character(ttl), “<em>"))[-1], collapse = "</em>”)))</p>
-<p>keeps &lt;- c(“title”, “validation”, “country_location”, paste0(“Country.”, 1:8)) write.csv(df[, colnames(df) %in% keeps], “validation_df_location.csv”, row.names = FALSE) write.csv(df[, c(1, 2, 3, 17:32)], “validation_df_spatial.csv”, row.names = FALSE) write.csv(df[, c(1, 2, 3, 7:16)], “validation_df_temporal.csv”, row.names = FALSE)</p>
-<p>fundings &lt;- as.matrix(df[, grep(“funding”, colnames(df))]) dim(fundings) &lt;- NULL fundings &lt;- data.frame(funding = unique(fundings)) write.csv(fundings, “funding.csv”, row.names = FALSE)</p>
-<p>countries &lt;- as.matrix(df[, grepl(“Country.”, colnames(df))]) dim(countries) &lt;- NULL countries &lt;- countries[countries != ""] countries &lt;- data.frame(country = countries)</p>
-<p>ggplot(countries, aes(x = country)) + geom_bar() + coord_flip() + theme_minimal() + labs(x = “country”, title = “Number of paper per country in the human-read English corpus”)</p>
-<p>statistics &lt;- sort(signif(table(countries[countries != 0]) / sum(table(countries[countries!= 0])) * 100, 2), decreasing = TRUE) print(statistics)</p>
+<span class="no">theme_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="no">cbind</span>, <span class="no">theme_df</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">theme_df</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">topicWords</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">theme_df</span>) <span class="kw">&lt;-</span> <span class="no">themes</span>
+<span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span>(<span class="no">topicWords</span>)
+<span class="no">cSums</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(<span class="no">theme_df</span>)
+<span class="no">theme_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sweep.html">sweep</a></span>(<span class="no">theme_df</span>, <span class="fl">2</span>, <span class="no">cSums</span>, <span class="st">"/"</span>)
+<span class="no">theme_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">theme_df</span>)
+<span class="no">dist_theme_JS</span> <span class="kw">&lt;-</span> <span class="kw pkg">philentropy</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/philentropy/man/distance.html">distance</a></span>(<span class="no">theme_df</span>, <span class="kw">method</span> <span class="kw">=</span> <span class="st">"jensen-shannon"</span>)
+<span class="co">#&gt; Metric: 'jensen-shannon' using unit: 'log'; comparing: 52 vectors.</span>
+<span class="no">dist_theme_JS</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="no">dist_theme_JS</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">dist_theme_JS</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">theme_df</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">dist_theme_JS</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">theme_df</span>)</pre></body></html></div>
+</div>
+<div id="correlation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#correlation" class="anchor"></a>Correlation</h2>
+<p>The following corrrelation matrix displays a very low level of Pearson’s correlation across the distribution of topics over words. This means that topics likely capture distinct components of the corpus content.</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">mat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">theme_df</span>))
+<span class="no">correlations</span> <span class="kw">&lt;-</span> <span class="kw pkg">Hmisc</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/Hmisc/man/rcorr.html">rcorr</a></span>(<span class="no">mat</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"pearson"</span>)
+<span class="no">correlations</span>$<span class="no">r</span>[<span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="no">correlations</span>$<span class="no">P</span> <span class="kw">&gt;</span> <span class="fl">0.05</span>)] <span class="kw">&lt;-</span> <span class="fl">0</span>
+<span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html">corrplot</a></span>(<span class="no">correlations</span>$<span class="no">r</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"upper"</span>)</pre></body></html></div>
+<p><img src="validation_files/figure-html/unnamed-chunk-3-1.png" width="768"></p>
+</div>
+<div id="hierarchical-clustering" class="section level2">
+<h2 class="hasAnchor">
+<a href="#hierarchical-clustering" class="anchor"></a>Hierarchical clustering</h2>
+<p>A dendrogram visualization of a hierarchical clustering with Ward’s criterion underlines that topics expected to have similar distributions over words are closer to one another. See for example the topics <code>agricultural economics</code>, <code>water resources management</code>, <code>water policy</code> and <code>water governance</code> in the middle of the dendrogram.</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">hc_fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/dist.html">as.dist</a></span>(<span class="no">dist_theme_JS</span>), <span class="kw">method</span> <span class="kw">=</span> <span class="st">"ward.D2"</span>)
+<span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span>(<span class="no">hc_fit</span>, <span class="kw">k</span> <span class="kw">=</span> <span class="kw">NULL</span>, <span class="kw">h</span> <span class="kw">=</span> <span class="fl">0.75</span>, <span class="kw">show_labels</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cex</span> <span class="kw">=</span> <span class="fl">0.8</span>, <span class="kw">horiz</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">labels_track_height</span> <span class="kw">=</span> <span class="fl">0.5</span>)</pre></body></html></div>
+<p><img src="validation_files/figure-html/phc_theme-1.png" width="768"></p>
+</div>
+</div>
+<div id="validation-with-human-reading" class="section level1">
+<h1 class="hasAnchor">
+<a href="#validation-with-human-reading" class="anchor"></a>Validation with human-reading</h1>
+<div id="libraries-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#libraries-1" class="anchor"></a>Libraries</h2>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">openxlsx</span>)</pre></body></html></div>
+</div>
+<div id="data-loading-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#data-loading-1" class="anchor"></a>Data loading</h2>
+<p>We retrieve the validation data from all the 12 human readers from <code>english_validation.xlsx</code>, a table transferred from Google Calc to Excell format. We also load a number of look-up levels to make the cross-walk between the human-identified country labels and unified country labels.</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">xlsxFile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"english_validation.xlsx"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>)
+<span class="no">l.df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">12</span>), <span class="kw">function</span>(<span class="no">i</span>){
+    <span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/read.xlsx.html">read.xlsx</a></span>(<span class="no">xlsxFile</span>, <span class="kw">sheet</span> <span class="kw">=</span> <span class="no">i</span>, <span class="kw">skipEmptyCols</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">skipEmptyRows</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">50</span>, <span class="kw">colNames</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">rowNames</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+    <span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu">buffer</span>(<span class="no">df</span>, <span class="fl">50</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="fl">NA</span>)
+    <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">df</span>[, -<span class="fl">1</span>])
+})
+
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="no">cbind</span>, <span class="no">l.df</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">df</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"X"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">df</span>)))
+<span class="no">ind</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">df</span>, <span class="kw">MARGIN</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">function</span>(<span class="no">row</span>) !<span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">row</span>)))
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="no">df</span>[<span class="no">ind</span>, ]
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">df</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"title"</span>, <span class="st">"validation"</span>, <span class="st">"country_location"</span>, <span class="st">"state"</span>, <span class="st">"basin_location"</span>, <span class="st">"city"</span>, <span class="st">"study_years"</span>, <span class="st">"event"</span>, <span class="st">"day"</span>, <span class="st">"week"</span>, <span class="st">"year"</span>, <span class="st">"years_10"</span>, <span class="st">"years_100"</span>, <span class="st">"years_1000"</span>, <span class="st">"years_10000"</span>, <span class="st">"years_100000"</span>, <span class="st">"agricultural_field"</span>, <span class="st">"aquifer_groundwater"</span>, <span class="st">"basin_scale"</span>, <span class="st">"catchment _watershed"</span>, <span class="st">"city_urban"</span>, <span class="st">"coastal"</span>, <span class="st">"country_scale"</span>, <span class="st">"dam_reservoir"</span>, <span class="st">"glacier_alpine"</span>, <span class="st">"hydrologic_region"</span>, <span class="st">"irrigation_district"</span>, <span class="st">"lake"</span>, <span class="st">"ocean_sea"</span>, <span class="st">"river_stream"</span>, <span class="st">"rural"</span>, <span class="st">"wetland"</span>, <span class="st">"topic.1"</span>, <span class="st">"topic.2"</span>, <span class="st">"topic.3"</span>, <span class="st">"topic.4"</span>, <span class="st">"topic.5"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"funding."</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">1</span>:(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df</span>)-<span class="fl">37</span>))))
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="no">df</span>))
+<span class="no">df</span>$<span class="no">country_location</span>[<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">df</span>$<span class="no">country_location</span>)] <span class="kw">&lt;-</span> <span class="fl">0</span>
+<span class="no">df</span>$<span class="no">country_location</span>[<span class="no">df</span>$<span class="no">country_location</span> <span class="kw">==</span> <span class="st">" 0"</span>] <span class="kw">&lt;-</span> <span class="fl">0</span>
+
+<span class="no">lookup_table</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"lookup_lvls.csv"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>))[, -<span class="fl">1</span>]
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">df</span>, <span class="no">lookup_table</span>[<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="no">df</span>$<span class="no">country_location</span>), ])
+
+<span class="no">df</span>$<span class="no">title</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="no">df</span>$<span class="no">title</span>, <span class="kw">function</span>(<span class="no">ttl</span>) <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">ttl</span>), <span class="st">"_"</span>))[-<span class="fl">1</span>], <span class="kw">collapse</span> <span class="kw">=</span> <span class="st">"_"</span>)))
+<span class="no">keeps</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"title"</span>, <span class="st">"validation"</span>, <span class="st">"country_location"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Country."</span>, <span class="fl">1</span>:<span class="fl">8</span>))
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">df</span>)
+<span class="co">#&gt;                                                 title validation</span>
+<span class="co">#&gt; X1 Gagern-2013-A critical review of fishing agree.pdf          1</span>
+<span class="co">#&gt; X2 Medina-2009-Future directions of Chilean ecoto.pdf       &lt;NA&gt;</span>
+<span class="co">#&gt; X3  Handiani-2013-Tropical vegetation response to.pdf          0</span>
+<span class="co">#&gt; X4 Toledo-2011-Patterns and Determinants of Flori.pdf          1</span>
+<span class="co">#&gt; X5 Ngodock-2007-Cycling the representer algorithm.pdf          1</span>
+<span class="co">#&gt; X6  Beharry-Borg-2009-An Analytical Framework for.pdf          0</span>
+<span class="co">#&gt;                  country_location state basin_location   city study_years event</span>
+<span class="co">#&gt; X1                              0  &lt;NA&gt;           &lt;NA&gt;   &lt;NA&gt;   1961-2006     1</span>
+<span class="co">#&gt; X2                              0  &lt;NA&gt;           &lt;NA&gt;   &lt;NA&gt;        &lt;NA&gt;  &lt;NA&gt;</span>
+<span class="co">#&gt; X3 Brazil, West African Countries  &lt;NA&gt;           &lt;NA&gt;   &lt;NA&gt;           0     1</span>
+<span class="co">#&gt; X4                        Bolivia  &lt;NA&gt;           &lt;NA&gt;   &lt;NA&gt;   1995-2007     0</span>
+<span class="co">#&gt; X5                 Gulf of Mexico  &lt;NA&gt;           &lt;NA&gt;   &lt;NA&gt;        &lt;NA&gt;     0</span>
+<span class="co">#&gt; X6            Trinidad and Tobago  &lt;NA&gt;           &lt;NA&gt; Tobago        &lt;NA&gt;     1</span>
+<span class="co">#&gt;     day week year years_10 years_100 years_1000 years_10000 years_100000</span>
+<span class="co">#&gt; X1    0    0    0        1         0          0           0            0</span>
+<span class="co">#&gt; X2 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;</span>
+<span class="co">#&gt; X3    0    0    0        0         1          0           0            0</span>
+<span class="co">#&gt; X4    0    0    0        1         0          0           0            0</span>
+<span class="co">#&gt; X5    0    0    0        0         0          0           0            0</span>
+<span class="co">#&gt; X6    0    0    0        0         0          0           0            0</span>
+<span class="co">#&gt;    agricultural_field aquifer_groundwater basin_scale catchment._watershed</span>
+<span class="co">#&gt; X1                  1                   0           0                    0</span>
+<span class="co">#&gt; X2               &lt;NA&gt;                &lt;NA&gt;        &lt;NA&gt;                 &lt;NA&gt;</span>
+<span class="co">#&gt; X3                  0                   1           0                    0</span>
+<span class="co">#&gt; X4                  1                   0           0                    0</span>
+<span class="co">#&gt; X5                  0                   0           0                    0</span>
+<span class="co">#&gt; X6                  0                   0           0                    0</span>
+<span class="co">#&gt;    city_urban coastal country_scale dam_reservoir glacier_alpine</span>
+<span class="co">#&gt; X1          0       1             0             0              0</span>
+<span class="co">#&gt; X2       &lt;NA&gt;    &lt;NA&gt;          &lt;NA&gt;          &lt;NA&gt;           &lt;NA&gt;</span>
+<span class="co">#&gt; X3          0       0             0             0              0</span>
+<span class="co">#&gt; X4          0       0             0             0              0</span>
+<span class="co">#&gt; X5          0       0             0             0              0</span>
+<span class="co">#&gt; X6          0       0             0             0              0</span>
+<span class="co">#&gt;    hydrologic_region irrigation_district lake ocean_sea river_stream rural</span>
+<span class="co">#&gt; X1                 0                   0    0         1            0     0</span>
+<span class="co">#&gt; X2              &lt;NA&gt;                &lt;NA&gt; &lt;NA&gt;      &lt;NA&gt;         &lt;NA&gt;  &lt;NA&gt;</span>
+<span class="co">#&gt; X3                 0                   0    0         0            0     0</span>
+<span class="co">#&gt; X4                 0                   0    0         0            0     0</span>
+<span class="co">#&gt; X5                 0                   0    0         1            0     0</span>
+<span class="co">#&gt; X6                 0                   0    0         1            0     0</span>
+<span class="co">#&gt;    wetland              topic.1            topic.2             topic.3 topic.4</span>
+<span class="co">#&gt; X1       0              fishing               &lt;NA&gt;                &lt;NA&gt;    &lt;NA&gt;</span>
+<span class="co">#&gt; X2    &lt;NA&gt;                 &lt;NA&gt;               &lt;NA&gt;                &lt;NA&gt;    &lt;NA&gt;</span>
+<span class="co">#&gt; X3       0  tropical vegetation     climate change                 HE1    &lt;NA&gt;</span>
+<span class="co">#&gt; X4       0 species distribution     climate change            rainfall    &lt;NA&gt;</span>
+<span class="co">#&gt; X5       0       ocean modeling representer method loop current eddies    &lt;NA&gt;</span>
+<span class="co">#&gt; X6       0   choice experiment             couples                &lt;NA&gt;    &lt;NA&gt;</span>
+<span class="co">#&gt;    topic.5                                                       funding.1</span>
+<span class="co">#&gt; X1    &lt;NA&gt;                 Becas de Formacion de Profesorado Universitario</span>
+<span class="co">#&gt; X2    &lt;NA&gt;                                                            &lt;NA&gt;</span>
+<span class="co">#&gt; X3    &lt;NA&gt;                                 Deutsche Forschungsgemeinschaft</span>
+<span class="co">#&gt; X4    &lt;NA&gt; Netherlands foundation for the advancement of tropical research</span>
+<span class="co">#&gt; X5    &lt;NA&gt;                                        Office of Naval Research</span>
+<span class="co">#&gt; X6    &lt;NA&gt;                                                            &lt;NA&gt;</span>
+<span class="co">#&gt;                                funding.2</span>
+<span class="co">#&gt; X1                                  &lt;NA&gt;</span>
+<span class="co">#&gt; X2                                  &lt;NA&gt;</span>
+<span class="co">#&gt; X3                                  &lt;NA&gt;</span>
+<span class="co">#&gt; X4 Russell E. Train Education for Nature</span>
+<span class="co">#&gt; X5                                  &lt;NA&gt;</span>
+<span class="co">#&gt; X6                                  &lt;NA&gt;</span>
+<span class="co">#&gt;                                   funding.3</span>
+<span class="co">#&gt; X1                                     &lt;NA&gt;</span>
+<span class="co">#&gt; X2                                     &lt;NA&gt;</span>
+<span class="co">#&gt; X3                                     &lt;NA&gt;</span>
+<span class="co">#&gt; X4 International Foundation for Science IFS</span>
+<span class="co">#&gt; X5                                     &lt;NA&gt;</span>
+<span class="co">#&gt; X6                                     &lt;NA&gt;</span>
+<span class="co">#&gt;                                   funding.4 funding.5 funding.6 funding.7</span>
+<span class="co">#&gt; X1                                     &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="co">#&gt; X2                                     &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="co">#&gt; X3                                     &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="co">#&gt; X4 Wageningen Univesity and Research Center      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="co">#&gt; X5                                     &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="co">#&gt; X6                                     &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="co">#&gt;    funding.8 funding.9 funding.10           Country.1 Country.2 Country.3</span>
+<span class="co">#&gt; X1      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;                   0                    </span>
+<span class="co">#&gt; X2      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;                   0                    </span>
+<span class="co">#&gt; X3      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;              Brazil                    </span>
+<span class="co">#&gt; X4      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;             Bolivia                    </span>
+<span class="co">#&gt; X5      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;                   0                    </span>
+<span class="co">#&gt; X6      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; Trinidad and Tobago                    </span>
+<span class="co">#&gt;    Country.4 Country.5 Country.6 Country.7 Country.8</span>
+<span class="co">#&gt; X1                                                  </span>
+<span class="co">#&gt; X2                                                  </span>
+<span class="co">#&gt; X3                                                  </span>
+<span class="co">#&gt; X4                                                  </span>
+<span class="co">#&gt; X5                                                  </span>
+<span class="co">#&gt; X6</span></pre></body></html></div>
+</div>
+<div id="separating-validation-information" class="section level2">
+<h2 class="hasAnchor">
+<a href="#separating-validation-information" class="anchor"></a>Separating validation information</h2>
+<p>For convenience in other scripts, the following chunk split the validation information between location, spatial scale, temporal scale and funding.</p>
+<pre><code><a href="https://rdrr.io/r/utils/write.table.html">write.csv(df[, colnames(df) %in% keeps], "validation_df_location.csv", row.names = FALSE)
+write.csv(df[, c(1, 2, 3, 17:32)], "validation_df_spatial.csv", row.names = FALSE)
+write.csv(df[, c(1, 2, 3, 7:16)], "validation_df_temporal.csv", row.names = FALSE)
+fundings &lt;- as.matrix(df[, grep("funding", colnames(df))])
+dim(fundings) &lt;- NULL
+fundings &lt;- data.frame(funding = unique(fundings))
+write.csv(fundings, "funding.csv", row.names = FALSE)</a></code></pre>
+</div>
+<div id="country-distribution" class="section level2">
+<h2 class="hasAnchor">
+<a href="#country-distribution" class="anchor"></a>Country distribution</h2>
+<p>The country distribution identified from human-reading matches the expectation from the electronic survey and corpus collection.</p>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">countries</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">df</span>[, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span>(<span class="st">"Country."</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">df</span>))])
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="no">countries</span>) <span class="kw">&lt;-</span> <span class="kw">NULL</span>
+<span class="no">countries</span> <span class="kw">&lt;-</span> <span class="no">countries</span>[<span class="no">countries</span> <span class="kw">!=</span> <span class="st">""</span>]
+<span class="no">countries</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">country</span> <span class="kw">=</span> <span class="no">countries</span>)
+
+<span class="fu">ggplot</span>(<span class="no">countries</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">country</span>)) + <span class="fu">geom_bar</span>() + <span class="fu">coord_flip</span>() + <span class="fu">theme_minimal</span>() + <span class="fu">labs</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="st">"country"</span>, <span class="kw">title</span> <span class="kw">=</span> <span class="st">"Number of paper per country in the human-read English corpus"</span>)</pre></body></html></div>
+<p><img src="validation_files/figure-html/unnamed-chunk-6-1.png" width="768"></p>
+<div class="sourceCode" id="cb9"><html><body><pre class="r">
+<span class="no">statistics</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Round.html">signif</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">countries</span>[<span class="no">countries</span> <span class="kw">!=</span> <span class="fl">0</span>]) / <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">countries</span>[<span class="no">countries</span><span class="kw">!=</span> <span class="fl">0</span>])) * <span class="fl">100</span>, <span class="fl">2</span>), <span class="kw">decreasing</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">statistics</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt;              Brazil              Mexico           Argentina               Chile </span>
+<span class="co">#&gt;               41.00               15.00               12.00                9.90 </span>
+<span class="co">#&gt;                Peru            Colombia             Bolivia          Costa Rica </span>
+<span class="co">#&gt;                3.60                2.80                2.20                1.70 </span>
+<span class="co">#&gt;             Ecuador             Uruguay           Venezuela              Panama </span>
+<span class="co">#&gt;                1.50                1.50                1.50                1.30 </span>
+<span class="co">#&gt;              Belize             Jamaica             Bahamas           Caribbean </span>
+<span class="co">#&gt;                0.71                0.71                0.61                0.61 </span>
+<span class="co">#&gt;           Nicaragua            Paraguay Trinidad and Tobago            Barbados </span>
+<span class="co">#&gt;                0.61                0.51                0.51                0.40 </span>
+<span class="co">#&gt;           Guatemala            Honduras         El Salvador               Haiti </span>
+<span class="co">#&gt;                0.40                0.40                0.30                0.20 </span>
+<span class="co">#&gt;                Cuba  Dominican Republic </span>
+<span class="co">#&gt;                0.10                0.10</span></pre></body></html></div>
+</div>
+<div id="agreement-between-human-topics-and-lda-topics" class="section level2">
+<h2 class="hasAnchor">
+<a href="#agreement-between-human-topics-and-lda-topics" class="anchor"></a>Agreement between human topics and LDA topics</h2>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'dplyr'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+<span class="no">validation_table</span> <span class="kw">&lt;-</span> <span class="no">df</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span>(<span class="no">validation</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>()
+<span class="no">validation_table</span>$<span class="no">notfound</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>(<span class="no">validation_table</span>, -<span class="fl">2</span>))
+<span class="co">#&gt; Warning in validation_table$notfound &lt;- sum(tail(validation_table, -2)):</span>
+<span class="co">#&gt; Coercing LHS to a list</span></pre></body></html></div>
+<p>The agreement between human topics and LDA topics was performed using <a href="lda_viz.html">LDA visualization</a> and flagged for articles relevant to the study. 32 documents were not found, pointing at issues of <a href="endnote_processing.html">cross-walk</a> between the titles in LDA and EndNote databases. 719 documents were in aggreement between the topic model and the human-reading; 116 documents were in disaggreement (86.1% aggreement).</p>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
