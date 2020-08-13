@@ -58,19 +58,19 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Corpus collection</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/making_query.html">making_query</a>
+          <a href="../articles/making_query.html">Making the online query</a>
         </li>
         <li>
-          <a href="../articles/query_processing.html">query_processing</a>
+          <a href="../articles/query_processing.html">Query processing</a>
         </li>
         <li>
-          <a href="../articles/query_QA.html">query_QA</a>
+          <a href="../articles/query_QA.html">Query QA/QC</a>
         </li>
         <li>
-          <a href="../articles/manual_download.html">manual_download</a>
+          <a href="../articles/manual_download.html">Manually downloading corpus documents</a>
         </li>
         <li>
-          <a href="../articles/select_human_reading.html">select_human_reading</a>
+          <a href="../articles/select_human_reading.html">Selecting documents for human-reading</a>
         </li>
       </ul>
 </li>
@@ -220,18 +220,28 @@
 
     
     
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
 <p>This vignette showcases the workflow to process the <code>.csv</code> files resulting from the online query. For each language, the files are processed and checked for unique hits and titles.</p>
-<pre><code>root.dir &lt;- get_rootdir()
-languages &lt;- c("english", "spanish", "portuguese")
+</div>
+<div id="processing" class="section level1">
+<h1 class="hasAnchor">
+<a href="#processing" class="anchor"></a>Processing</h1>
+<pre><code>languages &lt;- c("english", "spanish", "portuguese")
 for (language in languages){
     csv.dir &lt;- "data/latin_america/corpus_csv/"
-    csv.dir &lt;- file.path(root.dir, csv.dir, language)
+    csv.dir &lt;- file.path(csv.dir, language)
     csv.files &lt;- get_csv_files(csv.dir)
     citation_dataframe &lt;- get_citation_dataframe(csv.files)
     citation_dataframe &lt;- check_duplicate_row(citation_dataframe)
     citation_dataframe &lt;- check_duplicate_title(citation_dataframe)
     write_citation_dataframe(csv.dir)
 }</code></pre>
+</div>
+<div id="resulting-corpi" class="section level1">
+<h1 class="hasAnchor">
+<a href="#resulting-corpi" class="anchor"></a>Resulting corpi</h1>
 <table class="table">
 <colgroup>
 <col width="7%">
@@ -269,20 +279,16 @@ for (language in languages){
 <td align="left">261</td>
 <td align="left">561 (72%)</td>
 </tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
 </tbody>
 </table>
 </div>
+  </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

@@ -58,19 +58,19 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Corpus collection</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/making_query.html">making_query</a>
+          <a href="../articles/making_query.html">Making the online query</a>
         </li>
         <li>
-          <a href="../articles/query_processing.html">query_processing</a>
+          <a href="../articles/query_processing.html">Query processing</a>
         </li>
         <li>
-          <a href="../articles/query_QA.html">query_QA</a>
+          <a href="../articles/query_QA.html">Query QA/QC</a>
         </li>
         <li>
-          <a href="../articles/manual_download.html">manual_download</a>
+          <a href="../articles/manual_download.html">Manually downloading corpus documents</a>
         </li>
         <li>
-          <a href="../articles/select_human_reading.html">select_human_reading</a>
+          <a href="../articles/select_human_reading.html">Selecting documents for human-reading</a>
         </li>
       </ul>
 </li>
@@ -207,7 +207,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="query_QA_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Query Q&amp;A</h1>
@@ -220,98 +220,666 @@
 
     
     
-<pre><code><a href="https://ggplot2.tidyverse.org/reference">#####################
-##### LIBRARIES #####
-#####################
-
-library(ggplot2)
-library(forcats)
-library(plyr)
-library(dplyr)
-library(cowplot)
-library(gridExtra)
-library(multcompView)
-
-#################
-##### UTILS #####
-#################
-
-import::here(.from = "./R/utils/envpath.R", 
-    get_rootdir)
-
-import::here(.from = "./R/utils/lib_query.R",
-    get_meta_df,
-    get_language_dfs,
-    make_pretty_str
-    )
-
-#######################
-####### HELPERS #######
-#######################
-
-import::here(.from = "./R/query_QA/helpers.R", 
-    get_language,
-    read_citation_dataframe,
-    source_plot,
-    generate_label_df
-    )
-
-##############
-#### INIT ####
-##############
-
-root.dir &lt;- get_rootdir()
-languages &lt;- c("english", "portuguese", "spanish")
-out.dir &lt;- "exploitation/out/run79"
-
-##############
-#### MAIN ####
-##############
-
-# 1. read csv databases
-# language_dfs &lt;- get_language_dfs(languages)
-# load(file = file.path(root.dir, out.dir, paste0("language_dfs", ".rda")))
-# load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated", ".rda")))
-load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated_2", ".rda")))
-meta_df &lt;- get_meta_df(language_dfs)
-
-# 2. graphs
-pp &lt;- lapply(languages, function(language) source_plot(language, n = 30, facet = FALSE))
-pps &lt;- lapply(languages, function(language) source_plot(language, n = 30, facet = TRUE))
-
-p2 &lt;- ggplot(meta_df, aes(x = Year, group = language, fill = language)) +
-    geom_bar(aes(y = (..count..)/sum(..count..))) + 
-    scale_y_continuous(labels=scales::percent) +
-    ylab("relative frequencies") +
-    facet_grid(~collected)
-
-p3 &lt;- ggplot(meta_df, aes(x = Year, fill = language)) +
-    geom_density(alpha = .25, bw = 1) +
-    facet_grid(~collected)
-
-p5 &lt;- ggplot(meta_df[meta_df$Cites &gt;= 1, ], aes(y = Cites, x = language)) +
-    geom_violin(aes(color = collected), trim = FALSE, adjust = 1, alpha = 0.5) +
-    geom_boxplot(aes(fill = collected), position = position_dodge(preserve = "total", width = 0.9 ), width = 0.1) +
-    geom_text(data = generate_label_df(TukeyHSD(aov(Cites ~ language, data = meta_df), ordered = FALSE, conf.level = .95),
-        "language", meta_df, "Cites", fact = 2, yadjust = 100),
-         aes(x = match(plot.labels, languages) - 0.22, y = V1, label = labels)) +
-    geom_text(data = generate_label_df(TukeyHSD(aov(Cites ~ language, data = meta_df[meta_df$collected == "in corpus", ]), ordered = FALSE, conf.level = .95),
-    "language", meta_df[meta_df$collected == "in corpus", ], "Cites", fact = 2, yadjust = 100),
-     aes(x = match(plot.labels, languages) + 0.22, y = V1, label = labels)) +
-    scale_y_log10() + 
-    ylab("citations") + 
-    xlab("language") 
-
-plot.list &lt;- list(pp, pps, p2, p3, p5)
-
-pdf(file.path(root.dir, out.dir, "query_QA_2.pdf"), width = 17, height = 11, title = "query_QA")
-print(plot.list)
-dev.off()</a></code></pre>
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>This vignette presents the QA/QC of the query process.</p>
+</div>
+<div id="libraries" class="section level1">
+<h1 class="hasAnchor">
+<a href="#libraries" class="anchor"></a>Libraries</h1>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">wateReview</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)</pre></body></html></div>
+</div>
+<div id="data-loading" class="section level1">
+<h1 class="hasAnchor">
+<a href="#data-loading" class="anchor"></a>Data loading</h1>
+<p>We load the initial and final query and corpus databases.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="kw">file</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"language_dfs.rda"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>))
+<span class="no">initial_meta_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/get_meta_df.html">get_meta_df</a></span>(<span class="no">language_dfs</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="kw">file</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"language_dfs_updated_3.rda"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>))
+<span class="no">final_meta_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/get_meta_df.html">get_meta_df</a></span>(<span class="no">language_dfs</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">final_meta_df</span>, <span class="fl">3</span>) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">format</span> <span class="kw">=</span> <span class="st">"html"</span>, <span class="kw">caption</span> <span class="kw">=</span> <span class="st">""</span>) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">kableExtra</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hover"</span>, <span class="st">"condensed"</span>)) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">kableExtra</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/scroll_box.html">scroll_box</a></span>(<span class="kw">width</span> <span class="kw">=</span> <span class="st">"7in"</span>)</pre></body></html></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:7in; ">
+<table class="table table table-hover table-condensed">
+<caption>
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Cites
+</th>
+<th style="text-align:left;">
+Authors
+</th>
+<th style="text-align:left;">
+Title
+</th>
+<th style="text-align:right;">
+Year
+</th>
+<th style="text-align:left;">
+Source
+</th>
+<th style="text-align:left;">
+Publisher
+</th>
+<th style="text-align:left;">
+ArticleURL
+</th>
+<th style="text-align:left;">
+CitesURL
+</th>
+<th style="text-align:right;">
+GSRank
+</th>
+<th style="text-align:left;">
+QueryDate
+</th>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:left;">
+DOI
+</th>
+<th style="text-align:left;">
+ISSN
+</th>
+<th style="text-align:left;">
+CitationURL
+</th>
+<th style="text-align:right;">
+Volume
+</th>
+<th style="text-align:right;">
+Issue
+</th>
+<th style="text-align:right;">
+StartPage
+</th>
+<th style="text-align:right;">
+EndPage
+</th>
+<th style="text-align:right;">
+ECC
+</th>
+<th style="text-align:right;">
+CitesPerYear
+</th>
+<th style="text-align:right;">
+CitesPerAuthor
+</th>
+<th style="text-align:right;">
+AuthorCount
+</th>
+<th style="text-align:right;">
+Age
+</th>
+<th style="text-align:left;">
+language
+</th>
+<th style="text-align:left;">
+collected
+</th>
+<th style="text-align:left;">
+DOI_flag
+</th>
+<th style="text-align:left;">
+database
+</th>
+<th style="text-align:left;">
+source-app
+</th>
+<th style="text-align:left;">
+rec-number
+</th>
+<th style="text-align:left;">
+foreign-keys
+</th>
+<th style="text-align:left;">
+ref-type
+</th>
+<th style="text-align:left;">
+contributors
+</th>
+<th style="text-align:left;">
+titles
+</th>
+<th style="text-align:left;">
+periodical
+</th>
+<th style="text-align:left;">
+pages
+</th>
+<th style="text-align:left;">
+volume
+</th>
+<th style="text-align:left;">
+number
+</th>
+<th style="text-align:right;">
+dates
+</th>
+<th style="text-align:left;">
+publisher
+</th>
+<th style="text-align:left;">
+isbn
+</th>
+<th style="text-align:left;">
+notes
+</th>
+<th style="text-align:left;">
+urls
+</th>
+<th style="text-align:left;">
+electronic-resource-num
+</th>
+<th style="text-align:left;">
+pdfs
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+english.1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+[Anonymous]
+</td>
+<td style="text-align:left;">
+Developers and community officials work to solve wastewater issues and drinking water problems in Santa Cruz, Bolivia
+</td>
+<td style="text-align:right;">
+2000
+</td>
+<td style="text-align:left;">
+WATER-ENGINEERING &amp; MANAGEMENT
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+3675
+</td>
+<td style="text-align:left;">
+8/10/2018
+</td>
+<td style="text-align:left;">
+Journal article
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+147
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+english
+</td>
+<td style="text-align:left;">
+absent from corpus
+</td>
+<td style="text-align:left;">
+DOI absent
+</td>
+<td style="text-align:left;">
+english.enl
+</td>
+<td style="text-align:left;">
+EndNote
+</td>
+<td style="text-align:left;">
+14919
+</td>
+<td style="text-align:left;">
+149190
+</td>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Developers and community officials work to solve wastewater issues and drinking water problems in Santa Cruz, BoliviaWATER-ENGINEERING &amp; MANAGEMENT
+</td>
+<td style="text-align:left;">
+WATER-ENGINEERING &amp; MANAGEMENT
+</td>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+147
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:right;">
+2000
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+[Anonymous]
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+english.2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+ALVAREZ-GARCIA L A, CORTES-MONLLOR A
+</td>
+<td style="text-align:left;">
+CURRUTACA A PYTHIUM-ULTIMUM SOFT ROT OF XANTHOSOMA-SAGITTAEFOLIUM-M AND COLOCASIA-ESCULENTA-M IN PUERTO-RICO
+</td>
+<td style="text-align:right;">
+1971
+</td>
+<td style="text-align:left;">
+Journal of Agriculture of the University of Puerto Rico
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+238
+</td>
+<td style="text-align:left;">
+8/10/2018
+</td>
+<td style="text-align:left;">
+Journal article
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+78
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:left;">
+english
+</td>
+<td style="text-align:left;">
+absent from corpus
+</td>
+<td style="text-align:left;">
+DOI absent
+</td>
+<td style="text-align:left;">
+english.enl
+</td>
+<td style="text-align:left;">
+EndNote
+</td>
+<td style="text-align:left;">
+1226
+</td>
+<td style="text-align:left;">
+12260
+</td>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+A, Alvarez-Garcia L.A, Cortes-Monllor
+</td>
+<td style="text-align:left;">
+CURRUTACA A PYTHIUM-ULTIMUM SOFT ROT OF XANTHOSOMA-SAGITTAEFOLIUM-M AND COLOCASIA-ESCULENTA-M IN PUERTO-RICOJournal of Agriculture of the University of Puerto Rico
+</td>
+<td style="text-align:left;">
+JOURNAL OF AGRICULTURE OF THE UNIVERSITY OF PUERTO RICO
+</td>
+<td style="text-align:left;">
+78-84
+</td>
+<td style="text-align:left;">
+55
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:right;">
+1971
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Cited By (since 1971): 2
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+english.3
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+AQUILA M E A, FERREIRA A G
+</td>
+<td style="text-align:left;">
+GERMINATION OF SCARIFIED SEEDS OF ARAUCARIA-ANGUSTIFOLIA IN SOIL
+</td>
+<td style="text-align:right;">
+1984
+</td>
+<td style="text-align:left;">
+Ciencia e Cultura (Sao Paulo)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+4989
+</td>
+<td style="text-align:left;">
+8/10/2018
+</td>
+<td style="text-align:left;">
+Journal article
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1583
+</td>
+<td style="text-align:right;">
+1589
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+english
+</td>
+<td style="text-align:left;">
+absent from corpus
+</td>
+<td style="text-align:left;">
+DOI absent
+</td>
+<td style="text-align:left;">
+english.enl
+</td>
+<td style="text-align:left;">
+EndNote
+</td>
+<td style="text-align:left;">
+19839
+</td>
+<td style="text-align:left;">
+198390
+</td>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+A, Aquila M. E.G, Ferreira A.
+</td>
+<td style="text-align:left;">
+GERMINATION OF SCARIFIED SEEDS OF ARAUCARIA-ANGUSTIFOLIA IN SOILCiencia e Cultura (Sao Paulo)
+</td>
+<td style="text-align:left;">
+Ciencia e Cultura (Sao Paulo)
+</td>
+<td style="text-align:left;">
+1583-1589
+</td>
+<td style="text-align:left;">
+36
+</td>
+<td style="text-align:left;">
+9
+</td>
+<td style="text-align:right;">
+1984
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Cited By (since 1984): 15
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We use <code><a href="https://rdrr.io/pkg/wateReview/man/query_QA_plots.html">query_QA_plots()</a></code> to produce all plots.</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">initial</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/query_QA_plots.html">query_QA_plots</a></span>(<span class="no">initial_meta_df</span>)
+<span class="no">final</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/query_QA_plots.html">query_QA_plots</a></span>(<span class="no">final_meta_df</span>)</pre></body></html></div>
+</div>
+<div id="sources" class="section level1">
+<h1 class="hasAnchor">
+<a href="#sources" class="anchor"></a>Sources</h1>
+<div id="english-initial-vs-final" class="section level2">
+<h2 class="hasAnchor">
+<a href="#english-initial-vs-final" class="anchor"></a>English (initial vs final)</h2>
+<div id="initial" class="section level3">
+<h3 class="hasAnchor">
+<a href="#initial" class="anchor"></a>Initial</h3>
+<p><img src="query_QA_files/figure-html/unnamed-chunk-5-1.png" width="864"><img src="query_QA_files/figure-html/unnamed-chunk-5-2.png" width="864"></p>
+</div>
+<div id="final" class="section level3">
+<h3 class="hasAnchor">
+<a href="#final" class="anchor"></a>Final</h3>
+<p><img src="query_QA_files/figure-html/unnamed-chunk-6-1.png" width="864"><img src="query_QA_files/figure-html/unnamed-chunk-6-2.png" width="864"></p>
+</div>
+</div>
+<div id="spanish-initial-vs-final" class="section level2">
+<h2 class="hasAnchor">
+<a href="#spanish-initial-vs-final" class="anchor"></a>Spanish (initial vs final)</h2>
+<div id="initial-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#initial-1" class="anchor"></a>Initial</h3>
+<p><img src="query_QA_files/figure-html/unnamed-chunk-7-1.png" width="864"><img src="query_QA_files/figure-html/unnamed-chunk-7-2.png" width="864"></p>
+</div>
+<div id="final-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#final-1" class="anchor"></a>Final</h3>
+<p><img src="query_QA_files/figure-html/unnamed-chunk-8-1.png" width="864"><img src="query_QA_files/figure-html/unnamed-chunk-8-2.png" width="864"></p>
+</div>
+</div>
+<div id="portuguese-initial-vs-final" class="section level2">
+<h2 class="hasAnchor">
+<a href="#portuguese-initial-vs-final" class="anchor"></a>Portuguese (initial vs final)</h2>
+<div id="initial-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#initial-2" class="anchor"></a>Initial</h3>
+<p><img src="query_QA_files/figure-html/unnamed-chunk-9-1.png" width="864"><img src="query_QA_files/figure-html/unnamed-chunk-9-2.png" width="864"></p>
+</div>
+<div id="final-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#final-2" class="anchor"></a>Final</h3>
+<p><img src="query_QA_files/figure-html/unnamed-chunk-10-1.png" width="864"><img src="query_QA_files/figure-html/unnamed-chunk-10-2.png" width="864"></p>
+</div>
+</div>
+</div>
+<div id="time-coverage" class="section level1">
+<h1 class="hasAnchor">
+<a href="#time-coverage" class="anchor"></a>Time coverage</h1>
+<div id="initial-3" class="section level2">
+<h2 class="hasAnchor">
+<a href="#initial-3" class="anchor"></a>Initial</h2>
+<p><img src="query_QA_files/figure-html/unnamed-chunk-11-1.png" width="864"><img src="query_QA_files/figure-html/unnamed-chunk-11-2.png" width="864"></p>
+</div>
+<div id="final-3" class="section level2">
+<h2 class="hasAnchor">
+<a href="#final-3" class="anchor"></a>Final</h2>
+<p><img src="query_QA_files/figure-html/unnamed-chunk-12-1.png" width="864"><img src="query_QA_files/figure-html/unnamed-chunk-12-2.png" width="864"></p>
+</div>
+</div>
+<div id="citations" class="section level1">
+<h1 class="hasAnchor">
+<a href="#citations" class="anchor"></a>Citations</h1>
+<div id="initial-4" class="section level2">
+<h2 class="hasAnchor">
+<a href="#initial-4" class="anchor"></a>Initial</h2>
+<p><img src="query_QA_files/figure-html/unnamed-chunk-13-1.png" width="864"></p>
+</div>
+<div id="final-4" class="section level2">
+<h2 class="hasAnchor">
+<a href="#final-4" class="anchor"></a>Final</h2>
+<p><img src="query_QA_files/figure-html/unnamed-chunk-14-1.png" width="864"></p>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

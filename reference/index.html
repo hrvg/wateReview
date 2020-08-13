@@ -98,19 +98,19 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Corpus collection</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="../articles/making_query.html">making_query</a>
+          <a href="../articles/making_query.html">Making the online query</a>
         </li>
         <li>
-          <a href="../articles/query_processing.html">query_processing</a>
+          <a href="../articles/query_processing.html">Query processing</a>
         </li>
         <li>
-          <a href="../articles/query_QA.html">query_QA</a>
+          <a href="../articles/query_QA.html">Query QA/QC</a>
         </li>
         <li>
-          <a href="../articles/manual_download.html">manual_download</a>
+          <a href="../articles/manual_download.html">Manually downloading corpus documents</a>
         </li>
         <li>
-          <a href="../articles/select_human_reading.html">select_human_reading</a>
+          <a href="../articles/select_human_reading.html">Selecting documents for human-reading</a>
         </li>
       </ul>
     </li>
@@ -356,6 +356,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="assign_articles_to_players.html">assign_articles_to_players()</a></code> </p>
+        </td>
+        <td><p>Create a <code>.csv</code> files with the information to download the documents</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="assign_articles_to_readers.html">assign_articles_to_readers()</a></code> </p>
         </td>
         <td><p>Chunk the selected documents between a given number of human readers and copy them into a given directory</p></td>
@@ -432,6 +438,12 @@ This function mainly serves to limit the size of the document-feature matrix</p>
           <p><code><a href="format.data4get_ps.html">format(<i>&lt;data4get_ps&gt;</i>)</a></code> </p>
         </td>
         <td><p>Format the data to the format expected by get_ps</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="generate_label_df.html">generate_label_df()</a></code> </p>
+        </td>
+        <td><p>General a data.frame of labels for a violin plot</p></td>
       </tr><tr>
         
         <td>
@@ -555,6 +567,12 @@ This function mainly serves to limit the size of the document-feature matrix</p>
       </tr><tr>
         
         <td>
+          <p><code><a href="get_language.html">get_language()</a></code> </p>
+        </td>
+        <td><p>Interactive prompt to select language</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="get_language_dfs.html">get_language_dfs()</a></code> </p>
         </td>
         <td><p>Read the citation data frame and store them into a named list</p></td>
@@ -571,6 +589,12 @@ You probably want to execute this code on a linux server to avoid the issues wit
           <p><code><a href="get_meta_df.html">get_meta_df()</a></code> </p>
         </td>
         <td><p>Binds the separate languages data.frame into a meta data.frame</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_n_players.html">get_n_players()</a></code> </p>
+        </td>
+        <td><p>Prompt to get the number of players</p></td>
       </tr><tr>
         
         <td>
@@ -613,6 +637,12 @@ You probably want to execute this code on a linux server to avoid the issues wit
           <p><code><a href="get_rootdir.html">get_rootdir()</a></code> </p>
         </td>
         <td><p>Convenience functions to allow for inter-operability between different systems</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_samples.html">get_samples()</a></code> </p>
+        </td>
+        <td><p>Select the documents for downloading while correcting for bias in terms of year and sources</p></td>
       </tr><tr>
         
         <td>
@@ -853,6 +883,30 @@ The function removes alpha-numeric characters, some special characters, trim whi
       </tr><tr>
         
         <td>
+          <p><code><a href="plot_estimates.html">plot_estimates()</a></code> </p>
+        </td>
+        <td><p>Plot a time estimate matrix for a different number of downlaoders</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="print_estimate.html">print_estimate()</a></code> </p>
+        </td>
+        <td><p>Print the time estimate for manual downloading</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="query_QA_plots.html">query_QA_plots()</a></code> </p>
+        </td>
+        <td><p>Make QA/QC plot for a given data.frame by comparing corpus present in the query and actually collected</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="read_citation_dataframe.html">read_citation_dataframe()</a></code> </p>
+        </td>
+        <td><p>Read the citation data.frame exported by the query processing</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="read_countries_database.html">read_countries_database()</a></code> </p>
         </td>
         <td><p>Read the country database file</p></td>
@@ -919,6 +973,12 @@ The function removes alpha-numeric characters, some special characters, trim whi
       </tr><tr>
         
         <td>
+          <p><code><a href="source_plot.html">source_plot()</a></code> </p>
+        </td>
+        <td><p>Produce a barplot of the different sources present in the query and in the collected corpus</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="transform.DTM.html">transform(<i>&lt;DTM&gt;</i>)</a></code> </p>
         </td>
         <td><p>This function formats the DTM to be used by the ML models
@@ -929,6 +989,12 @@ In particular, merge together terms corresponding to one country, e.g. <code>cos
           <p><code><a href="transform_data.html">transform_data()</a></code> </p>
         </td>
         <td><p>Transform the data with centering, scaling and Box-Cox transformations</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="update_database.html">update_database()</a></code> </p>
+        </td>
+        <td><p>Update the database by marking the manuall downloaded articles as <code>in corpus</code></p></td>
       </tr><tr>
         
         <td>
