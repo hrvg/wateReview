@@ -37,10 +37,10 @@ navbar:
           href: articles/endnote_processing.html  
       - text: Metadata mining
         menu:
-        - text: web_scrapping
+        - text: Webscrapping metadata
           href: articles/web_scrapping.html
-        - text: metadata_mining
-          href: articles/metadata_mining.html
+        - text: Mining the citation network
+          href: articles/mining_citation_network.html
       - text: Location predictions
         menu:
         - text: text_mining  
@@ -81,7 +81,7 @@ navbar:
           href: articles/hexagonal_maps.html
       - text: Connectivity  
         menu:
-        - text: Citation network
-          href: articles/citation_network.html
+        - text: Bipartite networks
+          href: articles/bipartite_networks.html
         - text: Network visualization
           href: articles/network_visualization.html

@@ -1,84 +1,90 @@
 ---
-title: "Webscrapping"
+title: "Webscrapping metadata"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Webscrapping}
+  %\VignetteIndexEntry{Webscrapping metadata}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
+# Purpose
+
+This vignette documents the collection of additional article metadata.
+Because this vignette retrieves some licensed information, it is not run.
+
+# Libraries
 
 ```
-### libraries ###
+library(wateReview)
 if(!require("rvest")) install.packages("rvest")
 library("rvest")
-
 if(!require("rscopus")) install.packages("rscopus")
 library("rscopus")
+```
 
-### utils ###
-import::here(.from = "./R/utils/envpath.R", 
-	get_rootdir)
+# Initialization
 
-import::here(.from = "./R/utils/lib_query.R",
-	get_meta_df,
-	get_language_dfs,
-	make_pretty_str
-	)
+We define here an output directory `out.dir` and an API for `rscopus`.
 
-import::here(.from = "./R/utils/lib_webscrapping.R",
-  get.scopusAbstract,
-  get.wosAbstract,
-  get.wosAuthKeywords,
-  get.wosFullResult,
-  get.allMetadata,
-  add.abstractsToCorpus,
-  get.relevantCountries,
-  get.allAuthKeywords,
-  QA.AuthKeywords,
-  get.boolean_AuthKeywords,
-  get.ind_hasCountryTag
-)
-
-### main ###
-
-# init
-root.dir <- get_rootdir()
+```
 languages <- c("english", "portuguese", "spanish")
 out.dir <- "exploitation/out/run79"
-rscopus::set_api_key("38493e05eff904cef27135964f34d2b2")
+rscopus::set_api_key("your/API/key")
+```
 
-# data loading
-load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated_2", ".rda")))
+# Data loading
+
+```
+load(file = system.file("extdata", "language_dfs_updated_3", ".rda", package = "wateReview")
 in_corpus <- language_dfs$english[which(language_dfs$english$collected == "in corpus"), ]
 scopusID <- in_corpus$ArticleURL[grepl("scopus", in_corpus$ArticleURL)]
 wosID <- in_corpus[!grepl("scopus", in_corpus$ArticleURL), ]
 wosID <- wosID$DOI
+```
 
-# abstract retrieval
-scopusAbstracts <- get.allMetadata(scopusID, fun = get.scopusAbstract)
-wosAbstracts <- get.allMetadata(wosID, fun = get.wosAbstract)
-in_corpus <- add.abstractsToCorpus(in_corpus, scopusAbstracts, wosAbstracts)
-saveRDS(in_corpus, "in_corpus.Rds")
+# Abstract retrieval
 
-# full_result
-wosFullResult <- get.allMetadata(in_corpus$DOI, fun = get.wosFullResult)
+```
+scopusAbstracts <- get_allMetadata(scopusID, fun = get_scopusAbstract)
+wosAbstracts <- get_allMetadata(wosID, fun = get_wosAbstract)
+in_corpus <- add_abstractsToCorpus(in_corpus, scopusAbstracts, wosAbstracts)
+```
 
-# keywords
-relevant_countries <- get.relevantCountries()
-wosAuthKeywords <- get.allAuthKeywords(wosFullResult)
+# Full_result
+
+```
+wosFullResult <- get_allMetadata(in_corpus$DOI, fun = get_wosFullResult)
+```
+
+# Keywords
+
+We now extract the author-keywords from the full results.
+
+```
+relevant_countries <- get_relevantCountries()
+wosAuthKeywords <- get_allAuthKeywords(wosFullResult)
 ind_nullAuthKeywords <- QA.AuthKeywords(wosAuthKeywords, relevant_countries)
-saveRDS(wosAuthKeywords, "wosAuthKeywords.Rds")
+```
 
-# iterate (optional)
-# at this point, it is possible to iterate and retry some of the failed entries
-# wosFullResult <- get.allMetadata(in_corpus$DOI, fun = get.wosFullResult, newpass = TRUE, metadata = wosFullResult, ind_null = ind_nullAuthKeywords)
+# Iterate (optional)
 
-# transform results to label
-boolean_AuthKeywords <- get.boolean_AuthKeywords(wosAuthKeywords, relevant_countries)
-saveRDS(boolean_AuthKeywords, "boolean_AuthKeywords.Rds")
+At this point, it is possible to iterate and retry some of the failed entries
+```
+wosFullResult <- get_allMetadata(in_corpus$DOI, fun = get_wosFullResult, newpass = TRUE, metadata = wosFullResult, ind_null = ind_nullAuthKeywords)
+```
 
-# identify entries with any label
-ind_hasCountryTag <- get.ind_hasCountryTag(boolean_AuthKeywords)
-saveRDS(ind_hasCountryTag, "ind_hasCountryTag.Rds")
+# Transform results to label
+
+Using `get_boolean_AuthKeywords()` we transform the keywords into a boolean vector to use as input to the machine learning predictions.
+
+```
+boolean_AuthKeywords <- get_boolean_AuthKeywords(wosAuthKeywords, relevant_countries)
+```
+
+# Identify entries with any label
+
+Using `get_ind_hasCountryTag()` we retrive the indices of the documents of the corpus that have been identified to have author-keywords.
+
+```
+ind_hasCountryTag <- get_ind_hasCountryTag(boolean_AuthKeywords)
 ```

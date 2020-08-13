@@ -15,7 +15,10 @@ The citing literature is used to build a citation network.
 Keywords are used to augment the labels of country location derived from the human-reading.
 This is done by looking for regular expression of the name of the 23 target countries.
 
-# Citation 
+# Minig the citation network
+
+The following chunk extracts the cited and citing literature from the webscrapped metadata.
+This chunk is not run as it requires some licensed information.
 
 ```
 citingFile <- "citing_df.Rds"

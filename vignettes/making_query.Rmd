@@ -121,7 +121,7 @@ SU = Water Resources AND (TS = ((água) AND ((Acesso) OR (agricultura) OR (agrop
 - allow for exporting 20k citation at once in `.csv`
 - Scopus includes part of SciELO journals and has more journal in languages that are not English
 
-## Query with English terms
+### Query with English terms
 
 
 ```
@@ -140,7 +140,7 @@ AND KEY
 AND  DOCTYPE ( ar )  AND  ( EXCLUDE ( PREFNAMEAUID ,  "Anon#1" )  OR  EXCLUDE ( PREFNAMEAUID ,  "Undefined#Undefined" ) )  AND  ( EXCLUDE ( SUBJAREA ,  "MEDI" )  OR  EXCLUDE ( SUBJAREA ,  "BIOC" )  OR  EXCLUDE ( SUBJAREA ,  "IMMU" )  OR  EXCLUDE ( SUBJAREA ,  "ARTS" )  OR  EXCLUDE ( SUBJAREA ,  "VETE" )  OR  EXCLUDE ( SUBJAREA ,  "PHAR" )  OR  EXCLUDE ( SUBJAREA ,  "NURS" )  OR  EXCLUDE ( SUBJAREA ,  "PSYC" )  OR  EXCLUDE ( SUBJAREA ,  "PHYS" )  OR  EXCLUDE ( SUBJAREA ,  "NEUR" )  OR  EXCLUDE ( SUBJAREA ,  "HEAL" )  OR  EXCLUDE ( SUBJAREA ,  "DENT" )  OR  EXCLUDE ( SUBJAREA ,  "MATH" )  OR  EXCLUDE ( SUBJAREA ,  "Undefined" ) )  AND  ( LIMIT-TO ( LANGUAGE ,  "English" ) )
 ```
 
-## Query with Spanish terms
+### Query with Spanish terms
 
 ```
 KEY(
@@ -158,7 +158,7 @@ AND KEY
 AND  DOCTYPE ( ar )  AND  ( EXCLUDE ( PREFNAMEAUID ,  "Anon#1" )  OR  EXCLUDE ( PREFNAMEAUID ,  "Undefined#Undefined" ) )  AND  ( EXCLUDE ( SUBJAREA ,  "MEDI" )  OR  EXCLUDE ( SUBJAREA ,  "BIOC" )  OR  EXCLUDE ( SUBJAREA ,  "IMMU" )  OR  EXCLUDE ( SUBJAREA ,  "ARTS" )  OR  EXCLUDE ( SUBJAREA ,  "VETE" )  OR  EXCLUDE ( SUBJAREA ,  "PHAR" )  OR  EXCLUDE ( SUBJAREA ,  "NURS" )  OR  EXCLUDE ( SUBJAREA ,  "PSYC" )  OR  EXCLUDE ( SUBJAREA ,  "PHYS" )  OR  EXCLUDE ( SUBJAREA ,  "NEUR" )  OR  EXCLUDE ( SUBJAREA ,  "HEAL" )  OR  EXCLUDE ( SUBJAREA ,  "DENT" )  OR  EXCLUDE ( SUBJAREA ,  "MATH" )  OR  EXCLUDE ( SUBJAREA ,  "Undefined" ) )  AND  ( LIMIT-TO ( LANGUAGE ,  "Spanish" ) )
 ```
 
-## Query with Portuguese terms
+### Query with Portuguese terms
 
 ```
 KEY(
