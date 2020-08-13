@@ -7,98 +7,81 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 9,
+  fig.width = 9, 
+  comment = "#>"
+)
 ```
-#####################
-##### LIBRARIES #####
-#####################
 
-library(ggplot2)
-library(forcats)
-library(plyr)
-library(dplyr)
-library(cowplot)
-library(gridExtra)
-library(multcompView)
+# Purpose
 
-if (!require("oce")) install.packages("oce")
-library("oce")
+This vignette documents the selection of documents for manual download.
 
-#################
-##### UTILS #####
-#################
+# Libraries
 
-import::here(.from = "./R/utils/envpath.R", 
-	get_rootdir)
 
-import::here(.from = "./R/utils/lib_query.R",
-	get_meta_df,
-	get_language_dfs,
-	make_pretty_str
-	)
+```{r}
+library(wateReview)
+```
 
-#######################
-####### HELPERS #######
-#######################
+# Data loading
 
-import::here(.from = "./R/query_QA/helpers.R", 
-	get_language,
-	read_citation_dataframe,
-	source_plot,
-	generate_label_df
-	)
-
-import::here(.from = "./R/query_QA/download_party/helpers.R", 
-	get_samples,
-	print_estimate,
-	plot_estimates,
-	get_n_players,
-	assign_articles_to_players,
-	update_database
-	)
-
-##############
-#### INIT ####
-##############
-
-root.dir <- get_rootdir()
+```{r}
 languages <- c("english", "portuguese", "spanish")
-out.dir <- "exploitation/out/run79"
+load(file = system.file("extdata", "language_dfs.rda", package = "wateReview"))
+```
 
-##############
-#### MAIN ####
-##############
+# Get number of samples
 
-# 1. read csv databases
-load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated_3", ".rda")))
+We first obtain the `baseline_pct` of collected documents from the English corpus and derive the numbers of articles to collect for the other corpi in order to match that return rate.
 
-# 2. get number of samples
+```{r}
 baseline_pct <- table(language_dfs$english$collected)[["in corpus"]] / nrow(language_dfs$english)
 n_spanish <- ceiling(baseline_pct * nrow(language_dfs$spanish)) - table(language_dfs$spanish$collected)[["in corpus"]]
 n_portuguese <- ceiling(baseline_pct * nrow(language_dfs$portuguese)) - table(language_dfs$portuguese$collected)[["in corpus"]]
-# n <- list(spanish = n_spanish, portuguese = n_portuguese)
 n <- list(spanish = 1.2 * n_spanish, portuguese = 1.2 * n_portuguese)
 N <- sum(unlist(n))
+```
 
-# 3. get estimates
+# Time estimate
+
+This heatmap was helpful to budget the time slots for manually downloading the target number of `r int(N)` documents.
+
+```{r, echo = FALSE}
 plot_estimates()
+```
 
-# 4. get samples 
+# Get samples
+
+The following plot shows the distribution over time and sources for the target corpus and correct for bias.
+
+```{r}
 spanish_samples <- get_samples("spanish", n_spanish, pl = TRUE)
 portuguese_samples <- get_samples("portuguese", n_portuguese, pl = TRUE)
 samples <- list(spanish = spanish_samples, portuguese = portuguese_samples)
 ind_spanish <- which(spanish_samples == 1)
 ind_portuguese <- which(portuguese_samples == 1)
 ind <- list(spanish = ind_spanish, portuguese = ind_portuguese)
+```
 
-# 5. assign urls to downloaders
-n_players <- get_n_players()
-# n_players <- 12
+# Assign documents to downloaders
+
+Using `assign_articles_to_players()` creates a set of folders, one per downloader, along with `csv` files with the information needed to manually look-up and download the documents.
+
+```
+n_players <- 12
 assign_articles_to_players("spanish", number_of_players = n_players)
 assign_articles_to_players("portuguese", number_of_players = n_players)
+```
 
-# 6. update the databases
-# language_dfs <- update_database("portuguese", language_dfs)
-# language_dfs <- update_database("spanish", language_dfs)
-# save(language_dfs, file = file.path(root.dir, out.dir, paste0("language_dfs_updated_3", ".rda")))
+# Update the databases
 
+Once the missing document have been downloaded, `update_database()` checks which documents have been retrieved and mark them as `in corpus`.
+
+```
+language_dfs <- update_database("spanish", language_dfs)
+language_dfs <- update_database("portuguese", language_dfs)
 ```

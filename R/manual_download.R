@@ -1,16 +1,30 @@
-print_estimate <- function(n_dl = 8, time = 5){
-	print("Estimate (h)")
-	print(signif(N * time / 60 / n_dl, 3))
+
+#' Print the time estimate for manual downloading
+#' @param n_dl numeric, number of downloaders
+#' @param time numeric, time to download one document in minutes
+#' @param pr logical, controls the output of the values of the estimated times
+#' @return The time estimates in hours
+#' @export 
+print_estimate <- function(n_dl = 8, time = 5, pr = FALSE){
+	if (pr){
+		print("Estimate (h)")
+		print(signif(N * time / 60 / n_dl, 3))
+	} 
 	return(N * time / 60 / n_dl)
 }
 
+#' Plot a time estimate matrix for a different number of downlaoders
+#' @param downloaders numeric, vector of number of downloaders
+#' @param times numeric, vector of times to download one article
+#' @return a heat map plot
+#' @export
 plot_estimates <- function(downloaders = seq(7, 7+5), times = seq(1, 5, 0.5)){
 	estimates <- outer(downloaders, times, print_estimate)
 	p <- oce::imagep(
 		x = downloaders,
 		y = times,
 		z = estimates,
-		col = oce.colorsJet(14),
+		col = oce::oce.colorsJet(14),
 		ylab = 'Time [min]',
 		xlab = '# downloaders [-]',
 		zlab = 'Time [h]',
@@ -18,6 +32,12 @@ plot_estimates <- function(downloaders = seq(7, 7+5), times = seq(1, 5, 0.5)){
 		decimate = FALSE)
 }
 
+#' Select the documents for downloading while correcting for bias in terms of year and sources
+#' @param language character, one of "enlish", "portuguese", "spanish"
+#' @param n the number of samples to select
+#' @param pl logical, controls if a plot is produced or not
+#' @return samples indices
+#' @export
 get_samples <- function(language, n, pl = FALSE){
 
 	get_pt_df <- function(var, resampled = FALSE){
@@ -79,6 +99,10 @@ get_samples <- function(language, n, pl = FALSE){
 	return(samples)
 }
 
+#' Create a `.csv` files with the information to download the documents
+#' @param language character, one of "english", "spanish", "portuguese"
+#' @param number_of_players numeric, number of downloarders
+#' @export 
 assign_articles_to_players <- function(language, number_of_players = 8){
 	selected <- language_dfs[[language]][ind[[language]], ]
 	selected <- selected[, colnames(selected) %in% c("Authors", "Title", "Year", "Source", "urls", "DOI")]
@@ -96,11 +120,18 @@ assign_articles_to_players <- function(language, number_of_players = 8){
 
 }
 
+#' Prompt to get the number of players
+#' @export
 get_n_players <- function(){
 	n_players <- readline(prompt="How many people are downloading?: ")
 	return( as.numeric(n_players) )
 }
 
+#' Update the database by marking the manuall downloaded articles as `in corpus`
+#' @param language character, one of "english", "spanish", "portuguese"
+#' @param language_dfs list of data.frame with the information from the query and the corpus collection
+#' @return udpated `language_dfs` list of data.frame with the information from the query and the corpus collection
+#' @export
 update_database <- function(language, language_dfs){
 	language_ld <- list.dirs(file.path(root.dir, paste0("data/latin_america/corpus_pdf/", language, "/manual_download_", language)), recursive = TRUE, full.names = FALSE)[-1]
 	language_recovery_rate <- length(language_ld) / n$language

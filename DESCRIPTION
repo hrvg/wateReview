@@ -56,6 +56,7 @@ Imports:
     raster,
     RColorBrewer,
     reshape2,
+    sampling,
     scales,
     tidyr,
     tidyverse,

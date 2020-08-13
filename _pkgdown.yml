@@ -13,9 +13,9 @@ navbar:
           href: articles/making_query.html
         - text: Query processing
           href: articles/query_processing.html
-        - text: query_QA
+        - text: Query QA/QC
           href: articles/query_QA.html
-        - text: manual_download
+        - text: Manually downloading corpus documents
           href: articles/manual_download.html
         - text: select_human_reading
           href: articles/select_human_reading.html
