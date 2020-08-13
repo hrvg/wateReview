@@ -17,7 +17,7 @@ navbar:
           href: articles/query_QA.html
         - text: Manually downloading corpus documents
           href: articles/manual_download.html
-        - text: select_human_reading
+        - text: Selecting documents for human-reading
           href: articles/select_human_reading.html
       - text: Topic Model  
         menu:
