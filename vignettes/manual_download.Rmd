@@ -1,8 +1,8 @@
 ---
-title: "Manual downloading corpus documents"
+title: "Manually downloading corpus documents"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Manual downloading corpus documents}
+  %\VignetteIndexEntry{Manually downloading corpus documents}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -48,7 +48,7 @@ N <- sum(unlist(n))
 
 # Time estimate
 
-This heatmap was helpful to budget the time slots for manually downloading the target number of `r int(N)` documents.
+This heatmap was helpful to budget the time slots for manually downloading the target number of `r round(N)` documents.
 
 ```{r, echo = FALSE}
 plot_estimates()
