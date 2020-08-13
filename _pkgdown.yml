@@ -9,9 +9,9 @@ navbar:
       - text: Material and methods
       - text: Corpus collection
         menu:
-        - text: making_query
+        - text: Making the online query
           href: articles/making_query.html
-        - text: query_processing
+        - text: Query processing
           href: articles/query_processing.html
         - text: query_QA
           href: articles/query_QA.html

@@ -14,15 +14,19 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+# Purpose
+
 This vignette showcases the workflow to process the `.csv` files resulting from the online query.
 For each language, the files are processed and checked for unique hits and titles.
 
+# Processing
+
 ```
-root.dir <- get_rootdir()
 languages <- c("english", "spanish", "portuguese")
 for (language in languages){
 	csv.dir <- "data/latin_america/corpus_csv/"
-	csv.dir <- file.path(root.dir, csv.dir, language)
+	csv.dir <- file.path(csv.dir, language)
 	csv.files <- get_csv_files(csv.dir)
 	citation_dataframe <- get_citation_dataframe(csv.files)
 	citation_dataframe <- check_duplicate_row(citation_dataframe)
@@ -31,9 +35,10 @@ for (language in languages){
 }
 ```
 
+# Resulting corpi
+
 | Language   | Number of non-duplicate query returns | Number of documents automatically collected | Number of document manually collected | Total Corpus Size |
 |:-----------|:--------------------------------------|:--------------------------------------------|:--------------------------------------|:------------------|
 | English    | 29,365                                | 21,197  (72%)                               | 0                                     | 21,197 (72%)      |
 | Spanish    | 1,411                                 | 122  (8.6%)                                 | 875                                   | 997 (71%)         |
 | Portuguese | 777                                   | 300  (39%)                                  | 261                                   | 561 (72%)         |
-|            |                                       |                                             |                                       |                   |

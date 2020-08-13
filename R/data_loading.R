@@ -31,7 +31,14 @@ get_language_dfs <- function(languages){
 #' @param language_dfs a named list of data.frame
 #' @return a data.frame
 #' @export
-get_meta_df <- function(language_dfs){do.call(rbind, language_dfs)}
+get_meta_df <- function(language_dfs){
+	language_dfs <- lapply(language_dfs, function(df){
+		df %>% 
+		dplyr::mutate_if(is.factor, iconv, from = "WINDOWS-1252", to = "UTF-8") %>%
+		dplyr::mutate_if(is.character, iconv, from = "WINDOWS-1252", to = "UTF-8")
+	})
+	do.call(rbind, language_dfs)
+}
 
 #' This function performs the cross-walk between human reading databases and topic model databases using document titles
 #' @param titleInd_file a filename, if it exists, file content is read, if it does not exist the formatting and regexpr matching is performed
