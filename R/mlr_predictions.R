@@ -67,6 +67,7 @@ make_trainingData <- function(validationHumanReadingDTM, humanReadingTrainingLab
 #' @param trainingData data.frame of training data
 #' @param validationHumanReadingDTM document-term matrix from human reading
 #' @return MLDR a multilabel data.frame from mldr package
+#' @import mldr
 #' @export
 get_MLDR <- function(trainingData, validationHumanReadingDTM){
 	MLDR <- mldr_from_dataframe(trainingData, 
@@ -108,6 +109,7 @@ EDA_trainingData <- function(trainingData, validationHumanReadingDTM, humanReadi
 #' @param scale_type One of "location", "spatial", "temporal", default to "location"
 #' @param aggregated_labels logical
 #' @return a list of learners
+#' @import mlr
 #' @export
 get_binaryRelevanceLearners <- function(lrn = "classif.svm", trainingData, validationHumanReadingDTM, scale_type = "location", aggregated_labels = FALSE){
 	binary.learner <- makeLearner(lrn)
@@ -149,6 +151,7 @@ get_chainingOrder <- function(trainingData, validationHumanReadingDTM, scale_typ
 #' @param aggregated_labels logical
 #' @param obs_threshold remove columns with less than this threshold
 #' @return benchmark object
+#' @import mlr
 #' @export
 multilabelBenchmark <- function(trainingData, validationHumanReadingDTM, model_type, scale_type = "location", aggregated_labels = FALSE, obs_threshold = 10){
 	trainingData <- trainingData[, colSums(trainingData) >= obs_threshold]
@@ -171,6 +174,8 @@ multilabelBenchmark <- function(trainingData, validationHumanReadingDTM, model_t
 #' @param model_type type of predictions
 #' @param filter logical, if true create task for a binary classification Irrelevant/Relevant
 #' @return a MLR task
+#' @import mlr
+#' @import mldr
 #' @export
 make_task <- function(trainingData, validationHumanReadingDTM, model_type, filter = FALSE){
 	if (model_type == "binary_relevance"){
@@ -193,6 +198,7 @@ make_task <- function(trainingData, validationHumanReadingDTM, model_type, filte
 #' Legacy function to assess performance of learner that learned the fine temporal scale against the aggregated temporal scale
 #' @param lrn learner, used to access associated benchmark predictions
 #' @export
+#' @import mlr
 get_short_long_term_pred <- function(lrn){
 	rfpred <- getBMRPredictions(bmr, as.df = TRUE, learner.ids = lrn$id)
 	short_term_col.truth <- c("truth.event", "truth.day", "truth.week")
@@ -214,6 +220,7 @@ get_short_long_term_pred <- function(lrn){
 #' Make a performance plot for multilabel classification
 #' @param AggrPerformances data.frame of aggregated performance from getBMRAggrPerformances
 #' @return ggplot plot
+#' @import ggplot2
 #' @export
 PerfVisMultilabel <- function(AggrPerformances){
 	p_AggrPerformances <- AggrPerformances[, -1]
@@ -285,7 +292,7 @@ make_trainingDataMulticlass <- function(trainingData, validationHumanReadingDTM,
 #' @param data data to be formatted
 #' @return list with two named elements: data and labels
 #' @export
-format.data4get_ps <- function(data){
+format_data4get_ps <- function(data){
 	.data <- list()
 	.data$data <- data[, -ncol(data)]  
 	.data$labels <- data[, ncol(data)]  
@@ -297,6 +304,7 @@ format.data4get_ps <- function(data){
 #' @param data data used to construst the tuning values of the hyperparameters
 #' @param grid_resolution resolution of the tuning grid
 #' @return a MLR parameter set
+#' @import mlr
 #' @export
 get_ps <- function(lrn.id, data, grid_resolution){
 	if (lrn.id == "classif.svm"){
@@ -348,9 +356,10 @@ get_ps <- function(lrn.id, data, grid_resolution){
 #' @param mes measures
 #' @param grid_resolution resolution of the tuning grid
 #' @return list of wrapped learners
+#' @import mlr
 #' @export
 get_wrappedLearnersList <- function(learnerList, data, mes, grid_resolution){
-	data <- format.data4get_ps(data)
+	data <- format_data4get_ps(data)
 	inner <- makeResampleDesc("Holdout", split = 0.8)
 	random_learners <- c("classif.nnTrain")
 	wrappedLearnersList <- lapply(learnerList, function(learner){
@@ -375,6 +384,7 @@ get_wrappedLearnersList <- function(learnerList, data, mes, grid_resolution){
 #' @param model_type type of predictions
 #' @param filter logical, if true create task for a binary classification Irrelevant/Relevant
 #' @return benchmark object
+#' @import mlr
 #' @export
 multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune = NULL){
 	learning.task <- make_task(trainingData, NULL, model_type, filter = filter)
@@ -431,6 +441,7 @@ multiclassBenchmark <- function(trainingData, model_type, filter = FALSE, tune =
 #' Ties are broken by taking the mininum
 #' @param bmr a MLR benchmark
 #' @param tuning_par a tuning parameter name
+#' @import mlr
 #' @export
 get_tuningPar <- function(bmr, tuning_par){
 	getBMRTuneResults(bmr, as.df = TRUE) %>% 
@@ -450,6 +461,7 @@ get_tuningPar <- function(bmr, tuning_par){
 #' @param model_type 
 #' @param filter logical, if true will train and predict for the relevance filter
 #' @return prediction or membership
+#' @import mlr
 #' @export
 make_predictions <- function(lrn, parvals, trainingData, targetData, model_type, filter = TRUE){
 	learning.task <- make_task(trainingData, NULL, model_type, filter = filter)
@@ -484,6 +496,9 @@ make_targetData <- function(DTM, addTopicDocs = FALSE, topicDocs = NULL){
 #' @param bmr benchmark results from MLR
 #' @param binary logical, if TRUE it's a binary classification and the measure name has to be changed
 #' @return named list: p_auc: the plot; medians: a table with median value of auc
+#' @import mlr
+#' @import ggpubr
+#' @import rstatix
 #' @export
 make_AUCPlot <- function(bmr, binary = FALSE){
 	perf <- getBMRPerformances(bmr, as.df = TRUE) %>% 
@@ -517,8 +532,9 @@ make_AUCPlot <- function(bmr, binary = FALSE){
 #' @param DTM, a document term matrix
 #' @param change.col logical, default to `TRUE`, controls the modification of the column names for compatibility with other functions
 #' @return a DTM 
+#' @import dplyr
 #' @export
-transform.DTM <- function(DTM, change.col = TRUE){
+transform_DTM <- function(DTM, change.col = TRUE){
  DTM <- DTM %>% as.matrix() %>% as.data.frame() %>%
 	mutate(antigua = antigua + barbuda) %>% select(- barbuda) %>% rename(Antigua.and.Barbuda = antigua) %>%
 	mutate(costa = costa + rica) %>% select(-rica) %>% rename(Costa.Rica = costa) %>%

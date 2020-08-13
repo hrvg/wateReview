@@ -7,23 +7,32 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```
-### libraries ###
-import::from("magrittr", "%>%")
-
-### utils ###
-
-import::here(.from = "./R/utils/lib_text_mining.R",
-	get_dfm,
-	filter_dfm,
-	get_dtm
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 7,
+  fig.width = 7, 
+  comment = "#>"
 )
+```
 
-### main ###
+# Purpose
 
+This vignette creates a document-feature matrix from the corpus and filters it a number of tokens representing the country locations.
+Because the text mining is based on the text of the articles (that we cannot distribute), the vignette is not executed.
+
+# Extracting the document-feature matrix
+
+```
+library("magrittr")
 filtered_dfm <- get_dfm() %>% filter_dfm()
-filtering_tokens <- readRDS("./data/country_tokens.Rds")
+```
+
+```{r}
+filtering_tokens <- readRDS(system.file("extdata", "country_tokens.Rds", package = "wateReview"))
+head(filtering_tokens)
+```
+
+```
 obj_dtm <- get_dtm(filtered_dfm, filtering_tokens)
-dtm_file <- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"
-saveRDS(obj_dtm, dtm_file)
 ```

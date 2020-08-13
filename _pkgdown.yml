@@ -43,11 +43,11 @@ navbar:
           href: articles/mining_citation_network.html
       - text: Location predictions
         menu:
-        - text: text_mining  
-          href: articles/text_mining.html  
-        - text: webscrapped_training_labels
+        - text: Webscrapped training labels
           href: articles/webscrapped_training_labels.html
-        - text: ML_predictions
+        - text: Text mining  
+          href: articles/text_mining.html  
+        - text: Location prediction
           href: articles/ML_predictions.html
       - text: Socio-hydrologic clusters
         menu:

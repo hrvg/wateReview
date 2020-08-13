@@ -7,42 +7,16 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
-## Summary
-
-## Rationale
-
-The human reading collected metadata about: the document location, the document funding source and the document spatial and temporal scales.
-I focus here on the identifying scales.
-
-## Problem Definition
-
-The problem at hand is a classification task.
-This classification is characterized by having multiple labels.
-In other words, one document can have the spatial scales labels: "Day" and "Week" and "Year" at the same time.
-This problem of classification is different of the simpler problem of having to predict one label with different values: a multi-class classification problem.
-For example, the current problem could be conceptualized as one label "Timescale" taking the values "Day", "Week", "Year" and so on.
-
-Two main approaches exist to solve such a multilabel classification problem.
-The first one is to use algorithm adapted for such a task.
-The second one is to transform the problem to make it tractable.
-Such a transformation can be achieved through two schemes: Binary Relevance (BR) and Label Powerset.
-In the LP approach, the multilabel problem is transformed into a multi-class classification of the labelsets.
-In the BR approach, the problem is decomposed in a set of binary problems.
-In addition, we test more refined BR approaches: classifier chains were the binary classifiers are trained in a given order to predict the labels; nested stacking were the labels are approximated successively by learners and dependent binary relevance where every other labels are used as the input for each label-specific binary learners and stacking which combine dependent binary relevance and nested stacking.
-
-The performance metric used is the multilabel Hamming loss corresponding to the proportion of incorrectly predicted labels.
-We also profide the subset 0 1 metric corresponding to the proportion of observations for which the complete set of label is correctly predicted.
-
-## Temporal Scales
-
-Identifying temporal scales give avenues to 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 7,
+  fig.width = 7, 
+  comment = "#>"
+)
+```
 
 
-
-### Technical consideration
-
-## Spatial Scales
 # Location Prediction
 
 Machine learning predicts the location of the country of study of each paper.
@@ -69,87 +43,50 @@ Random forest outperforms every other model with a mean multiclass AUC of 0.99 a
 No further tuning is performed and the random forest with default hyper-parameters is used for predictions.
 More complex approaches were investigated: using additional geographical tokens (e.g. rivers and mountain ranges names), multilabel classifications (e.g. binary relevance, label powerset) or deep learning models of natural language processing (e.g. BERT) both on full texts and abstracts with little benefits.
 
+# Libraries
+
+```{r}
+library(wateReview)
 ```
-### libraries
-library("mlr")
-library("parallelMap")
-library("parallel")
-library("OpenML")
-library("NLP")
-library("tm")
-library("data.table")
-library("mldr")
-library("reshape2")
-library("ggplot2")
-library("rstatix")
-library("ggpubr")
-library("dplyr")
 
 
-### utils ###
-import::here(.from = "./R/utils/lib_shared.R", 
-	get_titleInd,
-	get_validationHumanReading,
-	get_topicDocs,
-	get_titleDocs,
-	get_webscrapped_validationDTM,
-	get_webscrapped_trainingLabels,
-	get_DocTermMatrix,
-	align.humanReadingTopicModel,
-	QA.alignedData
-)
+# Defining parameters
 
-import::here(.from = "./R/utils/lib_ML_predictions.R", 
-	make.humanReadingTrainingLabels,
-	make.trainingData,
-	get.MLDR,
-	EDA.trainingData,
-	get.binaryRelevanceLearners,
-	get.chainingOrder,
-	multilabelBenchmark,
-	make.task,
-	get_short_long_term_pred,
-	PerfVisMultilabel,
-	make.trainingDataMulticlass,
-	multiclassBenchmark,
-	make.predictions,
-	make.targetData,
-	transform.DTM,
-	make.AUCPlot,
-	get.tuningPar
-)
-
-### main
-
-# param
+```{r}
 SCALE_TYPE <- "location"
 MODEL_TYPE <- "multiclass" # multiclass or binary_relevance
 AGGREGATE <- FALSE
+```
 
-# data reading
+
+# Data reading
+
+```{r}
 topicDocs <- get_topicDocs()
 titleDocs <- get_titleDocs(topicDocs)
 validationHumanReading <-  get_validationHumanReading(scale_type = SCALE_TYPE)
 DTM <- get_DocTermMatrix()
 webscrapped_validationDTM <- get_webscrapped_validationDTM()
 colnames(webscrapped_validationDTM) <- colnames(DTM)
-webscrapped_validationDTM <- transform.DTM(webscrapped_validationDTM)
-DTM <- transform.DTM(DTM)
+webscrapped_validationDTM <- transform_DTM(webscrapped_validationDTM)
+DTM <- transform_DTM(DTM)
 webscrapped_trainingLabels <- get_webscrapped_trainingLabels()
 titleInd <- get_titleInd(humanReadingDatabase = validationHumanReading, topicModelTitles = titleDocs)
+```
+
 
 # sanity check
 # check if all the papers are found, address issues, align databases
 table(is.na(titleInd))
-alignedData <- align.humanReadingTopicModel(titleInd, validationHumanReading, topicDocs, DTM)
-alignedData <- QA.alignedData(alignedData, scale_type = SCALE_TYPE)
+alignedData <- align_humanReadingTopicModel(titleInd, validationHumanReading, topicDocs, DTM)
+alignedData <- QA_alignedData(alignedData, scale_type = SCALE_TYPE)
 validationTopicDocs <- alignedData$validationTopicDocs
 validationHumanReading <- alignedData$validationHumanReading
 validationHumanReadingDTM <- alignedData$validationDTM
 
 # get humanReadingTrainingLabels
-humanReadingTrainingLabels <- make.humanReadingTrainingLabels(validationHumanReading, scale_type = SCALE_TYPE, webscrapped_trainingLabels)
-trainingData <- make.trainingData(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = SCALE_TYPE, aggregate_labels = AGGREGATE)
+humanReadingTrainingLabels <- make_humanReadingTrainingLabels(validationHumanReading, scale_type = SCALE_TYPE, webscrapped_trainingLabels)
+trainingData <- make_trainingData(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = SCALE_TYPE, aggregate_labels = AGGREGATE)
 
 # exploratory data analysis
 EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
@@ -167,7 +104,7 @@ setwd("F:/hguillon/research")
 # multiclass
 
 # ## relevance filter
-trainingDataMulticlassFilter <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, 
+trainingDataMulticlassFilter <- make_trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, 
 	filter = TRUE, 
 	addTopicDocs = TRUE, 
 	validationTopicDocs = validationTopicDocs)
@@ -179,7 +116,7 @@ if (!file.exists("bmr_filter.Rds")){
 } else {
 	bmr_filter <- readRDS("bmr_filter.Rds")
 }
-make.AUCPlot(bmr_filter, binary = TRUE)
+make_AUCPlot(bmr_filter, binary = TRUE)
 # based on the result of the AUC plot comparison, svm, multinom and RF are selected for tuning benchmark
 
 # ### tuning model
@@ -190,18 +127,18 @@ if(!file.exists("bmr_tune_filter.Rds")){
 } else {
 	bmr_tune_filter <- readRDS("bmr_tune_filter.Rds")
 }
-make.AUCPlot(bmr_tune_filter, binary = TRUE)
+make_AUCPlot(bmr_tune_filter, binary = TRUE)
 # RF and multninomal have similar performance, we pick multinom (better hyper-parameter constrains)
 
 # ### predict
-targetData <- make.targetData(DTM, addTopicDocs = TRUE, topicDocs = topicDocs)
-predRelevance <- make.predictions("classif.multinom", 
-	list(mtry = get.tuningPar(bmr_tune_filter, "decay")),
+targetData <- make_targetData(DTM, addTopicDocs = TRUE, topicDocs = topicDocs)
+predRelevance <- make_predictions("classif.multinom", 
+	list(mtry = get_tuningPar(bmr_tune_filter, "decay")),
 	trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = TRUE)
 table(predRelevance)
 
 ## country
-trainingDataMulticlass <- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE)
+trainingDataMulticlass <- make_trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE)
 
 ### selecting a model to tune
 if (!file.exists("bmr_country.Rds")){
@@ -210,15 +147,15 @@ if (!file.exists("bmr_country.Rds")){
 } else {
 	bmr_country <- readRDS("bmr_country.Rds")
 }
-make.AUCPlot(bmr_country)
+make_AUCPlot(bmr_country)
 
 # bmr_tune_country <- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = list("classif.randomForest"))
-# make.AUCPlot(bmr_tune_country)
+# make_AUCPlot(bmr_tune_country)
 # saveRDS(bmr_tune_country, "bmr_tune_country.Rds")
 
 # ### predict
-targetData <- make.targetData(DTM)
-predCountry <- make.predictions("classif.randomForest", 
+targetData <- make_targetData(DTM)
+predCountry <- make_predictions("classif.randomForest", 
 	list(mtry = floor(sqrt(ncol(trainingDataMulticlass) - 1))),
 	trainingDataMulticlass, targetData, MODEL_TYPE, filter = FALSE)
 
@@ -233,33 +170,19 @@ saveRDS(predCountry, "predCountry.Rds")
 
 ```
 
+# Consolidating results
+
+We now consolidate all results to be used for analysis.
+
+## Cross-walk between databases
+
+The following code chunks perform a cross-walk between the topic model and EndNote databases using document id: `EndNoteIdcorpus` and `EndNoteIdLDA`.
+This ensures that the two databases can communicate and are aligned.
+
+
+### Data loading
+
 ```
-### libraries ###
-library("mlr")
-library("OpenML")
-library("NLP")
-library("tm")
-library("data.table")
-library("mldr")
-library("dplyr")
-
-### utils ###
-import::here(.from = "./R/utils/lib_webscrapping.R",
-  make.country_tokens,
-  get.EndNoteIdcorpus,
-  get.EndNoteIdLDA,
-  QA.EndNoteIdCorpusLDA,
-  align.dataWithEndNoteIdLDA,
-  align.dataWithEndNoteIdcorpus,
-  order.data
-)
-
-import::here(.from = "./R/utils/lib_ML_predictions.R",
-	consolidate_LDA_results,
-	make_df_docs
-)
-
-# data loading
 englishCorpus_file <- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
 englishCorpus <- readRDS(englishCorpus_file)
 
@@ -269,32 +192,46 @@ in_corpus <- readRDS(in_corpus_file)
 predCountry <- readRDS("predCountry.Rds") # aligned with englishCorpus
 predRelevance <- readRDS("predRelevance.Rds") # aligned with englishCorpus
 topicDocs <- readRDS("./data/topicDocs.Rds") # aligned with englishCorpus
+```
+### Get document IDs
 
-# get document IDs
-EndNoteIdcorpus <- get.EndNoteIdcorpus(in_corpus)
-EndNoteIdLDA <- get.EndNoteIdLDA(englishCorpus)
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+```
+EndNoteIdcorpus <- get_EndNoteIdcorpus(in_corpus)
+EndNoteIdLDA <- get_EndNoteIdLDA(englishCorpus)
+QA_EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+```
 
-# align databases 
-in_corpus <- align.dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
+### Align databases 
 
-englishCorpus <- align.dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
-predCountry <- align.dataWithEndNoteIdLDA(predCountry, EndNoteIdLDA, EndNoteIdcorpus)
-predRelevance <- align.dataWithEndNoteIdLDA(predRelevance, EndNoteIdLDA, EndNoteIdcorpus)
-topicDocs <- align.dataWithEndNoteIdLDA(topicDocs, EndNoteIdLDA, EndNoteIdcorpus)
+```
+in_corpus <- align_dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
 
-EndNoteIdLDA <- align.dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
-EndNoteIdcorpus <- align.dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
+englishCorpus <- align_dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
+predCountry <- align_dataWithEndNoteIdLDA(predCountry, EndNoteIdLDA, EndNoteIdcorpus)
+predRelevance <- align_dataWithEndNoteIdLDA(predRelevance, EndNoteIdLDA, EndNoteIdcorpus)
+topicDocs <- align_dataWithEndNoteIdLDA(topicDocs, EndNoteIdLDA, EndNoteIdcorpus)
 
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+EndNoteIdLDA <- align_dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
+EndNoteIdcorpus <- align_dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
 
-# order them according to LDA database
-in_corpus <- order.data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
+QA_EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+```
 
+### Order them according to LDA database
+
+```
+in_corpus <- order_data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
+```
+
+## Saving results
+
+```
 saveRDS(predRelevance, "predRelevance.Rds")
 saveRDS(predCountry %>% pull(response), "predCountry.Rds")
 saveRDS(predCountry %>% select(-response), "predCountryMembership.Rds")
+```
 
+```
 consolidate_LDA_results(theme_type = "topic_name", save = TRUE)
 consolidate_LDA_results(theme_type = "theme", save = TRUE)
 consolidate_LDA_results(theme_type = "NSF_general", save = TRUE)

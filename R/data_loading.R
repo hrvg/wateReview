@@ -47,7 +47,7 @@ get_meta_df <- function(language_dfs){
 #' @return matching indices between the two databases
 #' @export
 get_titleInd <- function(
-	titleInd_file = "F:/hguillon/research/exploitation/R/latin_america/data/titleInd.Rds",
+	titleInd_file = system.file("extdata", "titleInd.Rds", package = "wateReview"),
 	humanReadingDatabase = NULL,
 	topicModelTitles = NULL
 	){
@@ -75,7 +75,7 @@ get_titleInd <- function(
 #' @return validation human-read data
 #' @export
 get_validationHumanReading <- function(scale_type = "location"){
-	validationHumanReading <- read.csv(paste0("F:/hguillon/research/exploitation/R/latin_america/data/validation_df_", scale_type, ".csv"))
+	validationHumanReading <- read.csv(system.file("extdata", paste0("validation_df_", scale_type, ".csv"), package = "wateReview"))
 	validationHumanReading <- validationHumanReading[validationHumanReading$title != "", ]
 	return(validationHumanReading)
 }
@@ -84,7 +84,7 @@ get_validationHumanReading <- function(scale_type = "location"){
 #' @param fname path to the topic model data
 #' @return topic model data
 #' @export
-get_topicDocs <- function(fname = "F:/hguillon/research/exploitation/R/latin_america/data/topicDocs.Rds"){
+get_topicDocs <- function(fname = system.file("extdata", "topicDocs.Rds", package = "wateReview")){
 	topicDocs <- readRDS(fname)
 	return(topicDocs)
 }
@@ -93,7 +93,7 @@ get_topicDocs <- function(fname = "F:/hguillon/research/exploitation/R/latin_ame
 #' @param fname path to the topic model file titles
 #' @return topic model file titles
 #' @export
-get_titleDocs <- function(topicDocs, fname = "F:/hguillon/research/exploitation/R/latin_america/data/info.dat"){
+get_titleDocs <- function(topicDocs, fname = system.file("extdata", "info.dat", package = "wateReview")){
 	titleDocs <- readLines(fname)
 	if (nrow(topicDocs) != length(titleDocs)) warning("Dimensions not matching")
 	return(titleDocs)
@@ -103,8 +103,8 @@ get_titleDocs <- function(topicDocs, fname = "F:/hguillon/research/exploitation/
 #' @param fname path to training data (document-term matrix corresponding to webscrapped labels)
 #' @return training data (document-term matrix corresponding to webscrapped labels)
 #' @export
-get_webscrapped_validationDTM <- function(fname = "webscrapped_validationDTM.Rds"){
-	webscrapped_validationDTM <- readRDS("webscrapped_validationDTM.Rds")
+get_webscrapped_validationDTM <- function(fname = system.file("extdata", "webscrapped_validationDTM.Rds", package = "wateReview")){
+	webscrapped_validationDTM <- readRDS(fname)
 	return(webscrapped_validationDTM)
 }
 
@@ -112,8 +112,8 @@ get_webscrapped_validationDTM <- function(fname = "webscrapped_validationDTM.Rds
 #' @param fname path to webscrapped training labels data
 #' @return webscrapped training labels
 #' @export
-get_webscrapped_trainingLabels <- function(fname = "webscrapped_trainingLabels.Rds"){
-	webscrapped_trainingLabels <- readRDS("webscrapped_trainingLabels.Rds")
+get_webscrapped_trainingLabels <- function(fname = system.file("extdata", "webscrapped_trainingLabels.Rds", package = "wateReview")){
+	webscrapped_trainingLabels <- readRDS(fname)
 	return(webscrapped_trainingLabels)
 }
 
@@ -121,7 +121,7 @@ get_webscrapped_trainingLabels <- function(fname = "webscrapped_trainingLabels.R
 #' @param dtm_file path to saved document-term matrix
 #' @return document-term matrix
 #' @export
-get_DocTermMatrix <- function(dtm_file= "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"){
+get_DocTermMatrix <- function(dtm_file= system.file("extdata", "obj_dtm_from_dfm_country.Rds", package = "wateReview")){
 	obj_dtm <- readRDS(dtm_file)
 	return(obj_dtm)
 }
@@ -133,7 +133,7 @@ get_DocTermMatrix <- function(dtm_file= "F:/hguillon/research/exploitation/R/lat
 #' @param DTM document-term matrix derived from topic modelled corpus
 #' @return list with four elements: titleInd, validationHumanReading, validationTopicDocs, validationDTM
 #' @export
-align.humanReadingTopicModel <- function(titleInd, validationHumanReading, topicDocs, DTM){
+align_humanReadingTopicModel <- function(titleInd, validationHumanReading, topicDocs, DTM){
 	validationHumanReading <- validationHumanReading[!is.na(titleInd), ]
 	titleInd <- na.omit(unlist(titleInd))
 
@@ -155,7 +155,7 @@ align.humanReadingTopicModel <- function(titleInd, validationHumanReading, topic
 #' @param scale_type One of "location", "spatial", "temporal", default to "location"
 #' @return list with three elements: validationHumanReading, validationTopicDocs, validationDTM
 #' @export
-QA.alignedData <- function(alignedData, scale_type = "location"){
+QA_alignedData <- function(alignedData, scale_type = "location"){
 	validationHumanReading <- alignedData$validationHumanReading
 	validationTopicDocs <- alignedData$validationTopicDocs
 	validationDTM <- alignedData$validationDTM

@@ -48,6 +48,8 @@ Imports:
     inlmisc,
     kableExtra,
     magrittr,
+    mldr,
+    mlr,
     multcompView,
     oce,
     openxlsx,

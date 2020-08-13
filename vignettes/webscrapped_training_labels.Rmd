@@ -7,64 +7,73 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```
-### libraries ###
-library("mlr")
-library("OpenML")
-library("NLP")
-library("tm")
-library("data.table")
-library("mldr")
-
-### utils ###
-import::here(.from = "./R/utils/lib_webscrapping.R",
-  make.country_tokens,
-  get.EndNoteIdcorpus,
-  get.EndNoteIdLDA,
-  QA.EndNoteIdCorpusLDA,
-  align.dataWithEndNoteIdLDA,
-  align.dataWithEndNoteIdcorpus,
-  order.data,
-  make.webscrapped_trainingData,
-  get.ind_hasCountryTag
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.height = 7,
+  fig.width = 7, 
+  comment = "#>"
 )
+```
 
+# Purpose
 
-### main ###
+This vignette derives the training data from the extracted metadata.
 
-# data loading
-englishCorpus_file <- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
+# Data loading
+
+```
+englishCorpus_file <- "./data/english_corpus.Rds"
 englishCorpus <- readRDS(englishCorpus_file)
 
 in_corpus_file <- "in_corpus.Rds"
 in_corpus <- readRDS(in_corpus_file)
 
 boolean_AuthKeywords <- readRDS("boolean_AuthKeywords.Rds")
+```
 
-# get document IDs
-EndNoteIdcorpus <- get.EndNoteIdcorpus(in_corpus)
-EndNoteIdLDA <- get.EndNoteIdLDA(englishCorpus)
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+# Cross-walk between databases
 
-# align databases 
-in_corpus <- align.dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
-boolean_AuthKeywords <- align.dataWithEndNoteIdcorpus(boolean_AuthKeywords, EndNoteIdcorpus, EndNoteIdLDA)
 
-englishCorpus <- align.dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
+The following code chunks perform a cross-walk between the topic model and EndNote databases using document id: `EndNoteIdcorpus` and `EndNoteIdLDA`.
+This ensures that the two databases can communicate and are aligned.
 
-EndNoteIdLDA <- align.dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
-EndNoteIdcorpus <- align.dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
 
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+## Get document IDs
 
-# order them according to LDA database
-boolean_AuthKeywords <- order.data(boolean_AuthKeywords, EndNoteIdLDA, EndNoteIdcorpus)
-in_corpus <- order.data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
+```
+EndNoteIdcorpus <- get_EndNoteIdcorpus(in_corpus)
+EndNoteIdLDA <- get_EndNoteIdLDA(englishCorpus)
+QA_EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+```
+
+## Align databases
+
+```
+in_corpus <- align_dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
+boolean_AuthKeywords <- align_dataWithEndNoteIdcorpus(boolean_AuthKeywords, EndNoteIdcorpus, EndNoteIdLDA)
+
+englishCorpus <- align_dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
+
+EndNoteIdLDA <- align_dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
+EndNoteIdcorpus <- align_dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
+
+QA_EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+```
+
+## Order them according to LDA database
+
+```
+boolean_AuthKeywords <- order_data(boolean_AuthKeywords, EndNoteIdLDA, EndNoteIdcorpus)
+in_corpus <- order_data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
 englishCorpus$abstract <- in_corpus$abstract
-ind_hasCountryTag <- get.ind_hasCountryTag(boolean_AuthKeywords)
+ind_hasCountryTag <- get_ind_hasCountryTag(boolean_AuthKeywords)
+```
 
-# make the webscrapped training data
-webscrapped_trainingData <-  make.webscrapped_trainingData(boolean_AuthKeywords, ind_hasCountryTag, englishCorpus, englishCorpus_file)
+# Make the webscrapped training data
+
+```
+webscrapped_trainingData <-  make_webscrapped_trainingData(boolean_AuthKeywords, ind_hasCountryTag, englishCorpus, englishCorpus_file)
 
 country_tokens <- webscrapped_trainingData$country_tokens
 webscrapped_validationDTM <- webscrapped_trainingData$webscrapped_validationDTM
