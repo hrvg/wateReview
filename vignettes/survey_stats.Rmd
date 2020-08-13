@@ -21,8 +21,7 @@ knitr::opts_chunk$set(
 # Libraries
 
 ```{r}
-# library(wateReview)
-devtools::load_all()
+library(wateReview)
 ```
 
 # Survey statistics

@@ -1,8 +1,8 @@
 ---
-title: "Running LDAvis"
+title: "Visualizing LDA results"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Running LDAvis}
+  %\VignetteIndexEntry{Visualizing LDA results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: bibliography.bib
@@ -18,6 +18,65 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Purpose
+
+This vignette creates `.json` file used by `LDAvis`.
+
+# Creating `.json`
+
+```
+library(parallel)
+library(LDAvis)
+```
+
+```
+###################################
+# need:
+#    var_phi
+#    var_theta
+#    document token counts,   
+#    vocab (colnames(var_phi)), 
+#    var_corpus_word_frequencies
+###################################
+```
+
+```
+var_num_cores = 4
+var_parallel_cluster = makeCluster(var_num_cores)
+
+print ("load from file")
+vtheta = readRDS(file="./data/topicDocs.Rds")
+vphi = readRDS(file="./data//topicWords.Rds")
+
+print ("theta: ")
+print (dim(vtheta))
+print ("phi: ")
+print (dim(vphi))
+
+
+doc_lens = unlist(readRDS(file="./data/doc_lens.Rds"))
+vocabulary = colnames(vphi)
+wf = readLines("./data/freqs.txt")
+
+
+print ("creating json object")
+obj_json <- createJSON(
+  phi = (vphi), 
+  theta = (vtheta), 
+  doc.length = doc_lens,
+  vocab = vocabulary,
+  term.frequency = wf,
+  cluster = var_parallel_cluster
+)
+
+print ("writing to file")
+write(file ="./ldavis.json", obj_json)
+```
+
+# Running `LDAvis`
+
+Note that if you want to see it locally you either need to have a web server or use Mozilla Firefox, otherwise there will be a CORS error as the json data is being loaded. 
+This can be fixed by renaming the `json` file as a `.js` file and loading it in as a script.
 
 ```
 library("servr")

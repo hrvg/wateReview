@@ -7,27 +7,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+# Corpus preparation
 
-corpus cleaned 17/01/2019
-used hunspell american english dictionary (en_US)
-ran topic model on cleaned but not lemma corpus
+We used hunspell american english dictionary (en_US).
+The number of topic was fixed to $k = 105$ for the English corpus.
+We used 1000 iterations with parameters $\alpha = 0.5$ and $\beta = 0.1$.
 
-ran lda_model.R
-k = 105
-iter = 1000
-alpha = 0.5
-beta = 0.1
-burn in = 5
+# Workflow
 
-R LDAvis package to visualize
-can see online at ds.lib.ucdavis.edu/text-report/water-management/
-
-note that if you want to see it locally you either need to have a web server or use firefox,
-otherwise there will be a CORS error as the json data is being loaded. This can be fixed by
-renaming the json file as a .js file and loading it in as a script.
-
-run lda_model.R
-then get_vocab.R
-then wordfreqs.py
-then createjson.R
-then lda_vis.R
+1. [Run the topic model](lda_modal.html)
+1. [Get the corpus' vocabulary](get_vocab.html)
+1. Run `./src/wordfreqs.py`
+1. [Visualize results with `LDAvis`](lda_vis.html)
