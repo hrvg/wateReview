@@ -18,22 +18,6 @@ A regional bright spot, Brazil produces well-rounded water-related research but 
 
 ---
 
-# How to install
-
-```
-# Install development version from GitHub
-devtools::install_github("hrvg/wateReview")
-```
-
-You will have to install some GIS libraries to make `rgdal` and `rspatial` packages work.
-On Linux do:
-
-```
-sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
-sudo apt-get -q update
-sudo apt-get -y install libgdal-dev libgeos-dev libproj-dev 
-```
-
 # About
 
 This project uses:

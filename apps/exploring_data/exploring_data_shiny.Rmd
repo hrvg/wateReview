@@ -2,33 +2,6 @@
 title: "Research Opportunities in Latin America"
 runtime: shiny
 output: flexdashboard::flex_dashboard
-resource_files:
-- data/Americas.dbf
-- data/Americas.prj
-- data/Americas_README.txt
-- data/Americas.sbx
-- data/Americas.shp
-- data/Americas.shp.xml
-- data/Americas.shx
-- data/countries_database_final.csv
-- data/LAC.dbf
-- data/LAC.prj
-- data/LAC.sbn
-- data/LAC.sbx
-- data/LAC.shp
-- data/LAC.shp.xml
-- data/LAC.shx
-- data/survey_results.csv
-- countryColors.Rds
-- consolidated_results_spatial scale.Rds
-- consolidated_results_methods.Rds
-- consolidated_results_water budget.Rds
-- consolidated_results_NSF_specific.Rds
-- consolidated_results_NSF_general.Rds
-- consolidated_results_theme.Rds
-- predCountryMembership.Rds
-- predCountry.Rds
-- diversity/diversity by country.csv"
 ---
 
 ```{r libraries, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE, results = "hide"}
@@ -55,26 +28,24 @@ library("plotly")
 
 
 ### functions ###
-import::here(.from = "./R/network_analysis/lib_network_analysis.R", 
-  get_network,
-  VizSpots)
+library(wateReview)
 ```
 
 
 ```{r data_loading, warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-att_names <- readRDS("./data/att_names.Rds")
-att_maps <- readRDS("./data/att_maps.Rds")
-att_hists <- readRDS("./data/att_hists.Rds")
-pearson_corr <- readRDS("./data/pearson_corr.Rds")
-spearman_corr <- readRDS("./data/spearman_corr.Rds")
-l_dist <- readRDS("./data/l_dist.Rds")
-l_optimk_kmeans <- readRDS("./data/l_optimk_kmeans.Rds")
-l_optimk_hierarchical <- readRDS("./data/l_optimk_hierarchical.Rds")
-l_clStab_kmeans <- readRDS("./data/l_clStab_kmeans.Rds")
-l_clStab_hierarchical <- readRDS("./data/l_clStab_hierarchical.Rds")
-l_pkms <- readRDS("./data/l_pkms.Rds")
-l_phcs <- readRDS("./data/l_phcs.Rds")
-theme_phc <- readRDS("./data/theme_phc.Rds")
+att_names <- readRDS(system.file("extdata", "att_names.Rds", package = "wateReview"))
+att_maps <- readRDS(system.file("extdata", "att_maps.Rds", package = "wateReview"))
+att_hists <- readRDS(system.file("extdata", "att_hists.Rds", package = "wateReview"))
+pearson_corr <- readRDS(system.file("extdata", "pearson_corr.Rds", package = "wateReview"))
+spearman_corr <- readRDS(system.file("extdata", "spearman_corr.Rds", package = "wateReview"))
+l_dist <- readRDS(system.file("extdata", "l_dist.Rds", package = "wateReview"))
+l_optimk_kmeans <- readRDS(system.file("extdata", "l_optimk_kmeans.Rds", package = "wateReview"))
+l_optimk_hierarchical <- readRDS(system.file("extdata", "l_optimk_hierarchical.Rds", package = "wateReview"))
+l_clStab_kmeans <- readRDS(system.file("extdata", "l_clStab_kmeans.Rds", package = "wateReview"))
+l_clStab_hierarchical <- readRDS(system.file("extdata", "l_clStab_hierarchical.Rds", package = "wateReview"))
+l_pkms <- readRDS(system.file("extdata", "l_pkms.Rds", package = "wateReview"))
+l_phcs <- readRDS(system.file("extdata", "l_phcs.Rds", package = "wateReview"))
+theme_phc <- readRDS(system.file("extdata", "theme_phc.Rds", package = "wateReview"))
 
 
 select_list <- function(data_type){
@@ -110,7 +81,7 @@ Column
 -------------------------------------
 ### Map
 ```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-renderPlot({
+renderPlot({a
     att_maps[[which(att_names == input$attribute)]]
 })
 ```
@@ -306,7 +277,7 @@ checkboxInput("scaled", label = "Scaled results", value = FALSE)
 checkboxInput("filter_method", label = "Filter methods themes", value = TRUE)
 ```
 
-```{r}
+```
 mdef <- get_network(type = "theme", prob = TRUE, filter_method = TRUE, blindspot = FALSE, country.threshold = 0, percentile.threshold = 0)
 selectInput("countries", "Countries", rownames(mdef), selected = NULL, multiple = TRUE,
   selectize = TRUE, width = NULL, size = NULL)
@@ -330,12 +301,12 @@ Column {.tabset}
 
 ### Chord Diagrams for Country and Theme
 
-```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
+```
 renderPlot({
   m <- get_network(type = input$type, prob = TRUE, filter_method = input$filter_method, blindspot = input$blindspot, country.threshold = input$country.threshold, percentile.threshold = input$percentile.threshold, 
     country_filter = input$country_filter, countries = input$countries,
     theme_filter = input$theme_filter, themes = input$themes)
-  VizSpots(m, input$scaled, cluster_color = TRUE, NSF_general_color = TRUE, type = input$type)
+  VizSpots(m, input$scaled, cluster_color = FALSE, NSF_general_color = FALSE, type = input$type)
 })   
 ```
 
@@ -359,7 +330,7 @@ range01 <- function(x){(x-min(x))/(max(x)-min(x))}
 get_topic_sums <- function(type = "theme", themes = c("air quality", "agriculture"), country_filter = input$country_filter, countries = input$countries){
   type_list <- c("methods", "NSF_general", "NSF_specific", "spatial scale", "theme", "water budget")
   stopifnot(type %in% type_list)
-  consolidated_results <- readRDS(paste0("consolidated_results_", type, ".Rds"))
+  consolidated_results <- readRDS(system.file("extdata", paste0("consolidated_results_", type, ".Rds"), package = "wateReview"))
   if (country_filter == FALSE){
     df <- remove_country(consolidated_results)
     df <- melt(df, id.vars = "year")
@@ -409,9 +380,9 @@ renderPlot({
 ### Diversity {data-orientation=columns}
 
 ```{r , warning = FALSE, message = FALSE, include = TRUE, echo = FALSE}
-diversity_by_country <- read.csv("./diversity/diversity by country.csv")
+diversity_by_country <- read.csv(system.file("extdata", "diversity.csv", package = "wateReview")) %>% select(-X)
 names(diversity_by_country) <- c("country", "NSF_general", "NSF_specific", "theme")
-diversity_by_country_graph <- melt(diversity_by_country, id.vars = c("country"))
+diversity_by_country_graph <- melt(diversity_by_country , id.vars = c("country"))
 renderPlot({
 theme_graphdf <- subset(diversity_by_country_graph, variable == input$type)
 theme_graph <- ggdotchart(theme_graphdf, x = "country", y = "value", #add color = cluster

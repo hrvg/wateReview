@@ -53,7 +53,7 @@ get_network <- function(type = "theme", prob = TRUE, filter_method = FALSE, blin
 
 	if (!theme_filter){
 		if (filter_method & type == "theme"){
-			topic_names <- read.csv(system.file("extdata", "./data/topic_names.csv", package = "wateReview"))
+			topic_names <- read.csv(system.file("extdata", "topic_names.csv", package = "wateReview"))
 			method_topics <- as.character(topic_names$theme[grepl("methods", topic_names$description)])
 			network_results <- network_results[, which(!colnames(network_results) %in% method_topics)]
 		}
