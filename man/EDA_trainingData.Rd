@@ -17,6 +17,9 @@ EDA_trainingData(
 
 \item{humanReadingTrainingLabels}{labels from human-reading}
 }
+\value{
+a data.frame of comparison between the human reading and the webscrapped labels
+}
 \description{
 Performs a simple visualization of multilabel training data using mldr package
 }
