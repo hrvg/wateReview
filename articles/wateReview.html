@@ -220,12 +220,23 @@
 
     
     
-<p>You can start by doing this and that.</p>
+<div id="how-to-install" class="section level1">
+<h1 class="hasAnchor">
+<a href="#how-to-install" class="anchor"></a>How to install</h1>
+<pre><code># Install development version from GitHub
+devtools::install_github("hrvg/wateReview")</code></pre>
+<p>You will have to install some GIS libraries to make <code>rgdal</code> and <code>rspatial</code> packages work. On Linux do:</p>
+<pre><code>sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+sudo apt-get -q update
+sudo apt-get -y install libgdal-dev libgeos-dev libproj-dev </code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
