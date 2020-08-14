@@ -211,57 +211,17 @@
   <div class="contents col-md-9">
 
 
-<div id="literature-review-finds-opportunities-for-water-resources-management-research-in-latin-america-and-the-carribean" class="section level1">
+<p>To promote transparent and reproducible data science, this repository supports the article <em>Bright and Blind Spots of Water Research in Latin America and the Caribbean</em> by Alyssa J. DeVincentis<span class="math inline"><em></em><sup>1</sup></span>, Hervé Guillon<span class="math inline"><em></em><sup>1</sup></span>, Romina Díaz Gómez<span class="math inline"><em></em><sup>1</sup></span>, Noelle K. Patterson<span class="math inline"><em></em><sup>1</sup></span>, Francine van den Brandeler<span class="math inline"><em></em><sup>2</sup></span>, Arthur Koehl<span class="math inline"><em></em><sup>1</sup></span>, J. Pablo Ortiz-Partida<span class="math inline"><em></em><sup>3</sup></span>, Laura E. Garza-Díaz<span class="math inline"><em></em><sup>1</sup></span>, Jennifer Gamez-Rodríguez<span class="math inline"><em></em><sup>1</sup></span>, Erfan Goharian<span class="math inline"><em></em><sup>4</sup></span> and Samuel Sandoval Solis<span class="math inline"><em></em><sup>1</sup></span></p>
+<p><span class="math inline"><em></em><sup>1</sup></span> : University of California, Davis;<br><span class="math inline"><em></em><sup>2</sup></span> : University of Amsterdam; <span class="math inline"><em></em><sup>3</sup></span> : Union of Concerned Scientists; <span class="math inline"><em></em><sup>4</sup></span> : University of South Carolina</p>
+<div id="summary" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#literature-review-finds-opportunities-for-water-resources-management-research-in-latin-america-and-the-carribean" class="anchor"></a>Literature Review Finds Opportunities for Water Resources Management Research in Latin America and the Carribean</h1></div>
-<p>Alyssa J. DeVincentis (1), Hervé Guillon (1), Romina Díaz Gómez (1), Noelle K. Patterson (1), Francine van den Brandeler (2), Arthur Koehl (1), J. Pablo Ortiz-Partida (3), Laura E. Garza-Díaz (1), Jennifer Gamez-Rodríguez (1), Erfan Goharian (4) and Samuel Sandoval Solis (1)</p>
-<p>(1): University of California, Davis; (2): University of Amsterdam; (3): Union of Concerned Scientists; (4): University of South Carolina</p>
-<p>Global health, ecosystem function, and economic prosperity are unquestionably linked to successful management of water resources, which requires sufficient and equitably distributed research across spatial, time, and climatic scales. This research identifies research opportunities for water resources management in Latin America. We conducted an unprecedented literature review of over 30,000 multilingual articles on water resources research through the use of Latent Dirichlet Association (LDA). Topic modeling was validated through cross-validation with a training set of human-derived topics. A database was built to include results from the LDA analysis and biophysical and economic country descriptors in order to correlate countries’ populations, economies, natural resources, climate, and governmental structures to the state of their water resources research. Georeferenced relationships between the LDA results and country descriptors revealed bright spots and knowledge gaps, and a network model identified the strongest and weakest connections between topics in water resources research. A systems dynamics model identified country characteristics that are driving the prevalence or lack of research in certain water resources topics. All of these results were ground-truthed with an electronic survey sent to academic researchers throughout Latin America. The results from this research emphasize the need for more equitable distribution of resources, both financial and human, throughout Latin America to ensure the future safety and success of the region.</p>
+<a href="#summary" class="anchor"></a>Summary</h1></div>
+<p>Water resources management is threatened by climatic, economic, and political pressures, and these challenges are on particular display in Latin America and the Caribbean. To assess the region’s ability to manage water resources, we conducted an unprecedented literature review of over 20,000 multilingual research articles using machine learning and an understanding of the socio-hydrologic landscape. Results reveal that the region’s vulnerability to water-related stresses, and drivers such as climate change, is compounded by research blind spots in niche topics (reservoirs and risk assessment) and sub-regions (Caribbean nations), and by its reliance on an individual country (Brazil). A regional bright spot, Brazil produces well-rounded water-related research but its regional dominance suggests that funding cuts there would impede scientifically-informed water management in the entire region.</p>
 <hr>
-<div id="file-map" class="section level2">
-<h2 class="hasAnchor">
-<a href="#file-map" class="anchor"></a>File map</h2>
-<ul>
-<li>
-<code>./data</code> : data-source
-<ul>
-<li>
-<code>./data/README.md</code> : indicate the data source and link to them</li>
-</ul>
-</li>
-<li>
-<code>./docs</code> : Package reference documentation.<br>
-</li>
-<li>
-<code>./R</code> : contains the <code>R</code> code
-<ul>
-<li>
-<code>./R/sub_project_name</code> : code to run a sub-project
-<ul>
-<li>
-<code>./R/sub_project_name/helpers.R</code> : sub-routines for the sub-project</li>
-</ul>
-</li>
-<li>
-<code>./R/utils</code> : shared functions between sub-projects</li>
-<li>
-<code>./R/misc</code> : unconsolidated code snippets</li>
-</ul>
-</li>
-<li>
-<code>src</code> : <code>python</code> code
-<ul>
-<li>
-<code>BERTpy</code>: various versions of <code>python</code> scripts to run <a href="https://github.com/google-research/bert">Google BERT</a>; as this development was abandonned, code has not been refactored to production-level</li>
-</ul>
-</li>
-<li>
-<code>./requirements.txt</code> : dependencies</li>
-</ul>
 </div>
-<div id="how-to-install" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-to-install" class="anchor"></a>How to install</h2>
+<div id="how-to-install" class="section level1">
+<h1 class="hasAnchor">
+<a href="#how-to-install" class="anchor"></a>How to install</h1>
 <pre><code># Install development version from GitHub
 devtools::install_github("hrvg/wateReview")</code></pre>
 <p>You will have to install some GIS libraries to make <code>rgdal</code> and <code>rspatial</code> packages work. On Linux do:</p>
@@ -269,9 +229,9 @@ devtools::install_github("hrvg/wateReview")</code></pre>
 sudo apt-get -q update
 sudo apt-get -y install libgdal-dev libgeos-dev libproj-dev </code></pre>
 </div>
-<div id="about" class="section level2">
-<h2 class="hasAnchor">
-<a href="#about" class="anchor"></a>About</h2>
+<div id="about" class="section level1">
+<h1 class="hasAnchor">
+<a href="#about" class="anchor"></a>About</h1>
 <p>This project uses:</p>
 <ul>
 <li><a href="https://www.r-project.org/">R</a></li>
@@ -279,12 +239,6 @@ sudo apt-get -y install libgdal-dev libgeos-dev libproj-dev </code></pre>
 <li><a href="https://github.com/google-research/bert">Google BERT</a></li>
 <li><a href="https://www.naturalearthdata.com">Natural Earth Data</a></li>
 </ul>
-<p>Need to add here a path towards the entire datasets except <code>pdf</code> files. Review vignettes for paths:</p>
-<ul>
-<li><code>F:\hguillon\research\data\latin_america\corpus_pdf</code></li>
-<li><code>F:\hguillon\research\data\latin_america\corpus_csv</code></li>
-</ul>
-</div>
 </div>
 
   </div>
