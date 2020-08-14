@@ -104,10 +104,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Metadata mining</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/web_scrapping.html">web_scrapping</a>
+          <a href="../articles/web_scrapping.html">Webscrapping metadata</a>
         </li>
         <li>
-          <a href="../articles/metadata_mining.html">metadata_mining</a>
+          <a href="../articles/mining_citation_network.html">Mining the citation network</a>
         </li>
       </ul>
 </li>
@@ -115,13 +115,13 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Location predictions</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/text_mining.html">text_mining</a>
+          <a href="../articles/webscrapped_training_labels.html">Webscrapped training labels</a>
         </li>
         <li>
-          <a href="../articles/webscrapped_training_labels.html">webscrapped_training_labels</a>
+          <a href="../articles/text_mining.html">Text mining</a>
         </li>
         <li>
-          <a href="../articles/ML_predictions.html">ML_predictions</a>
+          <a href="../articles/ML_predictions.html">Location prediction</a>
         </li>
       </ul>
 </li>
@@ -181,7 +181,7 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Connectivity</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/citation_network.html">Citation network</a>
+          <a href="../articles/bipartite_networks.html">Bipartite networks</a>
         </li>
         <li>
           <a href="../articles/network_visualization.html">Network visualization</a>
@@ -220,63 +220,59 @@
 
     
     
-<pre><code><a href="https://rdrr.io/pkg/mlr/man">### libraries ###
-library("mlr")
-library("OpenML")
-library("NLP")
-library("tm")
-library("data.table")
-library("mldr")
-
-### utils ###
-import::here(.from = "./R/utils/lib_webscrapping.R",
-  make.country_tokens,
-  get.EndNoteIdcorpus,
-  get.EndNoteIdLDA,
-  QA.EndNoteIdCorpusLDA,
-  align.dataWithEndNoteIdLDA,
-  align.dataWithEndNoteIdcorpus,
-  order.data,
-  make.webscrapped_trainingData,
-  get.ind_hasCountryTag
-)
-
-
-### main ###
-
-# data loading
-englishCorpus_file &lt;- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>This vignette derives the training data from the extracted metadata.</p>
+</div>
+<div id="data-loading" class="section level1">
+<h1 class="hasAnchor">
+<a href="#data-loading" class="anchor"></a>Data loading</h1>
+<pre><code>englishCorpus_file &lt;- "./data/english_corpus.Rds"
 englishCorpus &lt;- readRDS(englishCorpus_file)
 
 in_corpus_file &lt;- "in_corpus.Rds"
 in_corpus &lt;- readRDS(in_corpus_file)
 
-boolean_AuthKeywords &lt;- readRDS("boolean_AuthKeywords.Rds")
+boolean_AuthKeywords &lt;- readRDS("boolean_AuthKeywords.Rds")</code></pre>
+</div>
+<div id="cross-walk-between-databases" class="section level1">
+<h1 class="hasAnchor">
+<a href="#cross-walk-between-databases" class="anchor"></a>Cross-walk between databases</h1>
+<p>The following code chunks perform a cross-walk between the topic model and EndNote databases using document id: <code>EndNoteIdcorpus</code> and <code>EndNoteIdLDA</code>. This ensures that the two databases can communicate and are aligned.</p>
+<div id="get-document-ids" class="section level2">
+<h2 class="hasAnchor">
+<a href="#get-document-ids" class="anchor"></a>Get document IDs</h2>
+<pre><code>EndNoteIdcorpus &lt;- get_EndNoteIdcorpus(in_corpus)
+EndNoteIdLDA &lt;- get_EndNoteIdLDA(englishCorpus)
+QA_EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)</code></pre>
+</div>
+<div id="align-databases" class="section level2">
+<h2 class="hasAnchor">
+<a href="#align-databases" class="anchor"></a>Align databases</h2>
+<pre><code>in_corpus &lt;- align_dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
+boolean_AuthKeywords &lt;- align_dataWithEndNoteIdcorpus(boolean_AuthKeywords, EndNoteIdcorpus, EndNoteIdLDA)
 
-# get document IDs
-EndNoteIdcorpus &lt;- get.EndNoteIdcorpus(in_corpus)
-EndNoteIdLDA &lt;- get.EndNoteIdLDA(englishCorpus)
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+englishCorpus &lt;- align_dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
 
-# align databases 
-in_corpus &lt;- align.dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
-boolean_AuthKeywords &lt;- align.dataWithEndNoteIdcorpus(boolean_AuthKeywords, EndNoteIdcorpus, EndNoteIdLDA)
+EndNoteIdLDA &lt;- align_dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
+EndNoteIdcorpus &lt;- align_dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
 
-englishCorpus &lt;- align.dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
-
-EndNoteIdLDA &lt;- align.dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
-EndNoteIdcorpus &lt;- align.dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
-
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
-
-# order them according to LDA database
-boolean_AuthKeywords &lt;- order.data(boolean_AuthKeywords, EndNoteIdLDA, EndNoteIdcorpus)
-in_corpus &lt;- order.data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
+QA_EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)</code></pre>
+</div>
+<div id="order-them-according-to-lda-database" class="section level2">
+<h2 class="hasAnchor">
+<a href="#order-them-according-to-lda-database" class="anchor"></a>Order them according to LDA database</h2>
+<pre><code>boolean_AuthKeywords &lt;- order_data(boolean_AuthKeywords, EndNoteIdLDA, EndNoteIdcorpus)
+in_corpus &lt;- order_data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
 englishCorpus$abstract &lt;- in_corpus$abstract
-ind_hasCountryTag &lt;- get.ind_hasCountryTag(boolean_AuthKeywords)
-
-# make the webscrapped training data
-webscrapped_trainingData &lt;-  make.webscrapped_trainingData(boolean_AuthKeywords, ind_hasCountryTag, englishCorpus, englishCorpus_file)
+ind_hasCountryTag &lt;- get_ind_hasCountryTag(boolean_AuthKeywords)</code></pre>
+</div>
+</div>
+<div id="make-the-webscrapped-training-data" class="section level1">
+<h1 class="hasAnchor">
+<a href="#make-the-webscrapped-training-data" class="anchor"></a>Make the webscrapped training data</h1>
+<pre><code>webscrapped_trainingData &lt;-  make_webscrapped_trainingData(boolean_AuthKeywords, ind_hasCountryTag, englishCorpus, englishCorpus_file)
 
 country_tokens &lt;- webscrapped_trainingData$country_tokens
 webscrapped_validationDTM &lt;- webscrapped_trainingData$webscrapped_validationDTM
@@ -284,12 +280,15 @@ webscrapped_trainingLabels &lt;- webscrapped_trainingData$webscrapped_trainingLa
 
 saveRDS(country_tokens, "country_tokens.Rds")
 saveRDS(webscrapped_validationDTM, "webscrapped_validationDTM.Rds")
-saveRDS(webscrapped_trainingLabels, "webscrapped_trainingLabels.Rds")</a></code></pre>
+saveRDS(webscrapped_trainingLabels, "webscrapped_trainingLabels.Rds")</code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

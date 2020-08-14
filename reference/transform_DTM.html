@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Format the data to the format expected by get_ps — format.data4get_ps • wateReview</title>
+<title>This function formats the DTM to be used by the ML models
+In particular, merge together terms corresponding to one country, e.g. <code>costa</code> and <code>rica</code> — transform_DTM • wateReview</title>
 
 
 <!-- jquery -->
@@ -39,8 +40,10 @@
 
 
 
-<meta property="og:title" content="Format the data to the format expected by get_ps — format.data4get_ps" />
-<meta property="og:description" content="Format the data to the format expected by get_ps" />
+<meta property="og:title" content="This function formats the DTM to be used by the ML models
+In particular, merge together terms corresponding to one country, e.g. <code>costa</code> and <code>rica</code> — transform_DTM" />
+<meta property="og:description" content="This function formats the DTM to be used by the ML models
+In particular, merge together terms corresponding to one country, e.g. costa and rica" />
 
 
 
@@ -145,10 +148,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Metadata mining</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="../articles/web_scrapping.html">web_scrapping</a>
+          <a href="../articles/web_scrapping.html">Webscrapping metadata</a>
         </li>
         <li>
-          <a href="../articles/metadata_mining.html">metadata_mining</a>
+          <a href="../articles/mining_citation_network.html">Mining the citation network</a>
         </li>
       </ul>
     </li>
@@ -156,13 +159,13 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Location predictions</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="../articles/text_mining.html">text_mining</a>
+          <a href="../articles/webscrapped_training_labels.html">Webscrapped training labels</a>
         </li>
         <li>
-          <a href="../articles/webscrapped_training_labels.html">webscrapped_training_labels</a>
+          <a href="../articles/text_mining.html">Text mining</a>
         </li>
         <li>
-          <a href="../articles/ML_predictions.html">ML_predictions</a>
+          <a href="../articles/ML_predictions.html">Location prediction</a>
         </li>
       </ul>
     </li>
@@ -222,7 +225,7 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Connectivity</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="../articles/citation_network.html">Citation network</a>
+          <a href="../articles/bipartite_networks.html">Bipartite networks</a>
         </li>
         <li>
           <a href="../articles/network_visualization.html">Network visualization</a>
@@ -253,30 +256,35 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Format the data to the format expected by get_ps</h1>
+    <h1>This function formats the DTM to be used by the ML models
+In particular, merge together terms corresponding to one country, e.g. <code>costa</code> and <code>rica</code></h1>
     
-    <div class="hidden name"><code>format.data4get_ps.Rd</code></div>
+    <div class="hidden name"><code>transform_DTM.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Format the data to the format expected by get_ps</p>
+    <p>This function formats the DTM to be used by the ML models
+In particular, merge together terms corresponding to one country, e.g. <code>costa</code> and <code>rica</code></p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for data4get_ps</span>
-<span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span>(<span class='no'>data</span>)</pre>
+    <pre class="usage"><span class='fu'>transform_DTM</span>(<span class='no'>DTM</span>, <span class='kw'>change.col</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>data to be formatted</p></td>
+      <th>DTM, </th>
+      <td><p>a document term matrix</p></td>
+    </tr>
+    <tr>
+      <th>change.col</th>
+      <td><p>logical, default to <code>TRUE</code>, controls the modification of the column names for compatibility with other functions</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>list with two named elements: data and labels</p>
+    <p>a DTM</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

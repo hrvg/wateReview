@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>identifies the subset of paper with validation data and align databases — align.humanReadingTopicModel • wateReview</title>
+<title>Format the data to the format expected by get_ps — format_data4get_ps • wateReview</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="identifies the subset of paper with validation data and align databases — align.humanReadingTopicModel" />
-<meta property="og:description" content="identifies the subset of paper with validation data and align databases" />
+<meta property="og:title" content="Format the data to the format expected by get_ps — format_data4get_ps" />
+<meta property="og:description" content="Format the data to the format expected by get_ps" />
 
 
 
@@ -145,10 +145,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Metadata mining</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="../articles/web_scrapping.html">web_scrapping</a>
+          <a href="../articles/web_scrapping.html">Webscrapping metadata</a>
         </li>
         <li>
-          <a href="../articles/metadata_mining.html">metadata_mining</a>
+          <a href="../articles/mining_citation_network.html">Mining the citation network</a>
         </li>
       </ul>
     </li>
@@ -156,13 +156,13 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Location predictions</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="../articles/text_mining.html">text_mining</a>
+          <a href="../articles/webscrapped_training_labels.html">Webscrapped training labels</a>
         </li>
         <li>
-          <a href="../articles/webscrapped_training_labels.html">webscrapped_training_labels</a>
+          <a href="../articles/text_mining.html">Text mining</a>
         </li>
         <li>
-          <a href="../articles/ML_predictions.html">ML_predictions</a>
+          <a href="../articles/ML_predictions.html">Location prediction</a>
         </li>
       </ul>
     </li>
@@ -222,7 +222,7 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Connectivity</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="../articles/citation_network.html">Citation network</a>
+          <a href="../articles/bipartite_networks.html">Bipartite networks</a>
         </li>
         <li>
           <a href="../articles/network_visualization.html">Network visualization</a>
@@ -253,41 +253,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>identifies the subset of paper with validation data and align databases</h1>
+    <h1>Format the data to the format expected by get_ps</h1>
     
-    <div class="hidden name"><code>align.humanReadingTopicModel.Rd</code></div>
+    <div class="hidden name"><code>format_data4get_ps.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>identifies the subset of paper with validation data and align databases</p>
+    <p>Format the data to the format expected by get_ps</p>
     </div>
 
-    <pre class="usage"><span class='fu'>align.humanReadingTopicModel</span>(<span class='no'>titleInd</span>, <span class='no'>validationHumanReading</span>, <span class='no'>topicDocs</span>, <span class='no'>DTM</span>)</pre>
+    <pre class="usage"><span class='fu'>format_data4get_ps</span>(<span class='no'>data</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>titleInd</th>
-      <td><p>cross-walked indices between human-reading database and topic model</p></td>
-    </tr>
-    <tr>
-      <th>validationHumanReading</th>
-      <td><p>human-reading database</p></td>
-    </tr>
-    <tr>
-      <th>topicDocs</th>
-      <td><p>results from the topic model</p></td>
-    </tr>
-    <tr>
-      <th>DTM</th>
-      <td><p>document-term matrix derived from topic modelled corpus</p></td>
+      <th>data</th>
+      <td><p>data to be formatted</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>list with four elements: titleInd, validationHumanReading, validationTopicDocs, validationDTM</p>
+    <p>list with two named elements: data and labels</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

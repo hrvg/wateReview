@@ -104,10 +104,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Metadata mining</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/web_scrapping.html">web_scrapping</a>
+          <a href="../articles/web_scrapping.html">Webscrapping metadata</a>
         </li>
         <li>
-          <a href="../articles/metadata_mining.html">metadata_mining</a>
+          <a href="../articles/mining_citation_network.html">Mining the citation network</a>
         </li>
       </ul>
 </li>
@@ -115,13 +115,13 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Location predictions</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/text_mining.html">text_mining</a>
+          <a href="../articles/webscrapped_training_labels.html">Webscrapped training labels</a>
         </li>
         <li>
-          <a href="../articles/webscrapped_training_labels.html">webscrapped_training_labels</a>
+          <a href="../articles/text_mining.html">Text mining</a>
         </li>
         <li>
-          <a href="../articles/ML_predictions.html">ML_predictions</a>
+          <a href="../articles/ML_predictions.html">Location prediction</a>
         </li>
       </ul>
 </li>
@@ -181,7 +181,7 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Connectivity</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/citation_network.html">Citation network</a>
+          <a href="../articles/bipartite_networks.html">Bipartite networks</a>
         </li>
         <li>
           <a href="../articles/network_visualization.html">Network visualization</a>
@@ -207,7 +207,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="ML_predictions_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>ML predictions</h1>
@@ -220,190 +220,1907 @@
 
     
     
-<div id="summary" class="section level2">
-<h2 class="hasAnchor">
-<a href="#summary" class="anchor"></a>Summary</h2>
-</div>
-<div id="rationale" class="section level2">
-<h2 class="hasAnchor">
-<a href="#rationale" class="anchor"></a>Rationale</h2>
-<p>The human reading collected metadata about: the document location, the document funding source and the document spatial and temporal scales. I focus here on the identifying scales.</p>
-</div>
-<div id="problem-definition" class="section level2">
-<h2 class="hasAnchor">
-<a href="#problem-definition" class="anchor"></a>Problem Definition</h2>
-<p>The problem at hand is a classification task. This classification is characterized by having multiple labels. In other words, one document can have the spatial scales labels: “Day” and “Week” and “Year” at the same time. This problem of classification is different of the simpler problem of having to predict one label with different values: a multi-class classification problem. For example, the current problem could be conceptualized as one label “Timescale” taking the values “Day”, “Week”, “Year” and so on.</p>
-<p>Two main approaches exist to solve such a multilabel classification problem. The first one is to use algorithm adapted for such a task. The second one is to transform the problem to make it tractable. Such a transformation can be achieved through two schemes: Binary Relevance (BR) and Label Powerset. In the LP approach, the multilabel problem is transformed into a multi-class classification of the labelsets. In the BR approach, the problem is decomposed in a set of binary problems. In addition, we test more refined BR approaches: classifier chains were the binary classifiers are trained in a given order to predict the labels; nested stacking were the labels are approximated successively by learners and dependent binary relevance where every other labels are used as the input for each label-specific binary learners and stacking which combine dependent binary relevance and nested stacking.</p>
-<p>The performance metric used is the multilabel Hamming loss corresponding to the proportion of incorrectly predicted labels. We also profide the subset 0 1 metric corresponding to the proportion of observations for which the complete set of label is correctly predicted.</p>
-</div>
-<div id="temporal-scales" class="section level2">
-<h2 class="hasAnchor">
-<a href="#temporal-scales" class="anchor"></a>Temporal Scales</h2>
-<p>Identifying temporal scales give avenues to</p>
-<div id="technical-consideration" class="section level3">
-<h3 class="hasAnchor">
-<a href="#technical-consideration" class="anchor"></a>Technical consideration</h3>
-</div>
-</div>
-<div id="spatial-scales" class="section level2">
-<h2 class="hasAnchor">
-<a href="#spatial-scales" class="anchor"></a>Spatial Scales</h2>
-</div>
 <div id="location-prediction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#location-prediction" class="anchor"></a>Location Prediction</h1>
 <p>Machine learning predicts the location of the country of study of each paper. The training labels were provided by human-reading randomly chosen articles from the corpus (1,428 human-derived labels) and from text mining the article metadata (2,663 text-mined labels). Interestingly, the human-reading provided 563 observations of irrelevant country locations or irrelevant subjects of study.</p>
 <p>The human-derived labels are first used for constructing a relevance filter based on simple binary classification between “Relevant” and “Irrelevant” documents (<span class="math inline">\(n = 1,386\)</span>). The predictors consist of the text document term matrix derived from the cleaned corpus text using tokens related to country names and of the topic membership output by the topic model (<span class="math inline">\(p = 138\)</span>). A benchmark of the six following models was conducted: featureless (baseline), random forest, support vector machine, naive Bayes, multinomial regression and extreme gradient boosting. The hyper-parameters are initially set at standard default value. The resampling scheme is 10 repeats of 10-fold cross-validation. The random forest, multinomal and support vector machine models are the best-performing model and show no statistical difference in the distribution of their performance measured by area-under-curve (AUC). These models are selected for further tuning using a nested cross-validation with a simple hold-out inner loop and 10 repeats of 10-fold cross-validation as outer loop. The size of the tuning grid is set to 16 between standard values for each hyper-parameters. Random forest and multinomial are the best-performing tuned models and show no statistical difference in the distribution of their performance measured by AUC. The distribution of the hyper-parameter resulting from the nested cross-validation shows a better constraint for the multinomial model and it is selected for predictions. The performance of such multinomial model corresponds to a mean AUC of 0.82, a mean accuracy of 77% and a true positive rate of 86%.</p>
 <p>The prediction of the location of study for each document is performed using both human-derived and text-mined labels (<span class="math inline">\(n = 3,494\)</span>). The predictors consist of the text document term matrix derived from the cleaned corpus text using tokens related to country names (<span class="math inline">\(p = 33\)</span>). Models and resampling scheme are similar than the ones used for the relevance filter. The hyper-parameters are initially set at standard default value. Random forest outperforms every other model with a mean multiclass AUC of 0.99 and a mean accuracy of 96%. No further tuning is performed and the random forest with default hyper-parameters is used for predictions. More complex approaches were investigated: using additional geographical tokens (e.g. rivers and mountain ranges names), multilabel classifications (e.g. binary relevance, label powerset) or deep learning models of natural language processing (e.g. BERT) both on full texts and abstracts with little benefits.</p>
-<pre><code><a href="https://rdrr.io/pkg/mlr/man">### libraries
-library("mlr")
-library("parallelMap")
-library("parallel")
-library("OpenML")
-library("NLP")
-library("tm")
-library("data.table")
-library("mldr")
-library("reshape2")
-library("ggplot2")
-library("rstatix")
-library("ggpubr")
-library("dplyr")
-
-
-### utils ###
-import::here(.from = "./R/utils/lib_shared.R", 
-    get_titleInd,
-    get_validationHumanReading,
-    get_topicDocs,
-    get_titleDocs,
-    get_webscrapped_validationDTM,
-    get_webscrapped_trainingLabels,
-    get_DocTermMatrix,
-    align.humanReadingTopicModel,
-    QA.alignedData
-)
-
-import::here(.from = "./R/utils/lib_ML_predictions.R", 
-    make.humanReadingTrainingLabels,
-    make.trainingData,
-    get.MLDR,
-    EDA.trainingData,
-    get.binaryRelevanceLearners,
-    get.chainingOrder,
-    multilabelBenchmark,
-    make.task,
-    get_short_long_term_pred,
-    PerfVisMultilabel,
-    make.trainingDataMulticlass,
-    multiclassBenchmark,
-    make.predictions,
-    make.targetData,
-    transform.DTM,
-    make.AUCPlot,
-    get.tuningPar
-)
-
-### main
-
-# param
-SCALE_TYPE &lt;- "location"
-MODEL_TYPE &lt;- "multiclass" # multiclass or binary_relevance
-AGGREGATE &lt;- FALSE
-
-# data reading
-topicDocs &lt;- get_topicDocs()
-titleDocs &lt;- get_titleDocs(topicDocs)
-validationHumanReading &lt;-  get_validationHumanReading(scale_type = SCALE_TYPE)
-DTM &lt;- get_DocTermMatrix()
-webscrapped_validationDTM &lt;- get_webscrapped_validationDTM()
-colnames(webscrapped_validationDTM) &lt;- colnames(DTM)
-webscrapped_validationDTM &lt;- transform.DTM(webscrapped_validationDTM)
-DTM &lt;- transform.DTM(DTM)
-webscrapped_trainingLabels &lt;- get_webscrapped_trainingLabels()
-titleInd &lt;- get_titleInd(humanReadingDatabase = validationHumanReading, topicModelTitles = titleDocs)
-
-# sanity check
-# check if all the papers are found, address issues, align databases
-table(is.na(titleInd))
-alignedData &lt;- align.humanReadingTopicModel(titleInd, validationHumanReading, topicDocs, DTM)
-alignedData &lt;- QA.alignedData(alignedData, scale_type = SCALE_TYPE)
-validationTopicDocs &lt;- alignedData$validationTopicDocs
-validationHumanReading &lt;- alignedData$validationHumanReading
-validationHumanReadingDTM &lt;- alignedData$validationDTM
-
-# get humanReadingTrainingLabels
-humanReadingTrainingLabels &lt;- make.humanReadingTrainingLabels(validationHumanReading, scale_type = SCALE_TYPE, webscrapped_trainingLabels)
-trainingData &lt;- make.trainingData(validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, scale_type = SCALE_TYPE, aggregate_labels = AGGREGATE)
-
-# exploratory data analysis
-EDA.trainingData(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels)
-
-
-cwd_bak &lt;- getwd()
-setwd("F:/hguillon/research")
-
-# multilabel: binary relevance and algorithm adaptation
-
-# bmr &lt;- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
-# AggrPerformances &lt;- getBMRAggrPerformances(bmr, as.df = TRUE)
-# PerfVisMultilabel(AggrPerformances)
-
-# multiclass
-
-# ## relevance filter
-trainingDataMulticlassFilter &lt;- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, 
+</div>
+<div id="libraries" class="section level1">
+<h1 class="hasAnchor">
+<a href="#libraries" class="anchor"></a>Libraries</h1>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">wateReview</span>)</pre></body></html></div>
+</div>
+<div id="defining-parameters" class="section level1">
+<h1 class="hasAnchor">
+<a href="#defining-parameters" class="anchor"></a>Defining parameters</h1>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">SCALE_TYPE</span> <span class="kw">&lt;-</span> <span class="st">"location"</span>
+<span class="no">MODEL_TYPE</span> <span class="kw">&lt;-</span> <span class="st">"multiclass"</span> <span class="co"># multiclass or binary_relevance</span>
+<span class="no">AGGREGATE</span> <span class="kw">&lt;-</span> <span class="fl">FALSE</span></pre></body></html></div>
+</div>
+<div id="data-reading" class="section level1">
+<h1 class="hasAnchor">
+<a href="#data-reading" class="anchor"></a>Data reading</h1>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">topicDocs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/get_topicDocs.html">get_topicDocs</a></span>()
+<span class="no">titleDocs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/get_titleDocs.html">get_titleDocs</a></span>(<span class="no">topicDocs</span>)
+<span class="no">validationHumanReading</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/get_validationHumanReading.html">get_validationHumanReading</a></span>(<span class="kw">scale_type</span> <span class="kw">=</span> <span class="no">SCALE_TYPE</span>)
+<span class="no">DTM</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/get_DocTermMatrix.html">get_DocTermMatrix</a></span>()
+<span class="no">webscrapped_validationDTM</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/get_webscrapped_validationDTM.html">get_webscrapped_validationDTM</a></span>()
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">webscrapped_validationDTM</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">DTM</span>)
+<span class="co">#&gt; Loading required package: quanteda</span>
+<span class="co">#&gt; Package version: 2.1.1</span>
+<span class="co">#&gt; Parallel computing: 2 of 2 threads used.</span>
+<span class="co">#&gt; See https://quanteda.io for tutorials and examples.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'quanteda'</span>
+<span class="co">#&gt; The following object is masked from 'package:utils':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     View</span>
+<span class="no">webscrapped_validationDTM</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/transform_DTM.html">transform_DTM</a></span>(<span class="no">webscrapped_validationDTM</span>)
+<span class="no">DTM</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/transform_DTM.html">transform_DTM</a></span>(<span class="no">DTM</span>)
+<span class="no">webscrapped_trainingLabels</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/get_webscrapped_trainingLabels.html">get_webscrapped_trainingLabels</a></span>()
+<span class="no">titleInd</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/get_titleInd.html">get_titleInd</a></span>(<span class="kw">humanReadingDatabase</span> <span class="kw">=</span> <span class="no">validationHumanReading</span>, <span class="kw">topicModelTitles</span> <span class="kw">=</span> <span class="no">titleDocs</span>)</pre></body></html></div>
+</div>
+<div id="sanity-check" class="section level1">
+<h1 class="hasAnchor">
+<a href="#sanity-check" class="anchor"></a>Sanity check</h1>
+<p>We now check if all the papers are found, address issues and align databases.</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">titleInd</span>))
+<span class="co">#&gt; </span>
+<span class="co">#&gt; FALSE  TRUE </span>
+<span class="co">#&gt;  1430   121</span>
+<span class="no">alignedData</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/align_humanReadingTopicModel.html">align_humanReadingTopicModel</a></span>(<span class="no">titleInd</span>, <span class="no">validationHumanReading</span>, <span class="no">topicDocs</span>, <span class="no">DTM</span>)
+<span class="no">alignedData</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/QA_alignedData.html">QA_alignedData</a></span>(<span class="no">alignedData</span>, <span class="kw">scale_type</span> <span class="kw">=</span> <span class="no">SCALE_TYPE</span>)
+<span class="no">validationTopicDocs</span> <span class="kw">&lt;-</span> <span class="no">alignedData</span>$<span class="no">validationTopicDocs</span>
+<span class="no">validationHumanReading</span> <span class="kw">&lt;-</span> <span class="no">alignedData</span>$<span class="no">validationHumanReading</span>
+<span class="no">validationHumanReadingDTM</span> <span class="kw">&lt;-</span> <span class="no">alignedData</span>$<span class="no">validationDTM</span></pre></body></html></div>
+</div>
+<div id="get-the-training-data-from-humanreadingtraininglabels" class="section level1">
+<h1 class="hasAnchor">
+<a href="#get-the-training-data-from-humanreadingtraininglabels" class="anchor"></a>Get the training data from <code>humanReadingTrainingLabels</code>
+</h1>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">humanReadingTrainingLabels</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/make_humanReadingTrainingLabels.html">make_humanReadingTrainingLabels</a></span>(<span class="no">validationHumanReading</span>, <span class="kw">scale_type</span> <span class="kw">=</span> <span class="no">SCALE_TYPE</span>, <span class="no">webscrapped_trainingLabels</span>)
+<span class="co">#&gt; [1] "These labels are missing from the human read labels:"</span>
+<span class="co">#&gt;  [1] "Antigua.and.Barbuda"            "Cuba"                          </span>
+<span class="co">#&gt;  [3] "Dominica"                       "Dominican.Republic"            </span>
+<span class="co">#&gt;  [5] "Grenada"                        "Guyana"                        </span>
+<span class="co">#&gt;  [7] "St..Kitts.and.Nevis"            "St..Lucia"                     </span>
+<span class="co">#&gt;  [9] "St..Vincent.and.the.Grenadines" "Suriname"</span>
+<span class="no">trainingData</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/make_trainingData.html">make_trainingData</a></span>(<span class="no">validationHumanReadingDTM</span>, <span class="no">humanReadingTrainingLabels</span>, <span class="no">webscrapped_validationDTM</span>, <span class="no">webscrapped_trainingLabels</span>, <span class="kw">scale_type</span> <span class="kw">=</span> <span class="no">SCALE_TYPE</span>, <span class="kw">aggregate_labels</span> <span class="kw">=</span> <span class="no">AGGREGATE</span>)
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">trainingData</span>, <span class="fl">5</span>) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">format</span> <span class="kw">=</span> <span class="st">"html"</span>, <span class="kw">caption</span> <span class="kw">=</span> <span class="st">""</span>) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">kableExtra</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hover"</span>, <span class="st">"condensed"</span>)) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">kableExtra</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/scroll_box.html">scroll_box</a></span>(<span class="kw">width</span> <span class="kw">=</span> <span class="st">"7in"</span>)</pre></body></html></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:7in; ">
+<table class="table table table-hover table-condensed">
+<caption>
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Term1
+</th>
+<th style="text-align:right;">
+Term2
+</th>
+<th style="text-align:right;">
+Term3
+</th>
+<th style="text-align:right;">
+Term4
+</th>
+<th style="text-align:right;">
+Term5
+</th>
+<th style="text-align:right;">
+Term6
+</th>
+<th style="text-align:right;">
+Term7
+</th>
+<th style="text-align:right;">
+Term8
+</th>
+<th style="text-align:right;">
+Term9
+</th>
+<th style="text-align:right;">
+Term10
+</th>
+<th style="text-align:right;">
+Term11
+</th>
+<th style="text-align:right;">
+Term12
+</th>
+<th style="text-align:right;">
+Term13
+</th>
+<th style="text-align:right;">
+Term14
+</th>
+<th style="text-align:right;">
+Term15
+</th>
+<th style="text-align:right;">
+Term16
+</th>
+<th style="text-align:right;">
+Term17
+</th>
+<th style="text-align:right;">
+Term18
+</th>
+<th style="text-align:right;">
+Term19
+</th>
+<th style="text-align:right;">
+Term20
+</th>
+<th style="text-align:right;">
+Term21
+</th>
+<th style="text-align:right;">
+Term22
+</th>
+<th style="text-align:right;">
+Term23
+</th>
+<th style="text-align:right;">
+Term24
+</th>
+<th style="text-align:right;">
+Term25
+</th>
+<th style="text-align:right;">
+Term26
+</th>
+<th style="text-align:right;">
+Term27
+</th>
+<th style="text-align:right;">
+Term28
+</th>
+<th style="text-align:right;">
+Term29
+</th>
+<th style="text-align:right;">
+Term30
+</th>
+<th style="text-align:right;">
+Term31
+</th>
+<th style="text-align:right;">
+Term32
+</th>
+<th style="text-align:right;">
+Term33
+</th>
+<th style="text-align:left;">
+Antigua.and.Barbuda
+</th>
+<th style="text-align:left;">
+Argentina
+</th>
+<th style="text-align:left;">
+Bahamas
+</th>
+<th style="text-align:left;">
+Barbados
+</th>
+<th style="text-align:left;">
+Belize
+</th>
+<th style="text-align:left;">
+Bolivia
+</th>
+<th style="text-align:left;">
+Brazil
+</th>
+<th style="text-align:left;">
+Chile
+</th>
+<th style="text-align:left;">
+Colombia
+</th>
+<th style="text-align:left;">
+Costa.Rica
+</th>
+<th style="text-align:left;">
+Cuba
+</th>
+<th style="text-align:left;">
+Dominica
+</th>
+<th style="text-align:left;">
+Dominican.Republic
+</th>
+<th style="text-align:left;">
+Ecuador
+</th>
+<th style="text-align:left;">
+El.Salvador
+</th>
+<th style="text-align:left;">
+Grenada
+</th>
+<th style="text-align:left;">
+Guatemala
+</th>
+<th style="text-align:left;">
+Guyana
+</th>
+<th style="text-align:left;">
+Haiti
+</th>
+<th style="text-align:left;">
+Honduras
+</th>
+<th style="text-align:left;">
+Jamaica
+</th>
+<th style="text-align:left;">
+Mexico
+</th>
+<th style="text-align:left;">
+Nicaragua
+</th>
+<th style="text-align:left;">
+Panama
+</th>
+<th style="text-align:left;">
+Paraguay
+</th>
+<th style="text-align:left;">
+Peru
+</th>
+<th style="text-align:left;">
+St..Kitts.and.Nevis
+</th>
+<th style="text-align:left;">
+St..Lucia
+</th>
+<th style="text-align:left;">
+St..Vincent.and.the.Grenadines
+</th>
+<th style="text-align:left;">
+Suriname
+</th>
+<th style="text-align:left;">
+Trinidad.and.Tobago
+</th>
+<th style="text-align:left;">
+Uruguay
+</th>
+<th style="text-align:left;">
+Venezuela
+</th>
+<th style="text-align:left;">
+Irrelevant
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+13816
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+527
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+7597
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2857
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5379
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="exploratory-data-analysis" class="section level1">
+<h1 class="hasAnchor">
+<a href="#exploratory-data-analysis" class="anchor"></a>Exploratory data analysis</h1>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/wateReview/man/EDA_trainingData.html">EDA_trainingData</a></span>(<span class="no">trainingData</span>, <span class="no">validationHumanReadingDTM</span>, <span class="no">humanReadingTrainingLabels</span>) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">format</span> <span class="kw">=</span> <span class="st">"html"</span>, <span class="kw">caption</span> <span class="kw">=</span> <span class="st">""</span>) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">kableExtra</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hover"</span>, <span class="st">"condensed"</span>)) <span class="kw">%&gt;%</span>
+    <span class="kw pkg">kableExtra</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/scroll_box.html">scroll_box</a></span>(<span class="kw">width</span> <span class="kw">=</span> <span class="st">"7in"</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="st">"7in"</span>)</pre></body></html></div>
+<img src="ML_predictions_files/figure-html/unnamed-chunk-7-1.png" width="864"><div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:7in; overflow-x: scroll; width:7in; ">
+<table class="table table table-hover table-condensed">
+<caption>
+</caption>
+<thead><tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+country
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+human_reading
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+human_reading_webscrapping
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+webscrapping
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Antigua.and.Barbuda
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Argentina
+</td>
+<td style="text-align:right;">
+104
+</td>
+<td style="text-align:right;">
+384
+</td>
+<td style="text-align:right;">
+280
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bahamas
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+26
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Barbados
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Belize
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bolivia
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+121
+</td>
+<td style="text-align:right;">
+102
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Brazil
+</td>
+<td style="text-align:right;">
+372
+</td>
+<td style="text-align:right;">
+1134
+</td>
+<td style="text-align:right;">
+762
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chile
+</td>
+<td style="text-align:right;">
+89
+</td>
+<td style="text-align:right;">
+427
+</td>
+<td style="text-align:right;">
+338
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Colombia
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+117
+</td>
+<td style="text-align:right;">
+91
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Costa.Rica
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+98
+</td>
+<td style="text-align:right;">
+84
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cuba
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+26
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dominica
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dominican.Republic
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ecuador
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+101
+</td>
+<td style="text-align:right;">
+87
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+El.Salvador
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Grenada
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Guatemala
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Guyana
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Haiti
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Honduras
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jamaica
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+24
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mexico
+</td>
+<td style="text-align:right;">
+138
+</td>
+<td style="text-align:right;">
+587
+</td>
+<td style="text-align:right;">
+449
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nicaragua
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:right;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Panama
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+77
+</td>
+<td style="text-align:right;">
+66
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Paraguay
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Peru
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+160
+</td>
+<td style="text-align:right;">
+125
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St..Kitts.and.Nevis
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St..Lucia
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+St..Vincent.and.the.Grenadines
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Suriname
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Trinidad.and.Tobago
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Uruguay
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Venezuela
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+51
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Irrelevant
+</td>
+<td style="text-align:right;">
+563
+</td>
+<td style="text-align:right;">
+563
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="multilabel-binary-relevance-and-algorithm-adaptation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#multilabel-binary-relevance-and-algorithm-adaptation" class="anchor"></a>Multilabel: binary relevance and algorithm adaptation</h1>
+<p>The following code executes a multilabl benchmark.</p>
+<pre><code>bmr &lt;- multilabelBenchmark(trainingData, validationHumanReadingDTM, MODEL_TYPE, scale_type = SCALE_TYPE, aggregated_labels = AGGREGATE, obs_threshold = 10)
+AggrPerformances &lt;- getBMRAggrPerformances(bmr, as.df = TRUE)
+PerfVisMultilabel(AggrPerformances)</code></pre>
+</div>
+<div id="multiclass" class="section level1">
+<h1 class="hasAnchor">
+<a href="#multiclass" class="anchor"></a>Multiclass</h1>
+<div id="relevance-filter" class="section level2">
+<h2 class="hasAnchor">
+<a href="#relevance-filter" class="anchor"></a>Relevance filter</h2>
+<pre><code>trainingDataMulticlassFilter &lt;- make_trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, 
     filter = TRUE, 
     addTopicDocs = TRUE, 
-    validationTopicDocs = validationTopicDocs)
-
-# ### selecting a model to tune
-if (!file.exists("bmr_filter.Rds")){
+    validationTopicDocs = validationTopicDocs)</code></pre>
+<div id="selecting-a-model-to-tune" class="section level3">
+<h3 class="hasAnchor">
+<a href="#selecting-a-model-to-tune" class="anchor"></a>Selecting a model to tune</h3>
+<pre><code>if (!file.exists("bmr_filter.Rds")){
     bmr_filter &lt;- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE)
     saveRDS(bmr_filter, "bmr_filter.Rds")
 } else {
     bmr_filter &lt;- readRDS("bmr_filter.Rds")
 }
-make.AUCPlot(bmr_filter, binary = TRUE)
-# based on the result of the AUC plot comparison, svm, multinom and RF are selected for tuning benchmark
-
-# ### tuning model
-
-if(!file.exists("bmr_tune_filter.Rds")){
+make_AUCPlot(bmr_filter, binary = TRUE)</code></pre>
+<p>Based on the result of the AUC plot comparison, svm, multinom and RF are selected for tuning benchmark</p>
+</div>
+<div id="tuning-model" class="section level3">
+<h3 class="hasAnchor">
+<a href="#tuning-model" class="anchor"></a>Tuning model</h3>
+<pre><code>if(!file.exists("bmr_tune_filter.Rds")){
     bmr_tune_filter &lt;- multiclassBenchmark(trainingDataMulticlassFilter, MODEL_TYPE, filter = TRUE, tune = list("classif.svm", "classif.randomForest", "classif.multinom"))
     saveRDS(bmr_tune_filter, "bmr_tune_filter.Rds")
 } else {
     bmr_tune_filter &lt;- readRDS("bmr_tune_filter.Rds")
 }
-make.AUCPlot(bmr_tune_filter, binary = TRUE)
-# RF and multninomal have similar performance, we pick multinom (better hyper-parameter constrains)
-
-# ### predict
-targetData &lt;- make.targetData(DTM, addTopicDocs = TRUE, topicDocs = topicDocs)
-predRelevance &lt;- make.predictions("classif.multinom", 
-    list(mtry = get.tuningPar(bmr_tune_filter, "decay")),
+make_AUCPlot(bmr_tune_filter, binary = TRUE)</code></pre>
+<p>RF and multninomal have similar performance, we pick multinom (better hyper-parameter constrains).</p>
+</div>
+<div id="predict" class="section level3">
+<h3 class="hasAnchor">
+<a href="#predict" class="anchor"></a>Predict</h3>
+<pre><code>targetData &lt;- make_targetData(DTM, addTopicDocs = TRUE, topicDocs = topicDocs)
+predRelevance &lt;- make_predictions("classif.multinom", 
+    list(mtry = get_tuningPar(bmr_tune_filter, "decay")),
     trainingDataMulticlassFilter, targetData, MODEL_TYPE, filter = TRUE)
-table(predRelevance)
-
-## country
-trainingDataMulticlass &lt;- make.trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE)
-
-### selecting a model to tune
-if (!file.exists("bmr_country.Rds")){
+table(predRelevance)</code></pre>
+</div>
+</div>
+<div id="country" class="section level2">
+<h2 class="hasAnchor">
+<a href="#country" class="anchor"></a>Country</h2>
+<pre><code>trainingDataMulticlass &lt;- make_trainingDataMulticlass(trainingData, validationHumanReadingDTM, humanReadingTrainingLabels, webscrapped_validationDTM, webscrapped_trainingLabels, filter = FALSE, addWebscrapped = TRUE)</code></pre>
+<div id="selecting-a-model-to-tune-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#selecting-a-model-to-tune-1" class="anchor"></a>Selecting a model to tune</h3>
+<pre><code>if (!file.exists("bmr_country.Rds")){
     bmr_country &lt;- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE)
     saveRDS(bmr_country, "bmr_country.Rds")
 } else {
     bmr_country &lt;- readRDS("bmr_country.Rds")
 }
-make.AUCPlot(bmr_country)
-
-# bmr_tune_country &lt;- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = list("classif.randomForest"))
-# make.AUCPlot(bmr_tune_country)
-# saveRDS(bmr_tune_country, "bmr_tune_country.Rds")
-
-# ### predict
-targetData &lt;- make.targetData(DTM)
-predCountry &lt;- make.predictions("classif.randomForest", 
+make_AUCPlot(bmr_country)</code></pre>
+</div>
+<div id="tuning" class="section level3">
+<h3 class="hasAnchor">
+<a href="#tuning" class="anchor"></a>Tuning</h3>
+<pre><code># bmr_tune_country &lt;- multiclassBenchmark(trainingDataMulticlass, MODEL_TYPE, filter = FALSE, tune = list("classif.randomForest"))
+# make_AUCPlot(bmr_tune_country)
+# saveRDS(bmr_tune_country, "bmr_tune_country.Rds")</code></pre>
+</div>
+<div id="predicting" class="section level3">
+<h3 class="hasAnchor">
+<a href="#predicting" class="anchor"></a>Predicting</h3>
+<pre><code>targetData &lt;- make_targetData(DTM)
+predCountry &lt;- make_predictions("classif.randomForest", 
     list(mtry = floor(sqrt(ncol(trainingDataMulticlass) - 1))),
     trainingDataMulticlass, targetData, MODEL_TYPE, filter = FALSE)
 
@@ -411,38 +2128,23 @@ predCountry$response &lt;- as.character(predCountry$response)
 predCountry$response[as.character(predRelevance) == "Irrelevant"] &lt;- "Irrelevant"
 predCountry$response &lt;- as.factor(predCountry$response)
 
-setwd(cwd_bak)
-
 saveRDS(predRelevance, "predRelevance.Rds")
-saveRDS(predCountry, "predCountry.Rds")
-</a></code></pre>
-<pre><code><a href="https://rdrr.io/pkg/mlr/man">### libraries ###
-library("mlr")
-library("OpenML")
-library("NLP")
-library("tm")
-library("data.table")
-library("mldr")
-library("dplyr")
-
-### utils ###
-import::here(.from = "./R/utils/lib_webscrapping.R",
-  make.country_tokens,
-  get.EndNoteIdcorpus,
-  get.EndNoteIdLDA,
-  QA.EndNoteIdCorpusLDA,
-  align.dataWithEndNoteIdLDA,
-  align.dataWithEndNoteIdcorpus,
-  order.data
-)
-
-import::here(.from = "./R/utils/lib_ML_predictions.R",
-    consolidate_LDA_results,
-    make_df_docs
-)
-
-# data loading
-englishCorpus_file &lt;- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
+saveRDS(predCountry, "predCountry.Rds")</code></pre>
+</div>
+</div>
+</div>
+<div id="consolidating-results" class="section level1">
+<h1 class="hasAnchor">
+<a href="#consolidating-results" class="anchor"></a>Consolidating results</h1>
+<p>We now consolidate all results to be used for analysis. Because this uses the complete corpus, the following code is not executed.</p>
+<div id="cross-walk-between-databases" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cross-walk-between-databases" class="anchor"></a>Cross-walk between databases</h2>
+<p>The following code chunks perform a cross-walk between the topic model and EndNote databases using document id: <code>EndNoteIdcorpus</code> and <code>EndNoteIdLDA</code>. This ensures that the two databases can communicate and are aligned.</p>
+<div id="data-loading" class="section level3">
+<h3 class="hasAnchor">
+<a href="#data-loading" class="anchor"></a>Data loading</h3>
+<pre><code>englishCorpus_file &lt;- "F:/hguillon/research/exploitation/R/latin_america/data/english_corpus.Rds"
 englishCorpus &lt;- readRDS(englishCorpus_file)
 
 in_corpus_file &lt;- "in_corpus.Rds"
@@ -450,40 +2152,50 @@ in_corpus &lt;- readRDS(in_corpus_file)
 
 predCountry &lt;- readRDS("predCountry.Rds") # aligned with englishCorpus
 predRelevance &lt;- readRDS("predRelevance.Rds") # aligned with englishCorpus
-topicDocs &lt;- readRDS("./data/topicDocs.Rds") # aligned with englishCorpus
+topicDocs &lt;- readRDS("./data/topicDocs.Rds") # aligned with englishCorpus</code></pre>
+</div>
+<div id="get-document-ids" class="section level3">
+<h3 class="hasAnchor">
+<a href="#get-document-ids" class="anchor"></a>Get document IDs</h3>
+<pre><code>EndNoteIdcorpus &lt;- get_EndNoteIdcorpus(in_corpus)
+EndNoteIdLDA &lt;- get_EndNoteIdLDA(englishCorpus)
+QA_EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)</code></pre>
+</div>
+<div id="align-databases" class="section level3">
+<h3 class="hasAnchor">
+<a href="#align-databases" class="anchor"></a>Align databases</h3>
+<pre><code>in_corpus &lt;- align_dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
 
-# get document IDs
-EndNoteIdcorpus &lt;- get.EndNoteIdcorpus(in_corpus)
-EndNoteIdLDA &lt;- get.EndNoteIdLDA(englishCorpus)
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
+englishCorpus &lt;- align_dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
+predCountry &lt;- align_dataWithEndNoteIdLDA(predCountry, EndNoteIdLDA, EndNoteIdcorpus)
+predRelevance &lt;- align_dataWithEndNoteIdLDA(predRelevance, EndNoteIdLDA, EndNoteIdcorpus)
+topicDocs &lt;- align_dataWithEndNoteIdLDA(topicDocs, EndNoteIdLDA, EndNoteIdcorpus)
 
-# align databases 
-in_corpus &lt;- align.dataWithEndNoteIdcorpus(in_corpus, EndNoteIdcorpus, EndNoteIdLDA)
+EndNoteIdLDA &lt;- align_dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
+EndNoteIdcorpus &lt;- align_dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
 
-englishCorpus &lt;- align.dataWithEndNoteIdLDA(englishCorpus, EndNoteIdLDA, EndNoteIdcorpus)
-predCountry &lt;- align.dataWithEndNoteIdLDA(predCountry, EndNoteIdLDA, EndNoteIdcorpus)
-predRelevance &lt;- align.dataWithEndNoteIdLDA(predRelevance, EndNoteIdLDA, EndNoteIdcorpus)
-topicDocs &lt;- align.dataWithEndNoteIdLDA(topicDocs, EndNoteIdLDA, EndNoteIdcorpus)
-
-EndNoteIdLDA &lt;- align.dataWithEndNoteIdLDA(EndNoteIdLDA, EndNoteIdLDA, EndNoteIdcorpus)
-EndNoteIdcorpus &lt;- align.dataWithEndNoteIdcorpus(EndNoteIdcorpus, EndNoteIdcorpus, EndNoteIdLDA)
-
-QA.EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)
-
-# order them according to LDA database
-in_corpus &lt;- order.data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)
-
-saveRDS(predRelevance, "predRelevance.Rds")
+QA_EndNoteIdCorpusLDA(EndNoteIdLDA, EndNoteIdcorpus)</code></pre>
+</div>
+<div id="order-them-according-to-lda-database" class="section level3">
+<h3 class="hasAnchor">
+<a href="#order-them-according-to-lda-database" class="anchor"></a>Order them according to LDA database</h3>
+<pre><code>in_corpus &lt;- order_data(in_corpus, EndNoteIdLDA, EndNoteIdcorpus)</code></pre>
+</div>
+</div>
+<div id="saving-results" class="section level2">
+<h2 class="hasAnchor">
+<a href="#saving-results" class="anchor"></a>Saving results</h2>
+<pre><code><a href="https://rdrr.io/r/base/readRDS.html">saveRDS(predRelevance, "predRelevance.Rds")
 saveRDS(predCountry %&gt;% pull(response), "predCountry.Rds")
-saveRDS(predCountry %&gt;% select(-response), "predCountryMembership.Rds")
-
-consolidate_LDA_results(theme_type = "topic_name", save = TRUE)
+saveRDS(predCountry %&gt;% select(-response), "predCountryMembership.Rds")</a></code></pre>
+<pre><code><a href="https://rdrr.io/pkg/wateReview/man/consolidate_LDA_results.html">consolidate_LDA_results(theme_type = "topic_name", save = TRUE)
 consolidate_LDA_results(theme_type = "theme", save = TRUE)
 consolidate_LDA_results(theme_type = "NSF_general", save = TRUE)
 consolidate_LDA_results(theme_type = "NSF_specific", save = TRUE)
 consolidate_LDA_results(theme_type = "theme", description = "water budget", save = TRUE)
 consolidate_LDA_results(theme_type = "theme", description = "methods", save = TRUE)
 consolidate_LDA_results(theme_type = "theme", description = "spatial scale", save = TRUE)</a></code></pre>
+</div>
 </div>
   </div>
 

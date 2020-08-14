@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Webscrapping • wateReview</title>
+<title>Webscrapping metadata • wateReview</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Webscrapping">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Webscrapping metadata">
 <meta property="og:description" content="wateReview">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -104,10 +104,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Metadata mining</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/web_scrapping.html">web_scrapping</a>
+          <a href="../articles/web_scrapping.html">Webscrapping metadata</a>
         </li>
         <li>
-          <a href="../articles/metadata_mining.html">metadata_mining</a>
+          <a href="../articles/mining_citation_network.html">Mining the citation network</a>
         </li>
       </ul>
 </li>
@@ -115,13 +115,13 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Location predictions</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/text_mining.html">text_mining</a>
+          <a href="../articles/webscrapped_training_labels.html">Webscrapped training labels</a>
         </li>
         <li>
-          <a href="../articles/webscrapped_training_labels.html">webscrapped_training_labels</a>
+          <a href="../articles/text_mining.html">Text mining</a>
         </li>
         <li>
-          <a href="../articles/ML_predictions.html">ML_predictions</a>
+          <a href="../articles/ML_predictions.html">Location prediction</a>
         </li>
       </ul>
 </li>
@@ -181,7 +181,7 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Connectivity</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/citation_network.html">Citation network</a>
+          <a href="../articles/bipartite_networks.html">Bipartite networks</a>
         </li>
         <li>
           <a href="../articles/network_visualization.html">Network visualization</a>
@@ -210,7 +210,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Webscrapping</h1>
+      <h1 data-toc-skip>Webscrapping metadata</h1>
             
       
       
@@ -220,83 +220,82 @@
 
     
     
-<pre><code>### libraries ###
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>This vignette documents the collection of additional article metadata. Because this vignette retrieves some licensed information, it is not run.</p>
+</div>
+<div id="libraries" class="section level1">
+<h1 class="hasAnchor">
+<a href="#libraries" class="anchor"></a>Libraries</h1>
+<pre><code><a href="https://rdrr.io/pkg/wateReview/man">library(wateReview)
 if(!require("rvest")) install.packages("rvest")
 library("rvest")
-
 if(!require("rscopus")) install.packages("rscopus")
-library("rscopus")
-
-### utils ###
-import::here(.from = "./R/utils/envpath.R", 
-    get_rootdir)
-
-import::here(.from = "./R/utils/lib_query.R",
-    get_meta_df,
-    get_language_dfs,
-    make_pretty_str
-    )
-
-import::here(.from = "./R/utils/lib_webscrapping.R",
-  get.scopusAbstract,
-  get.wosAbstract,
-  get.wosAuthKeywords,
-  get.wosFullResult,
-  get.allMetadata,
-  add.abstractsToCorpus,
-  get.relevantCountries,
-  get.allAuthKeywords,
-  QA.AuthKeywords,
-  get.boolean_AuthKeywords,
-  get.ind_hasCountryTag
-)
-
-### main ###
-
-# init
-root.dir &lt;- get_rootdir()
-languages &lt;- c("english", "portuguese", "spanish")
+library("rscopus")</a></code></pre>
+</div>
+<div id="initialization" class="section level1">
+<h1 class="hasAnchor">
+<a href="#initialization" class="anchor"></a>Initialization</h1>
+<p>We define here an output directory <code>out.dir</code> and an API for <code>rscopus</code>.</p>
+<pre><code>languages &lt;- c("english", "portuguese", "spanish")
 out.dir &lt;- "exploitation/out/run79"
-rscopus::set_api_key("38493e05eff904cef27135964f34d2b2")
-
-# data loading
-load(file = file.path(root.dir, out.dir, paste0("language_dfs_updated_2", ".rda")))
+rscopus::set_api_key("your/API/key")</code></pre>
+</div>
+<div id="data-loading" class="section level1">
+<h1 class="hasAnchor">
+<a href="#data-loading" class="anchor"></a>Data loading</h1>
+<pre><code>load(file = system.file("extdata", "language_dfs_updated_3", ".rda", package = "wateReview")
 in_corpus &lt;- language_dfs$english[which(language_dfs$english$collected == "in corpus"), ]
 scopusID &lt;- in_corpus$ArticleURL[grepl("scopus", in_corpus$ArticleURL)]
 wosID &lt;- in_corpus[!grepl("scopus", in_corpus$ArticleURL), ]
-wosID &lt;- wosID$DOI
-
-# abstract retrieval
-scopusAbstracts &lt;- get.allMetadata(scopusID, fun = get.scopusAbstract)
-wosAbstracts &lt;- get.allMetadata(wosID, fun = get.wosAbstract)
-in_corpus &lt;- add.abstractsToCorpus(in_corpus, scopusAbstracts, wosAbstracts)
-saveRDS(in_corpus, "in_corpus.Rds")
-
-# full_result
-wosFullResult &lt;- get.allMetadata(in_corpus$DOI, fun = get.wosFullResult)
-
-# keywords
-relevant_countries &lt;- get.relevantCountries()
-wosAuthKeywords &lt;- get.allAuthKeywords(wosFullResult)
-ind_nullAuthKeywords &lt;- QA.AuthKeywords(wosAuthKeywords, relevant_countries)
-saveRDS(wosAuthKeywords, "wosAuthKeywords.Rds")
-
-# iterate (optional)
-# at this point, it is possible to iterate and retry some of the failed entries
-# wosFullResult &lt;- get.allMetadata(in_corpus$DOI, fun = get.wosFullResult, newpass = TRUE, metadata = wosFullResult, ind_null = ind_nullAuthKeywords)
-
-# transform results to label
-boolean_AuthKeywords &lt;- get.boolean_AuthKeywords(wosAuthKeywords, relevant_countries)
-saveRDS(boolean_AuthKeywords, "boolean_AuthKeywords.Rds")
-
-# identify entries with any label
-ind_hasCountryTag &lt;- get.ind_hasCountryTag(boolean_AuthKeywords)
-saveRDS(ind_hasCountryTag, "ind_hasCountryTag.Rds")</code></pre>
+wosID &lt;- wosID$DOI</code></pre>
+</div>
+<div id="abstract-retrieval" class="section level1">
+<h1 class="hasAnchor">
+<a href="#abstract-retrieval" class="anchor"></a>Abstract retrieval</h1>
+<pre><code>scopusAbstracts &lt;- get_allMetadata(scopusID, fun = get_scopusAbstract)
+wosAbstracts &lt;- get_allMetadata(wosID, fun = get_wosAbstract)
+in_corpus &lt;- add_abstractsToCorpus(in_corpus, scopusAbstracts, wosAbstracts)</code></pre>
+</div>
+<div id="full_result" class="section level1">
+<h1 class="hasAnchor">
+<a href="#full_result" class="anchor"></a>Full_result</h1>
+<pre><code>wosFullResult &lt;- get_allMetadata(in_corpus$DOI, fun = get_wosFullResult)</code></pre>
+</div>
+<div id="keywords" class="section level1">
+<h1 class="hasAnchor">
+<a href="#keywords" class="anchor"></a>Keywords</h1>
+<p>We now extract the author-keywords from the full results.</p>
+<pre><code>relevant_countries &lt;- get_relevantCountries()
+wosAuthKeywords &lt;- get_allAuthKeywords(wosFullResult)
+ind_nullAuthKeywords &lt;- QA.AuthKeywords(wosAuthKeywords, relevant_countries)</code></pre>
+</div>
+<div id="iterate-optional" class="section level1">
+<h1 class="hasAnchor">
+<a href="#iterate-optional" class="anchor"></a>Iterate (optional)</h1>
+<p>At this point, it is possible to iterate and retry some of the failed entries</p>
+<pre><code>wosFullResult &lt;- get_allMetadata(in_corpus$DOI, fun = get_wosFullResult, newpass = TRUE, metadata = wosFullResult, ind_null = ind_nullAuthKeywords)</code></pre>
+</div>
+<div id="transform-results-to-label" class="section level1">
+<h1 class="hasAnchor">
+<a href="#transform-results-to-label" class="anchor"></a>Transform results to label</h1>
+<p>Using <code>get_boolean_AuthKeywords()</code> we transform the keywords into a boolean vector to use as input to the machine learning predictions.</p>
+<pre><code>boolean_AuthKeywords &lt;- get_boolean_AuthKeywords(wosAuthKeywords, relevant_countries)</code></pre>
+</div>
+<div id="identify-entries-with-any-label" class="section level1">
+<h1 class="hasAnchor">
+<a href="#identify-entries-with-any-label" class="anchor"></a>Identify entries with any label</h1>
+<p>Using <code>get_ind_hasCountryTag()</code> we retrive the indices of the documents of the corpus that have been identified to have author-keywords.</p>
+<pre><code>ind_hasCountryTag &lt;- get_ind_hasCountryTag(boolean_AuthKeywords)</code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

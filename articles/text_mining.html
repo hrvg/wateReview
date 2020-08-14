@@ -104,10 +104,10 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Metadata mining</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/web_scrapping.html">web_scrapping</a>
+          <a href="../articles/web_scrapping.html">Webscrapping metadata</a>
         </li>
         <li>
-          <a href="../articles/metadata_mining.html">metadata_mining</a>
+          <a href="../articles/mining_citation_network.html">Mining the citation network</a>
         </li>
       </ul>
 </li>
@@ -115,13 +115,13 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Location predictions</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/text_mining.html">text_mining</a>
+          <a href="../articles/webscrapped_training_labels.html">Webscrapped training labels</a>
         </li>
         <li>
-          <a href="../articles/webscrapped_training_labels.html">webscrapped_training_labels</a>
+          <a href="../articles/text_mining.html">Text mining</a>
         </li>
         <li>
-          <a href="../articles/ML_predictions.html">ML_predictions</a>
+          <a href="../articles/ML_predictions.html">Location prediction</a>
         </li>
       </ul>
 </li>
@@ -181,7 +181,7 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Connectivity</a>
       <ul class="dropdown-menu" role="menu">
 <li>
-          <a href="../articles/citation_network.html">Citation network</a>
+          <a href="../articles/bipartite_networks.html">Bipartite networks</a>
         </li>
         <li>
           <a href="../articles/network_visualization.html">Network visualization</a>
@@ -220,29 +220,28 @@
 
     
     
-<pre><code>### libraries ###
-import::from("magrittr", "%&gt;%")
-
-### utils ###
-
-import::here(.from = "./R/utils/lib_text_mining.R",
-    get_dfm,
-    filter_dfm,
-    get_dtm
-)
-
-### main ###
-
-filtered_dfm &lt;- get_dfm() %&gt;% filter_dfm()
-filtering_tokens &lt;- readRDS("./data/country_tokens.Rds")
-obj_dtm &lt;- get_dtm(filtered_dfm, filtering_tokens)
-dtm_file &lt;- "F:/hguillon/research/exploitation/R/latin_america/data/obj_dtm_from_dfm_country.Rds"
-saveRDS(obj_dtm, dtm_file)</code></pre>
+<div id="purpose" class="section level1">
+<h1 class="hasAnchor">
+<a href="#purpose" class="anchor"></a>Purpose</h1>
+<p>This vignette creates a document-feature matrix from the corpus and filters it a number of tokens representing the country locations. Because the text mining is based on the text of the articles (that we cannot distribute), the vignette is not executed.</p>
+</div>
+<div id="extracting-the-document-feature-matrix" class="section level1">
+<h1 class="hasAnchor">
+<a href="#extracting-the-document-feature-matrix" class="anchor"></a>Extracting the document-feature matrix</h1>
+<pre><code><a href="https://rdrr.io/pkg/magrittr/man">library("magrittr")
+filtered_dfm &lt;- get_dfm() %&gt;% filter_dfm()</a></code></pre>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">filtering_tokens</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"country_tokens.Rds"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"wateReview"</span>))
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">filtering_tokens</span>)
+<span class="co">#&gt; [1] "argentina" "bahama"    "barbado"   "beliz"     "bolivia"   "brazil"</span></pre></body></html></div>
+<pre><code>obj_dtm &lt;- get_dtm(filtered_dfm, filtering_tokens)</code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
